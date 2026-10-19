@@ -14,6 +14,11 @@
 }
 
 :root {
+  /* 주요 버튼 배경 — 로그인 제출 · 회원가입 다음/시작하기 (334:78939 btn_login 64283:11541, Button/Default 64493:21573).
+     시안은 #4a92ff 위에 그라데이션 이미지를 덮은 것이라 픽셀 색을 뽑아 CSS 로 옮김 */
+  --btn-primary-bg: linear-gradient(95deg, #4b6eff 0%, #4866ff 12%, #4370ff 30%, #3f87ff 50%, #3d96ff 70%, #4199ff 90%, #4497ff 100%);
+  --btn-primary-bg-hover: linear-gradient(95deg, #5c7cff 0%, #5a75ff 12%, #557eff 30%, #5193ff 50%, #4fa1ff 70%, #53a3ff 90%, #56a1ff 100%);
+
   /* greyscale / surface */
   /* 밝은 중심을 페이지 하단(100%)에 고정 — 페이지 길이와 무관하게 항상 아래쪽 */
   --bg-page: radial-gradient(1296px 760px at 216px 100%, #1a2a4a 0%, #0e1428 40%, #07070d 75%);
@@ -2378,7 +2383,7 @@ ul {
   height: 36px;
   padding: 6px 20px;
   border-radius: 8px;
-  background: #3c78ff;
+  background: #508bff;
   box-shadow: 4px 0 2px 0 rgba(0, 0, 0, 0.1);
   font-size: 15px;
   font-weight: 600;
@@ -2387,7 +2392,7 @@ ul {
   transition: background 0.15s ease;
 }
 .login-btn:hover {
-  background: #4f87ff;
+  background: #6398ff;
 }
 
 /* 라이트 모드에선 로그인 버튼 그림자 없음 */
@@ -2846,7 +2851,7 @@ ul {
 .login__submit {
   height: 52px;
   border-radius: 9px;
-  background: #3d5afe;
+  background: var(--btn-primary-bg);
   font-size: 18px;
   font-weight: 700;
   line-height: 20px;
@@ -4106,11 +4111,11 @@ ul {
   transition: background 0.2s ease, color 0.2s ease;
 }
 .signup__btn--primary {
-  background: var(--su-primary);
+  background: var(--btn-primary-bg);
   color: var(--su-primary-text);
 }
 .signup__btn--primary:hover:not(:disabled) {
-  background: #5c9dff;
+  background: var(--btn-primary-bg-hover);
 }
 /* 필수 항목이 비면 비활성 (64493:21020 다음 버튼) */
 .signup__btn--primary:disabled {
