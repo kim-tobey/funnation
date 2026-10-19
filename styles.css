@@ -29,7 +29,10 @@
   --grade-bg: #1f232d;
   --subnav-bg: transparent;
   --rule: #2e2e2e;
-  --more-line: #22262f;
+  /* 홈 시안 64112:13123 — LNB 구분선(Line 6·7) · 더보기 양옆 선은 #1e1e30, 푸터 위 선은 #162037 */
+  --lnb-rule: #1e1e30;
+  --footer-line: #162037;
+  --more-line: #1e1e30;
   --glow-display: block;
   --elevation: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.4));
   --bg-lnb: #151724;
@@ -123,6 +126,8 @@
   --border-card: #d9e0ea;
   --border-thumb: #e0e5ed;
   --rule: #e0e5ed;
+  --lnb-rule: #e0e5ed;
+  --footer-line: #e0e5ed;
   --more-line: #e0e5ed;
   --glow-display: none;
   /* 라이트 시안에는 외곽 그림자 없음 */
@@ -997,7 +1002,7 @@ ul {
   left: 0;
   right: 0;
   height: 1px;
-  background: var(--rule);
+  background: var(--lnb-rule);
 }
 .lnb__group {
   display: flex;
@@ -2125,7 +2130,7 @@ ul {
   height: 208px;
   padding: 16px;
   border-radius: 10px;
-  background-color: #2e2e2e;
+  background-color: #26292e; /* Box Card 64162:205522 — 이미지 아래 바탕 */
   background-position: center;
   background-size: cover;
   /* 카드 이미지가 어두운 톤 → 테마와 무관하게 밝은 글자 */
@@ -2152,7 +2157,7 @@ ul {
   flex-direction: column;
   gap: 24px;
   padding: 44px;
-  border-top: 1px solid var(--rule);
+  border-top: 1px solid var(--footer-line);
   font-size: 12px;
   line-height: 1.6;
   letter-spacing: -0.12px;
@@ -2400,10 +2405,11 @@ ul {
   box-shadow: none;
 }
 
-/* LNB — 방송 시작하기 (63998:4842) */
+/* LNB — 방송 시작하기 (63998:4842) — 안쪽은 채우지 않고 LNB 바탕 그대로 (64112:13198) */
 .lnb__start {
   flex: none;
   width: 100%;
+  --btn-face: var(--bg-lnb);
 }
 
 /* LNB — 추천 크리에이터 (63998:4967) */
@@ -2580,7 +2586,7 @@ ul {
 .ad-banner--top + .live-section {
   margin-top: 30px;
 }
-:root { --quick-card-bg: #202224; }
+:root { --quick-card-bg: #1b2026; } /* ADbanner 64112:87432 */
 [data-theme="light"] { --quick-card-bg: #f0f3f8; }
 
 /* 라이브 방송 — 2depth 메뉴 바로 아래 30px(본문 위 패딩)에서 시작 */
@@ -3611,6 +3617,152 @@ ul {
 }
 [data-theme="light"] img[src$="v2/close-md.svg"] { content: url("assets/light/v2/close-md.svg"); }
 
+/* 알림 목록 (64162:204386) — 모바일 알림 화면과 PC 알림 팝업이 같이 씀 */
+.notice-group {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.notice-group__date {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.6;
+  letter-spacing: -0.14px;
+  color: var(--notice-date);
+}
+.notice-group__list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.notice-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.notice-item__avatar {
+  flex: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--notice-avatar-bg);
+  object-fit: cover;
+}
+.notice-item__body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.notice-item__body p {
+  margin: 0;
+}
+.notice-item__tag {
+  font-size: 14px;
+  line-height: 1;
+  color: #6b8aff;
+}
+.notice-item__text {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.6;
+  letter-spacing: -0.14px;
+  color: var(--notice-text);
+}
+.notice-item__meta {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+  line-height: 1;
+  color: var(--notice-meta);
+  white-space: nowrap;
+}
+
+/* PC 알림 팝업 (64686:113964) — GNB 종 아이콘을 누르면 오른쪽 위에 펼침. 목록은 모바일 알림 화면을 복사해 채움 */
+:root {
+  --np-bg: rgba(21, 23, 36, 0.9);
+  --np-line: #1e1e30;
+  --np-title: #dfe2ea;
+}
+[data-theme="light"] {
+  --np-bg: rgba(255, 255, 255, 0.96);
+  --np-line: #e3e7ee;
+  --np-title: #202938;
+}
+.notice-pop {
+  position: absolute;
+  top: 55px;
+  right: 11px;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  width: 420px;
+  max-height: calc(100vh - 75px);
+  border: 1px solid var(--np-line);
+  border-radius: 20px;
+  background: var(--np-bg);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.44);
+  animation: notice-pop-in 0.16s ease-out;
+}
+.notice-pop[hidden] {
+  display: none;
+}
+@keyframes notice-pop-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .notice-pop { animation: none; }
+}
+.notice-pop__head {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: space-between;
+  height: 58px;
+  padding: 0 16px;
+  border-bottom: 1px solid var(--np-line);
+}
+.notice-pop__head h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.18px;
+  color: var(--np-title);
+}
+.notice-pop__close {
+  display: flex;
+}
+[data-theme="light"] .notice-pop__close img {
+  filter: brightness(0.25);
+}
+/* 시안은 글 폭 289px 고정 — 줄바꿈 위치를 시안과 맞춤 */
+.notice-pop .notice-item__body {
+  width: 289px;
+}
+.notice-pop__body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px 24px 24px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.nav-icon[aria-expanded="true"] {
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+}
+@media (max-width: 767px) {
+  .notice-pop { display: none; }
+}
+
+
 /* PC 시안은 없음 — PC 에서는 열리지 않고 상단 검색창을 그대로 씀 */
 .subview,
 .mo-appbar__sub-back,
@@ -3796,70 +3948,6 @@ ul {
     display: flex;
     flex-direction: column;
     gap: 18px;
-  }
-  .notice-group {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-  .notice-group__date {
-    margin: 0;
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 1.6;
-    letter-spacing: -0.14px;
-    color: var(--notice-date);
-  }
-  .notice-group__list {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-  .notice-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-  }
-  .notice-item__avatar {
-    flex: none;
-    width: 34px;
-    height: 34px;
-    border-radius: 50%;
-    background: var(--notice-avatar-bg);
-    object-fit: cover;
-  }
-  .notice-item__body {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    min-width: 0;
-  }
-  .notice-item__body p {
-    margin: 0;
-  }
-  .notice-item__tag {
-    font-size: 14px;
-    line-height: 1;
-    color: #6b8aff;
-  }
-  .notice-item__text {
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 1.6;
-    letter-spacing: -0.14px;
-    color: var(--notice-text);
-  }
-  .notice-item__meta {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 14px;
-    line-height: 1;
-    color: var(--notice-meta);
-    white-space: nowrap;
   }
 }
 
@@ -4519,6 +4607,10 @@ ul {
   --w-notice-bg: #3e3e3e;
   --w-active: #4a92ff;
   --w-amount: #4962ff;
+  /* 후원 패널 입력칸 (64617:28170) · 오류 노랑 (Sys/warning-100) */
+  --w-box: #212121;
+  --w-box-line: #343434;
+  --w-warn: #f7df4e;
 }
 [data-theme="light"] {
   --w-head-border: #e3e7ee;
@@ -4544,6 +4636,9 @@ ul {
   --w-chat-edge: #e3e7ee;
   --w-bar-line: #e9edf4;
   --w-notice-bg: #e9edf4;
+  --w-box: #ffffff;
+  --w-box-line: #d9e0ea;
+  --w-warn: #b98900;
 }
 [data-theme="light"] .watch-btn img,
 [data-theme="light"] .wchat__collapse img,
@@ -5000,7 +5095,7 @@ ul {
   flex: none;
   gap: 12px;
   height: 54px;
-  padding: 12px 20px 22px;
+  padding: 12px 24px 22px;
   background: var(--w-panel-bg);
 }
 .wtab {
@@ -5040,7 +5135,7 @@ ul {
   right: 0;
   bottom: 0;
   left: 0;
-  min-height: calc(100% - 259px);
+  min-height: calc(100% - 197px);
   max-height: calc(100% - 51px);
   z-index: 2;
   display: flex;
@@ -5088,7 +5183,7 @@ ul {
   flex-direction: column;
   gap: 20px;
   min-height: 0;
-  padding: 20px;
+  padding: 20px 24px;
   /* 세로로만 스크롤 — 세로 스크롤바가 생기면 폭이 줄어 시그니처 화살표(right: -1px)가 넘쳐 가로 스크롤바가 생기던 문제 */
   overflow-x: hidden;
   overflow-y: auto;
@@ -5146,7 +5241,7 @@ ul {
 }
 .dsig {
   position: relative;
-  margin-right: -20px;
+  margin-right: -24px;
 }
 .dsig__grid {
   display: grid;
@@ -5154,7 +5249,7 @@ ul {
   grid-auto-rows: 48px;
   gap: 12px 10px;
   margin: 0;
-  padding: 0 20px 0 0;
+  padding: 0 24px 0 0;
   overflow-x: auto;
   scroll-behavior: smooth;
   scrollbar-width: none;
@@ -5203,7 +5298,7 @@ ul {
 }
 .dfields__row {
   display: flex;
-  gap: 10px;
+  gap: 12px;
 }
 .dfields__row .dfield {
   flex: 1 1 0;
@@ -5211,19 +5306,18 @@ ul {
 .dfield {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   min-width: 0;
-  height: 44px;
+  height: 56px;
   padding: 0 16px;
-  border-radius: 10px;
-  background: var(--w-field-bg);
+  border: 1px solid var(--w-box-line);
+  border-radius: 8px;
+  background: var(--w-box);
 }
 .dfield span {
   flex: none;
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 14px;
-  letter-spacing: -0.12px;
+  font-size: 14px;
+  line-height: 1.5;
   color: var(--w-text);
 }
 .dfield input,
@@ -5244,57 +5338,63 @@ ul {
   caret-color: var(--w-active);
   resize: none;
 }
+.dfield input,
+.dmission input,
+.dmission textarea {
+  line-height: 1.5;
+  letter-spacing: 0;
+}
 .dfield input::placeholder,
 .dmission input::placeholder,
 .dmission textarea::placeholder {
-  color: var(--w-placeholder);
+  color: var(--w-sub);
 }
 .dfield:focus-within,
-.dmission__field:focus-within {
-  box-shadow: inset 0 0 0 1px var(--w-active);
+.dmission__box:focus-within {
+  border-color: var(--w-active);
 }
 
-/* 미션 입력 (64617:31545) — 한 상자 안에 제목 / 내용, 사이 1px 선 */
+/* 미션 입력 (64624:81665) — 라벨(제목 · 글자 수) 아래 56px 칸, 칸끼리 12px */
 .dmission {
   display: flex;
   flex-direction: column;
-  border-radius: 10px;
-  background: var(--w-field-bg);
+  gap: 12px;
 }
 .dmission__field {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  padding: 12px 16px;
-  border-radius: 10px;
-}
-.dmission__field + .dmission__field {
-  position: relative;
-}
-.dmission__field + .dmission__field::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  right: 16px;
-  left: 16px;
-  height: 1px;
-  background: var(--w-line);
+  gap: 8px;
 }
 .dmission__label {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 14px;
-  letter-spacing: -0.12px;
+  padding: 0 4px;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 20px;
   color: var(--w-text);
 }
 .dmission__count {
+  font-size: 12px;
   font-weight: 400;
+  line-height: 14px;
   color: var(--w-sub);
 }
+.dmission__box {
+  display: flex;
+  align-items: center;
+  min-height: 56px;
+  padding: 0 16px;
+  border: 1px solid var(--w-box-line);
+  border-radius: 8px;
+  background: var(--w-box);
+}
+/* 내용은 한 줄로 시작해 길어지면 칸이 늘어남 (최대 5줄) */
 .dmission textarea {
-  height: 62px;
+  max-height: 113px;
+  margin: 17px 0;
+  field-sizing: content;
 }
 
 /* 공통 — 사연 카드 · 칭호 · 후원 금액 (64617:31242) */
@@ -5309,7 +5409,7 @@ ul {
   gap: 10px;
   padding: 16px;
   border-radius: 12px;
-  background: #3f24d0;
+  background: #4962ff;
   color: #e0e0e0;
 }
 .dmsg__top {
@@ -5368,7 +5468,7 @@ ul {
   transition: transform 0.2s ease, background 0.2s ease;
 }
 .switch:checked {
-  background: #1e016e;
+  background: #3f24d0;
 }
 .switch:checked::after {
   background: #fff;
@@ -5389,7 +5489,7 @@ ul {
   justify-content: center;
   height: 28px;
   border-radius: 999px;
-  background: #1e016e;
+  background: #2c43d1;
 }
 .dmsg__vol {
   width: 28px;
@@ -5415,8 +5515,10 @@ ul {
   justify-content: space-between;
   height: 79px;
   padding: 12px;
+  margin-top: -2px; /* 목소리 버튼 ↔ 입력칸은 8px (카드 안 다른 간격은 10px) */
+  border: 1px solid transparent;
   border-radius: 8px;
-  background: #351eaf;
+  background: #3f56ea;
 }
 .dmsg__input {
   flex: 1;
@@ -5428,13 +5530,13 @@ ul {
   caret-color: #fff;
 }
 .dmsg__input::placeholder {
-  color: #644bea;
+  color: #5f74f8;
 }
 .dmsg__count {
   align-self: flex-end;
   font-size: 12px;
   line-height: 14px;
-  color: #b4a6ff;
+  color: #97a4f6;
 }
 .dbox {
   display: flex;
@@ -5492,11 +5594,13 @@ ul {
   gap: 10px;
   height: 56px;
   padding: 0 20px;
+  border: 1px solid transparent;
   border-radius: 8px;
   background: var(--w-field-bg);
 }
 .damount__box:focus-within {
-  box-shadow: inset 0 0 0 1px var(--w-amount);
+  border-color: var(--w-box-line);
+  background: var(--w-box);
 }
 .damount__input {
   flex: 1;
@@ -5512,9 +5616,7 @@ ul {
   color: var(--w-amount);
   caret-color: var(--w-amount);
 }
-.damount__box.is-over .damount__input {
-  color: #ff5b5b;
-}
+
 .damount__unit {
   font-size: 14px;
   line-height: 1.6;
@@ -5523,6 +5625,159 @@ ul {
 }
 .damount__clear {
   display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+}
+.damount__box.is-empty .damount__clear {
+  visibility: hidden;
+}
+.damount__clear img + img,
+.damount__box:focus-within .damount__clear img:first-child,
+.is-warn .damount__clear img:first-child,
+.is-warn .damount__clear img:nth-child(2) {
+  display: none;
+}
+.damount__box:focus-within:not(.is-warn) .damount__clear img:nth-child(2),
+.is-warn .damount__clear img:nth-child(3) {
+  display: block;
+}
+
+/* 오류 — 칸은 노란 테두리, 칸 아래 ⚠️ 문구 (Sys/warning-100) */
+.dwarn {
+  margin: 0;
+  padding: 0 4px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 14px;
+  color: var(--w-warn);
+}
+.dwarn[hidden] {
+  display: none;
+}
+.dfield.is-warn,
+.dmission__box.is-warn,
+.damount__box.is-warn {
+  border-color: var(--w-warn);
+}
+.damount__box.is-warn {
+  background: var(--w-box);
+}
+/* 사연 카드 안은 파란 바탕이라 테마와 상관없이 시안 노랑 */
+.dmsg .dwarn {
+  margin-top: -2px;
+  color: #f7df4e;
+}
+.dmsg__box.is-warn {
+  border-color: #f7df4e;
+}
+
+/* 등록된 시그니처 없음 (64624:82168) — 그리드 자리 가운데 */
+.dsig-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 108px;
+  text-align: center;
+}
+.dsig-empty[hidden] {
+  display: none;
+}
+.dsig-empty p {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 14px;
+  color: var(--w-placeholder);
+}
+.dsig + .dwarn,
+.dsig-empty + .dwarn {
+  margin-top: 6px;
+}
+
+/* 하단 — 입력정보 확인 문구 + 후원하기 (64624:81075 · 공통 / 에러 64643:39298) */
+.donate__foot {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px 24px 12px;
+}
+.donate__submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 50px;
+  border-radius: 10px;
+  background: var(--btn-primary-bg);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1;
+  color: #e0e0e0;
+}
+.donate__submit:hover {
+  background: var(--btn-primary-bg-hover);
+}
+.donate__submit:focus-visible {
+  outline: 2px solid var(--w-active);
+  outline-offset: 2px;
+}
+
+/* 후원 실패 (64624:81159) — 채팅 전체를 어둡게 덮고 가운데 모달 */
+.dfail {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 30px;
+  background: rgba(23, 23, 23, 0.7);
+  animation: dfail-in 0.18s ease-out;
+}
+.dfail[hidden] {
+  display: none;
+}
+@keyframes dfail-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dfail { animation: none; }
+}
+.dfail__box {
+  width: 100%;
+  padding: 26px 20px 21px;
+  border: 1px solid #343434;
+  border-radius: 14px;
+  background: #292929;
+  text-align: center;
+}
+.dfail__box h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 21px;
+  color: #fefefe;
+}
+.dfail__box p {
+  margin: 12px 0 24px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 17px;
+  color: #e0e0e0;
+}
+[data-theme="light"] .dfail__box {
+  border-color: #e3e7ee;
+  background: #fff;
+}
+[data-theme="light"] .dfail__box h3,
+[data-theme="light"] .dfail__box p {
+  color: #202938;
 }
 .damount__chips {
   display: flex;

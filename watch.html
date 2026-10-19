@@ -75,7 +75,7 @@
           <button class="nav-icon" type="button" aria-label="언어 설정">
             <img src="assets/imgLanguage.svg" width="24" height="24" alt="">
           </button>
-          <button class="nav-icon" type="button" aria-label="알림">
+          <button class="nav-icon" type="button" aria-label="알림" aria-haspopup="dialog" aria-expanded="false" aria-controls="notice-pop" id="notice-btn">
             <img src="assets/imgNotifications24DpE3E3E3Fill0Wght400Grad0Opsz241.svg" width="24" height="24" alt="">
             <span class="nav-icon__badge">2</span>
           </button>
@@ -91,6 +91,15 @@
           <img src="assets/imgLanguage.svg" width="24" height="24" alt="">
         </button>
         <button class="login-btn auth-out" type="button" id="login-btn">로그인</button>
+      </div>
+
+      <!-- PC 알림 팝업 (64686:113964) — 목록은 아래 모바일 알림 화면(#notice-view)을 그대로 복사해 채움 -->
+      <div class="notice-pop" id="notice-pop" role="dialog" aria-labelledby="notice-pop-title" data-node-id="64686:113964" hidden>
+        <header class="notice-pop__head">
+          <h2 id="notice-pop-title">알림</h2>
+          <button class="notice-pop__close" type="button" aria-label="알림 닫기" data-notice-close><img src="assets/v2/notice/close.svg" width="24" height="24" alt=""></button>
+        </header>
+        <div class="notice-pop__body" data-notice-body></div>
       </div>
 
     </div>
@@ -333,7 +342,7 @@
 
       <div class="main__inner">
 
-        <!-- 영상 상세 [A-03] ver.2 (64617:31107) — PC 전용. 영상 + 오른쪽 채팅(364px), 채팅 아래 탭으로 후원 패널 -->
+        <!-- 영상 상세 [A-03] ver.2 (64617:31107, 후원 패널 상태는 64617:28170) — PC 전용. 영상 + 오른쪽 채팅(364px), 채팅 아래 탭으로 후원 패널 -->
         <section class="watch" data-node-id="64617:31107">
           <div class="watch__main">
             <!-- 제목 · 태그 · 채널 / 구독 · 좋아요 · 팔로우 (64617:31137) -->
@@ -420,7 +429,7 @@
               <button class="wtab" type="button" aria-expanded="false" aria-controls="donate-mission" data-donate="mission"><span class="wtab__icon" aria-hidden="true"><img src="assets/watch/trophy.svg" width="20" height="20" alt=""><img src="assets/watch/trophy-active.svg" width="20" height="20" alt=""></span>미션</button>
             </div>
 
-          <section class="donate" id="donate-general" data-donate-panel="general" aria-label="일반후원" data-node-id="64617:31228" hidden>
+          <section class="donate" id="donate-general" data-donate-panel="general" aria-label="일반후원" data-node-id="64624:81075" hidden>
             <header class="donate__head">
               <h3>일반후원</h3>
               <button class="donate__close" type="button" aria-label="일반후원 닫기" data-donate-close><img src="assets/watch/close-sm.svg" width="24" height="24" alt=""></button>
@@ -437,9 +446,10 @@
                   <button class="dmsg__tts" type="button" data-donate-voice aria-label="읽어줄 목소리 바꾸기"><span>유나</span><img src="assets/watch/chevron-right.svg" width="20" height="20" alt=""></button>
                 </div>
                 <div class="dmsg__box">
-                  <textarea class="dmsg__input" id="d-general-msg" maxlength="200" rows="2" placeholder="응원의 한마디를 남겨주세요" aria-label="응원 메시지" data-count></textarea>
+                  <textarea class="dmsg__input" id="d-general-msg" rows="2" placeholder="응원의 한마디를 남겨주세요" aria-label="응원 메시지" aria-describedby="d-general-msg-warn" data-count data-donate-msg></textarea>
                   <span class="dmsg__count" aria-hidden="true">0/200</span>
                 </div>
+                <p class="dwarn" id="d-general-msg-warn" data-warn hidden></p>
               </div>
               <button class="dbox dtitle" type="button">
                 <span class="dbox__head"><strong>칭호</strong><img src="assets/watch/chevron-right.svg" width="20" height="20" alt=""></span>
@@ -451,10 +461,11 @@
                   <span class="dcash"><img src="assets/watch/cash.png" width="14" height="14" alt="">내 펀캐시<i aria-hidden="true"></i><b data-donate-balance>100,000</b></span>
                 </div>
                 <div class="damount__box">
-                  <input class="damount__input" id="d-general-amount" type="text" inputmode="numeric" value="5,000" autocomplete="off" data-donate-amount>
+                  <input class="damount__input" id="d-general-amount" type="text" inputmode="numeric" value="5,000" autocomplete="off" aria-describedby="d-general-amount-warn" data-donate-amount>
                   <span class="damount__unit">원</span>
-                  <button class="damount__clear" type="button" aria-label="금액 지우기" data-donate-clear><img src="assets/watch/close-circle.svg" width="24" height="24" alt=""></button>
+                  <button class="damount__clear" type="button" aria-label="금액 지우기" data-donate-clear><img src="assets/watch/close-circle.svg" width="24" height="24" alt=""><img src="assets/watch/close-circle-active.svg" width="20" height="20" alt=""><img src="assets/watch/close-circle-warn.svg" width="20" height="20" alt=""></button>
                 </div>
+                <p class="dwarn" id="d-general-amount-warn" data-warn hidden></p>
                 <div class="damount__chips">
                   <button type="button" data-add="1000">+1천</button>
                   <button type="button" data-add="10000">+1만</button>
@@ -466,8 +477,12 @@
               </div>
             </div>
             </div>
+            <footer class="donate__foot">
+              <p class="dwarn" data-warn-form hidden>⚠️ 입력정보를 확인해주세요</p>
+              <button class="donate__submit" type="button" data-donate-submit>후원하기</button>
+            </footer>
           </section>
-          <section class="donate" id="donate-signature" data-donate-panel="signature" aria-label="시그니처 후원" data-node-id="64617:31309" hidden>
+          <section class="donate" id="donate-signature" data-donate-panel="signature" aria-label="시그니처 후원" data-node-id="64624:81249" hidden>
             <header class="donate__head">
               <h3>시그니처 후원</h3>
               <button class="donate__close" type="button" aria-label="시그니처 후원 닫기" data-donate-close><img src="assets/watch/close-sm.svg" width="24" height="24" alt=""></button>
@@ -488,10 +503,16 @@
                   <li><button class="dsig__item" type="button" aria-pressed="false" data-price="2300"><img src="assets/watch/signature/sig-5.png" width="84" height="48" alt="GG EZ 2,300원"></button></li>
                   <li><button class="dsig__item" type="button" aria-pressed="false" data-price="2500"><img src="assets/watch/signature/sig-6.png" width="84" height="48" alt="토카토카 2,500원"></button></li>
                   <li><button class="dsig__item" type="button" aria-pressed="false" data-price="2700"><img src="assets/watch/signature/sig-7.png" width="84" height="48" alt="외모췍 2,700원"></button></li>
-                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="2700"><img src="assets/watch/signature/sig-7.png" width="84" height="48" alt="외모췍 2,700원"></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="2700" data-unavailable><img src="assets/watch/signature/sig-7.png" width="84" height="48" alt="외모췍 2,700원"></button></li>
                   </ul>
                   <button class="dsig__next" type="button" aria-label="시그니처 더 보기" data-sig-next><img src="assets/watch/sig-arrow.svg" width="24" height="24" alt=""></button>
                 </div>
+                <!-- 등록된 시그니처 없음 (64624:82168) — 그리드에 항목이 없으면 대신 표시 -->
+                <div class="dsig-empty" data-sig-empty hidden>
+                  <img src="assets/watch/circle-warning.svg" width="24" height="24" alt="">
+                  <p>등록된 시그니처가 없습니다.<br>일반 후원을 이용해주세요.</p>
+                </div>
+                <p class="dwarn" data-warn-sig hidden></p>
               </div>
               <hr class="dsep">
             <div class="dform" data-node-id="64617:31356">
@@ -505,9 +526,10 @@
                   <button class="dmsg__tts" type="button" data-donate-voice aria-label="읽어줄 목소리 바꾸기"><span>유나</span><img src="assets/watch/chevron-right.svg" width="20" height="20" alt=""></button>
                 </div>
                 <div class="dmsg__box">
-                  <textarea class="dmsg__input" id="d-signature-msg" maxlength="200" rows="2" placeholder="응원의 한마디를 남겨주세요" aria-label="응원 메시지" data-count></textarea>
+                  <textarea class="dmsg__input" id="d-signature-msg" rows="2" placeholder="응원의 한마디를 남겨주세요" aria-label="응원 메시지" aria-describedby="d-signature-msg-warn" data-count data-donate-msg></textarea>
                   <span class="dmsg__count" aria-hidden="true">0/200</span>
                 </div>
+                <p class="dwarn" id="d-signature-msg-warn" data-warn hidden></p>
               </div>
               <button class="dbox dtitle" type="button">
                 <span class="dbox__head"><strong>칭호</strong><img src="assets/watch/chevron-right.svg" width="20" height="20" alt=""></span>
@@ -519,10 +541,11 @@
                   <span class="dcash"><img src="assets/watch/cash.png" width="14" height="14" alt="">내 펀캐시<i aria-hidden="true"></i><b data-donate-balance>100,000</b></span>
                 </div>
                 <div class="damount__box">
-                  <input class="damount__input" id="d-signature-amount" type="text" inputmode="numeric" value="5,000" autocomplete="off" data-donate-amount>
+                  <input class="damount__input" id="d-signature-amount" type="text" inputmode="numeric" value="5,000" autocomplete="off" aria-describedby="d-signature-amount-warn" data-donate-amount>
                   <span class="damount__unit">원</span>
-                  <button class="damount__clear" type="button" aria-label="금액 지우기" data-donate-clear><img src="assets/watch/close-circle.svg" width="24" height="24" alt=""></button>
+                  <button class="damount__clear" type="button" aria-label="금액 지우기" data-donate-clear><img src="assets/watch/close-circle.svg" width="24" height="24" alt=""><img src="assets/watch/close-circle-active.svg" width="20" height="20" alt=""><img src="assets/watch/close-circle-warn.svg" width="20" height="20" alt=""></button>
                 </div>
+                <p class="dwarn" id="d-signature-amount-warn" data-warn hidden></p>
                 <div class="damount__chips">
                   <button type="button" data-add="1000">+1천</button>
                   <button type="button" data-add="10000">+1만</button>
@@ -534,8 +557,12 @@
               </div>
             </div>
             </div>
+            <footer class="donate__foot">
+              <p class="dwarn" data-warn-form hidden>⚠️ 입력정보를 확인해주세요</p>
+              <button class="donate__submit" type="button" data-donate-submit>후원하기</button>
+            </footer>
           </section>
-          <section class="donate" id="donate-video" data-donate-panel="video" aria-label="영상 후원" data-node-id="64617:31423" hidden>
+          <section class="donate" id="donate-video" data-donate-panel="video" aria-label="영상 후원" data-node-id="64624:81366" hidden>
             <header class="donate__head">
               <h3>영상 후원</h3>
               <button class="donate__close" type="button" aria-label="영상 후원 닫기" data-donate-close><img src="assets/watch/close-sm.svg" width="24" height="24" alt=""></button>
@@ -545,11 +572,13 @@
                 <div class="dsec__head"><h4>영상 내용</h4></div>
                 <p class="dsec__desc">*영상 후원은 크리에이터가 수락하면 후원이 됩니다. 수락하지 않으면 펀캐시로 다시 적립됩니다.</p>
                 <div class="dfields">
-                  <label class="dfield"><span>URL</span><input type="url" placeholder="Youtube URL을 입력해주세요" autocomplete="off"></label>
+                  <label class="dfield"><span>URL</span><input type="url" placeholder="Youtube URL을 입력해주세요" autocomplete="off" aria-describedby="d-video-url-warn" data-video-url></label>
+                  <p class="dwarn" id="d-video-url-warn" data-warn hidden></p>
                   <div class="dfields__row">
-                    <label class="dfield"><span>시작시간</span><input type="text" inputmode="numeric" placeholder="00:00" maxlength="5" data-time></label>
-                    <label class="dfield"><span>종료시간</span><input type="text" inputmode="numeric" placeholder="00:00" maxlength="5" data-time></label>
+                    <label class="dfield"><span>시작시간</span><input type="text" inputmode="numeric" placeholder="00:00" maxlength="5" aria-describedby="d-video-time-warn" data-time data-video-start></label>
+                    <label class="dfield"><span>종료시간</span><input type="text" inputmode="numeric" placeholder="00:00" maxlength="5" aria-describedby="d-video-time-warn" data-time data-video-end></label>
                   </div>
+                  <p class="dwarn" id="d-video-time-warn" data-warn hidden></p>
                 </div>
               </div>
               <hr class="dsep">
@@ -564,9 +593,10 @@
                   <button class="dmsg__tts" type="button" data-donate-voice aria-label="읽어줄 목소리 바꾸기"><span>유나</span><img src="assets/watch/chevron-right.svg" width="20" height="20" alt=""></button>
                 </div>
                 <div class="dmsg__box">
-                  <textarea class="dmsg__input" id="d-video-msg" maxlength="200" rows="2" placeholder="응원의 한마디를 남겨주세요" aria-label="응원 메시지" data-count></textarea>
+                  <textarea class="dmsg__input" id="d-video-msg" rows="2" placeholder="응원의 한마디를 남겨주세요" aria-label="응원 메시지" aria-describedby="d-video-msg-warn" data-count data-donate-msg></textarea>
                   <span class="dmsg__count" aria-hidden="true">0/200</span>
                 </div>
+                <p class="dwarn" id="d-video-msg-warn" data-warn hidden></p>
               </div>
               <button class="dbox dtitle" type="button">
                 <span class="dbox__head"><strong>칭호</strong><img src="assets/watch/chevron-right.svg" width="20" height="20" alt=""></span>
@@ -578,10 +608,11 @@
                   <span class="dcash"><img src="assets/watch/cash.png" width="14" height="14" alt="">내 펀캐시<i aria-hidden="true"></i><b data-donate-balance>100,000</b></span>
                 </div>
                 <div class="damount__box">
-                  <input class="damount__input" id="d-video-amount" type="text" inputmode="numeric" value="5,000" autocomplete="off" data-donate-amount>
+                  <input class="damount__input" id="d-video-amount" type="text" inputmode="numeric" value="5,000" autocomplete="off" aria-describedby="d-video-amount-warn" data-donate-amount>
                   <span class="damount__unit">원</span>
-                  <button class="damount__clear" type="button" aria-label="금액 지우기" data-donate-clear><img src="assets/watch/close-circle.svg" width="24" height="24" alt=""></button>
+                  <button class="damount__clear" type="button" aria-label="금액 지우기" data-donate-clear><img src="assets/watch/close-circle.svg" width="24" height="24" alt=""><img src="assets/watch/close-circle-active.svg" width="20" height="20" alt=""><img src="assets/watch/close-circle-warn.svg" width="20" height="20" alt=""></button>
                 </div>
+                <p class="dwarn" id="d-video-amount-warn" data-warn hidden></p>
                 <div class="damount__chips">
                   <button type="button" data-add="1000">+1천</button>
                   <button type="button" data-add="10000">+1만</button>
@@ -593,8 +624,12 @@
               </div>
             </div>
             </div>
+            <footer class="donate__foot">
+              <p class="dwarn" data-warn-form hidden>⚠️ 입력정보를 확인해주세요</p>
+              <button class="donate__submit" type="button" data-donate-submit>후원하기</button>
+            </footer>
           </section>
-          <section class="donate" id="donate-mission" data-donate-panel="mission" aria-label="미션 후원" data-node-id="64617:31523" hidden>
+          <section class="donate" id="donate-mission" data-donate-panel="mission" aria-label="미션 후원" data-node-id="64624:81665" hidden>
             <header class="donate__head">
               <h3>미션 후원</h3>
               <button class="donate__close" type="button" aria-label="미션 후원 닫기" data-donate-close><img src="assets/watch/close-sm.svg" width="24" height="24" alt=""></button>
@@ -604,14 +639,16 @@
                 <div class="dsec__head"><h4>미션 내용</h4></div>
                 <p class="dsec__desc">미션 후원은 크리에이터가 수락하면 후원이 됩니다. 수락하지 않으면 펀캐시로 다시 적립됩니다.</p>
                 <div class="dmission">
-                  <label class="dmission__field">
-                    <span class="dmission__label">미션 제목<span class="dmission__count" aria-hidden="true">0/200</span></span>
-                    <input type="text" maxlength="200" placeholder="미션 제목을 입력하세요" data-count>
-                  </label>
-                  <label class="dmission__field">
-                    <span class="dmission__label">미션 내용 (선택)<span class="dmission__count" aria-hidden="true">0/200</span></span>
-                    <textarea maxlength="200" rows="3" placeholder="미션 내용을 자세히 설명해주세요" data-count></textarea>
-                  </label>
+                  <div class="dmission__field">
+                    <label class="dmission__label" for="d-mission-title">미션제목<span class="dmission__count" aria-hidden="true">0/200</span></label>
+                    <div class="dmission__box"><input id="d-mission-title" type="text" placeholder="미션 제목을 입력해주세요" autocomplete="off" aria-describedby="d-mission-title-warn" data-count data-mission-title></div>
+                  </div>
+                  <p class="dwarn" id="d-mission-title-warn" data-warn hidden></p>
+                  <div class="dmission__field">
+                    <label class="dmission__label" for="d-mission-body">미션내용 (선택)<span class="dmission__count" aria-hidden="true">0/200</span></label>
+                    <div class="dmission__box"><textarea id="d-mission-body" rows="1" placeholder="미션 내용을 자세히 설명해주세요" aria-describedby="d-mission-body-warn" data-count data-mission-body></textarea></div>
+                  </div>
+                  <p class="dwarn" id="d-mission-body-warn" data-warn hidden></p>
                 </div>
               </div>
               <hr class="dsep">
@@ -626,9 +663,10 @@
                   <button class="dmsg__tts" type="button" data-donate-voice aria-label="읽어줄 목소리 바꾸기"><span>유나</span><img src="assets/watch/chevron-right.svg" width="20" height="20" alt=""></button>
                 </div>
                 <div class="dmsg__box">
-                  <textarea class="dmsg__input" id="d-mission-msg" maxlength="200" rows="2" placeholder="응원의 한마디를 남겨주세요" aria-label="응원 메시지" data-count></textarea>
+                  <textarea class="dmsg__input" id="d-mission-msg" rows="2" placeholder="응원의 한마디를 남겨주세요" aria-label="응원 메시지" aria-describedby="d-mission-msg-warn" data-count data-donate-msg></textarea>
                   <span class="dmsg__count" aria-hidden="true">0/200</span>
                 </div>
+                <p class="dwarn" id="d-mission-msg-warn" data-warn hidden></p>
               </div>
               <button class="dbox dtitle" type="button">
                 <span class="dbox__head"><strong>칭호</strong><img src="assets/watch/chevron-right.svg" width="20" height="20" alt=""></span>
@@ -640,10 +678,11 @@
                   <span class="dcash"><img src="assets/watch/cash.png" width="14" height="14" alt="">내 펀캐시<i aria-hidden="true"></i><b data-donate-balance>100,000</b></span>
                 </div>
                 <div class="damount__box">
-                  <input class="damount__input" id="d-mission-amount" type="text" inputmode="numeric" value="5,000" autocomplete="off" data-donate-amount>
+                  <input class="damount__input" id="d-mission-amount" type="text" inputmode="numeric" value="5,000" autocomplete="off" aria-describedby="d-mission-amount-warn" data-donate-amount>
                   <span class="damount__unit">원</span>
-                  <button class="damount__clear" type="button" aria-label="금액 지우기" data-donate-clear><img src="assets/watch/close-circle.svg" width="24" height="24" alt=""></button>
+                  <button class="damount__clear" type="button" aria-label="금액 지우기" data-donate-clear><img src="assets/watch/close-circle.svg" width="24" height="24" alt=""><img src="assets/watch/close-circle-active.svg" width="20" height="20" alt=""><img src="assets/watch/close-circle-warn.svg" width="20" height="20" alt=""></button>
                 </div>
+                <p class="dwarn" id="d-mission-amount-warn" data-warn hidden></p>
                 <div class="damount__chips">
                   <button type="button" data-add="1000">+1천</button>
                   <button type="button" data-add="10000">+1만</button>
@@ -655,7 +694,18 @@
               </div>
             </div>
             </div>
+            <footer class="donate__foot">
+              <p class="dwarn" data-warn-form hidden>⚠️ 입력정보를 확인해주세요</p>
+              <button class="donate__submit" type="button" data-donate-submit>후원하기</button>
+            </footer>
           </section>
+            <div class="dfail" id="donate-fail" hidden>
+              <div class="dfail__box" role="alertdialog" aria-modal="true" aria-labelledby="dfail-title" aria-describedby="dfail-desc" data-node-id="64624:81244">
+                <h3 id="dfail-title">후원에 실패했어요</h3>
+                <p id="dfail-desc">후원을 완료하지 못했어요. 다시 시도해주세요.</p>
+                <button class="donate__submit" type="button" data-donate-retry>다시 시도하기</button>
+              </div>
+            </div>
           </aside>
         </section>
 

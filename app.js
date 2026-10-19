@@ -1270,7 +1270,7 @@
     if (e.key === "Escape" && current && root.getAttribute("data-drawer") !== "open") show(null);
   });
 
-  // 글자 수 표시 (0/200)
+  // 글자 수 표시 (0/200) — 200자를 넘겨 입력할 수 있고, 넘으면 오류 문구로 알림
   var counted = watch.querySelectorAll("[data-count]");
   for (var n = 0; n < counted.length; n++) counted[n].addEventListener("input", function () {
     var box = this.closest(".dmsg__box, .dmission__field");
@@ -1297,18 +1297,14 @@
     label.textContent = VOICES[(VOICES.indexOf(label.textContent) + 1) % VOICES.length];
   });
 
-  /* 후원 금액 — 숫자만 받아 천 단위 쉼표, 칩은 더하기, 전액은 내 펀캐시 전부. 펀캐시보다 많으면 빨간 글씨 */
+  /* 후원 금액 — 숫자만 받아 천 단위 쉼표, 칩은 더하기, 전액은 내 펀캐시 전부. 0원이면 지우기 버튼 숨김 */
   var BALANCE = 100000;
   function fmt(n) { return n.toLocaleString("ko-KR"); }
-  function setAmount(input, n) {
-    input.value = n ? fmt(n) : "";
-    input.closest(".damount__box").classList.toggle("is-over", n > BALANCE);
+  function setAmount(input, n, typing) {
+    input.value = n || !typing ? fmt(n) : "";
+    input.closest(".damount__box").classList.toggle("is-empty", !n);
   }
   function amountOf(input) { return +input.value.replace(/[^0-9]/g, "") || 0; }
-  var amounts = watch.querySelectorAll("[data-donate-amount]");
-  for (var m = 0; m < amounts.length; m++) amounts[m].addEventListener("input", function () {
-    setAmount(this, Math.min(amountOf(this), 99999999));
-  });
   watch.addEventListener("click", function (e) {
     var chip = e.target.closest("[data-add]");
     var clear = e.target.closest("[data-donate-clear]");
@@ -1317,23 +1313,33 @@
     if (clear) setAmount(input, 0);
     else {
       var add = chip.getAttribute("data-add");
-      setAmount(input, add === "all" ? BALANCE : amountOf(input) + +add);
+      setAmount(input, add === "all" ? BALANCE : Math.min(amountOf(input) + +add, 99999999));
     }
     var sig = input.closest(".donate").querySelector('.dsig__item[aria-pressed="true"]');
     if (sig) sig.setAttribute("aria-pressed", "false");
+    check(input.closest(".donate"));
+  });
+  var amounts = watch.querySelectorAll("[data-donate-amount]");
+  for (var m = 0; m < amounts.length; m++) amounts[m].addEventListener("input", function () {
+    setAmount(this, Math.min(amountOf(this), 99999999), true);
   });
 
-  // 시그니처 — 고르면 그 금액이 들어감, 오른쪽 화살표로 다음 묶음
+  // 시그니처 — 고르면 그 금액이 들어감, 오른쪽 화살표로 다음 묶음. 항목이 없으면 "등록된 시그니처 없음"
   var sigs = watch.querySelectorAll(".dsig__item");
   for (var g = 0; g < sigs.length; g++) sigs[g].addEventListener("click", function () {
     for (var i = 0; i < sigs.length; i++) sigs[i].setAttribute("aria-pressed", sigs[i] === this ? "true" : "false");
     setAmount(this.closest(".donate").querySelector("[data-donate-amount]"), +this.getAttribute("data-price"));
+    check(this.closest(".donate"));
   });
   var grid = watch.querySelector("[data-sig-grid]");
   watch.querySelector("[data-sig-next]").addEventListener("click", function () {
     var end = grid.scrollLeft + grid.clientWidth >= grid.scrollWidth - 2;
     grid.scrollLeft = end ? 0 : grid.scrollLeft + 188;
   });
+  if (!sigs.length) {
+    grid.parentNode.hidden = true;
+    watch.querySelector("[data-sig-empty]").hidden = false;
+  }
 
   // 영상 시작·종료 시간 — 숫자만, mm:ss 로 맞춤
   var times = watch.querySelectorAll("[data-time]");
@@ -1341,4 +1347,182 @@
     var d = this.value.replace(/[^0-9]/g, "").slice(0, 4);
     this.value = d.length > 2 ? d.slice(0, d.length - 2) + ":" + d.slice(-2) : d;
   });
+
+  /* 입력 확인 (64617:28170) — 서버 연동 전 데모 규칙.
+     글자 수·금지어·금액은 입력하는 대로, 빈 필수 항목은 후원하기를 누른 뒤부터 알림.
+     최소 금액은 영상 후원 10,000원(시안 "최소금액표시"), 나머지 1,000원 */
+  var BANNED = ["씨발", "시발", "병신", "개새끼"];
+  var MAX_CLIP = 300; // 영상 후원 최대 재생 시간(초)
+  function secOf(input) {
+    var d = input.value.replace(/[^0-9]/g, "");
+    if (!d) return null;
+    return (d.length > 2 ? +d.slice(0, -2) : 0) * 60 + +d.slice(-2);
+  }
+  function warn(el, msg, field) {
+    el.textContent = msg ? "⚠️ " + msg : "";
+    el.hidden = !msg;
+    if (field) for (var i = 0; i < field.length; i++) field[i].classList.toggle("is-warn", !!msg);
+    return !msg;
+  }
+  function check(panel, all) {
+    if (panel.hasAttribute("data-tried")) all = true;
+    var ok = true;
+    var msg = panel.querySelector("[data-donate-msg]");
+    var text = msg.value;
+    ok = warn(msg.closest(".dmsg").querySelector("[data-warn]"),
+      text.length > 200 ? "후원메세지는 200자 이내로 입력해주세요"
+        : BANNED.some(function (b) { return text.indexOf(b) > -1; }) ? "후원메세지에 사용할 수 없는 표현이 포함되어 있어요" : "",
+      [msg.closest(".dmsg__box")]) && ok;
+
+    var amount = panel.querySelector("[data-donate-amount]");
+    var won = amountOf(amount);
+    var min = panel.getAttribute("data-donate-panel") === "video" ? 10000 : 1000;
+    ok = warn(amount.closest(".damount").querySelector("[data-warn]"),
+      won > BALANCE ? "보유캐시가 부족합니다" : (won || all) && won < min ? "최소 " + fmt(min) + "원 이상" : "",
+      [amount.closest(".damount__box")]) && ok;
+
+    var key = panel.getAttribute("data-donate-panel");
+    if (key === "signature") {
+      var picked = panel.querySelector('.dsig__item[aria-pressed="true"]');
+      ok = warn(panel.querySelector("[data-warn-sig]"),
+        picked && picked.hasAttribute("data-unavailable") ? "선택한 시그니처를 사용할 수 없습니다. 다른 항목을 선택해주세요"
+          : all && !picked && sigs.length ? "후원할 시그니처를 선택해주세요" : "") && ok;
+    }
+    if (key === "video") {
+      var url = panel.querySelector("[data-video-url]");
+      var u = url.value.trim();
+      ok = warn(panel.querySelector("#d-video-url-warn"),
+        !u ? (all ? "영상 URL을 입력해주세요" : "")
+          : /^(https?:\/\/)?(www\.|m\.)?(youtube\.com\/(watch\?v=|shorts\/|live\/)|youtu\.be\/)[\w-]{6,}/.test(u) ? ""
+          : "지원되는 Youtube 영상 URL을 입력해주세요",
+        [url.closest(".dfield")]) && ok;
+      var start = panel.querySelector("[data-video-start]");
+      var end = panel.querySelector("[data-video-end]");
+      var s0 = secOf(start), s1 = secOf(end);
+      ok = warn(panel.querySelector("#d-video-time-warn"),
+        s0 === null || s1 === null ? ""
+          : s1 <= s0 ? "종료 시간은 시작 시간보다 늦어야 합니다"
+          : s1 - s0 > MAX_CLIP ? "허용된 영상 재생 시간을 초과했습니다" : "",
+        [start.closest(".dfield"), end.closest(".dfield")]) && ok;
+    }
+    if (key === "mission") {
+      var title = panel.querySelector("[data-mission-title]");
+      var body = panel.querySelector("[data-mission-body]");
+      var LONG = "입력 가능한 글자 수를 초과했습니다";
+      ok = warn(panel.querySelector("#d-mission-title-warn"),
+        title.value.length > 200 ? LONG : all && !title.value.trim() ? "미션 제목을 입력해주세요" : "",
+        [title.closest(".dmission__box")]) && ok;
+      ok = warn(panel.querySelector("#d-mission-body-warn"), body.value.length > 200 ? LONG : "",
+        [body.closest(".dmission__box")]) && ok;
+    }
+    panel.querySelector("[data-warn-form]").hidden = ok || !panel.hasAttribute("data-tried");
+    return ok;
+  }
+  for (var q = 0; q < panels.length; q++) {
+    panels[q].addEventListener("input", function () { check(this); });
+    check(panels[q]);
+  }
+
+  /* 후원하기 — 확인을 통과하면 펀캐시를 빼고 채팅에 후원 메시지를 남긴 뒤 패널을 닫음.
+     실패 화면(64624:81159)은 주소에 ?donate=fail 을 붙이면 첫 시도에서 한 번 보여줌 (오프라인이면 늘) */
+  var fail = watch.querySelector("#donate-fail");
+  var failOnce = /[?&]donate=fail\b/.test(location.search);
+  var pending = null;
+  function reset(panel) {
+    panel.removeAttribute("data-tried");
+    var fields = panel.querySelectorAll("textarea, input[type=text]:not([data-donate-amount]), input[type=url]");
+    for (var i = 0; i < fields.length; i++) {
+      fields[i].value = "";
+      fields[i].dispatchEvent(new Event("input", { bubbles: true }));
+    }
+    setAmount(panel.querySelector("[data-donate-amount]"), 5000);
+    var picked = panel.querySelector('.dsig__item[aria-pressed="true"]');
+    if (picked) picked.setAttribute("aria-pressed", "false");
+    check(panel);
+  }
+  function donate(panel) {
+    if (failOnce || !navigator.onLine) {
+      failOnce = false;
+      pending = panel;
+      fail.hidden = false;
+      fail.querySelector("[data-donate-retry]").focus();
+      return;
+    }
+    var won = amountOf(panel.querySelector("[data-donate-amount]"));
+    BALANCE -= won;
+    var bals = watch.querySelectorAll("[data-donate-balance]");
+    for (var i = 0; i < bals.length; i++) bals[i].textContent = fmt(BALANCE);
+    var li = document.createElement("li");
+    li.className = "wmsg wmsg--mine";
+    li.innerHTML = '<span class="wmsg__avatar wmsg__avatar--white" aria-hidden="true"></span><p><span class="wmsg__name"></span><span class="wmsg__text"></span></p>';
+    li.querySelector(".wmsg__name").textContent = "@" + panel.querySelector("[data-donate-nick]").textContent;
+    var note = panel.querySelector("[data-donate-msg]").value.trim();
+    li.querySelector(".wmsg__text").textContent = "💰 " + fmt(won) + "원 후원" + (note ? " · " + note : "");
+    list.appendChild(li);
+    list.scrollTop = list.scrollHeight;
+    reset(panel);
+    show(null);
+  }
+  var submits = watch.querySelectorAll("[data-donate-submit]");
+  for (var t = 0; t < submits.length; t++) submits[t].addEventListener("click", function () {
+    var panel = this.closest(".donate");
+    panel.setAttribute("data-tried", "");
+    if (check(panel)) donate(panel);
+    else {
+      var bad = panel.querySelector(".is-warn input, .is-warn textarea, .dwarn:not([hidden])");
+      if (bad) bad.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    }
+  });
+  function closeFail() {
+    fail.hidden = true;
+    var panel = pending;
+    pending = null;
+    return panel;
+  }
+  fail.querySelector("[data-donate-retry]").addEventListener("click", function () {
+    var panel = closeFail();
+    if (panel) donate(panel);
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && !fail.hidden) {
+      e.stopImmediatePropagation();
+      var panel = closeFail();
+      if (panel) panel.querySelector("[data-donate-submit]").focus();
+    }
+  }, true);
+})();
+
+/* PC 알림 팝업 (64686:113964) — GNB 종 아이콘으로 열고 닫음. X · 바깥 클릭 · ESC 로도 닫힘.
+   목록은 모바일 알림 화면(#notice-view)과 같은 내용이라 복사해 씀 */
+(function () {
+  var btn = document.getElementById("notice-btn");
+  var pop = document.getElementById("notice-pop");
+  if (!btn || !pop) return;
+  var body = pop.querySelector("[data-notice-body]");
+  var groups = document.querySelectorAll("#notice-view .notice-group");
+  for (var i = 0; i < groups.length; i++) {
+    var copy = groups[i].cloneNode(true);
+    copy.removeAttribute("data-node-id");
+    body.appendChild(copy);
+  }
+  function toggle(open) {
+    pop.hidden = !open;
+    btn.setAttribute("aria-expanded", open ? "true" : "false");
+  }
+  btn.addEventListener("click", function () { toggle(pop.hidden); });
+  pop.querySelector("[data-notice-close]").addEventListener("click", function () {
+    toggle(false);
+    btn.focus();
+  });
+  document.addEventListener("click", function (e) {
+    if (!pop.hidden && !pop.contains(e.target) && !btn.contains(e.target)) toggle(false);
+  });
+  // 캡처 단계에서 먼저 받아, 영상 상세의 후원 패널처럼 ESC 를 쓰는 다른 화면은 함께 닫히지 않게 함
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && !pop.hidden) {
+      e.stopImmediatePropagation();
+      toggle(false);
+      btn.focus();
+    }
+  }, true);
 })();
