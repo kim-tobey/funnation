@@ -1,0 +1,9 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Menu / Close_SM">
+<g id="Vector">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M16 16L8 8Z" fill="#D9D9D9"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M16 8L8 16Z" fill="#D9D9D9"/>
+<path d="M16 16L8 8M16 8L8 16" stroke="#D9D9D9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</g>
+</svg>

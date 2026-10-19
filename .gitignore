@@ -1,0 +1,9 @@
+# macOS
+.DS_Store
+
+# 이 Mac 전용 설정
+.claude/
+
+# 작업용 (이전 버전 복사본 · 검수 스크린샷) — git 기록이 백업을 대신함
+.backup/
+.design/

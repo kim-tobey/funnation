@@ -1,0 +1,7 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<!-- 원본 Group 15(21.47x12)를 24x24 안 정수 위치(1,6)에 배치 — 픽셀 격자 정렬 -->
+<g transform="translate(1 6)">
+<path id="Vector" d="M12.3158 1H2.84211C1.82474 1 1 1.82474 1 2.84211V9.1579C1 10.1753 1.82474 11 2.84211 11H12.3158C13.3332 11 14.1579 10.1753 14.1579 9.1579V2.84211C14.1579 1.82474 13.3332 1 12.3158 1Z" fill="#DFE2EA" stroke="#DFE2EA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector_2" d="M14.1579 4.42106L20.4737 1.26316V10.7368L14.1579 7.57895V4.42106Z" fill="#DFE2EA" stroke="#DFE2EA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</svg>

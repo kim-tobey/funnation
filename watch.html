@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark" data-page="watch">
+<head>
+<meta charset="UTF-8">
+<!-- 영상 상세는 아직 PC 시안만 있어 휴대폰에서도 1440px 화면을 축소해 보여줌 -->
+<meta name="viewport" content="width=1440">
+<title>FUNNATION — 영상 상세</title>
+<link rel="icon" href="assets/favicon.ico" sizes="any">
+<link rel="icon" href="assets/favicon/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="icon" href="assets/favicon/favicon-192.png" type="image/png" sizes="192x192">
+<link rel="apple-touch-icon" href="assets/favicon/apple-touch-icon.png">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="page page--watch" data-node-id="64617:31107">
+
+  <!-- 조명 -->
+  <div class="page__glow" data-node-id="63998:5232" aria-hidden="true">
+    <img src="assets/img.svg" alt="">
+  </div>
+
+  <!-- ===================== Top nav ===================== -->
+  <header class="top-nav" data-node-id="63998:5542">
+    <div class="top-nav__inner">
+
+      <div class="top-nav__left">
+        <button class="icon-btn-square" type="button" id="lnb-toggle" aria-label="메뉴 접기" aria-expanded="true" aria-controls="lnb">
+          <!-- 펼침(imgMenuOpen) ↔ 접힘(mini/menu-closed) 아이콘을 막대·화살표로 나눠 애니메이션 -->
+          <svg class="menu-toggle-icon" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
+            <rect class="menu-toggle-icon__bar menu-toggle-icon__bar--1" x="4" y="6" width="16" height="2" rx="1"/>
+            <rect class="menu-toggle-icon__bar menu-toggle-icon__bar--2" x="4" y="11" width="16" height="2" rx="1"/>
+            <rect class="menu-toggle-icon__bar menu-toggle-icon__bar--3" x="4" y="16" width="16" height="2" rx="1"/>
+            <path class="menu-toggle-icon__arrow" d="M14.5996 12L19.5996 17L20.9996 15.6L17.3996 12L20.9996 8.4L19.5996 7L14.5996 12Z"/>
+          </svg>
+        </button>
+        <a class="logo" href="index.html" aria-label="FUNNATION 홈" data-node-id="64389:149326">
+          <span class="logo__symbol" aria-hidden="true">
+            <img class="logo__symbol-base" src="assets/logo/v2/symbol.svg" alt="">
+            <img class="logo__symbol-base" src="assets/logo/v2/symbol-mask.svg" alt="">
+            <img class="logo__crown" src="assets/logo/v2/symbol-crown.svg" alt="">
+          </span>
+          <img class="logo__word" src="assets/logo/v2/wordmark.svg" alt="">
+        </a>
+      </div>
+
+      <!-- 검색 인풋 — 누르면 포커스 상태(64299:157625) + 최근 검색어(64299:159052), 입력하면 지우기 버튼(64299:162199) -->
+      <form class="nav-search" id="nav-search" role="search" data-node-id="64149:72817">
+        <input class="nav-search__input" type="search" name="q" placeholder="크리에이터, 동영상 검색" aria-label="크리에이터, 동영상 검색" autocomplete="off" data-focus-placeholder="검색어를 입력해주세요.">
+        <img class="nav-search__icon" src="assets/v2/search.svg" width="18" height="18" alt="">
+        <button class="nav-search__clear" type="button" aria-label="검색어 지우기" hidden><img src="assets/v2/search-clear.svg" width="20" height="20" alt=""></button>
+        <div class="nav-search__panel" data-node-id="64299:159052">
+          <div class="nav-search__head">
+            <h2>최근 검색어</h2>
+            <button type="button" data-recent-clear>전체삭제</button>
+          </div>
+          <ul class="nav-search__list">
+            <li><a href="#"><span class="search-term-icon"><img src="assets/v2/pc-recent-search.svg" width="18" height="18" alt=""></span><span>큰별TV</span></a><button type="button" aria-label="큰별TV 삭제" data-recent-remove><img src="assets/v2/recent-remove.svg" width="11.65" height="11.65" alt=""></button></li>
+            <li><a href="#"><span class="search-term-icon"><img src="assets/v2/pc-recent-search.svg" width="18" height="18" alt=""></span><span>다썰남TV</span></a><button type="button" aria-label="다썰남TV 삭제" data-recent-remove><img src="assets/v2/recent-remove.svg" width="11.65" height="11.65" alt=""></button></li>
+            <li><a href="#"><span class="search-term-icon"><img src="assets/v2/pc-recent-search.svg" width="18" height="18" alt=""></span><span>스타덤레이블</span></a><button type="button" aria-label="스타덤레이블 삭제" data-recent-remove><img src="assets/v2/recent-remove.svg" width="11.65" height="11.65" alt=""></button></li>
+          </ul>
+        </div>
+      </form>
+
+      <div class="top-nav__right">
+        <div class="gold-chip auth-in" data-node-id="63998:5553">
+          <img src="assets/imgGold.png" alt="">
+          <span>1,250만원</span>
+        </div>
+
+        <div class="top-nav__icons auth-in">
+          <button class="nav-icon" type="button" aria-label="로그인">
+            <img src="assets/imgAccountCircle.svg" width="24" height="24" alt="">
+          </button>
+          <button class="nav-icon" type="button" aria-label="언어 설정">
+            <img src="assets/imgLanguage.svg" width="24" height="24" alt="">
+          </button>
+          <button class="nav-icon" type="button" aria-label="알림">
+            <img src="assets/imgNotifications24DpE3E3E3Fill0Wght400Grad0Opsz241.svg" width="24" height="24" alt="">
+            <span class="nav-icon__badge">2</span>
+          </button>
+        </div>
+
+        <button class="studio-btn auth-in" type="button">
+          <span class="studio-btn__icon"><img src="assets/imgGroup15.svg" width="21.4737" height="12" alt=""></span>
+          스튜디오
+        </button>
+
+        <!-- 로그아웃 상태 (v2.0 64372:140618) — 언어 설정은 로그인 상태와 같은 아이콘 버튼 -->
+        <button class="nav-icon auth-out" type="button" aria-label="언어 설정" data-node-id="64372:140627">
+          <img src="assets/imgLanguage.svg" width="24" height="24" alt="">
+        </button>
+        <button class="login-btn auth-out" type="button" id="login-btn">로그인</button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ===================== 모바일 상태바 (64026:37330) — 시안 재현용 ===================== -->
+  <div class="mo-statusbar" aria-hidden="true">
+    <span class="mo-statusbar__time">9:41</span>
+    <img class="mo-statusbar__island" src="assets/mo/dynamic-island.png" width="124.66" height="36" alt="">
+    <span class="mo-statusbar__icons">
+      <img src="assets/mo/status-cell.svg" width="17" height="10.667" alt="">
+      <img src="assets/mo/status-wifi.svg" width="15.333" height="11" alt="">
+      <img src="assets/mo/status-battery.svg" width="24.328" height="11.333" alt="">
+    </span>
+  </div>
+
+  <!-- ===================== 모바일 앱바 (64026:38039) ===================== -->
+  <!-- v2.0 64112:15968 — 검색 · 로고(가운데) · 언어 · 메뉴 (뒤로 가기는 로그인 화면에서만) -->
+  <header class="mo-appbar mo-appbar--home">
+    <div class="mo-appbar__side">
+      <button class="mo-appbar__btn mo-appbar__sub-back" type="button" aria-label="뒤로 가기" data-subview-close>
+        <img src="assets/mo/appbar-back.svg" width="24" height="24" alt="">
+      </button>
+      <button class="mo-appbar__btn mo-appbar__sub-close" type="button" aria-label="알림 닫기" data-subview-close>
+        <img src="assets/v2/close-md.svg" width="24" height="24" alt="">
+      </button>
+      <button class="mo-appbar__btn mo-appbar__search" type="button" aria-label="검색" data-node-id="64162:199925">
+        <img src="assets/v2/mo-search.svg" width="24" height="24" alt="">
+      </button>
+      <button class="mo-appbar__btn" type="button" aria-label="뒤로 가기" data-login-back data-history-back>
+        <img src="assets/mo/appbar-back.svg" width="24" height="24" alt="">
+      </button>
+    </div>
+    <h1 class="mo-appbar__title" id="mo-title"><img class="mo-appbar__logo" src="assets/v2/mo-logo.svg" width="63" height="26" alt="FUNNATION"></h1>
+    <div class="mo-appbar__side">
+      <button class="mo-appbar__btn mo-appbar__bell" type="button" aria-label="알림">
+        <img src="assets/mo/appbar-bell.svg" width="24" height="24" alt="">
+        <span class="mo-appbar__badge">2</span>
+      </button>
+      <button class="mo-appbar__btn" type="button" aria-label="언어 설정">
+        <img src="assets/mo/appbar-lang.svg" width="24" height="24" alt="">
+      </button>
+      <button class="mo-appbar__btn" type="button" id="lnb-toggle-mo" aria-label="메뉴 열기" aria-expanded="false" aria-controls="lnb">
+        <!-- PC 메뉴 버튼과 같은 아이콘 — 닫힘은 막대 셋, 드로어가 열리면 화살표 모양으로 -->
+        <svg class="menu-toggle-icon" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
+          <rect class="menu-toggle-icon__bar menu-toggle-icon__bar--1" x="4" y="6" width="16" height="2" rx="1"/>
+          <rect class="menu-toggle-icon__bar menu-toggle-icon__bar--2" x="4" y="11" width="16" height="2" rx="1"/>
+          <rect class="menu-toggle-icon__bar menu-toggle-icon__bar--3" x="4" y="16" width="16" height="2" rx="1"/>
+          <path class="menu-toggle-icon__arrow" d="M14.5996 12L19.5996 17L20.9996 15.6L17.3996 12L20.9996 8.4L19.5996 7L14.5996 12Z"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="layout">
+
+    <!-- ===================== LNB ===================== -->
+    <aside class="lnb" id="lnb" data-node-id="63998:5233">
+      <div class="lnb__content">
+
+        <!-- 프로필 -->
+        <div class="profile auth-in" data-node-id="63998:5235">
+          <div class="profile__pic">
+            <img src="assets/imgWhiteBg.png" width="57" height="57" alt="">
+            <img src="assets/imgBorder.svg" width="57" height="57" alt="">
+          </div>
+          <div class="profile__body">
+            <div class="profile__row1">
+              <span class="tag">닉네임</span>
+              <span class="profile__name">텔레토비</span>
+            </div>
+            <div class="profile__row2">
+              <span class="profile__yt"><img src="assets/imgGroup1321315348.svg" width="16" height="11.2002" alt=""></span>
+              <span class="profile__mail">kimiljoo@gmail.com</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 버튼 2개 -->
+        <div class="lnb__btn-row auth-in" data-node-id="63998:5262">
+          <button class="btn-outline" type="button">관리자 모드</button>
+          <button class="btn-outline btn-outline--accent" type="button">
+            연결 계정
+            <img src="assets/imgComponent1.svg" width="15" height="15" alt="">
+          </button>
+        </div>
+
+        <!-- 등급 카드 -->
+        <div class="grade auth-in" data-node-id="64073:7513">
+          <div class="grade__head">
+            <div class="grade__title">
+              <span class="grade__name">VIP</span>
+              <span class="grade__recent">최근 30일 300,000원</span>
+            </div>
+            <img class="grade__badge" src="assets/grade/vip.png" width="52" height="47" alt="">
+          </div>
+          <div class="grade__bar"><div class="grade__bar-fill"></div></div>
+          <p class="grade__next">다음 등급까지 999,000원 필요</p>
+          <button class="btn-ghost-accent" type="button">
+            다음 등급 미리 보기
+            <img src="assets/imgComponent1.svg" width="15" height="15" alt="">
+          </button>
+        </div>
+
+        <!-- 메뉴 -->
+        <nav class="lnb__menu" data-node-id="63998:5297">
+          <!-- 로그아웃 상태 : 63998:4842 -->
+          <!-- 펀캐시 (라이트 시안 64021:3377) -->
+          <div class="cash auth-in">
+            <div class="cash__info">
+              <span class="cash__label">펀캐시</span>
+              <span class="cash__amount">999,999,000<span>캐시</span></span>
+            </div>
+            <button class="cash__charge" type="button">충전</button>
+          </div>
+          <button class="btn-outline btn-outline--accent lnb__start auth-out" type="button">
+            방송 시작하기
+            <img src="assets/imgComponent1.svg" width="15" height="15" alt="">
+          </button>
+          <div class="lnb__rule auth-in"></div>
+
+          <div class="lnb__group">
+            <p class="lnb__caption">펀네이션</p>
+            <a class="lnb__item lnb__item--active" href="index.html" aria-current="page">
+              <span class="lnb__item-icon"><img src="assets/v2/lnb-home-active.svg" width="24" height="24" alt=""></span>홈
+            </a>
+            <a class="lnb__item" href="live.html">
+              <img src="assets/v2/lnb-live.svg" width="24" height="24" alt="">라이브 방송
+            </a>
+            <a class="lnb__item" href="#">
+              <img src="assets/imgComponent2.svg" width="24" height="24" alt="">크리에이터 찾기
+            </a>
+            <a class="lnb__item" href="#">
+              <img src="assets/imgComponent3.svg" width="24" height="24" alt="">즐겨찾기
+            </a>
+            <a class="lnb__item" href="#">
+              <img src="assets/imgComponent4.svg" width="24" height="24" alt="">커뮤니티
+            </a>
+          </div>
+
+          <div class="lnb__rule"></div>
+
+          <div class="lnb__group">
+            <p class="lnb__caption">고객지원</p>
+            <a class="lnb__item" href="#">
+              <img src="assets/imgComponent5.svg" width="24" height="24" alt="">이벤트
+            </a>
+            <a class="lnb__item" href="#">
+              <img src="assets/imgComponent6.svg" width="24" height="24" alt="">명예의 전당
+            </a>
+            <a class="lnb__item" href="#">
+              <img src="assets/imgComponent7.svg" width="24" height="24" alt="">고객센터
+            </a>
+            <a class="lnb__item" href="#">
+              <img src="assets/icTag.svg" width="24" height="24" alt="">서비스 소개
+            </a>
+            <button class="lnb__item lnb__item--toggle" type="button"
+                    id="theme-toggle" role="switch" aria-checked="false">
+              <span class="lnb__item-left">
+                <img src="assets/imgComponent8.svg" width="24" height="24" alt="">밝은 테마
+              </span>
+              <span class="toggle" aria-hidden="true"><span class="toggle__knob"></span></span>
+            </button>
+            <a class="lnb__item" href="#">
+              <img src="assets/imgIconServiceIntro1.svg" width="24" height="24" alt="">설정
+            </a>
+          </div>
+
+          <div class="lnb__rule"></div>
+        </nav>
+
+        <!-- 카카오 배너 -->
+        <!-- 시안 64073:7640 을 통짜 이미지(3x)로 사용 — 문구·서체(네모니2) 수정은 Figma 에서 다시 내보내 교체 -->
+        <a class="kakao-banner auth-in" href="#" data-node-id="64073:7640">
+          <img src="assets/kakao-banner.jpg" width="228" height="261" alt="카카오톡에서 바로 해결하세요! 카카오톡 채널 @펀네이션">
+        </a>
+
+        <!-- 추천 크리에이터 (로그아웃 상태) : 63998:4967 -->
+        <div class="creator-list auth-out" data-node-id="63998:4967">
+          <p class="lnb__caption">추천 크리에이터</p>
+          <ul>
+            <li class="creator">
+              <span class="creator__who">
+                <span class="creator__avatar creator__avatar--live"><img src="assets/logout/avatar1.png" alt=""></span>
+                <span class="creator__name">나해은</span> <span class="creator__live">LIVE</span>
+              </span>
+              <span class="creator__count">1,251</span>
+            </li>
+            <li class="creator">
+              <span class="creator__who">
+                <span class="creator__avatar"><img src="assets/logout/avatar2.png" alt=""></span>
+                <span class="creator__name">YM상사</span>
+              </span>
+              <span class="creator__count">2,454</span>
+            </li>
+            <li class="creator">
+              <span class="creator__who">
+                <span class="creator__avatar creator__avatar--live"><img src="assets/logout/avatar3.png" alt=""></span>
+                <span class="creator__name">더크라운레이블</span> <span class="creator__live">LIVE</span>
+              </span>
+              <span class="creator__count">10,343</span>
+            </li>
+            <li class="creator">
+              <span class="creator__who">
+                <span class="creator__avatar creator__avatar--live"><img src="assets/logout/avatar4.png" alt=""></span>
+                <span class="creator__name">SM상사</span> <span class="creator__live">LIVE</span>
+              </span>
+              <span class="creator__count">780</span>
+            </li>
+            <li class="creator">
+              <span class="creator__who">
+                <span class="creator__avatar creator__avatar--live"><img src="assets/logout/avatar5.png" alt=""></span>
+                <span class="creator__name">MS레이블</span> <span class="creator__live">LIVE</span>
+              </span>
+              <span class="creator__count">982</span>
+            </li>
+            <li class="creator">
+              <span class="creator__who">
+                <span class="creator__avatar"><img src="assets/logout/avatar6.png" alt=""></span>
+                <span class="creator__name">빵양</span>
+              </span>
+              <span class="creator__count">1040</span>
+            </li>
+            <!-- 접힌 LNB 전용 : 나머지 크리에이터 묶음 (64026:37183) -->
+            <li class="creator-more" aria-label="크리에이터 3명 더 보기">
+              <img src="assets/mini/stack1.png" alt="">
+              <img src="assets/mini/stack2.png" alt="">
+              <span>+3</span>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </aside>
+    <!-- 모바일 드로어 배경 -->
+    <div class="lnb-backdrop" id="lnb-backdrop" aria-hidden="true"></div>
+
+    <!-- ===================== Main ===================== -->
+    <main class="main">
+
+      <div class="main__inner">
+
+        <!-- 영상 상세 [A-03] ver.2 (64617:31107) — PC 전용. 영상 + 오른쪽 채팅(364px), 채팅 아래 탭으로 후원 패널 -->
+        <section class="watch" data-node-id="64617:31107">
+          <div class="watch__main">
+            <!-- 제목 · 태그 · 채널 / 구독 · 좋아요 · 팔로우 (64617:31137) -->
+            <header class="watch-head" data-node-id="64617:31137">
+              <div class="watch-head__info">
+                <div class="watch-head__meta">
+                  <div class="watch-head__title-row">
+                    <h1 class="watch-head__title">키워주세요 #채소가시러 #김삭은 #삭은이</h1>
+                    <span class="watch-head__viewers" aria-label="시청자 13명"><img src="assets/watch/users.svg" width="16" height="16" alt="">13</span>
+                  </div>
+                  <ul class="watch-head__tags" aria-label="태그">
+                    <li>#인디</li>
+                    <li>팀플레이</li>
+                    <li>서바이벌</li>
+                  </ul>
+                </div>
+                <a class="watch-head__channel" href="#">
+                  <span class="watch-head__avatar" aria-hidden="true"><img src="assets/watch/channel-banner.png" alt=""></span>
+                  채소가시러
+                </a>
+              </div>
+              <div class="watch-head__actions">
+                <button class="watch-btn" type="button" aria-pressed="false"><img src="assets/watch/plus.svg" width="16" height="16" alt="">구독</button>
+                <button class="watch-btn" type="button" aria-pressed="false"><img src="assets/watch/thumbs-up.svg" width="16" height="16" alt="">좋아요</button>
+                <button class="watch-btn" type="button" aria-pressed="false"><img src="assets/watch/heart.svg" width="16" height="16" alt="">팔로우</button>
+              </div>
+            </header>
+            <!-- 영상 (64617:31135) — 서버 연동 전이라 정지 화면 -->
+            <div class="watch-stage" data-node-id="64617:31135">
+              <img class="watch-stage__video" src="assets/watch/video.png" width="727" height="1295" alt="채소가시러 방송 화면">
+              <button class="watch-stage__chat" type="button" data-chat-open hidden>
+                <img src="assets/watch/collapse.svg" width="15" height="15" alt="">채팅 열기
+              </button>
+            </div>
+          </div>
+
+          <!-- 채팅 (64617:31108) -->
+          <aside class="wchat" id="wchat" aria-label="채팅" data-node-id="64617:31108">
+            <header class="wchat__head" data-node-id="64617:31112">
+              <button class="wchat__collapse" type="button" aria-label="채팅 닫기" aria-controls="wchat" data-chat-close><img src="assets/watch/collapse.svg" width="15" height="15" alt=""></button>
+              <h2>채팅</h2>
+            </header>
+            <div class="wchat__bar">
+              <button class="wchat__mode" type="button">주요 채팅<img src="assets/watch/chevron-down.svg" width="16" height="16" alt=""></button>
+              <span class="wchat__xp"><img src="assets/watch/crown.svg" width="12" height="12" alt="">0XP</span>
+              <button class="wchat__more" type="button" aria-label="채팅 설정"><img src="assets/watch/more.svg" width="20" height="20" alt=""></button>
+            </div>
+            <ol class="wchat__list" id="wchat-list" aria-live="polite">
+            <li class="wmsg"><img class="wmsg__avatar" src="assets/home/avatar/chim.png" width="24" height="24" alt=""><p><span class="wmsg__name">@얌사단_까잡서</span><span class="wmsg__badge"><img src="assets/watch/crown.svg" width="12" height="12" alt="">#1</span><span class="wmsg__text">5단이 다 간식임요</span></p></li>
+            <li class="wmsg"><span class="wmsg__avatar wmsg__avatar--white" aria-hidden="true"></span><p><span class="wmsg__name">@눅우인가-h3b</span><span class="wmsg__text">어마하다</span></p></li>
+            <li class="wnotice">
+              <img src="assets/watch/youtube.svg" width="20" height="14" alt="">
+              <div>
+                <p>실시간 채팅에 오신 것을 환영합니다. 개인정보를 보호하고 YouTube 커뮤니티 가이드를 준수하는 것을 잊지 마세요.</p>
+                <a href="https://www.youtube.com/howyoutubeworks/policies/community-guidelines/" target="_blank" rel="noopener">자세히 알아보기</a>
+              </div>
+            </li>
+            <li class="wmsg"><span class="wmsg__avatar wmsg__avatar--white" aria-hidden="true"></span><p><span class="wmsg__name">@눅우인가-h3b</span><span class="wmsg__text">돌얌이 곧 80찍는다</span></p></li>
+            <li class="wmsg"><span class="wmsg__avatar wmsg__avatar--black" aria-hidden="true"></span><p><span class="wmsg__name">@블랙-y3s</span><span class="wmsg__text">에휴 🥵</span></p></li>
+            <li class="wmsg"><span class="wmsg__avatar wmsg__avatar--white" aria-hidden="true"></span><p><span class="wmsg__name">@눅우인가-h3b</span><span class="wmsg__text">👏 👏 👏 👏 👏</span></p></li>
+            <li class="wmsg"><span class="wmsg__avatar wmsg__avatar--white" aria-hidden="true"></span><p><span class="wmsg__name">@눅우인가-h3b</span><span class="wmsg__text">에휴</span></p></li>
+            <li class="wmsg"><span class="wmsg__avatar wmsg__avatar--white" aria-hidden="true"></span><p><span class="wmsg__name">@눅우인가-h3b</span><span class="wmsg__text">쥰나 에휴</span></p></li>
+            <li class="wmsg"><img class="wmsg__avatar" src="assets/home/avatar/pixel.png" width="24" height="24" alt=""><p><span class="wmsg__name">@익명-x8b2d</span><span class="wmsg__badge"><img src="assets/watch/crown.svg" width="12" height="12" alt="">#2</span><span class="wmsg__text">입구 조만간 잔뜩쌓일 예정입니다 🤣🤣🤣</span></p></li>
+            <li class="wmsg"><img class="wmsg__avatar" src="assets/home/avatar/pixel.png" width="24" height="24" alt=""><p><span class="wmsg__name">@익명-x8b2d</span><span class="wmsg__badge"><img src="assets/watch/crown.svg" width="12" height="12" alt="">#2</span><span class="wmsg__text">먹을때 제일 행복한 스톤얌 🤣🤣🤣</span></p></li>
+            <li class="wmsg"><span class="wmsg__avatar wmsg__avatar--black" aria-hidden="true"></span><p><span class="wmsg__name">@블랙-y3s</span><span class="wmsg__text">로드님 천장에서 내려와서 한소리 해주세요</span></p></li>
+            <li class="wmsg"><img class="wmsg__avatar" src="assets/home/avatar/pixel.png" width="24" height="24" alt=""><p><span class="wmsg__name">@익명-x8b2d</span><span class="wmsg__badge"><img src="assets/watch/crown.svg" width="12" height="12" alt="">#2</span><span class="wmsg__text">오 저거 졸~~~라맛있겠다 추천해준값 주세요 🤣🤣🤣</span></p></li>
+            <li class="wmsg"><span class="wmsg__avatar wmsg__avatar--text" aria-hidden="true">동현</span><p><span class="wmsg__name">@김동현-h2l</span><span class="wmsg__text">대충먹어 살찐다</span></p></li>
+            <li class="wmsg"><span class="wmsg__avatar wmsg__avatar--black" aria-hidden="true"></span><p><span class="wmsg__name">@블랙-y3s</span><span class="wmsg__text">나도 걱정되서 천장에서 내려왔더니 못 내려오겠다 🦖</span></p></li>
+            <li class="wmsg"><img class="wmsg__avatar" src="assets/home/avatar/bear.jpg" width="24" height="24" alt=""><p><span class="wmsg__name">@애착뮤직</span><span class="wmsg__text">누나 맛있게 먹오! ❤️</span></p></li>
+            <li class="wmsg"><span class="wmsg__avatar wmsg__avatar--text" aria-hidden="true">동현</span><p><span class="wmsg__name">@김동현-h2l</span><span class="wmsg__text">맛보기는 한술깔</span></p></li>
+            <li class="wmsg"><span class="wmsg__avatar wmsg__avatar--text" aria-hidden="true">동현</span><p><span class="wmsg__name">@김동현-h2l</span><span class="wmsg__text">버리자요</span></p></li>
+            <li class="wmsg"><span class="wmsg__avatar wmsg__avatar--black" aria-hidden="true"></span><p><span class="wmsg__name">@블랙-y3s</span><span class="wmsg__text">누구긴 누구야 너 안티팬이지 ㅋㅋ</span></p></li>
+            <li class="wmsg"><span class="wmsg__avatar wmsg__avatar--text" aria-hidden="true">동현</span><p><span class="wmsg__name">@김동현-h2l</span><span class="wmsg__text">면은 한입끌</span></p></li>
+            <li class="wmsg"><img class="wmsg__avatar" src="assets/home/avatar/pixel.png" width="24" height="24" alt=""><p><span class="wmsg__name">@익명-x8b2d</span><span class="wmsg__badge"><img src="assets/watch/crown.svg" width="12" height="12" alt="">#2</span><span class="wmsg__text">악 스톤얌이 맛봐서 못홈쳐가겠다 먹지마15000원 많관부~ 🥰</span></p></li>
+            </ol>
+            <form class="wchat__form" id="wchat-form" data-node-id="64617:31117">
+              <input class="wchat__input" name="msg" type="text" maxlength="200" placeholder="채팅을 입력해주세요" aria-label="채팅 입력" autocomplete="off">
+            </form>
+            <!-- 후원 탭 (64617:31122) — 누르면 같은 이름의 패널이 채팅 위로 올라옴, 다시 누르면 닫힘 -->
+            <div class="wchat__tabs" data-node-id="64617:31122">
+              <button class="wtab" type="button" aria-expanded="false" aria-controls="donate-general" data-donate="general"><span class="wtab__icon" aria-hidden="true"><img src="assets/watch/gift.svg" width="20" height="20" alt=""><img src="assets/watch/gift-active.svg" width="20" height="20" alt=""></span>후원</button>
+              <button class="wtab" type="button" aria-expanded="false" aria-controls="donate-signature" data-donate="signature"><span class="wtab__icon" aria-hidden="true"><img src="assets/watch/star.svg" width="20" height="20" alt=""><img src="assets/watch/star-active.svg" width="20" height="20" alt=""></span>시그니처</button>
+              <button class="wtab" type="button" aria-expanded="false" aria-controls="donate-video" data-donate="video"><span class="wtab__icon" aria-hidden="true"><img src="assets/watch/monitor.svg" width="20" height="20" alt=""><img src="assets/watch/monitor-active.svg" width="20" height="20" alt=""></span>영상</button>
+              <button class="wtab" type="button" aria-expanded="false" aria-controls="donate-mission" data-donate="mission"><span class="wtab__icon" aria-hidden="true"><img src="assets/watch/trophy.svg" width="20" height="20" alt=""><img src="assets/watch/trophy-active.svg" width="20" height="20" alt=""></span>미션</button>
+            </div>
+
+          <section class="donate" id="donate-general" data-donate-panel="general" aria-label="일반후원" data-node-id="64617:31228" hidden>
+            <header class="donate__head">
+              <h3>일반후원</h3>
+              <button class="donate__close" type="button" aria-label="일반후원 닫기" data-donate-close><img src="assets/watch/close-sm.svg" width="24" height="24" alt=""></button>
+            </header>
+            <div class="donate__body">
+            <div class="dform" data-node-id="64617:31242">
+              <div class="dmsg">
+                <div class="dmsg__top">
+                  <p class="dmsg__name"><strong data-donate-nick>Nickname</strong><span>님</span></p>
+                  <label class="dmsg__anon">익명<input class="switch" type="checkbox" role="switch" data-donate-anon></label>
+                </div>
+                <div class="dmsg__voice">
+                  <button class="dmsg__vol" type="button" aria-label="음성 읽기 끄기" aria-pressed="true" data-donate-vol><img src="assets/watch/volume.svg" width="16" height="16" alt=""></button>
+                  <button class="dmsg__tts" type="button" data-donate-voice aria-label="읽어줄 목소리 바꾸기"><span>유나</span><img src="assets/watch/chevron-right.svg" width="20" height="20" alt=""></button>
+                </div>
+                <div class="dmsg__box">
+                  <textarea class="dmsg__input" id="d-general-msg" maxlength="200" rows="2" placeholder="응원의 한마디를 남겨주세요" aria-label="응원 메시지" data-count></textarea>
+                  <span class="dmsg__count" aria-hidden="true">0/200</span>
+                </div>
+              </div>
+              <button class="dbox dtitle" type="button">
+                <span class="dbox__head"><strong>칭호</strong><img src="assets/watch/chevron-right.svg" width="20" height="20" alt=""></span>
+                <span class="dtitle__value">아직없음</span>
+              </button>
+              <div class="dbox damount">
+                <div class="dbox__head">
+                  <label for="d-general-amount"><strong>후원 금액</strong></label>
+                  <span class="dcash"><img src="assets/watch/cash.png" width="14" height="14" alt="">내 펀캐시<i aria-hidden="true"></i><b data-donate-balance>100,000</b></span>
+                </div>
+                <div class="damount__box">
+                  <input class="damount__input" id="d-general-amount" type="text" inputmode="numeric" value="5,000" autocomplete="off" data-donate-amount>
+                  <span class="damount__unit">원</span>
+                  <button class="damount__clear" type="button" aria-label="금액 지우기" data-donate-clear><img src="assets/watch/close-circle.svg" width="24" height="24" alt=""></button>
+                </div>
+                <div class="damount__chips">
+                  <button type="button" data-add="1000">+1천</button>
+                  <button type="button" data-add="10000">+1만</button>
+                  <button type="button" data-add="100000">+10만</button>
+                  <button type="button" data-add="300000">+30만</button>
+                  <button type="button" data-add="500000">+50만</button>
+                  <button type="button" data-add="all">전액</button>
+                </div>
+              </div>
+            </div>
+            </div>
+          </section>
+          <section class="donate" id="donate-signature" data-donate-panel="signature" aria-label="시그니처 후원" data-node-id="64617:31309" hidden>
+            <header class="donate__head">
+              <h3>시그니처 후원</h3>
+              <button class="donate__close" type="button" aria-label="시그니처 후원 닫기" data-donate-close><img src="assets/watch/close-sm.svg" width="24" height="24" alt=""></button>
+            </header>
+            <div class="donate__body">
+              <div class="dsec">
+                <div class="dsec__head">
+                  <h4>시그니처 선택</h4>
+                  <button class="dsig__all" type="button">전체보기<b>68</b></button>
+                </div>
+                <p class="dsec__desc">이미지를 선택하시면 후원 금액이 자동으로 입력됩니다.</p>
+                <div class="dsig">
+                  <ul class="dsig__grid" data-sig-grid>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="1000"><img src="assets/watch/signature/sig-1.png" width="84" height="48" alt="이쁜이 1,000원"></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="1500"><img src="assets/watch/signature/sig-2.png" width="84" height="48" alt="오짝승 1,500원"></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="1700"><img src="assets/watch/signature/sig-3.png" width="84" height="48" alt="키세스 1,700원"></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="1700"><img src="assets/watch/signature/sig-3.png" width="84" height="48" alt="키세스 1,700원"></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="2300"><img src="assets/watch/signature/sig-5.png" width="84" height="48" alt="GG EZ 2,300원"></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="2500"><img src="assets/watch/signature/sig-6.png" width="84" height="48" alt="토카토카 2,500원"></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="2700"><img src="assets/watch/signature/sig-7.png" width="84" height="48" alt="외모췍 2,700원"></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="2700"><img src="assets/watch/signature/sig-7.png" width="84" height="48" alt="외모췍 2,700원"></button></li>
+                  </ul>
+                  <button class="dsig__next" type="button" aria-label="시그니처 더 보기" data-sig-next><img src="assets/watch/sig-arrow.svg" width="24" height="24" alt=""></button>
+                </div>
+              </div>
+              <hr class="dsep">
+            <div class="dform" data-node-id="64617:31356">
+              <div class="dmsg">
+                <div class="dmsg__top">
+                  <p class="dmsg__name"><strong data-donate-nick>Nickname</strong><span>님</span></p>
+                  <label class="dmsg__anon">익명<input class="switch" type="checkbox" role="switch" data-donate-anon></label>
+                </div>
+                <div class="dmsg__voice">
+                  <button class="dmsg__vol" type="button" aria-label="음성 읽기 끄기" aria-pressed="true" data-donate-vol><img src="assets/watch/volume.svg" width="16" height="16" alt=""></button>
+                  <button class="dmsg__tts" type="button" data-donate-voice aria-label="읽어줄 목소리 바꾸기"><span>유나</span><img src="assets/watch/chevron-right.svg" width="20" height="20" alt=""></button>
+                </div>
+                <div class="dmsg__box">
+                  <textarea class="dmsg__input" id="d-signature-msg" maxlength="200" rows="2" placeholder="응원의 한마디를 남겨주세요" aria-label="응원 메시지" data-count></textarea>
+                  <span class="dmsg__count" aria-hidden="true">0/200</span>
+                </div>
+              </div>
+              <button class="dbox dtitle" type="button">
+                <span class="dbox__head"><strong>칭호</strong><img src="assets/watch/chevron-right.svg" width="20" height="20" alt=""></span>
+                <span class="dtitle__value">아직없음</span>
+              </button>
+              <div class="dbox damount">
+                <div class="dbox__head">
+                  <label for="d-signature-amount"><strong>후원 금액</strong></label>
+                  <span class="dcash"><img src="assets/watch/cash.png" width="14" height="14" alt="">내 펀캐시<i aria-hidden="true"></i><b data-donate-balance>100,000</b></span>
+                </div>
+                <div class="damount__box">
+                  <input class="damount__input" id="d-signature-amount" type="text" inputmode="numeric" value="5,000" autocomplete="off" data-donate-amount>
+                  <span class="damount__unit">원</span>
+                  <button class="damount__clear" type="button" aria-label="금액 지우기" data-donate-clear><img src="assets/watch/close-circle.svg" width="24" height="24" alt=""></button>
+                </div>
+                <div class="damount__chips">
+                  <button type="button" data-add="1000">+1천</button>
+                  <button type="button" data-add="10000">+1만</button>
+                  <button type="button" data-add="100000">+10만</button>
+                  <button type="button" data-add="300000">+30만</button>
+                  <button type="button" data-add="500000">+50만</button>
+                  <button type="button" data-add="all">전액</button>
+                </div>
+              </div>
+            </div>
+            </div>
+          </section>
+          <section class="donate" id="donate-video" data-donate-panel="video" aria-label="영상 후원" data-node-id="64617:31423" hidden>
+            <header class="donate__head">
+              <h3>영상 후원</h3>
+              <button class="donate__close" type="button" aria-label="영상 후원 닫기" data-donate-close><img src="assets/watch/close-sm.svg" width="24" height="24" alt=""></button>
+            </header>
+            <div class="donate__body">
+              <div class="dsec">
+                <div class="dsec__head"><h4>영상 내용</h4></div>
+                <p class="dsec__desc">*영상 후원은 크리에이터가 수락하면 후원이 됩니다. 수락하지 않으면 펀캐시로 다시 적립됩니다.</p>
+                <div class="dfields">
+                  <label class="dfield"><span>URL</span><input type="url" placeholder="Youtube URL을 입력해주세요" autocomplete="off"></label>
+                  <div class="dfields__row">
+                    <label class="dfield"><span>시작시간</span><input type="text" inputmode="numeric" placeholder="00:00" maxlength="5" data-time></label>
+                    <label class="dfield"><span>종료시간</span><input type="text" inputmode="numeric" placeholder="00:00" maxlength="5" data-time></label>
+                  </div>
+                </div>
+              </div>
+              <hr class="dsep">
+            <div class="dform" data-node-id="64617:31456">
+              <div class="dmsg">
+                <div class="dmsg__top">
+                  <p class="dmsg__name"><strong data-donate-nick>Nickname</strong><span>님</span></p>
+                  <label class="dmsg__anon">익명<input class="switch" type="checkbox" role="switch" data-donate-anon></label>
+                </div>
+                <div class="dmsg__voice">
+                  <button class="dmsg__vol" type="button" aria-label="음성 읽기 끄기" aria-pressed="true" data-donate-vol><img src="assets/watch/volume.svg" width="16" height="16" alt=""></button>
+                  <button class="dmsg__tts" type="button" data-donate-voice aria-label="읽어줄 목소리 바꾸기"><span>유나</span><img src="assets/watch/chevron-right.svg" width="20" height="20" alt=""></button>
+                </div>
+                <div class="dmsg__box">
+                  <textarea class="dmsg__input" id="d-video-msg" maxlength="200" rows="2" placeholder="응원의 한마디를 남겨주세요" aria-label="응원 메시지" data-count></textarea>
+                  <span class="dmsg__count" aria-hidden="true">0/200</span>
+                </div>
+              </div>
+              <button class="dbox dtitle" type="button">
+                <span class="dbox__head"><strong>칭호</strong><img src="assets/watch/chevron-right.svg" width="20" height="20" alt=""></span>
+                <span class="dtitle__value">아직없음</span>
+              </button>
+              <div class="dbox damount">
+                <div class="dbox__head">
+                  <label for="d-video-amount"><strong>후원 금액</strong></label>
+                  <span class="dcash"><img src="assets/watch/cash.png" width="14" height="14" alt="">내 펀캐시<i aria-hidden="true"></i><b data-donate-balance>100,000</b></span>
+                </div>
+                <div class="damount__box">
+                  <input class="damount__input" id="d-video-amount" type="text" inputmode="numeric" value="5,000" autocomplete="off" data-donate-amount>
+                  <span class="damount__unit">원</span>
+                  <button class="damount__clear" type="button" aria-label="금액 지우기" data-donate-clear><img src="assets/watch/close-circle.svg" width="24" height="24" alt=""></button>
+                </div>
+                <div class="damount__chips">
+                  <button type="button" data-add="1000">+1천</button>
+                  <button type="button" data-add="10000">+1만</button>
+                  <button type="button" data-add="100000">+10만</button>
+                  <button type="button" data-add="300000">+30만</button>
+                  <button type="button" data-add="500000">+50만</button>
+                  <button type="button" data-add="all">전액</button>
+                </div>
+              </div>
+            </div>
+            </div>
+          </section>
+          <section class="donate" id="donate-mission" data-donate-panel="mission" aria-label="미션 후원" data-node-id="64617:31523" hidden>
+            <header class="donate__head">
+              <h3>미션 후원</h3>
+              <button class="donate__close" type="button" aria-label="미션 후원 닫기" data-donate-close><img src="assets/watch/close-sm.svg" width="24" height="24" alt=""></button>
+            </header>
+            <div class="donate__body">
+              <div class="dsec">
+                <div class="dsec__head"><h4>미션 내용</h4></div>
+                <p class="dsec__desc">미션 후원은 크리에이터가 수락하면 후원이 됩니다. 수락하지 않으면 펀캐시로 다시 적립됩니다.</p>
+                <div class="dmission">
+                  <label class="dmission__field">
+                    <span class="dmission__label">미션 제목<span class="dmission__count" aria-hidden="true">0/200</span></span>
+                    <input type="text" maxlength="200" placeholder="미션 제목을 입력하세요" data-count>
+                  </label>
+                  <label class="dmission__field">
+                    <span class="dmission__label">미션 내용 (선택)<span class="dmission__count" aria-hidden="true">0/200</span></span>
+                    <textarea maxlength="200" rows="3" placeholder="미션 내용을 자세히 설명해주세요" data-count></textarea>
+                  </label>
+                </div>
+              </div>
+              <hr class="dsep">
+            <div class="dform" data-node-id="64617:31560">
+              <div class="dmsg">
+                <div class="dmsg__top">
+                  <p class="dmsg__name"><strong data-donate-nick>Nickname</strong><span>님</span></p>
+                  <label class="dmsg__anon">익명<input class="switch" type="checkbox" role="switch" data-donate-anon></label>
+                </div>
+                <div class="dmsg__voice">
+                  <button class="dmsg__vol" type="button" aria-label="음성 읽기 끄기" aria-pressed="true" data-donate-vol><img src="assets/watch/volume.svg" width="16" height="16" alt=""></button>
+                  <button class="dmsg__tts" type="button" data-donate-voice aria-label="읽어줄 목소리 바꾸기"><span>유나</span><img src="assets/watch/chevron-right.svg" width="20" height="20" alt=""></button>
+                </div>
+                <div class="dmsg__box">
+                  <textarea class="dmsg__input" id="d-mission-msg" maxlength="200" rows="2" placeholder="응원의 한마디를 남겨주세요" aria-label="응원 메시지" data-count></textarea>
+                  <span class="dmsg__count" aria-hidden="true">0/200</span>
+                </div>
+              </div>
+              <button class="dbox dtitle" type="button">
+                <span class="dbox__head"><strong>칭호</strong><img src="assets/watch/chevron-right.svg" width="20" height="20" alt=""></span>
+                <span class="dtitle__value">아직없음</span>
+              </button>
+              <div class="dbox damount">
+                <div class="dbox__head">
+                  <label for="d-mission-amount"><strong>후원 금액</strong></label>
+                  <span class="dcash"><img src="assets/watch/cash.png" width="14" height="14" alt="">내 펀캐시<i aria-hidden="true"></i><b data-donate-balance>100,000</b></span>
+                </div>
+                <div class="damount__box">
+                  <input class="damount__input" id="d-mission-amount" type="text" inputmode="numeric" value="5,000" autocomplete="off" data-donate-amount>
+                  <span class="damount__unit">원</span>
+                  <button class="damount__clear" type="button" aria-label="금액 지우기" data-donate-clear><img src="assets/watch/close-circle.svg" width="24" height="24" alt=""></button>
+                </div>
+                <div class="damount__chips">
+                  <button type="button" data-add="1000">+1천</button>
+                  <button type="button" data-add="10000">+1만</button>
+                  <button type="button" data-add="100000">+10만</button>
+                  <button type="button" data-add="300000">+30만</button>
+                  <button type="button" data-add="500000">+50만</button>
+                  <button type="button" data-add="all">전액</button>
+                </div>
+              </div>
+            </div>
+            </div>
+          </section>
+          </aside>
+        </section>
+
+      </div>
+
+      <section class="login" id="login-view" aria-labelledby="login-title" data-node-id="64085:83981" hidden>
+        <h1 class="login__title" id="login-title">로그인</h1>
+        <form class="login__form" id="login-form" novalidate>
+          <!-- 입력칸 (64266:153550) — 포커스 때 라벨이 위 테두리에 걸리고(fieldset legend 로 테두리를 끊음) 파란 테두리,
+               값이 있으면 지우기 / 비밀번호는 보기 토글, 오류면 회색 테두리 + 빨간 아이콘·문구 -->
+          <div class="field-group" data-node-id="64316:165456">
+          <div class="field">
+            <input class="field__input" type="text" name="id" autocomplete="username" spellcheck="false"
+                   placeholder="아이디를 입력해주세요." aria-label="아이디" aria-describedby="login-id-hint">
+            <fieldset class="field__outline" aria-hidden="true"><legend><span>아이디</span></legend></fieldset>
+            <button class="field__action field__clear" type="button" aria-label="아이디 지우기" tabindex="-1">
+              <img src="assets/v2/search-clear.svg" width="20" height="20" alt="">
+            </button>
+          </div>
+          <p class="field__hint" id="login-id-hint"><img src="assets/login/check-glyph.svg" width="16" height="16" alt="">사용 가능한 아이디입니다.</p>
+          </div>
+          <div class="field-group" data-node-id="64316:166222">
+            <div class="field field--pw">
+              <input class="field__input" type="password" name="password" autocomplete="current-password"
+                     placeholder="비밀번호를 입력해주세요." aria-label="비밀번호" aria-describedby="login-pw-hint login-error">
+              <fieldset class="field__outline" aria-hidden="true"><legend><span>비밀번호</span></legend></fieldset>
+              <button class="field__action field__reveal" type="button" aria-label="비밀번호 보기" aria-pressed="false">
+                <img class="field__reveal-show" src="assets/login/pw-show.svg" width="24" height="24" alt="">
+                <img class="field__reveal-hide" src="assets/login/pw-hide.svg" width="20" height="20" alt="">
+              </button>
+              <img class="field__error-icon" src="assets/login/error-24.svg" width="24" height="24" alt="">
+            </div>
+            <p class="field__hint" id="login-pw-hint"><img src="assets/login/check-glyph.svg" width="16" height="16" alt="">비밀번호가 일치합니다.</p>
+            <p class="field__msg" id="login-error"><img src="assets/login/error-glyph.svg" width="16" height="16" alt="">비밀번호가 틀립니다.</p>
+          </div>
+          <div class="login__actions" data-node-id="64085:84005">
+            <button class="login__submit" type="submit">로그인</button>
+            <p class="login__or"><span>또는</span></p>
+            <button class="sns sns--google" type="button" data-sns>
+              <span class="sns__icon"><img src="assets/login/google.svg" width="20" height="20" alt=""></span>
+              <span class="sns__label">구글 로그인</span>
+            </button>
+            <button class="sns sns--naver" type="button" data-sns>
+              <span class="sns__icon"><img src="assets/login/naver.svg" width="18" height="18" alt=""></span>
+              <span class="sns__label">네이버 로그인</span>
+            </button>
+            <button class="sns sns--kakao" type="button" data-sns>
+              <span class="sns__icon"><img src="assets/login/kakao.svg" width="32" height="32" alt=""></span>
+              <span class="sns__label">카카오 로그인</span>
+            </button>
+          </div>
+        </form>
+        <nav class="login__help" aria-label="계정 도움말" data-node-id="64085:84025">
+          <a href="#">아이디 찾기</a>
+          <a href="#">비밀번호 찾기</a>
+          <a href="#signup" data-signup-open>회원가입</a>
+        </nav>
+      </section>
+
+      <!-- 회원가입 (모바일 시안 64454:202039 — PC 도 같은 폼). 로그아웃 상태에서 #signup 으로 열림.
+           약관동의 → 본인인증 → 정보입력 → 가입완료 4단계, 단계 이동은 주소를 바꾸지 않음 -->
+      <section class="signup" id="signup-view" aria-labelledby="signup-title" data-step="1" hidden>
+        <h1 class="signup__title" id="signup-title">회원가입</h1>
+
+        <!-- 단계 표시 (64493:83652) -->
+        <ol class="steps" aria-label="가입 단계" data-node-id="64493:83652">
+          <li class="steps__item"><span class="steps__num">1</span><span class="steps__label">약관동의</span></li>
+          <li class="steps__item"><span class="steps__num">2</span><span class="steps__label">본인인증</span></li>
+          <li class="steps__item"><span class="steps__num">3</span><span class="steps__label">정보입력</span></li>
+          <li class="steps__item"><span class="steps__num">4</span><span class="steps__label">가입완료</span></li>
+        </ol>
+
+        <!-- 1. 이용 약관 동의 (64493:21020 / 전체 동의 64493:21540) -->
+        <div class="signup__page" data-signup-step="1" data-node-id="64493:21020">
+          <div class="signup__body">
+            <h2 class="signup__head">이용 약관 동의</h2>
+            <ul class="terms">
+              <li class="terms__item terms__item--all">
+                <label class="check"><input type="checkbox" data-terms-all><span class="check__box" aria-hidden="true"></span><span>전체 동의 (선택 정보 포함)</span></label>
+              </li>
+              <li class="terms__item">
+                <label class="check"><input type="checkbox" data-terms required><span class="check__box" aria-hidden="true"></span><span>(필수) 청소년 보호정책을 확인하였습니다.</span></label>
+                <button class="terms__more" type="button" aria-label="청소년 보호정책 보기"><img src="assets/signup/chevron.svg" width="20" height="20" alt=""></button>
+              </li>
+              <li class="terms__item">
+                <label class="check"><input type="checkbox" data-terms required><span class="check__box" aria-hidden="true"></span><span>(필수) 서비스 이용약관(도네이터)</span></label>
+                <button class="terms__more" type="button" aria-label="서비스 이용약관(도네이터) 보기"><img src="assets/signup/chevron.svg" width="20" height="20" alt=""></button>
+              </li>
+              <li class="terms__item">
+                <label class="check"><input type="checkbox" data-terms required><span class="check__box" aria-hidden="true"></span><span>(필수) 서비스 이용약관(크리에이터)</span></label>
+                <button class="terms__more" type="button" aria-label="서비스 이용약관(크리에이터) 보기"><img src="assets/signup/chevron.svg" width="20" height="20" alt=""></button>
+              </li>
+              <li class="terms__item">
+                <label class="check"><input type="checkbox" data-terms required><span class="check__box" aria-hidden="true"></span><span>(필수) 개인정보 처리 방침</span></label>
+                <button class="terms__more" type="button" aria-label="개인정보 처리 방침 보기"><img src="assets/signup/chevron.svg" width="20" height="20" alt=""></button>
+              </li>
+              <li class="terms__item">
+                <label class="check"><input type="checkbox" data-terms name="marketing"><span class="check__box" aria-hidden="true"></span><span>(선택) 광고성 정보 수신 및 마케팅 활용 동의</span></label>
+                <button class="terms__more" type="button" aria-label="광고성 정보 수신 동의 보기"><img src="assets/signup/chevron.svg" width="20" height="20" alt=""></button>
+              </li>
+            </ul>
+          </div>
+          <div class="signup__actions">
+            <button class="signup__btn signup__btn--primary" type="button" data-signup-next disabled>다음</button>
+          </div>
+        </div>
+
+        <!-- 2. 본인 인증 수단 선택 (64573:105573 — 현재 휴대폰 인증만) -->
+        <div class="signup__page" data-signup-step="2" data-node-id="64573:105573" hidden>
+          <div class="signup__body">
+            <div class="signup__heading">
+              <h2 class="signup__head">본인 인증 수단 선택</h2>
+              <p class="signup__desc">안전한 서비스 이용을 위해 본인인증을 진행해주세요.</p>
+            </div>
+            <label class="method">
+              <input type="radio" name="verify" value="phone">
+              <span class="method__icon" aria-hidden="true">
+                <img class="method__phone" src="assets/signup/phone.png" width="38" height="38" alt="">
+                <img class="method__finger" src="assets/signup/fingerprint.png" width="16" height="16" alt="">
+              </span>
+              <span class="method__text">
+                <strong>휴대폰 인증</strong>
+                <span>본인 명의 휴대폰으로 인증하기</span>
+              </span>
+              <span class="method__check" aria-hidden="true"><img src="assets/signup/glyph.svg" width="16" height="16" alt=""></span>
+            </label>
+            <p class="signup__assist"><img src="assets/signup/info.svg" width="16" height="16" alt="">본인 인증은 1회만 진행됩니다.</p>
+            <!-- 서버 연동 전 데모 — 실제로는 통신사 본인인증 창에서 받아오는 값 -->
+            <p class="verified" hidden><img src="assets/signup/glyph.svg" width="16" height="16" alt=""><span>김펀네 · 010-****-1234 인증 완료</span></p>
+          </div>
+          <div class="signup__actions">
+            <button class="signup__btn" type="button" data-signup-prev>뒤로가기</button>
+            <button class="signup__btn signup__btn--primary" type="button" data-signup-next disabled>다음</button>
+          </div>
+        </div>
+
+        <!-- 3. 정보 입력 (64574:106949) — 아이디·닉네임은 입력칸에 붙은 중복 확인, 비밀번호 두 칸은 보기 아이콘 -->
+        <form class="signup__page" data-signup-step="3" id="signup-form" data-node-id="64574:106949" novalidate hidden>
+          <div class="signup__body">
+            <div class="signup__heading">
+              <h2 class="signup__head">정보 입력</h2>
+              <p class="signup__desc">펀네이션에서 사용할 계정 정보를 입력해주세요.</p>
+            </div>
+            <div class="sfields">
+              <div class="sfield">
+                <label class="sfield__label" for="su-id">아이디<em aria-hidden="true">*</em></label>
+                <div class="sfield__row">
+                  <div class="sfield__box"><input class="sfield__input" id="su-id" name="id" type="text" autocomplete="username" spellcheck="false" maxlength="16" placeholder="아이디를 입력해주세요" aria-describedby="su-id-msg" required></div>
+                  <button class="sfield__side" type="button" data-dup-check="id">중복 확인</button>
+                </div>
+                <p class="sfield__msg" id="su-id-msg">영문 소문자, 숫자 4~16자</p>
+              </div>
+              <div class="sfield">
+                <label class="sfield__label" for="su-pw">비밀번호<em aria-hidden="true">*</em></label>
+                <div class="sfield__box">
+                  <input class="sfield__input" id="su-pw" name="password" type="password" autocomplete="new-password" maxlength="20" placeholder="비밀번호를 입력해주세요." aria-describedby="su-pw-msg" required>
+                  <button class="sfield__reveal" type="button" aria-label="비밀번호 보기" aria-pressed="false">
+                    <img class="sfield__reveal-show" src="assets/login/pw-show.svg" width="24" height="24" alt="">
+                    <img class="sfield__reveal-hide" src="assets/login/pw-hide.svg" width="20" height="20" alt="">
+                  </button>
+                </div>
+                <p class="sfield__msg" id="su-pw-msg"></p>
+              </div>
+              <div class="sfield">
+                <label class="sfield__label" for="su-pw2">비밀번호 확인<em aria-hidden="true">*</em></label>
+                <div class="sfield__box">
+                  <input class="sfield__input" id="su-pw2" name="password2" type="password" autocomplete="new-password" maxlength="20" placeholder="비밀번호를 한번 더 입력해주세요." aria-describedby="su-pw2-msg" required>
+                  <button class="sfield__reveal" type="button" aria-label="비밀번호 확인 보기" aria-pressed="false">
+                    <img class="sfield__reveal-show" src="assets/login/pw-show.svg" width="24" height="24" alt="">
+                    <img class="sfield__reveal-hide" src="assets/login/pw-hide.svg" width="20" height="20" alt="">
+                  </button>
+                </div>
+                <p class="sfield__msg" id="su-pw2-msg"></p>
+              </div>
+              <div class="sfield">
+                <label class="sfield__label" for="su-nick">닉네임<em aria-hidden="true">*</em></label>
+                <div class="sfield__row">
+                  <div class="sfield__box"><input class="sfield__input" id="su-nick" name="nickname" type="text" maxlength="10" placeholder="닉네임을 입력해주세요" aria-describedby="su-nick-msg" required></div>
+                  <button class="sfield__side" type="button" data-dup-check="nickname">중복 확인</button>
+                </div>
+                <p class="sfield__msg" id="su-nick-msg">한글, 영문, 숫자 2~10자, 방송과 채팅에 표시돼요</p>
+              </div>
+              <div class="sfield">
+                <label class="sfield__label" for="su-email">이메일</label>
+                <div class="sfield__box"><input class="sfield__input" id="su-email" name="email" type="email" autocomplete="email" spellcheck="false" placeholder="example@funnation.com" aria-describedby="su-email-msg"></div>
+                <p class="sfield__msg" id="su-email-msg">아이디, 비밀번호 찾기에 사용돼요 (선택)</p>
+              </div>
+            </div>
+          </div>
+          <div class="signup__actions">
+            <button class="signup__btn" type="button" data-signup-prev>뒤로가기</button>
+            <button class="signup__btn signup__btn--primary" type="submit" data-signup-next>다음</button>
+          </div>
+        </form>
+
+        <!-- 4. 회원가입 완료 (64615:27375) -->
+        <div class="signup__page" data-signup-step="4" data-node-id="64615:27375" hidden>
+          <div class="signup__body done">
+            <span class="done__badge" aria-hidden="true"><img src="assets/signup/glyph-30.svg" width="30" height="30" alt=""></span>
+            <div class="done__text">
+              <h2 class="done__title">가입을 완료했어요!</h2>
+              <p class="done__desc">닉네임과 비밀번호는 [마이페이지]에서<br>언제든지 변경하실 수 있어요.</p>
+            </div>
+          </div>
+          <div class="signup__actions">
+            <button class="signup__btn signup__btn--primary" type="button" data-signup-finish>시작하기</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 검색 (모바일 시안 64162:201098). 앱바 검색 아이콘 → #search -->
+      <section class="subview search-view" id="search-view" aria-label="검색" data-node-id="64162:201098" hidden>
+        <form class="search-view__form" id="search-form" role="search" data-node-id="64162:204479">
+          <input class="search-view__input" type="search" name="q" placeholder="크리에이터, 동영상 검색" aria-label="크리에이터, 동영상 검색" autocomplete="off">
+          <button class="search-view__submit" type="submit" aria-label="검색">
+            <img src="assets/v2/search.svg" width="18" height="18" alt="">
+          </button>
+          <!-- 입력값이 있을 때 (64299:163076) — 돋보기는 왼쪽, 오른쪽에 지우기 -->
+          <button class="search-view__clear" type="reset" aria-label="검색어 지우기"><img src="assets/v2/search-clear.svg" width="20" height="20" alt=""></button>
+        </form>
+        <div class="search-view__recent" data-node-id="64162:204436">
+          <div class="search-view__head">
+            <h2>최근 검색어</h2>
+            <button type="button" data-recent-clear>전체삭제</button>
+          </div>
+          <ul class="search-view__list" id="recent-list">
+            <li><a href="#"><span class="search-term-icon"><img src="assets/v2/pc-recent-search.svg" width="18" height="18" alt=""></span><span>큰별TV</span></a><button type="button" aria-label="큰별TV 삭제" data-recent-remove><img src="assets/v2/recent-remove.svg" width="11.65" height="11.65" alt=""></button></li>
+            <li><a href="#"><span class="search-term-icon"><img src="assets/v2/pc-recent-search.svg" width="18" height="18" alt=""></span><span>다썰남TV</span></a><button type="button" aria-label="다썰남TV 삭제" data-recent-remove><img src="assets/v2/recent-remove.svg" width="11.65" height="11.65" alt=""></button></li>
+            <li><a href="#"><span class="search-term-icon"><img src="assets/v2/pc-recent-search.svg" width="18" height="18" alt=""></span><span>스타덤레이블</span></a><button type="button" aria-label="스타덤레이블 삭제" data-recent-remove><img src="assets/v2/recent-remove.svg" width="11.65" height="11.65" alt=""></button></li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 알림 (모바일 시안 64162:200698). 앱바 종 아이콘 → #notice -->
+      <section class="subview notice-view" id="notice-view" aria-label="알림" data-node-id="64162:200698" hidden>
+        <div class="notice-group" data-node-id="64162:204386">
+          <h2 class="notice-group__date">어제</h2>
+          <ul class="notice-group__list">
+            <li class="notice-item">
+              <img class="notice-item__avatar" src="assets/v2/notice/avatar1.png" width="34" height="34" alt="">
+              <div class="notice-item__body">
+                <p class="notice-item__text">노블레스 레이블님이 방송을 시작했어요 : 노블레스레이블 화목토 8회차! 지금 시작합니다, 대표 이경현</p>
+                <p class="notice-item__meta"><span>노블레스레이블</span><img src="assets/v2/notice/separator.svg" width="2" height="2" alt=""><time>2026.08.14 23:00</time></p>
+              </div>
+            </li>
+            <li class="notice-item">
+              <img class="notice-item__avatar" src="assets/v2/notice/avatar2.png" width="34" height="34" alt="">
+              <div class="notice-item__body">
+                <p class="notice-item__text">앙커퍼니님이 방송을 시작했어요!</p>
+                <p class="notice-item__meta"><span>노블레스레이블</span><img src="assets/v2/notice/separator.svg" width="2" height="2" alt=""><time>2026.08.14 19:48</time></p>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="notice-group" data-node-id="64162:204405">
+          <h2 class="notice-group__date">2026.08.12</h2>
+          <ul class="notice-group__list">
+            <li class="notice-item">
+              <img class="notice-item__avatar" src="assets/v2/notice/avatar1.png" width="34" height="34" alt="">
+              <div class="notice-item__body">
+                <p class="notice-item__text">노블레스 레이블님이 방송을 시작했어요 : 노블레스레이블 화목토 7회차! 지금 시작합니다, 대표 이경현</p>
+                <p class="notice-item__meta"><span>노블레스레이블</span><img src="assets/v2/notice/separator.svg" width="2" height="2" alt=""><time>2026.08.14 23:00</time></p>
+              </div>
+            </li>
+            <li class="notice-item">
+              <img class="notice-item__avatar" src="assets/v2/notice/avatar-funnation.png" width="34" height="34" alt="">
+              <div class="notice-item__body">
+                <p class="notice-item__tag">공지사항</p>
+                <p class="notice-item__text">펀네이션에 오신 여러분을 환영합니다!</p>
+                <p class="notice-item__meta"><span>Funnation</span><img src="assets/v2/notice/separator.svg" width="2" height="2" alt=""><time>2026.08.14 12:00</time></p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+
+      <!-- 푸터 (64023:30589) -->
+    </main>
+
+  </div>
+</div>
+
+<!-- 모바일 하단 내비게이션 (64026:37346) -->
+<nav class="bottom-nav" aria-label="주요 메뉴">
+  <div class="bottom-nav__list">
+    <a class="bottom-nav__item" href="index.html">
+      <img src="assets/icHome.svg" width="24" height="24" alt="">홈
+    </a>
+    <a class="bottom-nav__item" href="live.html">
+      <img src="assets/mo/nav-live.svg" width="24" height="24" alt="">라이브
+    </a>
+    <!-- 크리에이터 (64059:159015) -->
+    <a class="bottom-nav__item" href="#">
+      <img src="assets/mo/nav-my.svg" width="24" height="24" alt="">크리에이터
+    </a>
+    <a class="bottom-nav__item" href="#">
+      <img src="assets/mo/nav-fav.svg" width="24" height="24" alt="">즐겨찾기
+    </a>
+    <a class="bottom-nav__item" href="#">
+      <img src="assets/imgComponent4.svg" width="24" height="24" alt="">커뮤니티
+    </a>
+    <!-- 로그인 / 내 정보 (v2.0 64085:89486) — 로그아웃 상태면 "로그인"이고 로그인 화면을 연다 -->
+    <a class="bottom-nav__item" href="#login" id="bn-account">
+      <img src="assets/mo/nav-user.svg" width="24" height="24" alt="">
+      <span class="auth-out">로그인</span><span class="auth-in">내 정보</span>
+    </a>
+  </div>
+  <!-- 홈 인디케이터 (시안 재현용) -->
+  <span class="bottom-nav__indicator" aria-hidden="true"></span>
+</nav>
+
+<!-- 플로팅 로그아웃 (시안에 없는 추가 요소) -->
+<button class="fab-auth" type="button" id="auth-btn">
+  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor"
+       stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3" />
+    <path d="M10 17l5-5-5-5" />
+    <path d="M15 12H3" />
+  </svg>
+  <span class="auth-in">로그아웃</span>
+  <span class="auth-out">로그인</span>
+</button>
+
+<script src="app.js"></script>
+
+</body>
+</html>
