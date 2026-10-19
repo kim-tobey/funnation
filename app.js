@@ -227,20 +227,13 @@
     if (!view.hidden) window.scrollTo(0, 0);
   });
 
-  // 서버 연동 전 데모 — 아이디·비밀번호가 모두 있으면 로그인, 비밀번호가 비면 오류 표시
+  // 서버 연동 전 데모 — 아이디만 있으면 비밀번호와 상관없이 로그인
+  // (틀린 비밀번호 화면 64316:166222 의 is-error 스타일은 서버 연동 때 쓰도록 남겨 둠)
   form.addEventListener("submit", function (e) {
     e.preventDefault();
     var id = form.elements.id;
-    var pw = form.elements.password;
     if (!id.value.trim()) { id.focus(); return; }
-    // 서버 연동 전 데모: 4자 미만이면 틀린 비밀번호로 처리 (64316:166222)
-    if (pw.value.length < 4) {
-      form.classList.add("is-error");
-      pw.setAttribute("aria-invalid", "true");
-      pw.focus();
-      return;
-    }
-    pw.removeAttribute("aria-invalid");
+    form.elements.password.removeAttribute("aria-invalid");
     form.reset();
     signIn();
   });
