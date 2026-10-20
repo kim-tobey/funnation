@@ -510,7 +510,7 @@
 })();
 
 /* 히어로 배경 효과 — Predictive Arc (Originkit) 를 바닐라 WebGL 로 옮김.
-   ?fx=off 로 끌 수 있음. WebGL 이 없거나 셰이더가 실패하면 캔버스만 숨기고 기존 배너 그대로 */
+   기본은 꺼 둠 — ?fx=on 일 때만 켬. WebGL 이 없거나 셰이더가 실패하면 캔버스만 숨기고 기존 배너 그대로 */
 (function () {
   var hero = document.getElementById("hero");
   if (!hero) return;
@@ -520,7 +520,7 @@
     return;
   }
   var canvases = hero.querySelectorAll(".hero__arc");
-  if (new URLSearchParams(location.search).get("fx") === "off") {
+  if (new URLSearchParams(location.search).get("fx") !== "on") {
     hero.classList.add("hero--no-fx");
     return;
   }
@@ -740,6 +740,71 @@
   }
 })();
 
+/* 후원 컨텐츠 영상 카드 (투표) — 올림·포커스 중에만 영상 재생, 설명 문구는 글자마다 지연을 줘 차례로 떠오르게.
+   글자 나누기는 흐르는 목록이 카드를 복제하기 전에 해 둠(복제본도 같은 구조) · 이벤트는 목록에 위임 */
+(function () {
+  var list = document.querySelector(".donation-list");
+  if (!list) return;
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+  var splits = list.querySelectorAll("[data-split]");
+  for (var s = 0; s < splits.length; s++) {
+    var el = splits[s];
+    var text = el.textContent.trim();
+    var n = 0;
+    el.textContent = "";
+    text.split(" ").forEach(function (word, wi) {
+      if (wi) el.appendChild(document.createTextNode(" "));
+      var w = document.createElement("span");
+      w.className = "w";
+      Array.prototype.forEach.call(word, function (ch) {
+        var c = document.createElement("span");
+        c.className = "c";
+        c.style.setProperty("--i", n++);
+        c.textContent = ch;
+        w.appendChild(c);
+      });
+      el.appendChild(w);
+    });
+  }
+  function activate(card, on) {
+    if (card.classList.contains("is-active") === on) return;
+    card.classList.toggle("is-active", on);
+    var video = card.querySelector("video");
+    clearTimeout(card._rewind);
+    if (on) {
+      if (!reduced.matches) {
+        var p = video.play();
+        if (p && p.catch) p.catch(function () {});
+      }
+    } else {
+      // 영상이 사라진 뒤(0.3초) 멈추고 처음으로
+      card._rewind = setTimeout(function () {
+        video.pause();
+        video.currentTime = 0;
+      }, 300);
+    }
+  }
+  function cardOf(node) {
+    return node && node.closest ? node.closest(".donation-card--video") : null;
+  }
+  list.addEventListener("mouseover", function (e) {
+    var card = cardOf(e.target);
+    if (card && !card.contains(e.relatedTarget)) activate(card, true);
+  });
+  list.addEventListener("mouseout", function (e) {
+    var card = cardOf(e.target);
+    if (card && !card.contains(e.relatedTarget)) activate(card, false);
+  });
+  list.addEventListener("focusin", function (e) {
+    var card = cardOf(e.target);
+    if (card) activate(card, true);
+  });
+  list.addEventListener("focusout", function (e) {
+    var card = cardOf(e.target);
+    if (card) activate(card, false);
+  });
+})();
+
 /* 후원 컨텐츠 카드 — 폭이 좁아 가려지는 카드가 있을 때만 왼쪽으로 계속 흐름.
    카드를 한 벌 복제해 뒤에 붙이고, 한 벌만큼 지나가면 처음 위치로 되돌려 끊김 없이 반복.
    마우스 올림·터치·포커스 중엔 멈추고(손으로 넘기기 가능), 화면 밖·다른 탭·동작 줄이기 설정이면 움직이지 않음 */
@@ -791,6 +856,7 @@
       originals.forEach(function (li) {
         var c = li.cloneNode(true);
         c.setAttribute("aria-hidden", "true");
+        if (c.hasAttribute("tabindex")) c.setAttribute("tabindex", "-1");
         list.appendChild(c);
         clones.push(c);
       });
@@ -1205,29 +1271,11 @@
   }
 })();
 
-/* 영상 상세 (64617:31107) — 채팅 · 후원 패널 4종. 서버 연동 전 데모라 보내거나 결제하지 않음 */
+/* 영상 상세 ver.3 (64795:14999) — 채팅 · 후원 패널 4종. 서버 연동 전 데모라 보내거나 결제하지 않음 */
 (function () {
   var root = document.documentElement;
   var watch = document.querySelector(".watch");
   if (!watch) return;
-
-  // 구독 · 좋아요 · 팔로우 — 누를 때마다 켜고 끔
-  var toggles = watch.querySelectorAll(".watch-btn");
-  for (var t = 0; t < toggles.length; t++) toggles[t].addEventListener("click", function () {
-    this.setAttribute("aria-pressed", this.getAttribute("aria-pressed") === "true" ? "false" : "true");
-  });
-
-  // 채팅 닫기(→|) / 다시 열기
-  var openBtn = watch.querySelector("[data-chat-open]");
-  watch.querySelector("[data-chat-close]").addEventListener("click", function () {
-    root.setAttribute("data-chat", "closed");
-    openBtn.hidden = false;
-    openBtn.focus();
-  });
-  openBtn.addEventListener("click", function () {
-    root.removeAttribute("data-chat");
-    openBtn.hidden = true;
-  });
 
   // 채팅 입력 — 엔터로 목록 맨 아래에 내 메시지 추가
   var list = document.getElementById("wchat-list");
@@ -1247,27 +1295,50 @@
     list.scrollTop = list.scrollHeight;
   });
 
-  /* 후원 탭 ↔ 패널 — 같은 탭을 다시 누르거나 X · ESC 로 닫힘 */
+  // 이모티콘 — 입력칸에 😊 추가 / 좋아요 — 누를 때마다 켜고 끔
+  watch.querySelector("[data-chat-emoji]").addEventListener("click", function () {
+    var input = chatForm.elements.msg;
+    input.value += "😊";
+    input.focus();
+  });
+  watch.querySelector("[data-chat-like]").addEventListener("click", function () {
+    this.setAttribute("aria-pressed", this.getAttribute("aria-pressed") === "true" ? "false" : "true");
+  });
+
+  /* 플레이어 버튼 (샘플) — 음소거 · 자막 · 나중에 볼 동영상은 켜고 끔, 전체화면은 플레이어만 꽉 채움 */
+  var ytToggles = watch.querySelectorAll("[data-yt-toggle]");
+  for (var y = 0; y < ytToggles.length; y++) ytToggles[y].addEventListener("click", function () {
+    this.setAttribute("aria-pressed", this.getAttribute("aria-pressed") === "true" ? "false" : "true");
+  });
+  var yt = watch.querySelector(".yt");
+  watch.querySelector("[data-yt-fs]").addEventListener("click", function () {
+    if (document.fullscreenElement) document.exitFullscreen();
+    else if (yt.requestFullscreen) yt.requestFullscreen();
+  });
+
+  /* 채팅 ↔ 후원하기 탭 — 후원하기는 종류 탭(일반후원·시그니처·영상·미션) + 패널, 마지막에 고른 종류를 기억.
+     입력줄 $ 버튼도 후원하기로 넘어감. show(null) 은 채팅으로 돌아감 */
+  var chat = document.getElementById("wchat");
+  var modeTabs = watch.querySelectorAll(".wchat__mode-tab");
   var tabs = watch.querySelectorAll("[data-donate]");
   var panels = watch.querySelectorAll("[data-donate-panel]");
   var current = null;
+  var lastKind = "general";
   function show(key) {
     current = key;
+    if (key) lastKind = key;
+    chat.setAttribute("data-mode", key ? "donate" : "chat");
+    for (var m = 0; m < modeTabs.length; m++) modeTabs[m].setAttribute("aria-selected", (modeTabs[m].getAttribute("data-chat-tab") === "donate") === !!key ? "true" : "false");
     for (var i = 0; i < panels.length; i++) panels[i].hidden = panels[i].getAttribute("data-donate-panel") !== key;
-    for (var j = 0; j < tabs.length; j++) tabs[j].setAttribute("aria-expanded", tabs[j].getAttribute("data-donate") === key ? "true" : "false");
+    for (var j = 0; j < tabs.length; j++) tabs[j].setAttribute("aria-pressed", tabs[j].getAttribute("data-donate") === key ? "true" : "false");
+    if (!key) list.scrollTop = list.scrollHeight;
   }
+  var modeBtns = watch.querySelectorAll("[data-chat-tab]");
+  for (var b = 0; b < modeBtns.length; b++) modeBtns[b].addEventListener("click", function () {
+    show(this.getAttribute("data-chat-tab") === "donate" ? lastKind : null);
+  });
   for (var k = 0; k < tabs.length; k++) tabs[k].addEventListener("click", function () {
-    var key = this.getAttribute("data-donate");
-    show(current === key ? null : key);
-  });
-  var closes = watch.querySelectorAll("[data-donate-close]");
-  for (var c = 0; c < closes.length; c++) closes[c].addEventListener("click", function () {
-    var key = current;
-    show(null);
-    watch.querySelector('[data-donate="' + key + '"]').focus();
-  });
-  document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape" && current && root.getAttribute("data-drawer") !== "open") show(null);
+    show(this.getAttribute("data-donate"));
   });
 
   // 글자 수 표시 (0/200) — 200자를 넘겨 입력할 수 있고, 넘으면 오류 문구로 알림
@@ -1280,16 +1351,15 @@
   // 익명 — 켜면 닉네임 자리에 "익명"
   var anons = watch.querySelectorAll("[data-donate-anon]");
   for (var a = 0; a < anons.length; a++) anons[a].addEventListener("change", function () {
-    this.closest(".dmsg").querySelector("[data-donate-nick]").textContent = this.checked ? "익명" : "Nickname";
+    this.closest(".dmsg").querySelector("[data-donate-nick]").textContent = this.checked ? "익명" : "토비라마";
   });
 
   // 음성 읽기 켜기/끄기 · 목소리 바꾸기
-  var VOICES = ["유나", "민준", "서연", "도윤"];
+  var VOICES = ["야옹이", "유나", "민준", "서연"];
   var vols = watch.querySelectorAll("[data-donate-vol]");
   for (var v = 0; v < vols.length; v++) vols[v].addEventListener("click", function () {
     var on = this.getAttribute("aria-pressed") !== "true";
     this.setAttribute("aria-pressed", on ? "true" : "false");
-    this.setAttribute("aria-label", on ? "음성 읽기 끄기" : "음성 읽기 켜기");
   });
   var voices = watch.querySelectorAll("[data-donate-voice]");
   for (var w = 0; w < voices.length; w++) voices[w].addEventListener("click", function () {

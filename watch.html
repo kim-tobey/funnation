@@ -46,7 +46,7 @@
 
       <!-- 검색 인풋 — 누르면 포커스 상태(64299:157625) + 최근 검색어(64299:159052), 입력하면 지우기 버튼(64299:162199) -->
       <form class="nav-search" id="nav-search" role="search" data-node-id="64149:72817">
-        <input class="nav-search__input" type="search" name="q" placeholder="크리에이터, 동영상 검색" aria-label="크리에이터, 동영상 검색" autocomplete="off" data-focus-placeholder="검색어를 입력해주세요.">
+        <input class="nav-search__input" type="search" name="q" placeholder="크리에이터 검색" aria-label="크리에이터 검색" autocomplete="off" data-focus-placeholder="검색어를 입력해주세요.">
         <img class="nav-search__icon" src="assets/v2/search.svg" width="18" height="18" alt="">
         <button class="nav-search__clear" type="button" aria-label="검색어 지우기" hidden><img src="assets/v2/search-clear.svg" width="20" height="20" alt=""></button>
         <div class="nav-search__panel" data-node-id="64299:159052">
@@ -342,57 +342,77 @@
 
       <div class="main__inner">
 
-        <!-- 영상 상세 [A-03] ver.2 (64617:31107, 후원 패널 상태는 64617:28170) — PC 전용. 영상 + 오른쪽 채팅(364px), 채팅 아래 탭으로 후원 패널 -->
-        <section class="watch" data-node-id="64617:31107">
+        <!-- 영상 상세 ver.3 (64795:14999) — PC 전용. YouTube 플레이어(1076) + 오른쪽 채팅(398, 채팅/후원하기 탭) -->
+        <section class="watch" data-node-id="64795:14999">
           <div class="watch__main">
-            <!-- 제목 · 태그 · 채널 / 구독 · 좋아요 · 팔로우 (64617:31137) -->
-            <header class="watch-head" data-node-id="64617:31137">
-              <div class="watch-head__info">
-                <div class="watch-head__meta">
-                  <div class="watch-head__title-row">
-                    <h1 class="watch-head__title">키워주세요 #채소가시러 #김삭은 #삭은이</h1>
-                    <span class="watch-head__viewers" aria-label="시청자 13명"><img src="assets/watch/users.svg" width="16" height="16" alt="">13</span>
-                  </div>
-                  <ul class="watch-head__tags" aria-label="태그">
-                    <li>#인디</li>
-                    <li>팀플레이</li>
-                    <li>서바이벌</li>
-                  </ul>
+            <!-- YouTube 플레이어 (64795:15029) — 서버 연동 전이라 플레이어 캡처(위 제목줄 · 아래 컨트롤)와 정지 화면으로 구성 -->
+            <div class="yt" data-node-id="64795:15029">
+              <span class="yt__video" data-node-id="64822:111179">
+                <img src="assets/watch/v3/video.png" width="1076" height="605" alt="[ym상사] S7 A팀 제1화 신입인턴 7명! 시즌7 새로운시작 방송 화면">
+                <!-- 캡처 모서리 보정 (64822:111180~111183) -->
+                <i class="yt__fix yt__fix--bl" aria-hidden="true"></i>
+                <i class="yt__fix yt__fix--br" aria-hidden="true"></i>
+                <i class="yt__fix yt__fix--tr" aria-hidden="true"></i>
+                <img class="yt__fix yt__fix--tl" src="assets/watch/v3/corner.svg" width="8" height="6" alt="">
+              </span>
+              <!-- 위 — 채널 아이콘 · 제목 · 채널명 / 음량 · 자막 · 설정 (64822:111164 · 111166) -->
+              <div class="yt__top">
+                <img class="yt__channel" src="assets/watch/v3/yt/channel.png" width="32" height="32" alt="">
+                <div class="yt__heading">
+                  <h1 class="yt__title">[ym상사] S7 A팀 제1화 신입인턴 7명! 시즌7 새로운시작</h1>
+                  <p class="yt__owner">YM상사 A팀</p>
                 </div>
-                <a class="watch-head__channel" href="#">
-                  <span class="watch-head__avatar" aria-hidden="true"><img src="assets/watch/channel-banner.png" alt=""></span>
-                  채소가시러
-                </a>
+                <div class="yt__tools">
+                  <button class="yt__btn" type="button" aria-label="음소거" aria-pressed="false" data-yt-toggle><img src="assets/watch/v3/yt/volume.png" width="24" height="24" alt=""></button>
+                  <button class="yt__btn" type="button" aria-label="자막" aria-pressed="false" data-yt-toggle><img src="assets/watch/v3/yt/cc.png" width="24" height="24" alt=""></button>
+                  <button class="yt__btn" type="button" aria-label="설정"><img src="assets/watch/v3/yt/settings.png" width="24" height="24" alt=""></button>
+                </div>
               </div>
-              <div class="watch-head__actions">
-                <button class="watch-btn" type="button" aria-pressed="false"><img src="assets/watch/plus.svg" width="16" height="16" alt="">구독</button>
-                <button class="watch-btn" type="button" aria-pressed="false"><img src="assets/watch/thumbs-up.svg" width="16" height="16" alt="">좋아요</button>
-                <button class="watch-btn" type="button" aria-pressed="false"><img src="assets/watch/heart.svg" width="16" height="16" alt="">팔로우</button>
+              <!-- 아래 — 라이브 · 재생 바 · 공유 · 나중에 볼 동영상 / 전체화면 · YouTube 로고 (64822:105175 · 105176) -->
+              <div class="yt__ctrl">
+                <span class="yt__live">라이브</span>
+                <button class="yt__btn yt__fs" type="button" aria-label="전체화면" data-yt-fs><img src="assets/watch/v3/yt/fullscreen.png" width="24" height="24" alt=""></button>
+                <div class="yt__progress" role="progressbar" aria-label="실시간 재생 위치" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span class="yt__knob"></span></div>
+                <div class="yt__row">
+                  <button class="yt__btn" type="button" aria-label="공유"><img src="assets/watch/v3/yt/share.png" width="24" height="24" alt=""></button>
+                  <button class="yt__btn" type="button" aria-label="나중에 볼 동영상" aria-pressed="false" data-yt-toggle><img src="assets/watch/v3/yt/clock.png" width="24" height="24" alt=""></button>
+                  <a class="yt__logo" href="https://www.youtube.com/" target="_blank" rel="noopener" aria-label="YouTube 에서 보기"><img src="assets/watch/v3/yt/youtube.png" width="86" height="22" alt=""></a>
+                </div>
               </div>
-            </header>
-            <!-- 영상 (64617:31135) — 서버 연동 전이라 정지 화면 -->
-            <div class="watch-stage" data-node-id="64617:31135">
-              <img class="watch-stage__video" src="assets/watch/video.png" width="727" height="1295" alt="채소가시러 방송 화면">
-              <button class="watch-stage__chat" type="button" data-chat-open hidden>
-                <img src="assets/watch/collapse.svg" width="15" height="15" alt="">채팅 열기
-              </button>
             </div>
           </div>
 
-          <!-- 채팅 (64617:31108) -->
-          <aside class="wchat" id="wchat" aria-label="채팅" data-node-id="64617:31108">
-            <header class="wchat__head" data-node-id="64617:31112">
-              <button class="wchat__collapse" type="button" aria-label="채팅 닫기" aria-controls="wchat" data-chat-close><img src="assets/watch/collapse.svg" width="15" height="15" alt=""></button>
-              <h2>채팅</h2>
-            </header>
+          <!-- 채팅 (64816:102304) — 위 탭(채팅/후원하기), 후원하기를 고르면 후원 종류 탭(64822:111705)과 패널 -->
+          <aside class="wchat" id="wchat" aria-label="채팅" data-mode="chat" data-node-id="64816:102304">
+            <div class="wchat__mode-tabs" role="tablist" data-node-id="64822:111733">
+              <button class="wchat__mode-tab" type="button" role="tab" aria-selected="true" data-chat-tab="chat">채팅</button>
+              <button class="wchat__mode-tab" type="button" role="tab" aria-selected="false" data-chat-tab="donate">후원하기</button>
+            </div>
+            <div class="wchat__kinds" data-node-id="64822:111705">
+              <button class="wkind" type="button" aria-pressed="false" aria-controls="donate-general" data-donate="general">일반후원</button>
+              <button class="wkind" type="button" aria-pressed="false" aria-controls="donate-signature" data-donate="signature">시그니처</button>
+              <button class="wkind" type="button" aria-pressed="false" aria-controls="donate-video" data-donate="video">영상</button>
+              <button class="wkind" type="button" aria-pressed="false" aria-controls="donate-mission" data-donate="mission">미션</button>
+            </div>
             <div class="wchat__bar">
               <button class="wchat__mode" type="button">주요 채팅<img src="assets/watch/chevron-down.svg" width="16" height="16" alt=""></button>
               <span class="wchat__xp"><img src="assets/watch/crown.svg" width="12" height="12" alt="">0XP</span>
               <button class="wchat__more" type="button" aria-label="채팅 설정"><img src="assets/watch/more.svg" width="20" height="20" alt=""></button>
             </div>
             <ol class="wchat__list" id="wchat-list" aria-live="polite">
-            <li class="wmsg"><img class="wmsg__avatar" src="assets/home/avatar/chim.png" width="24" height="24" alt=""><p><span class="wmsg__name">@얌사단_까잡서</span><span class="wmsg__badge"><img src="assets/watch/crown.svg" width="12" height="12" alt="">#1</span><span class="wmsg__text">5단이 다 간식임요</span></p></li>
-            <li class="wmsg"><span class="wmsg__avatar wmsg__avatar--white" aria-hidden="true"></span><p><span class="wmsg__name">@눅우인가-h3b</span><span class="wmsg__text">어마하다</span></p></li>
+            <li class="wmsg"><img class="wmsg__avatar" src="assets/watch/v3/avatar/frokynn.png" width="24" height="24" alt=""><p><span class="wmsg__name wmsg__name--member">@FROKYNN<img class="wmsg__icon" src="assets/watch/v3/badge-member-blue.png" width="14" height="16" alt="멤버"></span><span class="wmsg__text">윤수압</span></p></li>
+            <li class="wmsg"><img class="wmsg__avatar" src="assets/watch/v3/avatar/frokynn.png" width="24" height="24" alt=""><p><span class="wmsg__name wmsg__name--member">@FROKYNN<img class="wmsg__icon" src="assets/watch/v3/badge-member-blue.png" width="14" height="16" alt="멤버"></span><span class="wmsg__text">윤수압</span></p></li>
+            <li class="wmsg"><img class="wmsg__avatar" src="assets/watch/v3/avatar/joker.png" width="24" height="24" alt=""><p><span class="wmsg__name">@조커_InsiDer</span><span class="wmsg__text">윤수업</span></p></li>
+            <li class="wmsg"><img class="wmsg__avatar" src="assets/watch/v3/avatar/eurat.png" width="24" height="24" alt=""><p><span class="wmsg__name">@으랏차차-b9s</span><span class="wmsg__badge wmsg__badge--deep"><img src="assets/watch/crown.svg" width="12" height="12" alt="">#2</span><span class="wmsg__text">윤수업 민재업 <img class="wmsg__emote" src="assets/watch/v3/emote-dab.png" width="24" height="20" alt=":dab:"><img class="wmsg__emote" src="assets/watch/v3/emote-dab.png" width="24" height="20" alt=":dab:"><img class="wmsg__emote" src="assets/watch/v3/emote-dab.png" width="24" height="20" alt=":dab:"></span></p></li>
+            <li class="wmsg"><img class="wmsg__avatar" src="assets/watch/v3/avatar/ippeun.png" width="24" height="24" alt=""><p><span class="wmsg__name wmsg__name--member">@이쁜아씨를지키는호위<img class="wmsg__icon" src="assets/watch/v3/badge-member.png" width="14" height="16" alt="멤버"></span><span class="wmsg__text">윤수업</span></p></li>
+            <li class="wmsg"><img class="wmsg__avatar" src="assets/watch/v3/avatar/nightbot.png" width="24" height="24" alt=""><p><span class="wmsg__name wmsg__name--mod">@nightbot<img class="wmsg__icon" src="assets/watch/v3/badge-verified.png" width="15" height="15" alt="인증됨"><img class="wmsg__icon" src="assets/watch/v3/badge-mod.png" width="12" height="15" alt="모더레이터"></span><span class="wmsg__text">ym상사 공식 홈페이지 : <a href="https://ymss.kr" target="_blank" rel="noopener">https://ymss.kr</a></span></p></li>
+            <li class="wmsg"><img class="wmsg__avatar" src="assets/watch/v3/avatar/love.png" width="24" height="24" alt=""><p><span class="wmsg__name">@러브올댓</span><span class="wmsg__text">행꿍업</span></p></li>
+            <li class="wmsg"><img class="wmsg__avatar" src="assets/watch/v3/avatar/ippeun.png" width="24" height="24" alt=""><p><span class="wmsg__name wmsg__name--member">@이쁜아씨를지키는호위<img class="wmsg__icon" src="assets/watch/v3/badge-member.png" width="14" height="16" alt="멤버"></span><span class="wmsg__text">윤수업</span></p></li>
+            <li class="wmsg"><img class="wmsg__avatar" src="assets/watch/v3/avatar/love.png" width="24" height="24" alt=""><p><span class="wmsg__name">@러브올댓</span><span class="wmsg__text">윤슈업</span></p></li>
+            <li class="wmsg"><img class="wmsg__avatar" src="assets/watch/v3/avatar/ippeun.png" width="24" height="24" alt=""><p><span class="wmsg__name wmsg__name--member">@이쁜아씨를지키는호위<img class="wmsg__icon" src="assets/watch/v3/badge-member.png" width="14" height="16" alt="멤버"></span><span class="wmsg__text">윤수업</span></p></li>
+            <li class="wmsg"><img class="wmsg__avatar" src="assets/watch/v3/avatar/trangam.png" width="24" height="24" alt=""><p><span class="wmsg__name wmsg__name--mod">@트난감<img class="wmsg__icon" src="assets/watch/v3/badge-mod.png" width="12" height="15" alt="모더레이터"><img class="wmsg__icon" src="assets/watch/v3/badge-member.png" width="14" height="16" alt="멤버"></span><span class="wmsg__badge wmsg__badge--deep"><img src="assets/watch/crown.svg" width="12" height="12" alt="">#3</span><span class="wmsg__text">조윤수님 550,000캐시(터미널) 감사합니다 💗 조</span></p></li>
+            <li class="wmsg"><img class="wmsg__avatar" src="assets/watch/v3/avatar/chaeyoung.png" width="24" height="24" alt=""><p><span class="wmsg__name">@채영이옆자리</span><span class="wmsg__text">!고채영시그</span></p></li>
+            <li class="wmsg"><img class="wmsg__avatar" src="assets/watch/v3/avatar/nightbot.png" width="24" height="24" alt=""><p><span class="wmsg__name wmsg__name--mod">@nightbot<img class="wmsg__icon" src="assets/watch/v3/badge-verified.png" width="15" height="15" alt="인증됨"><img class="wmsg__icon" src="assets/watch/v3/badge-mod.png" width="12" height="15" alt="모더레이터"></span><span class="wmsg__text">고채영 - <span class="wmsg__dia" aria-hidden="true">🔹</span> 88,900 트월킹 덕 <span class="wmsg__dia" aria-hidden="true">🔹</span> 151,000 우유 <span class="wmsg__dia" aria-hidden="true">🔹</span> 200,000 스키스키 <span class="wmsg__dia" aria-hidden="true">🔹</span> 280,000 오빠하앙 <span class="wmsg__dia" aria-hidden="true">🔹</span> 1,005,400 다크사이드 <span class="wmsg__dia" aria-hidden="true">🔹</span> 1,027,200 까스댄스댄스 <span class="wmsg__dia" aria-hidden="true">🔹</span> 1,080,900 소년 <span class="wmsg__dia" aria-hidden="true">🔹</span> 1,100,100 반포대교 <span class="wmsg__dia" aria-hidden="true">🔹</span> 1,123,000 토마스열차 <span class="wmsg__dia" aria-hidden="true">🔹</span> 2,878,700 슈퍼핵펀치</span></p></li>
             <li class="wnotice">
               <img src="assets/watch/youtube.svg" width="20" height="14" alt="">
               <div>
@@ -400,35 +420,29 @@
                 <a href="https://www.youtube.com/howyoutubeworks/policies/community-guidelines/" target="_blank" rel="noopener">자세히 알아보기</a>
               </div>
             </li>
-            <li class="wmsg"><span class="wmsg__avatar wmsg__avatar--white" aria-hidden="true"></span><p><span class="wmsg__name">@눅우인가-h3b</span><span class="wmsg__text">돌얌이 곧 80찍는다</span></p></li>
-            <li class="wmsg"><span class="wmsg__avatar wmsg__avatar--black" aria-hidden="true"></span><p><span class="wmsg__name">@블랙-y3s</span><span class="wmsg__text">에휴 🥵</span></p></li>
-            <li class="wmsg"><span class="wmsg__avatar wmsg__avatar--white" aria-hidden="true"></span><p><span class="wmsg__name">@눅우인가-h3b</span><span class="wmsg__text">👏 👏 👏 👏 👏</span></p></li>
-            <li class="wmsg"><span class="wmsg__avatar wmsg__avatar--white" aria-hidden="true"></span><p><span class="wmsg__name">@눅우인가-h3b</span><span class="wmsg__text">에휴</span></p></li>
-            <li class="wmsg"><span class="wmsg__avatar wmsg__avatar--white" aria-hidden="true"></span><p><span class="wmsg__name">@눅우인가-h3b</span><span class="wmsg__text">쥰나 에휴</span></p></li>
-            <li class="wmsg"><img class="wmsg__avatar" src="assets/home/avatar/pixel.png" width="24" height="24" alt=""><p><span class="wmsg__name">@익명-x8b2d</span><span class="wmsg__badge"><img src="assets/watch/crown.svg" width="12" height="12" alt="">#2</span><span class="wmsg__text">입구 조만간 잔뜩쌓일 예정입니다 🤣🤣🤣</span></p></li>
-            <li class="wmsg"><img class="wmsg__avatar" src="assets/home/avatar/pixel.png" width="24" height="24" alt=""><p><span class="wmsg__name">@익명-x8b2d</span><span class="wmsg__badge"><img src="assets/watch/crown.svg" width="12" height="12" alt="">#2</span><span class="wmsg__text">먹을때 제일 행복한 스톤얌 🤣🤣🤣</span></p></li>
-            <li class="wmsg"><span class="wmsg__avatar wmsg__avatar--black" aria-hidden="true"></span><p><span class="wmsg__name">@블랙-y3s</span><span class="wmsg__text">로드님 천장에서 내려와서 한소리 해주세요</span></p></li>
-            <li class="wmsg"><img class="wmsg__avatar" src="assets/home/avatar/pixel.png" width="24" height="24" alt=""><p><span class="wmsg__name">@익명-x8b2d</span><span class="wmsg__badge"><img src="assets/watch/crown.svg" width="12" height="12" alt="">#2</span><span class="wmsg__text">오 저거 졸~~~라맛있겠다 추천해준값 주세요 🤣🤣🤣</span></p></li>
-            <li class="wmsg"><span class="wmsg__avatar wmsg__avatar--text" aria-hidden="true">동현</span><p><span class="wmsg__name">@김동현-h2l</span><span class="wmsg__text">대충먹어 살찐다</span></p></li>
-            <li class="wmsg"><span class="wmsg__avatar wmsg__avatar--black" aria-hidden="true"></span><p><span class="wmsg__name">@블랙-y3s</span><span class="wmsg__text">나도 걱정되서 천장에서 내려왔더니 못 내려오겠다 🦖</span></p></li>
-            <li class="wmsg"><img class="wmsg__avatar" src="assets/home/avatar/bear.jpg" width="24" height="24" alt=""><p><span class="wmsg__name">@애착뮤직</span><span class="wmsg__text">누나 맛있게 먹오! ❤️</span></p></li>
-            <li class="wmsg"><span class="wmsg__avatar wmsg__avatar--text" aria-hidden="true">동현</span><p><span class="wmsg__name">@김동현-h2l</span><span class="wmsg__text">맛보기는 한술깔</span></p></li>
-            <li class="wmsg"><span class="wmsg__avatar wmsg__avatar--text" aria-hidden="true">동현</span><p><span class="wmsg__name">@김동현-h2l</span><span class="wmsg__text">버리자요</span></p></li>
-            <li class="wmsg"><span class="wmsg__avatar wmsg__avatar--black" aria-hidden="true"></span><p><span class="wmsg__name">@블랙-y3s</span><span class="wmsg__text">누구긴 누구야 너 안티팬이지 ㅋㅋ</span></p></li>
-            <li class="wmsg"><span class="wmsg__avatar wmsg__avatar--text" aria-hidden="true">동현</span><p><span class="wmsg__name">@김동현-h2l</span><span class="wmsg__text">면은 한입끌</span></p></li>
-            <li class="wmsg"><img class="wmsg__avatar" src="assets/home/avatar/pixel.png" width="24" height="24" alt=""><p><span class="wmsg__name">@익명-x8b2d</span><span class="wmsg__badge"><img src="assets/watch/crown.svg" width="12" height="12" alt="">#2</span><span class="wmsg__text">악 스톤얌이 맛봐서 못홈쳐가겠다 먹지마15000원 많관부~ 🥰</span></p></li>
+            <li class="wmsg"><img class="wmsg__avatar" src="assets/watch/v3/avatar/dopamin.png" width="24" height="24" alt=""><p><span class="wmsg__name">@도파민TV3</span><span class="wmsg__text">빠땀업</span></p></li>
+            <li class="wmsg"><img class="wmsg__avatar" src="assets/watch/v3/avatar/eurat.png" width="24" height="24" alt=""><p><span class="wmsg__name">@으랏차차-b9s</span><span class="wmsg__badge"><img src="assets/watch/crown.svg" width="12" height="12" alt="">#2</span><span class="wmsg__text">꺄 자박업</span></p></li>
+            <li class="wmsg"><img class="wmsg__avatar" src="assets/watch/v3/avatar/dopamin.png" width="24" height="24" alt=""><p><span class="wmsg__name">@도파민TV3</span><span class="wmsg__text">자리흥님<img class="wmsg__emote" src="assets/watch/v3/emote-dab.png" width="24" height="20" alt=":dab:"><img class="wmsg__emote" src="assets/watch/v3/emote-dab.png" width="24" height="20" alt=":dab:"><img class="wmsg__emote" src="assets/watch/v3/emote-dab.png" width="24" height="20" alt=":dab:"><img class="wmsg__emote" src="assets/watch/v3/emote-dab.png" width="24" height="20" alt=":dab:"><img class="wmsg__emote" src="assets/watch/v3/emote-dab.png" width="24" height="20" alt=":dab:"></span></p></li>
+            <li class="wmsg"><img class="wmsg__avatar" src="assets/watch/v3/avatar/ippeun.png" width="24" height="24" alt=""><p><span class="wmsg__name wmsg__name--member">@이쁜아씨를지키는호위<img class="wmsg__icon" src="assets/watch/v3/badge-member.png" width="14" height="16" alt="멤버"></span><span class="wmsg__text">크으으응</span></p></li>
+            <li class="wmsg"><img class="wmsg__avatar" src="assets/watch/v3/avatar/eurat.png" width="24" height="24" alt=""><p><span class="wmsg__name">@으랏차차-b9s</span><span class="wmsg__badge"><img src="assets/watch/crown.svg" width="12" height="12" alt="">#2</span><span class="wmsg__text">자박업 🐬</span></p></li>
+            <li class="wmsg"><img class="wmsg__avatar" src="assets/watch/v3/avatar/ippeun.png" width="24" height="24" alt=""><p><span class="wmsg__name wmsg__name--member">@이쁜아씨를지키는호위<img class="wmsg__icon" src="assets/watch/v3/badge-member.png" width="14" height="16" alt="멤버"></span><span class="wmsg__text">대----자----박</span></p></li>
+            <li class="wmsg"><img class="wmsg__avatar" src="assets/watch/v3/avatar/trangam.png" width="24" height="24" alt=""><p><span class="wmsg__name wmsg__name--mod">@트난감<img class="wmsg__icon" src="assets/watch/v3/badge-mod.png" width="12" height="15" alt="모더레이터"><img class="wmsg__icon" src="assets/watch/v3/badge-member.png" width="14" height="16" alt="멤버"></span><span class="wmsg__badge"><img src="assets/watch/crown.svg" width="12" height="12" alt="">#2</span><span class="wmsg__text">꽃벼리님 1,000,000캐시(지코토닉) 감사합니다 💗 은지언니 이쁘다아</span></p></li>
+            <li class="wmsg"><img class="wmsg__avatar" src="assets/watch/v3/avatar/cheon.png" width="24" height="24" alt=""><p><span class="wmsg__name">@천척결</span><span class="wmsg__badge"><img src="assets/watch/crown.svg" width="12" height="12" alt="">#1</span><span class="wmsg__text">차수아가 ym의 미래다</span></p></li>
+            <li class="wmsg"><img class="wmsg__avatar" src="assets/watch/v3/avatar/ippeun.png" width="24" height="24" alt=""><p><span class="wmsg__name wmsg__name--member">@이쁜아씨를지키는호위<img class="wmsg__icon" src="assets/watch/v3/badge-member.png" width="14" height="16" alt="멤버"></span><span class="wmsg__text">대----자----박</span></p></li>
             </ol>
-            <form class="wchat__form" id="wchat-form" data-node-id="64617:31117">
-              <input class="wchat__input" name="msg" type="text" maxlength="200" placeholder="채팅을 입력해주세요" aria-label="채팅 입력" autocomplete="off">
-            </form>
-            <!-- 후원 탭 (64617:31122) — 누르면 같은 이름의 패널이 채팅 위로 올라옴, 다시 누르면 닫힘 -->
-            <div class="wchat__tabs" data-node-id="64617:31122">
-              <button class="wtab" type="button" aria-expanded="false" aria-controls="donate-general" data-donate="general"><span class="wtab__icon" aria-hidden="true"><img src="assets/watch/gift.svg" width="20" height="20" alt=""><img src="assets/watch/gift-active.svg" width="20" height="20" alt=""></span>후원</button>
-              <button class="wtab" type="button" aria-expanded="false" aria-controls="donate-signature" data-donate="signature"><span class="wtab__icon" aria-hidden="true"><img src="assets/watch/star.svg" width="20" height="20" alt=""><img src="assets/watch/star-active.svg" width="20" height="20" alt=""></span>시그니처</button>
-              <button class="wtab" type="button" aria-expanded="false" aria-controls="donate-video" data-donate="video"><span class="wtab__icon" aria-hidden="true"><img src="assets/watch/monitor.svg" width="20" height="20" alt=""><img src="assets/watch/monitor-active.svg" width="20" height="20" alt=""></span>영상</button>
-              <button class="wtab" type="button" aria-expanded="false" aria-controls="donate-mission" data-donate="mission"><span class="wtab__icon" aria-hidden="true"><img src="assets/watch/trophy.svg" width="20" height="20" alt=""><img src="assets/watch/trophy-active.svg" width="20" height="20" alt=""></span>미션</button>
+            <!-- 고정 메시지 -->
+            <div class="wchat__pin">
+              <img src="assets/watch/v3/avatar/ym.png" width="24" height="24" alt="">
+              <span class="wchat__pin-name">@YM상사</span>
+              <p class="wchat__pin-text">**후원안내** 투네이션 : <a href="#">https://toon.at/donate/</a></p>
+              <button class="wchat__more" type="button" aria-label="고정 메시지 메뉴"><img src="assets/watch/more.svg" width="20" height="20" alt=""></button>
             </div>
-
+            <form class="wchat__form" id="wchat-form">
+              <input class="wchat__input" name="msg" type="text" maxlength="200" placeholder="채팅..." aria-label="채팅 입력" autocomplete="off">
+              <button class="wchat__icon" type="button" aria-label="이모티콘" data-chat-emoji><img src="assets/watch/v3/ic-emoji.png" width="24" height="24" alt=""></button>
+              <button class="wchat__icon" type="button" aria-label="후원하기" data-chat-tab="donate"><img src="assets/watch/v3/ic-cash.png" width="24" height="24" alt=""></button>
+              <button class="wchat__icon" type="button" aria-label="좋아요" aria-pressed="false" data-chat-like><img src="assets/watch/v3/ic-heart.png" width="24" height="24" alt=""></button>
+            </form>
           <section class="donate" id="donate-general" data-donate-panel="general" aria-label="일반후원" data-node-id="64624:81075" hidden>
             <header class="donate__head">
               <h3>일반후원</h3>
@@ -438,12 +452,12 @@
             <div class="dform" data-node-id="64617:31242">
               <div class="dmsg">
                 <div class="dmsg__top">
-                  <p class="dmsg__name"><strong data-donate-nick>Nickname</strong><span>님</span></p>
+                  <p class="dmsg__name"><strong data-donate-nick>토비라마</strong><span>님</span></p>
                   <label class="dmsg__anon">익명<input class="switch" type="checkbox" role="switch" data-donate-anon></label>
                 </div>
                 <div class="dmsg__voice">
-                  <button class="dmsg__vol" type="button" aria-label="음성 읽기 끄기" aria-pressed="true" data-donate-vol><img src="assets/watch/volume.svg" width="16" height="16" alt=""></button>
-                  <button class="dmsg__tts" type="button" data-donate-voice aria-label="읽어줄 목소리 바꾸기"><span>유나</span><img src="assets/watch/chevron-right.svg" width="20" height="20" alt=""></button>
+                  <button class="dmsg__vol" type="button" aria-pressed="true" data-donate-vol><img src="assets/watch/volume.svg" width="16" height="16" alt="">채팅 읽어주기</button>
+                  <button class="dmsg__tts" type="button" data-donate-voice aria-label="읽어줄 목소리 바꾸기"><span>야옹이</span><img src="assets/watch/chevron-right.svg" width="20" height="20" alt=""></button>
                 </div>
                 <div class="dmsg__box">
                   <textarea class="dmsg__input" id="d-general-msg" rows="2" placeholder="응원의 한마디를 남겨주세요" aria-label="응원 메시지" aria-describedby="d-general-msg-warn" data-count data-donate-msg></textarea>
@@ -452,12 +466,12 @@
                 <p class="dwarn" id="d-general-msg-warn" data-warn hidden></p>
               </div>
               <button class="dbox dtitle" type="button">
-                <span class="dbox__head"><strong>칭호</strong><img src="assets/watch/chevron-right.svg" width="20" height="20" alt=""></span>
-                <span class="dtitle__value">아직없음</span>
+                <span class="dbox__head"><strong>🎖️칭호</strong><img src="assets/watch/chevron-right.svg" width="20" height="20" alt=""></span>
+                <span class="dtitle__value">표시 안 함</span>
               </button>
               <div class="dbox damount">
                 <div class="dbox__head">
-                  <label for="d-general-amount"><strong>후원 금액</strong></label>
+                  <label for="d-general-amount"><strong>💰후원 금액</strong></label>
                   <span class="dcash"><img src="assets/watch/cash.png" width="14" height="14" alt="">내 펀캐시<i aria-hidden="true"></i><b data-donate-balance>100,000</b></span>
                 </div>
                 <div class="damount__box">
@@ -518,12 +532,12 @@
             <div class="dform" data-node-id="64617:31356">
               <div class="dmsg">
                 <div class="dmsg__top">
-                  <p class="dmsg__name"><strong data-donate-nick>Nickname</strong><span>님</span></p>
+                  <p class="dmsg__name"><strong data-donate-nick>토비라마</strong><span>님</span></p>
                   <label class="dmsg__anon">익명<input class="switch" type="checkbox" role="switch" data-donate-anon></label>
                 </div>
                 <div class="dmsg__voice">
-                  <button class="dmsg__vol" type="button" aria-label="음성 읽기 끄기" aria-pressed="true" data-donate-vol><img src="assets/watch/volume.svg" width="16" height="16" alt=""></button>
-                  <button class="dmsg__tts" type="button" data-donate-voice aria-label="읽어줄 목소리 바꾸기"><span>유나</span><img src="assets/watch/chevron-right.svg" width="20" height="20" alt=""></button>
+                  <button class="dmsg__vol" type="button" aria-pressed="true" data-donate-vol><img src="assets/watch/volume.svg" width="16" height="16" alt="">채팅 읽어주기</button>
+                  <button class="dmsg__tts" type="button" data-donate-voice aria-label="읽어줄 목소리 바꾸기"><span>야옹이</span><img src="assets/watch/chevron-right.svg" width="20" height="20" alt=""></button>
                 </div>
                 <div class="dmsg__box">
                   <textarea class="dmsg__input" id="d-signature-msg" rows="2" placeholder="응원의 한마디를 남겨주세요" aria-label="응원 메시지" aria-describedby="d-signature-msg-warn" data-count data-donate-msg></textarea>
@@ -532,12 +546,12 @@
                 <p class="dwarn" id="d-signature-msg-warn" data-warn hidden></p>
               </div>
               <button class="dbox dtitle" type="button">
-                <span class="dbox__head"><strong>칭호</strong><img src="assets/watch/chevron-right.svg" width="20" height="20" alt=""></span>
-                <span class="dtitle__value">아직없음</span>
+                <span class="dbox__head"><strong>🎖️칭호</strong><img src="assets/watch/chevron-right.svg" width="20" height="20" alt=""></span>
+                <span class="dtitle__value">표시 안 함</span>
               </button>
               <div class="dbox damount">
                 <div class="dbox__head">
-                  <label for="d-signature-amount"><strong>후원 금액</strong></label>
+                  <label for="d-signature-amount"><strong>💰후원 금액</strong></label>
                   <span class="dcash"><img src="assets/watch/cash.png" width="14" height="14" alt="">내 펀캐시<i aria-hidden="true"></i><b data-donate-balance>100,000</b></span>
                 </div>
                 <div class="damount__box">
@@ -585,12 +599,12 @@
             <div class="dform" data-node-id="64617:31456">
               <div class="dmsg">
                 <div class="dmsg__top">
-                  <p class="dmsg__name"><strong data-donate-nick>Nickname</strong><span>님</span></p>
+                  <p class="dmsg__name"><strong data-donate-nick>토비라마</strong><span>님</span></p>
                   <label class="dmsg__anon">익명<input class="switch" type="checkbox" role="switch" data-donate-anon></label>
                 </div>
                 <div class="dmsg__voice">
-                  <button class="dmsg__vol" type="button" aria-label="음성 읽기 끄기" aria-pressed="true" data-donate-vol><img src="assets/watch/volume.svg" width="16" height="16" alt=""></button>
-                  <button class="dmsg__tts" type="button" data-donate-voice aria-label="읽어줄 목소리 바꾸기"><span>유나</span><img src="assets/watch/chevron-right.svg" width="20" height="20" alt=""></button>
+                  <button class="dmsg__vol" type="button" aria-pressed="true" data-donate-vol><img src="assets/watch/volume.svg" width="16" height="16" alt="">채팅 읽어주기</button>
+                  <button class="dmsg__tts" type="button" data-donate-voice aria-label="읽어줄 목소리 바꾸기"><span>야옹이</span><img src="assets/watch/chevron-right.svg" width="20" height="20" alt=""></button>
                 </div>
                 <div class="dmsg__box">
                   <textarea class="dmsg__input" id="d-video-msg" rows="2" placeholder="응원의 한마디를 남겨주세요" aria-label="응원 메시지" aria-describedby="d-video-msg-warn" data-count data-donate-msg></textarea>
@@ -599,12 +613,12 @@
                 <p class="dwarn" id="d-video-msg-warn" data-warn hidden></p>
               </div>
               <button class="dbox dtitle" type="button">
-                <span class="dbox__head"><strong>칭호</strong><img src="assets/watch/chevron-right.svg" width="20" height="20" alt=""></span>
-                <span class="dtitle__value">아직없음</span>
+                <span class="dbox__head"><strong>🎖️칭호</strong><img src="assets/watch/chevron-right.svg" width="20" height="20" alt=""></span>
+                <span class="dtitle__value">표시 안 함</span>
               </button>
               <div class="dbox damount">
                 <div class="dbox__head">
-                  <label for="d-video-amount"><strong>후원 금액</strong></label>
+                  <label for="d-video-amount"><strong>💰후원 금액</strong></label>
                   <span class="dcash"><img src="assets/watch/cash.png" width="14" height="14" alt="">내 펀캐시<i aria-hidden="true"></i><b data-donate-balance>100,000</b></span>
                 </div>
                 <div class="damount__box">
@@ -655,12 +669,12 @@
             <div class="dform" data-node-id="64617:31560">
               <div class="dmsg">
                 <div class="dmsg__top">
-                  <p class="dmsg__name"><strong data-donate-nick>Nickname</strong><span>님</span></p>
+                  <p class="dmsg__name"><strong data-donate-nick>토비라마</strong><span>님</span></p>
                   <label class="dmsg__anon">익명<input class="switch" type="checkbox" role="switch" data-donate-anon></label>
                 </div>
                 <div class="dmsg__voice">
-                  <button class="dmsg__vol" type="button" aria-label="음성 읽기 끄기" aria-pressed="true" data-donate-vol><img src="assets/watch/volume.svg" width="16" height="16" alt=""></button>
-                  <button class="dmsg__tts" type="button" data-donate-voice aria-label="읽어줄 목소리 바꾸기"><span>유나</span><img src="assets/watch/chevron-right.svg" width="20" height="20" alt=""></button>
+                  <button class="dmsg__vol" type="button" aria-pressed="true" data-donate-vol><img src="assets/watch/volume.svg" width="16" height="16" alt="">채팅 읽어주기</button>
+                  <button class="dmsg__tts" type="button" data-donate-voice aria-label="읽어줄 목소리 바꾸기"><span>야옹이</span><img src="assets/watch/chevron-right.svg" width="20" height="20" alt=""></button>
                 </div>
                 <div class="dmsg__box">
                   <textarea class="dmsg__input" id="d-mission-msg" rows="2" placeholder="응원의 한마디를 남겨주세요" aria-label="응원 메시지" aria-describedby="d-mission-msg-warn" data-count data-donate-msg></textarea>
@@ -669,12 +683,12 @@
                 <p class="dwarn" id="d-mission-msg-warn" data-warn hidden></p>
               </div>
               <button class="dbox dtitle" type="button">
-                <span class="dbox__head"><strong>칭호</strong><img src="assets/watch/chevron-right.svg" width="20" height="20" alt=""></span>
-                <span class="dtitle__value">아직없음</span>
+                <span class="dbox__head"><strong>🎖️칭호</strong><img src="assets/watch/chevron-right.svg" width="20" height="20" alt=""></span>
+                <span class="dtitle__value">표시 안 함</span>
               </button>
               <div class="dbox damount">
                 <div class="dbox__head">
-                  <label for="d-mission-amount"><strong>후원 금액</strong></label>
+                  <label for="d-mission-amount"><strong>💰후원 금액</strong></label>
                   <span class="dcash"><img src="assets/watch/cash.png" width="14" height="14" alt="">내 펀캐시<i aria-hidden="true"></i><b data-donate-balance>100,000</b></span>
                 </div>
                 <div class="damount__box">

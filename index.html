@@ -932,9 +932,12 @@
               <span class="donation-card__en">MISSION</span>
               <span class="donation-card__ko">미션</span>
             </li>
-            <li class="donation-card" style="background-image: url('assets/donation/v2-05.jpg')">
+            <!-- 투표 — 마우스를 올리거나 포커스하면 영상 재생 + 제목이 설명 문구로 바뀜(글자 애니메이션) -->
+            <li class="donation-card donation-card--video" tabindex="0" style="background-image: url('assets/donation/v2-05.jpg')">
+              <video class="donation-card__video" src="assets/donation/poll.mp4" muted loop playsinline preload="auto" aria-hidden="true"></video>
               <span class="donation-card__en">POLL</span>
               <span class="donation-card__ko">투표</span>
+              <span class="donation-card__desc" data-split>생방송에서 진행되는 투표에 후원으로 참여해 보세요</span>
             </li>
             <li class="donation-card" style="background-image: url('assets/donation/v2-06.jpg')">
               <span class="donation-card__en">DONATION GOAL</span>

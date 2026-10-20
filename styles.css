@@ -13,6 +13,15 @@
   src: local("Sandoll 네모니2 04 Basic Bd"), local("SDNemony2dBasicBd");
 }
 
+/* G마켓 산스 Bold — 퀵 카드 제목 (v2.0). 설치돼 있으면 로컬, 없으면 웹폰트 */
+@font-face {
+  font-family: "Gmarket Sans Bd";
+  font-weight: 700;
+  font-display: swap;
+  src: local("Gmarket Sans TTF Bold"), local("GmarketSansTTFBold"), local("GmarketSansBold"),
+    url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansBold.woff") format("woff");
+}
+
 :root {
   /* 주요 버튼 배경 — 로그인 제출 · 회원가입 다음/시작하기 (334:78939 btn_login 64283:11541, Button/Default 64493:21573).
      시안은 #4a92ff 위에 그라데이션 이미지를 덮은 것이라 픽셀 색을 뽑아 CSS 로 옮김 */
@@ -91,9 +100,11 @@
     BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
   /* 산돌구름 설치 폰트 — 패밀리명이 한글이라 한글명으로 지정해야 매칭됨.
      미설치 환경에서는 Pretendard 로 폴백 */
-  /* 격동굴림은 광고 배너 문구에만 남음 (v2.0 섹션 제목·퀵 카드는 네모니2 로 바뀜) */
+  /* 격동굴림 — 띠 광고 문구 */
   --font-display: "Sandoll 격동굴림", "Sandoll Gyeokdonggulim", var(--font-base);
-  /* 네모니2 04 Basic Bd — 섹션 제목 · 퀵 카드 제목 · 영상 상세 제목/탭 (font-weight: 700 과 함께 사용) */
+  /* G마켓 산스 Bold — 퀵 카드 제목 (font-weight: 700 과 함께 사용) */
+  --font-gmarket: "Gmarket Sans Bd", var(--font-base);
+  /* 네모니2 04 Basic Bd — 섹션 제목 · 영상 상세 제목/탭 (font-weight: 700 과 함께 사용) */
   --font-nemony: "Nemony2 Basic Bd", var(--font-base);
   --font-hero: "Sandoll 맵씨", "Sandoll Mapssi", var(--font-base);
 
@@ -546,6 +557,31 @@ ul {
 }
 .nav-search.is-open .nav-search__input::placeholder {
   color: var(--nav-search-focus-placeholder);
+}
+/* 영상 상세 GNB 검색 (64822:102997) — 300×36 · 모서리 4px, 돋보기 왼쪽 7px, 안내 글자 가운데 #bfbfbf */
+[data-page="watch"] .nav-search {
+  top: 14px;
+  width: 300px;
+  height: 36px;
+  border-color: rgba(86, 94, 106, 0.1);
+  border-radius: 4px;
+  background: rgba(49, 55, 64, 0.5);
+}
+[data-page="watch"] .nav-search__icon {
+  left: 7px;
+  transform: translate(0, -50%);
+}
+[data-page="watch"] .nav-search__input {
+  padding: 0 34px;
+}
+[data-page="watch"] .nav-search__input:placeholder-shown {
+  text-align: center;
+}
+[data-page="watch"] .nav-search__input::placeholder {
+  color: #bfbfbf;
+}
+[data-page="watch"] .nav-search.is-open .nav-search__input {
+  text-align: left;
 }
 .nav-search.is-open .nav-search__icon {
   transform: translate(0, -50%);
@@ -2149,6 +2185,92 @@ ul {
   letter-spacing: -0.16px;
 }
 
+/* 영상 카드 (투표) — 올리면 영상이 이미지 위로 서서히 나타나 재생되고,
+   제목은 위로 사라지며 설명 문구가 한 글자씩 아래에서 떠오름. 내리면 반대로 */
+.donation-card--video {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  outline-offset: 2px;
+}
+.donation-card--video > span {
+  position: relative;
+  z-index: 2;
+}
+.donation-card__video {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+/* 재생 중엔 위쪽을 어둡게 — 설명 문구가 영상 속 투표용지와 겹쳐도 읽히게 */
+.donation-card--video::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(rgba(10, 10, 18, 0.8) 0, rgba(10, 10, 18, 0.6) 45%, transparent 68%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+.donation-card--video.is-active .donation-card__video,
+.donation-card--video.is-active::after {
+  opacity: 1;
+}
+.donation-card__ko {
+  transition: opacity 0.2s ease, transform 0.25s ease;
+}
+.donation-card--video.is-active .donation-card__ko {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+/* 설명 — 제목 자리(위 여백 + 영문 줄 + 간격)에 겹쳐 두고 줄바꿈은 어절 단위 */
+.donation-card__desc {
+  position: absolute !important;
+  top: calc(16px + 14.4px + 4px);
+  right: 16px;
+  left: 16px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.3px;
+  white-space: normal;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+  word-break: keep-all;
+  pointer-events: none;
+}
+.donation-card__desc .w {
+  display: inline-block;
+  white-space: nowrap;
+}
+.donation-card__desc .c {
+  display: inline-block;
+  opacity: 0;
+  filter: blur(4px);
+  transform: translateY(10px);
+  transition: opacity 0.18s ease, filter 0.18s ease, transform 0.18s ease;
+  transition-delay: 0s;
+}
+.donation-card--video.is-active .donation-card__desc .c {
+  opacity: 1;
+  filter: none;
+  transform: none;
+  transition: opacity 0.4s ease, filter 0.4s ease, transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transition-delay: calc(0.12s + var(--i) * 28ms);
+}
+@media (prefers-reduced-motion: reduce) {
+  .donation-card__ko,
+  .donation-card__desc .c,
+  .donation-card--video.is-active .donation-card__desc .c {
+    transition: none;
+  }
+}
+
 /* ------------------------------------------------------------
    푸터 (64023:30589)
    ------------------------------------------------------------ */
@@ -2544,11 +2666,12 @@ ul {
   min-width: 0;
   white-space: nowrap;
 }
-/* v2.0 퀵 카드 제목 (64112:87434) — Sandoll 네모니2 04 Basic Bd 19px */
+/* v2.0 퀵 카드 제목 (64112:87434) — G마켓 산스 Bold 19px, 자간 -5% */
 .quick-card__text strong {
-  font-family: var(--font-nemony);
+  font-family: var(--font-gmarket);
   font-size: 19px;
   font-weight: 700;
+  letter-spacing: -0.95px;
   line-height: 1;
   color: var(--text-secondary);
 }
@@ -3385,6 +3508,12 @@ ul {
   }
   .donation-card__ko {
     font-size: 15px;
+  }
+  .donation-card__desc {
+    top: calc(12px + 14.4px + 4px);
+    right: 12px;
+    left: 12px;
+    font-size: 12px;
   }
 
   /* 푸터 — 강제 줄바꿈 해제 */
@@ -4575,8 +4704,8 @@ ul {
 }
 
 /* ============================================================
-   영상 상세 [A-03] ver.2 (64617:31107) — watch.html, PC 전용
-   GNB 아래를 영상(왼쪽) + 채팅 364px(오른쪽)로 나누고 화면 높이에 맞춤.
+   영상 상세 ver.3 (64795:14999) — watch.html, PC 전용
+   GNB 아래를 YouTube 플레이어(왼쪽) + 채팅 398px(오른쪽)로 나누고 화면 높이에 맞춤.
    LNB 는 숨겨 두고 GNB 햄버거로 영상 위에 겹쳐 엶
    ============================================================ */
 :root {
@@ -4596,17 +4725,27 @@ ul {
   --w-placeholder: #515151;
   --w-input-bg: #343434;
   --w-field-bg: #292929;
-  --w-box-bg: rgba(23, 23, 23, 0.7);
-  --w-name: #c6c6c6;
+  --w-box-bg: #202224;
+  --w-name: #b8b8b8;
   /* 채팅 메시지 영역(주요 채팅 바 + 목록) — 시안은 채팅 캡처 이미지 바탕 #0f0f0f, 제목·입력·탭은 패널색 #212121 */
   --w-chat-bg: #0f0f0f;
+  /* ver.3 채팅 (64816:102304) — 탭 바탕 · 꺼진 탭 글자, YouTube 채팅 캡처 색 */
+  --w-tabs-bg: #101010;
+  --w-tab-off: #818181;
+  --w-msg: #fff;
+  --w-name-member: #56a14a;
+  --w-name-mod: #5aa6fa;
+  --w-pin-bg: #272727;
   /* 테두리 (64617:31107 stroke · 시안 픽셀 기준) */
   --w-nav-line: #343434;     /* GNB 아래 (64617:31170) */
-  --w-chat-edge: #212121;    /* 영상 ↔ 채팅 메시지 영역 사이 1px */
   --w-bar-line: #272727;     /* "주요 채팅" 바 아래 2px */
   --w-notice-bg: #3e3e3e;
   --w-active: #4a92ff;
-  --w-amount: #4962ff;
+  --w-amount: #4a92ff;
+  /* 후원 시트 (64822:112729) — 바탕 · 금액 칸 · 금액 칩 */
+  --w-sheet-bg: #101010;
+  --w-amount-bg: #101010;
+  --w-chip-bg: #292929;
   /* 후원 패널 입력칸 (64617:28170) · 오류 노랑 (Sys/warning-100) */
   --w-box: #212121;
   --w-box-line: #343434;
@@ -4630,19 +4769,25 @@ ul {
   --w-input-bg: #f1f4f9;
   --w-field-bg: #f1f4f9;
   --w-box-bg: #f6f8fb;
+  --w-sheet-bg: #ffffff;
+  --w-amount-bg: #f1f4f9;
+  --w-chip-bg: #e9edf4;
   --w-name: #4a5568;
   --w-chat-bg: #f6f8fb;
+  --w-tabs-bg: #ffffff;
+  --w-tab-off: #687385;
+  --w-msg: #202938;
+  --w-name-member: #2f8a3a;
+  --w-name-mod: #2f6fd6;
+  --w-pin-bg: #e9edf4;
   --w-nav-line: #e0e5ed;
-  --w-chat-edge: #e3e7ee;
   --w-bar-line: #e9edf4;
   --w-notice-bg: #e9edf4;
   --w-box: #ffffff;
   --w-box-line: #d9e0ea;
   --w-warn: #b98900;
 }
-[data-theme="light"] .watch-btn img,
-[data-theme="light"] .wchat__collapse img,
-[data-theme="light"] .watch-stage__chat img,
+[data-theme="light"] .wchat__icon img,
 [data-theme="light"] .donate__close img,
 [data-theme="light"] .dtitle .dbox__head img,
 [data-theme="light"] .wchat__mode img,
@@ -4713,12 +4858,10 @@ ul {
   opacity: 1;
   pointer-events: auto;
 }
-/* 데모용 로그인 플로팅 버튼은 채팅 탭과 겹치지 않게 영상 오른쪽 아래로 */
+/* 데모용 로그인 플로팅 버튼 — 플레이어 아래 컨트롤(113px)과 겹치지 않게 위로 */
 [data-page="watch"] .fab-auth {
-  right: 388px;
-}
-[data-page="watch"][data-chat="closed"] .fab-auth {
-  right: 24px;
+  right: 422px;
+  bottom: 130px;
 }
 @media (prefers-reduced-motion: reduce) {
   [data-page="watch"] .lnb,
@@ -4727,207 +4870,242 @@ ul {
   }
 }
 
-/* 제목 영역 (64617:31137) — 24px 여백, 아래 1px 선 */
-.watch-head {
-  display: flex;
-  flex: none;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 24px;
-  padding: 24px;
-  border-bottom: 1px solid var(--w-head-border);
-}
-.watch-head__info {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  min-width: 0;
-}
-.watch-head__meta {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-.watch-head__title-row {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  min-width: 0;
-}
-.watch-head__title {
-  overflow: hidden;
-  margin: 0;
-  font-size: 19px;
-  font-weight: 700;
-  line-height: 1;
-  letter-spacing: -0.19px;
-  color: var(--w-title);
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.watch-head__viewers {
-  display: flex;
-  flex: none;
-  align-items: center;
-  gap: 2px;
-  font-size: 13px;
-  line-height: 1;
-  letter-spacing: -0.13px;
-  color: var(--w-sub);
-}
-.watch-head__tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.watch-head__tags li {
-  padding: 2px 8px;
-  border-radius: 20px;
-  background: var(--w-tag-bg);
-  font-size: 11px;
-  font-weight: 500;
-  line-height: 16px;
-  color: var(--w-tag-text);
-}
-.watch-head__channel {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  line-height: 1;
-  letter-spacing: -0.13px;
-  color: var(--w-sub);
-  text-decoration: none;
-}
-.watch-head__channel:hover {
-  color: var(--w-text);
-}
-/* 채널 아바타 — 시안처럼 채널 배너(2048×339)의 얼굴 부분을 24px 원에 맞춰 보여줌 */
-.watch-head__avatar {
-  position: relative;
-  flex: none;
-  overflow: hidden;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-}
-.watch-head__avatar img {
-  position: absolute;
-  top: 0;
-  left: -48px;
-  width: auto;
-  max-width: none;
-  height: 24px;
-}
-.watch-head__actions {
-  display: flex;
-  flex: none;
-  gap: 12px;
-}
-.watch-btn {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding: 12px;
-  border: 1px solid var(--w-btn-border);
-  border-radius: 999px;
-  font-size: 13px;
-  font-weight: 500;
-  line-height: 16px;
-  color: var(--w-btn-text);
-  transition: border-color 0.2s ease, color 0.2s ease;
-}
-.watch-btn:hover {
-  border-color: #6b6b6b;
-}
-.watch-btn[aria-pressed="true"] {
-  border-color: var(--w-active);
-  color: var(--w-active);
-}
-
-/* 영상 (64617:31135) — 세로 영상을 영역 높이에 맞춰 가운데 */
-.watch-stage {
+/* YouTube 플레이어 (64795:15029) — 영상(1076×604.56)을 영역 가운데, 위 제목줄 · 아래 컨트롤은 코드로 겹침 */
+.yt {
   position: relative;
   display: flex;
   flex: 1 1 0;
+  align-items: center;
   justify-content: center;
   min-height: 0;
   overflow: hidden;
-  background: var(--w-stage-bg);
+  /* 시안 바탕 — 아래 왼쪽이 밝은 남색 */
+  background: var(--bg-page);
 }
-.watch-stage__video {
+.yt__video {
+  position: relative;
+  display: flex;
+  max-width: 100%;
+  max-height: 100%;
+}
+.yt__video > img:first-child {
   width: auto;
-  height: 100%;
-  aspect-ratio: 727 / 1295;
+  height: auto;
+  max-width: 100%;
+  max-height: calc(100vh - 65px);
+  aspect-ratio: 1076 / 604.5618;
   object-fit: cover;
 }
-.watch-stage__chat {
+.yt__fix {
   position: absolute;
-  top: 16px;
-  right: 16px;
+}
+.yt__fix--bl { left: 0; bottom: 0; width: 2px; height: 3px; background: #3c3f86; }
+.yt__fix--br { right: 0; bottom: 0; width: 3px; height: 4px; background: #26226d; }
+.yt__fix--tr { right: 0; top: 0; width: 5px; height: 5px; background: #dfd2fa; }
+.yt__fix--tl { left: 0; top: 0; }
+/* 위 · 아래 컨트롤 — 시안 플레이어 캡처의 위치·크기를 그대로 옮겨 코드로 그림(아이콘만 캡처에서 잘라 씀).
+   영역 폭이 바뀌어도 재생 바가 이어지도록 왼쪽 29px ~ 오른쪽 36px 를 한 줄로 채움.
+   영상과 겹칠 때(화면 높이가 낮을 때) 글자가 보이게 위·아래에 옅은 그림자 */
+.yt__top,
+.yt__ctrl {
+  position: absolute;
+  right: 0;
+  left: 0;
+  z-index: 1;
+  color: #fff;
+}
+.yt__top {
+  top: 0;
   display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 10px 14px;
-  border: 1px solid var(--w-btn-border);
-  border-radius: 999px;
-  background: var(--w-panel-bg);
+  align-items: flex-start;
+  height: 64px;
+  padding: 16.5px 36px 0 31.5px;
+  background: linear-gradient(rgba(0, 0, 0, 0.45), transparent);
+}
+.yt__channel {
+  flex: none;
+  border-radius: 50%;
+}
+.yt__heading {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: -6px 0 0 14px;
+}
+.yt__title {
+  margin: 0;
+  overflow: hidden;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 26px;
+  letter-spacing: -0.2px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.yt__owner {
+  margin: 0;
   font-size: 13px;
   font-weight: 500;
-  color: var(--w-text);
+  line-height: 16px;
 }
-.watch-stage__chat img {
-  transform: scaleX(-1);
+.yt__tools {
+  display: flex;
+  flex: none;
+  gap: 25px;
+  margin: -4.5px 0 0 24px;
 }
-.watch-stage__chat[hidden] {
-  display: none;
+.yt__btn {
+  display: flex;
+  flex: none;
+  width: 24px;
+  height: 24px;
+  opacity: 1;
+  transition: opacity 0.15s ease;
+}
+.yt__btn:hover {
+  opacity: 0.8;
+}
+.yt__btn[aria-pressed="true"] {
+  opacity: 0.45;
+}
+.yt__ctrl {
+  bottom: 0;
+  height: 113px;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.45));
+}
+/* 라이브 — 빨간 점 6px + 14px 글자 */
+.yt__live {
+  position: absolute;
+  top: 0;
+  left: 33px;
+  display: flex;
+  align-items: center;
+  gap: 4.5px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 17px;
+}
+.yt__live::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ba2f2f;
+}
+.yt__fs {
+  position: absolute;
+  top: -3px;
+  right: 36px;
+}
+/* 재생 바 — 3px, 끝 쪽만 빨강 → 분홍, 오른쪽 끝에 12px 손잡이(실시간이라 항상 끝) */
+.yt__progress {
+  position: absolute;
+  top: 37.5px;
+  right: 36px;
+  left: 29px;
+  height: 3px;
+  background: linear-gradient(90deg, #ea3c3b 0, #ea3c3b calc(100% - 200px), #ea4989 100%);
+}
+.yt__knob {
+  position: absolute;
+  top: 50%;
+  right: -6px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #ea3c3b;
+  transform: translateY(-50%);
+}
+.yt__row {
+  position: absolute;
+  top: 65px;
+  right: 56px;
+  left: 45px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+.yt__logo {
+  display: flex;
+  margin-left: auto;
+}
+/* 전체화면 — 플레이어만 화면에 꽉 채움 */
+.yt:fullscreen {
+  background: #000;
+}
+.yt:fullscreen .yt__video > img:first-child {
+  max-height: 100vh;
 }
 
-/* 채팅 (64617:31108) — 364px, 위 제목 50 · 아래 입력 73 + 탭 44 + 10 */
+/* 채팅 (64816:102304) — 398px, 왼쪽 1px 선. 위 탭(채팅/후원하기) 48 */
 .wchat {
   position: relative;
   display: flex;
   flex: none;
   flex-direction: column;
-  width: 364px;
+  width: 398px;
   overflow: hidden;
-  background: var(--w-panel-bg);
+  border-left: 1px solid var(--w-head-border);
+  background: var(--w-chat-bg);
 }
-[data-chat="closed"] .wchat {
-  display: none;
-}
-.wchat__head {
-  position: relative;
+.wchat__mode-tabs {
   display: flex;
   flex: none;
-  align-items: center;
-  justify-content: center;
-  height: 50px;
-  padding: 0 20px;
-  border-bottom: 1px solid var(--w-panel-line);
+  border-bottom: 1px solid var(--w-head-border);
+  background: var(--w-tabs-bg);
 }
-.wchat__head h2 {
-  margin: 0;
-  font-family: var(--font-nemony);
-  font-size: 17px;
+.wchat__mode-tab {
+  position: relative;
+  flex: 1 1 0;
+  height: 47px;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 19px;
+  color: var(--w-tab-off);
+}
+.wchat__mode-tab[aria-selected="true"] {
   font-weight: 700;
-  line-height: 1;
-  letter-spacing: -0.17px;
+  color: var(--w-active);
+}
+.wchat__mode-tab[aria-selected="true"]::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: -1px;
+  left: 0;
+  height: 2px;
+  background: var(--w-active);
+}
+/* 후원 종류 탭 (64822:111705) — 후원하기를 골랐을 때만 */
+.wchat__kinds {
+  display: none;
+  flex: none;
+  align-items: center;
+  gap: 12px;
+  height: 50px;
+  padding: 0 6px;
+  border-bottom: 1px solid var(--w-head-border);
+  background: var(--w-tabs-bg);
+}
+.wchat[data-mode="donate"] .wchat__kinds {
+  display: flex;
+}
+.wkind {
+  flex: 1 1 0;
+  padding: 9px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  white-space: nowrap;
+  color: var(--w-tab-off);
+}
+.wkind:hover {
   color: var(--w-text);
 }
-.wchat__collapse {
-  position: absolute;
-  top: 50%;
-  left: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-  transform: translateY(-50%);
+.wkind[aria-pressed="true"] {
+  background: var(--w-active);
+  font-weight: 600;
+  color: #fefefe;
 }
 .wchat__bar {
   display: flex;
@@ -4937,7 +5115,6 @@ ul {
   height: 48px;
   padding: 0 14px 0 20px;
   border-bottom: 2px solid var(--w-bar-line);
-  border-left: 1px solid var(--w-chat-edge);
   background: var(--w-chat-bg);
 }
 .wchat__mode {
@@ -4970,11 +5147,10 @@ ul {
 }
 .wchat__list {
   flex: 1 1 0;
-  border-left: 1px solid var(--w-chat-edge);
   background: var(--w-chat-bg);
   min-height: 0;
   margin: 0;
-  padding: 12px 20px 12px;
+  padding: 8px 20px 8px 26px;
   overflow-y: auto;
   overscroll-behavior: contain;
   list-style: none;
@@ -4982,11 +5158,11 @@ ul {
 .wmsg {
   display: flex;
   align-items: flex-start;
-  gap: 10px;
+  gap: 16px;
   padding: 4px 0;
-  font-size: 13px;
-  line-height: 20px;
-  color: var(--w-text);
+  font-size: 14px;
+  line-height: 24px;
+  color: var(--w-msg);
   word-break: break-all;
 }
 .wmsg p {
@@ -5013,9 +5189,28 @@ ul {
   color: #fff;
 }
 .wmsg__name {
-  margin-right: 6px;
-  font-weight: 600;
+  margin-right: 8px;
+  font-weight: 500;
   color: var(--w-name);
+}
+.wmsg__name--member { color: var(--w-name-member); }
+.wmsg__name--mod { color: var(--w-name-mod); }
+.wmsg__icon {
+  display: inline-block;
+  margin-left: 3px;
+  vertical-align: -2px;
+}
+.wmsg__emote {
+  display: inline-block;
+  vertical-align: -4px;
+}
+.wmsg__dia {
+  margin: 0 4px;
+  font-size: 12px;
+  vertical-align: 1px;
+}
+.wmsg__text a {
+  color: inherit;
 }
 .wmsg__badge {
   display: inline-flex;
@@ -5025,12 +5220,19 @@ ul {
   margin-right: 6px;
   padding: 0 6px;
   border-radius: 999px;
-  background: #c9b2ff;
+  background: #d2a0fb;
   vertical-align: 1px;
   font-size: 11px;
   font-weight: 700;
   line-height: 1;
-  color: #22106a;
+  color: #000;
+}
+.wmsg__badge--deep {
+  background: #6826a7;
+  color: #fff;
+}
+.wmsg__badge--deep img {
+  filter: brightness(0) invert(1);
 }
 .wmsg--mine .wmsg__name {
   color: var(--w-active);
@@ -5061,23 +5263,66 @@ ul {
 .wnotice a:hover {
   text-decoration: underline;
 }
-.wchat__form {
+/* 고정 메시지 — 48px 둥근 상자 */
+.wchat__pin {
+  display: flex;
   flex: none;
-  padding: 12px 20px;
+  align-items: center;
+  gap: 10px;
+  height: 48px;
+  margin: 4px 12px 8px;
+  padding: 0 10px 0 12px;
+  border-radius: 24px;
+  background: var(--w-pin-bg);
+  font-size: 14px;
+  color: var(--w-msg);
+}
+.wchat__pin > img {
+  flex: none;
+  border-radius: 50%;
+}
+.wchat__pin-name {
+  flex: none;
+  padding: 1px 6px;
+  border-radius: 6px;
+  background: #f1f1f1;
+  font-weight: 600;
+  line-height: 20px;
+  color: #0f0f0f;
+}
+.wchat__pin-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  font-weight: 500;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.wchat__pin-text a {
+  color: inherit;
+}
+/* 입력 — 36px 둥근 입력칸 + 이모티콘 · 후원 · 좋아요 동그라미 */
+.wchat__form {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 12px 14px;
   border-top: 1px solid var(--w-line);
 }
 .wchat__input {
-  width: 100%;
-  height: 48px;
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 36px;
   padding: 0 16px;
   border: 0;
-  border-radius: 8px;
+  border-radius: 18px;
   outline: 0;
-  background: var(--w-input-bg);
+  background: var(--w-pin-bg);
   font: inherit;
   font-size: 14px;
-  letter-spacing: -0.14px;
-  color: var(--w-text);
+  color: var(--w-msg);
   caret-color: var(--w-active);
 }
 .wchat__input::placeholder {
@@ -5086,75 +5331,53 @@ ul {
 .wchat__input:focus-visible {
   box-shadow: inset 0 0 0 1px var(--w-active);
 }
-
-/* 후원 탭 (64617:31122) — 선택·호버 시 글자와 아이콘이 #4a92ff (아이콘은 *-active.svg 로 교체) */
-.wchat__tabs {
-  position: relative;
-  z-index: 3;
+.wchat__icon {
   display: flex;
   flex: none;
-  gap: 12px;
-  height: 54px;
-  padding: 12px 24px 22px;
-  background: var(--w-panel-bg);
-}
-.wtab {
-  display: flex;
   align-items: center;
-  gap: 4px;
-  font-family: var(--font-nemony);
-  font-size: 16px;
-  font-weight: 700;
-  line-height: 1;
-  letter-spacing: -0.16px;
-  color: var(--w-text-2);
-  transition: color 0.15s ease;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--w-pin-bg);
 }
-.wtab:hover,
-.wtab[aria-expanded="true"] {
-  color: var(--w-active);
+.wchat__icon:hover {
+  background: #3a3a3a;
 }
-.wtab__icon {
-  display: flex;
-}
-.wtab__icon img + img,
-.wtab:hover .wtab__icon img:first-child,
-.wtab[aria-expanded="true"] .wtab__icon img:first-child {
-  display: none;
-}
-.wtab:hover .wtab__icon img + img,
-.wtab[aria-expanded="true"] .wtab__icon img + img {
-  display: block;
+.wchat__icon[aria-pressed="true"] {
+  background: #e3365c;
 }
 
-/* 후원 패널 (64617:31228 외 3종) — 채팅 위로 올라오는 시트. 위 모서리 20px, 그림자 */
-/* 아래에 붙어 내용만큼 높아짐 — 최소는 시안처럼 채팅 위 259px 아래부터, 내용이 길면(시그니처 등) 채팅 제목 바로 아래까지 올라오고
-   그래도 모자랄 때만 패널 안에서 스크롤 */
+/* 후원 시트 (64822:112729) — 후원 종류 탭 바로 아래에서 내려와 채팅 위에 겹침(채팅은 아래로 계속 보임).
+   #101010 · 1px 선 · 아래 모서리 20px · 아래 그림자. 내용만큼 높아지고 넘치면 시트 안에서 스크롤 (제목줄은 종류 탭이 대신해 숨김) */
 .donate {
   position: absolute;
+  top: 98px;
   right: 0;
-  bottom: 0;
-  left: 0;
-  min-height: calc(100% - 197px);
-  max-height: calc(100% - 51px);
-  z-index: 2;
+  left: -1px;
+  z-index: 3;
   display: flex;
   flex-direction: column;
-  padding-bottom: 54px;
-  border-radius: 20px 20px 0 0;
-  background: var(--w-panel-bg);
-  box-shadow: 0 4px 17px rgba(0, 0, 0, 0.25);
-  animation: donate-up 0.22s ease-out;
+  max-height: calc(100% - 98px - 24px);
+  border: 1px solid var(--w-head-border);
+  border-top: 0;
+  border-radius: 0 0 20px 20px;
+  background: var(--w-sheet-bg);
+  filter: drop-shadow(0 8px 4px rgba(0, 0, 0, 0.5));
+  animation: donate-down 0.22s ease-out;
 }
-.donate[hidden] {
-  display: none;
-}
-@keyframes donate-up {
-  from { transform: translateY(24px); opacity: 0; }
+@keyframes donate-down {
+  from { transform: translateY(-12px); opacity: 0; }
   to { transform: none; opacity: 1; }
 }
 @media (prefers-reduced-motion: reduce) {
   .donate { animation: none; }
+}
+.donate .donate__head {
+  display: none;
+}
+.donate[hidden] {
+  display: none;
 }
 .donate__head {
   display: flex;
@@ -5183,7 +5406,7 @@ ul {
   flex-direction: column;
   gap: 20px;
   min-height: 0;
-  padding: 20px 24px;
+  padding: 20px 24px 24px;
   /* 세로로만 스크롤 — 세로 스크롤바가 생기면 폭이 줄어 시그니처 화살표(right: -1px)가 넘쳐 가로 스크롤바가 생기던 문제 */
   overflow-x: hidden;
   overflow-y: auto;
@@ -5401,7 +5624,7 @@ ul {
 .dform {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 20px;
 }
 .dmsg {
   display: flex;
@@ -5419,8 +5642,8 @@ ul {
 }
 .dmsg__name {
   display: flex;
-  align-items: center;
-  gap: 4px;
+  align-items: flex-end;
+  gap: 2px;
   margin: 0;
   font-size: 12px;
   font-weight: 500;
@@ -5428,11 +5651,10 @@ ul {
   letter-spacing: -0.12px;
 }
 .dmsg__name strong {
-  font-family: var(--font-nemony);
-  font-size: 14px;
-  font-weight: 700;
+  font-size: 16px;
+  font-weight: 500;
   line-height: 1;
-  letter-spacing: -0.14px;
+  letter-spacing: -0.16px;
 }
 .dmsg__anon {
   display: flex;
@@ -5444,14 +5666,14 @@ ul {
   letter-spacing: 0.48px;
   cursor: pointer;
 }
-/* 익명 스위치 (Togglebox 64159:88264) — 50×26, 손잡이 20px */
+/* 익명 스위치 (Togglebox 64822:113484) — 44×24, 손잡이 18px */
 .switch {
   position: relative;
-  width: 50px;
-  height: 26px;
+  width: 44px;
+  height: 24px;
   margin: 0;
   border-radius: 999px;
-  background: #2a2b32;
+  background: #999;
   cursor: pointer;
   appearance: none;
   transition: background 0.2s ease;
@@ -5461,10 +5683,10 @@ ul {
   position: absolute;
   top: 3px;
   left: 3px;
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
-  background: #8b8b9b;
+  background: #dfe2ea;
   transition: transform 0.2s ease, background 0.2s ease;
 }
 .switch:checked {
@@ -5472,7 +5694,7 @@ ul {
 }
 .switch:checked::after {
   background: #fff;
-  transform: translateX(24px);
+  transform: translateX(20px);
 }
 .switch:focus-visible {
   outline: 2px solid #fff;
@@ -5480,7 +5702,7 @@ ul {
 }
 .dmsg__voice {
   display: flex;
-  gap: 4px;
+  gap: 5px;
 }
 .dmsg__vol,
 .dmsg__tts {
@@ -5491,19 +5713,26 @@ ul {
   border-radius: 999px;
   background: #2c43d1;
 }
+/* 채팅 읽어주기 · 목소리 (64822:112745 · 112747) — 28px 알약, 14px */
 .dmsg__vol {
-  width: 28px;
+  gap: 2px;
+  padding: 0 8px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: 0.52px;
+  color: #e0e0e0;
 }
-.dmsg__vol[aria-pressed="false"] img {
-  opacity: 0.35;
+.dmsg__vol[aria-pressed="false"] {
+  opacity: 0.5;
 }
 .dmsg__tts {
   gap: 2px;
   padding: 0 6px 0 12px;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   line-height: 1.2;
-  letter-spacing: 0.48px;
+  letter-spacing: 0.52px;
   color: #e0e0e0;
 }
 .dmsg__vol[aria-pressed="false"] + .dmsg__tts {
@@ -5530,7 +5759,7 @@ ul {
   caret-color: #fff;
 }
 .dmsg__input::placeholder {
-  color: #5f74f8;
+  color: #97a4f6;
 }
 .dmsg__count {
   align-self: flex-end;
@@ -5552,7 +5781,7 @@ ul {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 14px;
+  font-size: 16px;
   line-height: 20px;
   color: var(--w-text);
 }
@@ -5567,9 +5796,9 @@ ul {
   gap: 6px;
   height: 29px;
   padding: 0 9px 0 6px;
-  border: 1px solid var(--w-btn-border);
+  border: 1px solid var(--w-line);
   border-radius: 50px;
-  background: var(--w-panel-line);
+  background: transparent;
   font-size: 13px;
   font-weight: 600;
   line-height: 16px;
@@ -5586,21 +5815,20 @@ ul {
 }
 .dcash b {
   font-weight: 600;
-  color: var(--w-amount);
+  color: var(--w-active);
 }
 .damount__box {
   display: flex;
   align-items: center;
   gap: 10px;
   height: 56px;
-  padding: 0 20px;
+  padding: 0 16px;
   border: 1px solid transparent;
   border-radius: 8px;
-  background: var(--w-field-bg);
+  background: var(--w-amount-bg);
 }
 .damount__box:focus-within {
   border-color: var(--w-box-line);
-  background: var(--w-box);
 }
 .damount__input {
   flex: 1;
@@ -5633,13 +5861,12 @@ ul {
 .damount__box.is-empty .damount__clear {
   visibility: hidden;
 }
-.damount__clear img + img,
-.damount__box:focus-within .damount__clear img:first-child,
-.is-warn .damount__clear img:first-child,
+/* 지우기 — 시안(64822:112773)은 평소에도 파란 X, 오류일 때만 노란 X */
+.damount__clear img:first-child,
+.damount__clear img:nth-child(3),
 .is-warn .damount__clear img:nth-child(2) {
   display: none;
 }
-.damount__box:focus-within:not(.is-warn) .damount__clear img:nth-child(2),
 .is-warn .damount__clear img:nth-child(3) {
   display: block;
 }
@@ -5704,7 +5931,7 @@ ul {
   flex: none;
   flex-direction: column;
   gap: 10px;
-  padding: 10px 24px 12px;
+  padding: 0 24px 24px;
 }
 .donate__submit {
   display: flex;
@@ -5787,7 +6014,7 @@ ul {
   height: 26px;
   padding: 0 6px;
   border-radius: 4px;
-  background: var(--w-field-bg);
+  background: var(--w-chip-bg);
   font-size: 12px;
   font-weight: 600;
   line-height: 17px;
