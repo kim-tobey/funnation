@@ -5,21 +5,13 @@
    FUNNATION — 전체 방송 (Figma 63998:5230)
    ============================================================ */
 
-/* Sandoll 네모니2 04 Basic Bd — 굵기 이름(01~10)이 표준과 달라 font-weight 로는 안 잡혀 이름으로 직접 지정.
-   설치돼 있지 않으면 Pretendard 굵게로 대체 */
+/* 에스코어 드림 7 ExtraBold — 섹션 제목 · 후원 패널 제목 · 퀵 카드 제목
+   (시안의 산돌 네모니2 · G마켓 산스 대신, 크롬·사파리 공통 웹폰트) */
 @font-face {
-  font-family: "Nemony2 Basic Bd";
-  font-weight: 700;
-  src: local("Sandoll 네모니2 04 Basic Bd"), local("SDNemony2dBasicBd");
-}
-
-/* G마켓 산스 Bold — 퀵 카드 제목 (v2.0). 설치돼 있으면 로컬, 없으면 웹폰트 */
-@font-face {
-  font-family: "Gmarket Sans Bd";
+  font-family: "S-Core Dream";
   font-weight: 700;
   font-display: swap;
-  src: local("Gmarket Sans TTF Bold"), local("GmarketSansTTFBold"), local("GmarketSansBold"),
-    url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansBold.woff") format("woff");
+  src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-7ExtraBold.woff") format("woff");
 }
 
 :root {
@@ -102,10 +94,8 @@
      미설치 환경에서는 Pretendard 로 폴백 */
   /* 격동굴림 — 띠 광고 문구 */
   --font-display: "Sandoll 격동굴림", "Sandoll Gyeokdonggulim", var(--font-base);
-  /* G마켓 산스 Bold — 퀵 카드 제목 (font-weight: 700 과 함께 사용) */
-  --font-gmarket: "Gmarket Sans Bd", var(--font-base);
-  /* 네모니2 04 Basic Bd — 섹션 제목 · 영상 상세 제목/탭 (font-weight: 700 과 함께 사용) */
-  --font-nemony: "Nemony2 Basic Bd", var(--font-base);
+  /* 에스코어 드림 7 ExtraBold(시안: 네모니2 · G마켓 산스) — 섹션 제목 · 후원 패널 제목 · 퀵 카드 제목 (font-weight: 700 과 함께 사용) */
+  --font-score: "S-Core Dream", var(--font-base);
   --font-hero: "Sandoll 맵씨", "Sandoll Mapssi", var(--font-base);
 
   --body-bg: #07070d;
@@ -1678,11 +1668,12 @@ ul {
 /* v2.0 섹션 제목 (64112:13465 등) — Sandoll 네모니2 04 Basic Bd 19px */
 .section-header h2 {
   margin: 0;
-  font-family: var(--font-nemony);
+  font-family: var(--font-score);
   font-size: 19px;
   font-weight: 700;
   line-height: 1;
   letter-spacing: -0.19px;
+  word-spacing: -0.12em; /* 에스코어 드림은 띄어쓰기가 넓어 단어 사이만 좁힘 */
   color: var(--text-secondary);
 }
 .section-header a {
@@ -2666,9 +2657,9 @@ ul {
   min-width: 0;
   white-space: nowrap;
 }
-/* v2.0 퀵 카드 제목 (64112:87434) — G마켓 산스 Bold 19px, 자간 -5% */
+/* v2.0 퀵 카드 제목 (64112:87434) — 시안은 G마켓 산스 Bold 19px, 자간 -5%. 에스코어 드림으로 대체 */
 .quick-card__text strong {
-  font-family: var(--font-gmarket);
+  font-family: var(--font-score);
   font-size: 19px;
   font-weight: 700;
   letter-spacing: -0.95px;
@@ -2709,8 +2700,146 @@ ul {
 .ad-banner--top + .live-section {
   margin-top: 30px;
 }
-:root { --quick-card-bg: #1b2026; } /* ADbanner 64112:87432 */
-[data-theme="light"] { --quick-card-bg: #f0f3f8; }
+:root { --quick-card-bg: #1b2026; --quick-card-bg-hover: #212833; } /* ADbanner 64112:87432 */
+[data-theme="light"] { --quick-card-bg: #f0f3f8; --quick-card-bg-hover: #e7edf7; }
+
+/* 퀵 카드 마우스 오버 — 카드가 살짝 떠오르며 파란 테두리 빛, 오른쪽 그림 뒤에 은은한 빛이 퍼지고
+   그림은 커지면서 위아래로 둥실둥실(기울이지 않음). 제목은 밝아지고 › 가 밀려 나옴 */
+.quick-card {
+  isolation: isolate;
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), background-color 0.25s ease, box-shadow 0.35s ease;
+}
+.quick-card::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: -20px;
+  z-index: -1;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(80, 139, 255, 0.35), rgba(80, 139, 255, 0) 70%);
+  opacity: 0;
+  transform: translateY(-50%) scale(0.6);
+  transition: opacity 0.35s ease, transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+  pointer-events: none;
+}
+.quick-card img {
+  transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.quick-card__text strong {
+  transition: color 0.25s ease;
+}
+.quick-card__text strong::after {
+  content: "›";
+  display: inline-block;
+  margin-left: 6px;
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 0.25s ease, transform 0.3s ease;
+}
+@media (hover: hover) {
+  .quick-card:hover,
+  .quick-card:focus-visible {
+    background-color: var(--quick-card-bg-hover);
+    box-shadow: inset 0 0 0 1px rgba(80, 139, 255, 0.45), 0 12px 24px -8px rgba(0, 0, 0, 0.5);
+    transform: translateY(-3px);
+  }
+  .quick-card:hover::before,
+  .quick-card:focus-visible::before {
+    opacity: 1;
+    transform: translateY(-50%) scale(1);
+  }
+  .quick-card:hover img,
+  .quick-card:focus-visible img {
+    animation: quick-float 2.4s ease-in-out 0.45s infinite;
+    transform: translateY(-50%) scale(1.1);
+  }
+  .quick-card:hover .quick-card__text strong,
+  .quick-card:focus-visible .quick-card__text strong {
+    color: var(--text-primary);
+  }
+  .quick-card:hover .quick-card__text strong::after,
+  .quick-card:focus-visible .quick-card__text strong::after {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes quick-float {
+  0%, 100% { transform: translateY(-50%) scale(1.1); }
+  50% { transform: translateY(calc(-50% - 5px)) scale(1.1); }
+}
+
+/* 영상 썸네일 마우스 오버 (홈 · 라이브 방송, 광고 카드 제외) — 카드 어디에 올려도 썸네일이 천천히 확대되고
+   파란 테두리 + 아래쪽 어둠 */
+.card__thumb,
+.vod-card__thumb {
+  position: relative;
+  isolation: isolate;
+  transition: box-shadow 0.3s ease;
+}
+.card__thumb > img,
+.vod-card__thumb img {
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.3s ease;
+}
+.card__status {
+  z-index: 2;
+}
+.card__thumb::before,
+.vod-card__thumb::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  opacity: 0;
+  pointer-events: none;
+  background: linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.45));
+  transition: opacity 0.3s ease;
+}
+@media (hover: hover) {
+  .card:not(.card--ad):hover .card__thumb,
+  .vod-card:hover .vod-card__thumb {
+    box-shadow: 0 0 0 2px #4a92ff, 0 10px 24px -8px rgba(74, 146, 255, 0.45);
+  }
+  .card:not(.card--ad):hover .card__thumb > img,
+  .vod-card:hover .vod-card__thumb img {
+    filter: brightness(1.05) saturate(1.1);
+    transform: scale(1.06);
+  }
+  /* 세로 썸네일 — 뒤 블러 배경은 블러를 유지한 채 함께 확대(가장자리 여유 1.15 × 1.06) */
+  .card:not(.card--ad):hover .thumb--vertical > .thumb__blur,
+  .vod-card:hover .thumb--vertical > .thumb__blur {
+    filter: blur(10px) brightness(0.55);
+    transform: scale(1.22);
+  }
+  .card:not(.card--ad):hover .card__thumb::before,
+  .vod-card:hover .vod-card__thumb::before {
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .quick-card,
+  .quick-card img,
+  .quick-card::before,
+  .card__thumb > img,
+  .vod-card__thumb img {
+    transition: none;
+    animation: none !important;
+  }
+  .quick-card:hover,
+  .quick-card:hover img,
+  .card:not(.card--ad):hover .card__thumb > img,
+  .vod-card:hover .vod-card__thumb img {
+    transform: none;
+  }
+  .quick-card:hover img {
+    transform: translateY(-50%);
+  }
+  .card:not(.card--ad):hover .thumb--vertical > .thumb__blur,
+  .vod-card:hover .thumb--vertical > .thumb__blur {
+    transform: scale(1.15);
+  }
+}
 
 /* 라이브 방송 — 2depth 메뉴 바로 아래 30px(본문 위 패딩)에서 시작 */
 .live-section--page {
@@ -4737,7 +4866,6 @@ ul {
   --w-name-mod: #5aa6fa;
   --w-pin-bg: #272727;
   /* 테두리 (64617:31107 stroke · 시안 픽셀 기준) */
-  --w-nav-line: #343434;     /* GNB 아래 (64617:31170) */
   --w-bar-line: #272727;     /* "주요 채팅" 바 아래 2px */
   --w-notice-bg: #3e3e3e;
   --w-active: #4a92ff;
@@ -4780,18 +4908,14 @@ ul {
   --w-name-member: #2f8a3a;
   --w-name-mod: #2f6fd6;
   --w-pin-bg: #e9edf4;
-  --w-nav-line: #e0e5ed;
   --w-bar-line: #e9edf4;
   --w-notice-bg: #e9edf4;
   --w-box: #ffffff;
   --w-box-line: #d9e0ea;
   --w-warn: #b98900;
 }
-[data-theme="light"] .wchat__icon img,
 [data-theme="light"] .donate__close img,
 [data-theme="light"] .dtitle .dbox__head img,
-[data-theme="light"] .wchat__mode img,
-[data-theme="light"] .wchat__more img,
 [data-theme="light"] .dsig__next img {
   filter: brightness(0.25);
 }
@@ -4803,9 +4927,6 @@ ul {
 .page--watch .page__glow,
 .page--watch .footer {
   display: none;
-}
-.page--watch .top-nav {
-  border-bottom-color: var(--w-nav-line);
 }
 .page--watch .main__inner {
   max-width: none;
@@ -4870,7 +4991,7 @@ ul {
   }
 }
 
-/* YouTube 플레이어 (64795:15029) — 영상(1076×604.56)을 영역 가운데, 위 제목줄 · 아래 컨트롤은 코드로 겹침 */
+/* YouTube 플레이어 (64795:15029) — 실제 YouTube iframe 을 16:9 로 영역 가운데에 */
 .yt {
   position: relative;
   display: flex;
@@ -4882,158 +5003,13 @@ ul {
   /* 시안 바탕 — 아래 왼쪽이 밝은 남색 */
   background: var(--bg-page);
 }
-.yt__video {
-  position: relative;
-  display: flex;
-  max-width: 100%;
+.yt__frame {
+  display: block;
+  width: 100%;
   max-height: 100%;
-}
-.yt__video > img:first-child {
-  width: auto;
-  height: auto;
-  max-width: 100%;
-  max-height: calc(100vh - 65px);
-  aspect-ratio: 1076 / 604.5618;
-  object-fit: cover;
-}
-.yt__fix {
-  position: absolute;
-}
-.yt__fix--bl { left: 0; bottom: 0; width: 2px; height: 3px; background: #3c3f86; }
-.yt__fix--br { right: 0; bottom: 0; width: 3px; height: 4px; background: #26226d; }
-.yt__fix--tr { right: 0; top: 0; width: 5px; height: 5px; background: #dfd2fa; }
-.yt__fix--tl { left: 0; top: 0; }
-/* 위 · 아래 컨트롤 — 시안 플레이어 캡처의 위치·크기를 그대로 옮겨 코드로 그림(아이콘만 캡처에서 잘라 씀).
-   영역 폭이 바뀌어도 재생 바가 이어지도록 왼쪽 29px ~ 오른쪽 36px 를 한 줄로 채움.
-   영상과 겹칠 때(화면 높이가 낮을 때) 글자가 보이게 위·아래에 옅은 그림자 */
-.yt__top,
-.yt__ctrl {
-  position: absolute;
-  right: 0;
-  left: 0;
-  z-index: 1;
-  color: #fff;
-}
-.yt__top {
-  top: 0;
-  display: flex;
-  align-items: flex-start;
-  height: 64px;
-  padding: 16.5px 36px 0 31.5px;
-  background: linear-gradient(rgba(0, 0, 0, 0.45), transparent);
-}
-.yt__channel {
-  flex: none;
-  border-radius: 50%;
-}
-.yt__heading {
-  flex: 1 1 auto;
-  min-width: 0;
-  margin: -6px 0 0 14px;
-}
-.yt__title {
-  margin: 0;
-  overflow: hidden;
-  font-size: 20px;
-  font-weight: 700;
-  line-height: 26px;
-  letter-spacing: -0.2px;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-.yt__owner {
-  margin: 0;
-  font-size: 13px;
-  font-weight: 500;
-  line-height: 16px;
-}
-.yt__tools {
-  display: flex;
-  flex: none;
-  gap: 25px;
-  margin: -4.5px 0 0 24px;
-}
-.yt__btn {
-  display: flex;
-  flex: none;
-  width: 24px;
-  height: 24px;
-  opacity: 1;
-  transition: opacity 0.15s ease;
-}
-.yt__btn:hover {
-  opacity: 0.8;
-}
-.yt__btn[aria-pressed="true"] {
-  opacity: 0.45;
-}
-.yt__ctrl {
-  bottom: 0;
-  height: 113px;
-  background: linear-gradient(transparent, rgba(0, 0, 0, 0.45));
-}
-/* 라이브 — 빨간 점 6px + 14px 글자 */
-.yt__live {
-  position: absolute;
-  top: 0;
-  left: 33px;
-  display: flex;
-  align-items: center;
-  gap: 4.5px;
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 17px;
-}
-.yt__live::before {
-  content: "";
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #ba2f2f;
-}
-.yt__fs {
-  position: absolute;
-  top: -3px;
-  right: 36px;
-}
-/* 재생 바 — 3px, 끝 쪽만 빨강 → 분홍, 오른쪽 끝에 12px 손잡이(실시간이라 항상 끝) */
-.yt__progress {
-  position: absolute;
-  top: 37.5px;
-  right: 36px;
-  left: 29px;
-  height: 3px;
-  background: linear-gradient(90deg, #ea3c3b 0, #ea3c3b calc(100% - 200px), #ea4989 100%);
-}
-.yt__knob {
-  position: absolute;
-  top: 50%;
-  right: -6px;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: #ea3c3b;
-  transform: translateY(-50%);
-}
-.yt__row {
-  position: absolute;
-  top: 65px;
-  right: 56px;
-  left: 45px;
-  display: flex;
-  align-items: center;
-  gap: 24px;
-}
-.yt__logo {
-  display: flex;
-  margin-left: auto;
-}
-/* 전체화면 — 플레이어만 화면에 꽉 채움 */
-.yt:fullscreen {
+  aspect-ratio: 16 / 9;
+  border: 0;
   background: #000;
-}
-.yt:fullscreen .yt__video > img:first-child {
-  max-height: 100vh;
 }
 
 /* 채팅 (64816:102304) — 398px, 왼쪽 1px 선. 위 탭(채팅/후원하기) 48 */
@@ -5107,245 +5083,36 @@ ul {
   font-weight: 600;
   color: #fefefe;
 }
-.wchat__bar {
-  display: flex;
-  flex: none;
-  align-items: center;
-  gap: 8px;
-  height: 48px;
-  padding: 0 14px 0 20px;
-  border-bottom: 2px solid var(--w-bar-line);
-  background: var(--w-chat-bg);
-}
-.wchat__mode {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-  margin-right: auto;
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--w-text);
-}
-.wchat__xp {
-  display: flex;
-  align-items: center;
-  gap: 3px;
-  height: 22px;
-  padding: 0 8px;
-  border: 1px solid var(--w-btn-border);
-  border-radius: 999px;
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--w-text);
-}
-.wchat__more {
-  display: flex;
-  width: 24px;
-  height: 24px;
-  align-items: center;
-  justify-content: center;
-}
-.wchat__list {
+/* YouTube 라이브 채팅 — 탭 아래 남은 높이를 모두 채움 */
+.wchat__yt {
+  display: block;
   flex: 1 1 0;
-  background: var(--w-chat-bg);
+  width: 100%;
   min-height: 0;
-  margin: 0;
-  padding: 8px 20px 8px 26px;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  list-style: none;
-}
-.wmsg {
-  display: flex;
-  align-items: flex-start;
-  gap: 16px;
-  padding: 4px 0;
-  font-size: 14px;
-  line-height: 24px;
-  color: var(--w-msg);
-  word-break: break-all;
-}
-.wmsg p {
-  margin: 0;
-}
-.wmsg__avatar {
-  flex: none;
-  width: 24px;
-  height: 24px;
-  margin-top: -2px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-.wmsg__avatar--white { background: #fff; }
-.wmsg__avatar--black { background: #050505; box-shadow: inset 0 0 0 1px #2c2c2c; }
-.wmsg__avatar--text {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #9b4fd6;
-  font-size: 9px;
-  font-weight: 600;
-  line-height: 1;
-  color: #fff;
-}
-.wmsg__name {
-  margin-right: 8px;
-  font-weight: 500;
-  color: var(--w-name);
-}
-.wmsg__name--member { color: var(--w-name-member); }
-.wmsg__name--mod { color: var(--w-name-mod); }
-.wmsg__icon {
-  display: inline-block;
-  margin-left: 3px;
-  vertical-align: -2px;
-}
-.wmsg__emote {
-  display: inline-block;
-  vertical-align: -4px;
-}
-.wmsg__dia {
-  margin: 0 4px;
-  font-size: 12px;
-  vertical-align: 1px;
-}
-.wmsg__text a {
-  color: inherit;
-}
-.wmsg__badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 2px;
-  height: 18px;
-  margin-right: 6px;
-  padding: 0 6px;
-  border-radius: 999px;
-  background: #d2a0fb;
-  vertical-align: 1px;
-  font-size: 11px;
-  font-weight: 700;
-  line-height: 1;
-  color: #000;
-}
-.wmsg__badge--deep {
-  background: #6826a7;
-  color: #fff;
-}
-.wmsg__badge--deep img {
-  filter: brightness(0) invert(1);
-}
-.wmsg--mine .wmsg__name {
-  color: var(--w-active);
-}
-.wnotice {
-  display: flex;
-  gap: 12px;
-  margin: 8px 0;
-  padding: 14px 14px 16px;
-  border-radius: 4px;
-  background: var(--w-notice-bg);
-  font-size: 12px;
-  line-height: 17px;
-  color: var(--w-text);
-}
-.wnotice img {
-  flex: none;
-  margin-top: 2px;
-}
-.wnotice p {
-  margin: 0 0 10px;
-}
-.wnotice a {
-  font-size: 13px;
-  color: #3ea6ff;
-  text-decoration: none;
-}
-.wnotice a:hover {
-  text-decoration: underline;
-}
-/* 고정 메시지 — 48px 둥근 상자 */
-.wchat__pin {
-  display: flex;
-  flex: none;
-  align-items: center;
-  gap: 10px;
-  height: 48px;
-  margin: 4px 12px 8px;
-  padding: 0 10px 0 12px;
-  border-radius: 24px;
-  background: var(--w-pin-bg);
-  font-size: 14px;
-  color: var(--w-msg);
-}
-.wchat__pin > img {
-  flex: none;
-  border-radius: 50%;
-}
-.wchat__pin-name {
-  flex: none;
-  padding: 1px 6px;
-  border-radius: 6px;
-  background: #f1f1f1;
-  font-weight: 600;
-  line-height: 20px;
-  color: #0f0f0f;
-}
-.wchat__pin-text {
-  flex: 1 1 auto;
-  min-width: 0;
-  margin: 0;
-  overflow: hidden;
-  font-weight: 500;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-.wchat__pin-text a {
-  color: inherit;
-}
-/* 입력 — 36px 둥근 입력칸 + 이모티콘 · 후원 · 좋아요 동그라미 */
-.wchat__form {
-  display: flex;
-  flex: none;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 12px 14px;
-  border-top: 1px solid var(--w-line);
-}
-.wchat__input {
-  flex: 1 1 auto;
-  min-width: 0;
-  height: 36px;
-  padding: 0 16px;
   border: 0;
-  border-radius: 18px;
-  outline: 0;
-  background: var(--w-pin-bg);
-  font: inherit;
+  background: var(--w-chat-bg);
+}
+.yt__frame[hidden],
+.wchat__yt[hidden] {
+  display: none;
+}
+.yt__off {
+  flex: 1 1 auto;
+  margin: 0;
+  padding: 24px;
+  font-size: 15px;
+  line-height: 1.6;
+  text-align: center;
+  color: #fff;
+}
+.wchat__yt-off {
+  flex: 1 1 0;
+  margin: 0;
+  padding: 40px 24px;
   font-size: 14px;
-  color: var(--w-msg);
-  caret-color: var(--w-active);
-}
-.wchat__input::placeholder {
-  color: var(--w-placeholder);
-}
-.wchat__input:focus-visible {
-  box-shadow: inset 0 0 0 1px var(--w-active);
-}
-.wchat__icon {
-  display: flex;
-  flex: none;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: var(--w-pin-bg);
-}
-.wchat__icon:hover {
-  background: #3a3a3a;
-}
-.wchat__icon[aria-pressed="true"] {
-  background: #e3365c;
+  line-height: 1.5;
+  text-align: center;
+  color: var(--w-tab-off);
 }
 
 /* 후원 시트 (64822:112729) — 후원 종류 탭 바로 아래에서 내려와 채팅 위에 겹침(채팅은 아래로 계속 보임).
@@ -5390,11 +5157,12 @@ ul {
 .donate__head h3 {
   flex: 1;
   margin: 0;
-  font-family: var(--font-nemony);
+  font-family: var(--font-score);
   font-size: 17px;
   font-weight: 700;
   line-height: 1;
   letter-spacing: -0.17px;
+  word-spacing: -0.12em; /* 에스코어 드림은 띄어쓰기가 넓어 단어 사이만 좁힘 */
   color: var(--w-text);
 }
 .donate__close {
@@ -6038,11 +5806,7 @@ ul {
   outline: 2px solid #4a92ff;
   outline-offset: 2px;
 }
-[data-theme="light"] .wmsg__avatar--white {
-  box-shadow: inset 0 0 0 1px #d9e0ea;
-}
-
-/* 채팅 목록 · 후원 패널 스크롤바 — 기본 회색 막대 대신 6px 둥근 막대, 바탕 투명.
+/* 후원 패널 스크롤바 — 기본 회색 막대 대신 6px 둥근 막대, 바탕 투명.
    Chrome·Safari 는 ::-webkit-scrollbar, Firefox 는 표준 속성
    (Chrome 121+ 은 표준 속성이 있으면 ::-webkit-scrollbar 를 무시해 Firefox 에만 적용) */
 :root {
@@ -6053,30 +5817,24 @@ ul {
   --w-scroll-thumb: #cfd6e1;
   --w-scroll-thumb-hover: #b4bccb;
 }
-.wchat__list::-webkit-scrollbar,
 .donate__body::-webkit-scrollbar {
   width: 10px;
 }
-.wchat__list::-webkit-scrollbar-track,
 .donate__body::-webkit-scrollbar-track {
   background: transparent;
 }
-.wchat__list::-webkit-scrollbar-thumb,
 .donate__body::-webkit-scrollbar-thumb {
   border: 2px solid transparent;
   border-radius: 999px;
   background: var(--w-scroll-thumb) padding-box;
 }
-.wchat__list::-webkit-scrollbar-thumb:hover,
 .donate__body::-webkit-scrollbar-thumb:hover {
   background-color: var(--w-scroll-thumb-hover);
 }
-.wchat__list::-webkit-scrollbar-button,
 .donate__body::-webkit-scrollbar-button {
   display: none;
 }
 @supports (-moz-appearance: none) {
-  .wchat__list,
   .donate__body {
     scrollbar-width: thin;
     scrollbar-color: var(--w-scroll-thumb) transparent;

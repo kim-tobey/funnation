@@ -343,42 +343,12 @@
       <div class="main__inner">
 
         <!-- 영상 상세 ver.3 (64795:14999) — PC 전용. YouTube 플레이어(1076) + 오른쪽 채팅(398, 채팅/후원하기 탭) -->
-        <section class="watch" data-node-id="64795:14999">
+        <section class="watch" data-yt-id="0sfDth4lMLc" data-node-id="64795:14999">
           <div class="watch__main">
-            <!-- YouTube 플레이어 (64795:15029) — 서버 연동 전이라 플레이어 캡처(위 제목줄 · 아래 컨트롤)와 정지 화면으로 구성 -->
+            <!-- YouTube 플레이어 (64795:15029) — 실제 YouTube 임베드. 영상 ID 는 .watch 의 data-yt-id (app.js 가 src 를 채움) -->
             <div class="yt" data-node-id="64795:15029">
-              <span class="yt__video" data-node-id="64822:111179">
-                <img src="assets/watch/v3/video.png" width="1076" height="605" alt="[ym상사] S7 A팀 제1화 신입인턴 7명! 시즌7 새로운시작 방송 화면">
-                <!-- 캡처 모서리 보정 (64822:111180~111183) -->
-                <i class="yt__fix yt__fix--bl" aria-hidden="true"></i>
-                <i class="yt__fix yt__fix--br" aria-hidden="true"></i>
-                <i class="yt__fix yt__fix--tr" aria-hidden="true"></i>
-                <img class="yt__fix yt__fix--tl" src="assets/watch/v3/corner.svg" width="8" height="6" alt="">
-              </span>
-              <!-- 위 — 채널 아이콘 · 제목 · 채널명 / 음량 · 자막 · 설정 (64822:111164 · 111166) -->
-              <div class="yt__top">
-                <img class="yt__channel" src="assets/watch/v3/yt/channel.png" width="32" height="32" alt="">
-                <div class="yt__heading">
-                  <h1 class="yt__title">[ym상사] S7 A팀 제1화 신입인턴 7명! 시즌7 새로운시작</h1>
-                  <p class="yt__owner">YM상사 A팀</p>
-                </div>
-                <div class="yt__tools">
-                  <button class="yt__btn" type="button" aria-label="음소거" aria-pressed="false" data-yt-toggle><img src="assets/watch/v3/yt/volume.png" width="24" height="24" alt=""></button>
-                  <button class="yt__btn" type="button" aria-label="자막" aria-pressed="false" data-yt-toggle><img src="assets/watch/v3/yt/cc.png" width="24" height="24" alt=""></button>
-                  <button class="yt__btn" type="button" aria-label="설정"><img src="assets/watch/v3/yt/settings.png" width="24" height="24" alt=""></button>
-                </div>
-              </div>
-              <!-- 아래 — 라이브 · 재생 바 · 공유 · 나중에 볼 동영상 / 전체화면 · YouTube 로고 (64822:105175 · 105176) -->
-              <div class="yt__ctrl">
-                <span class="yt__live">라이브</span>
-                <button class="yt__btn yt__fs" type="button" aria-label="전체화면" data-yt-fs><img src="assets/watch/v3/yt/fullscreen.png" width="24" height="24" alt=""></button>
-                <div class="yt__progress" role="progressbar" aria-label="실시간 재생 위치" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span class="yt__knob"></span></div>
-                <div class="yt__row">
-                  <button class="yt__btn" type="button" aria-label="공유"><img src="assets/watch/v3/yt/share.png" width="24" height="24" alt=""></button>
-                  <button class="yt__btn" type="button" aria-label="나중에 볼 동영상" aria-pressed="false" data-yt-toggle><img src="assets/watch/v3/yt/clock.png" width="24" height="24" alt=""></button>
-                  <a class="yt__logo" href="https://www.youtube.com/" target="_blank" rel="noopener" aria-label="YouTube 에서 보기"><img src="assets/watch/v3/yt/youtube.png" width="86" height="22" alt=""></a>
-                </div>
-              </div>
+              <iframe class="yt__frame" data-yt-player title="YouTube 영상 플레이어" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+              <p class="yt__off" data-yt-player-off hidden>YouTube 영상은 파일로 직접 열면 재생되지 않아요(오류 153).<br>로컬 서버(http://localhost)나 실제 도메인에서 열어 주세요.</p>
             </div>
           </div>
 
@@ -394,55 +364,9 @@
               <button class="wkind" type="button" aria-pressed="false" aria-controls="donate-video" data-donate="video">영상</button>
               <button class="wkind" type="button" aria-pressed="false" aria-controls="donate-mission" data-donate="mission">미션</button>
             </div>
-            <div class="wchat__bar">
-              <button class="wchat__mode" type="button">주요 채팅<img src="assets/watch/chevron-down.svg" width="16" height="16" alt=""></button>
-              <span class="wchat__xp"><img src="assets/watch/crown.svg" width="12" height="12" alt="">0XP</span>
-              <button class="wchat__more" type="button" aria-label="채팅 설정"><img src="assets/watch/more.svg" width="20" height="20" alt=""></button>
-            </div>
-            <ol class="wchat__list" id="wchat-list" aria-live="polite">
-            <li class="wmsg"><img class="wmsg__avatar" src="assets/watch/v3/avatar/frokynn.png" width="24" height="24" alt=""><p><span class="wmsg__name wmsg__name--member">@FROKYNN<img class="wmsg__icon" src="assets/watch/v3/badge-member-blue.png" width="14" height="16" alt="멤버"></span><span class="wmsg__text">윤수압</span></p></li>
-            <li class="wmsg"><img class="wmsg__avatar" src="assets/watch/v3/avatar/frokynn.png" width="24" height="24" alt=""><p><span class="wmsg__name wmsg__name--member">@FROKYNN<img class="wmsg__icon" src="assets/watch/v3/badge-member-blue.png" width="14" height="16" alt="멤버"></span><span class="wmsg__text">윤수압</span></p></li>
-            <li class="wmsg"><img class="wmsg__avatar" src="assets/watch/v3/avatar/joker.png" width="24" height="24" alt=""><p><span class="wmsg__name">@조커_InsiDer</span><span class="wmsg__text">윤수업</span></p></li>
-            <li class="wmsg"><img class="wmsg__avatar" src="assets/watch/v3/avatar/eurat.png" width="24" height="24" alt=""><p><span class="wmsg__name">@으랏차차-b9s</span><span class="wmsg__badge wmsg__badge--deep"><img src="assets/watch/crown.svg" width="12" height="12" alt="">#2</span><span class="wmsg__text">윤수업 민재업 <img class="wmsg__emote" src="assets/watch/v3/emote-dab.png" width="24" height="20" alt=":dab:"><img class="wmsg__emote" src="assets/watch/v3/emote-dab.png" width="24" height="20" alt=":dab:"><img class="wmsg__emote" src="assets/watch/v3/emote-dab.png" width="24" height="20" alt=":dab:"></span></p></li>
-            <li class="wmsg"><img class="wmsg__avatar" src="assets/watch/v3/avatar/ippeun.png" width="24" height="24" alt=""><p><span class="wmsg__name wmsg__name--member">@이쁜아씨를지키는호위<img class="wmsg__icon" src="assets/watch/v3/badge-member.png" width="14" height="16" alt="멤버"></span><span class="wmsg__text">윤수업</span></p></li>
-            <li class="wmsg"><img class="wmsg__avatar" src="assets/watch/v3/avatar/nightbot.png" width="24" height="24" alt=""><p><span class="wmsg__name wmsg__name--mod">@nightbot<img class="wmsg__icon" src="assets/watch/v3/badge-verified.png" width="15" height="15" alt="인증됨"><img class="wmsg__icon" src="assets/watch/v3/badge-mod.png" width="12" height="15" alt="모더레이터"></span><span class="wmsg__text">ym상사 공식 홈페이지 : <a href="https://ymss.kr" target="_blank" rel="noopener">https://ymss.kr</a></span></p></li>
-            <li class="wmsg"><img class="wmsg__avatar" src="assets/watch/v3/avatar/love.png" width="24" height="24" alt=""><p><span class="wmsg__name">@러브올댓</span><span class="wmsg__text">행꿍업</span></p></li>
-            <li class="wmsg"><img class="wmsg__avatar" src="assets/watch/v3/avatar/ippeun.png" width="24" height="24" alt=""><p><span class="wmsg__name wmsg__name--member">@이쁜아씨를지키는호위<img class="wmsg__icon" src="assets/watch/v3/badge-member.png" width="14" height="16" alt="멤버"></span><span class="wmsg__text">윤수업</span></p></li>
-            <li class="wmsg"><img class="wmsg__avatar" src="assets/watch/v3/avatar/love.png" width="24" height="24" alt=""><p><span class="wmsg__name">@러브올댓</span><span class="wmsg__text">윤슈업</span></p></li>
-            <li class="wmsg"><img class="wmsg__avatar" src="assets/watch/v3/avatar/ippeun.png" width="24" height="24" alt=""><p><span class="wmsg__name wmsg__name--member">@이쁜아씨를지키는호위<img class="wmsg__icon" src="assets/watch/v3/badge-member.png" width="14" height="16" alt="멤버"></span><span class="wmsg__text">윤수업</span></p></li>
-            <li class="wmsg"><img class="wmsg__avatar" src="assets/watch/v3/avatar/trangam.png" width="24" height="24" alt=""><p><span class="wmsg__name wmsg__name--mod">@트난감<img class="wmsg__icon" src="assets/watch/v3/badge-mod.png" width="12" height="15" alt="모더레이터"><img class="wmsg__icon" src="assets/watch/v3/badge-member.png" width="14" height="16" alt="멤버"></span><span class="wmsg__badge wmsg__badge--deep"><img src="assets/watch/crown.svg" width="12" height="12" alt="">#3</span><span class="wmsg__text">조윤수님 550,000캐시(터미널) 감사합니다 💗 조</span></p></li>
-            <li class="wmsg"><img class="wmsg__avatar" src="assets/watch/v3/avatar/chaeyoung.png" width="24" height="24" alt=""><p><span class="wmsg__name">@채영이옆자리</span><span class="wmsg__text">!고채영시그</span></p></li>
-            <li class="wmsg"><img class="wmsg__avatar" src="assets/watch/v3/avatar/nightbot.png" width="24" height="24" alt=""><p><span class="wmsg__name wmsg__name--mod">@nightbot<img class="wmsg__icon" src="assets/watch/v3/badge-verified.png" width="15" height="15" alt="인증됨"><img class="wmsg__icon" src="assets/watch/v3/badge-mod.png" width="12" height="15" alt="모더레이터"></span><span class="wmsg__text">고채영 - <span class="wmsg__dia" aria-hidden="true">🔹</span> 88,900 트월킹 덕 <span class="wmsg__dia" aria-hidden="true">🔹</span> 151,000 우유 <span class="wmsg__dia" aria-hidden="true">🔹</span> 200,000 스키스키 <span class="wmsg__dia" aria-hidden="true">🔹</span> 280,000 오빠하앙 <span class="wmsg__dia" aria-hidden="true">🔹</span> 1,005,400 다크사이드 <span class="wmsg__dia" aria-hidden="true">🔹</span> 1,027,200 까스댄스댄스 <span class="wmsg__dia" aria-hidden="true">🔹</span> 1,080,900 소년 <span class="wmsg__dia" aria-hidden="true">🔹</span> 1,100,100 반포대교 <span class="wmsg__dia" aria-hidden="true">🔹</span> 1,123,000 토마스열차 <span class="wmsg__dia" aria-hidden="true">🔹</span> 2,878,700 슈퍼핵펀치</span></p></li>
-            <li class="wnotice">
-              <img src="assets/watch/youtube.svg" width="20" height="14" alt="">
-              <div>
-                <p>실시간 채팅에 오신 것을 환영합니다. 개인정보를 보호하고 YouTube 커뮤니티 가이드를 준수하는 것을 잊지 마세요.</p>
-                <a href="https://www.youtube.com/howyoutubeworks/policies/community-guidelines/" target="_blank" rel="noopener">자세히 알아보기</a>
-              </div>
-            </li>
-            <li class="wmsg"><img class="wmsg__avatar" src="assets/watch/v3/avatar/dopamin.png" width="24" height="24" alt=""><p><span class="wmsg__name">@도파민TV3</span><span class="wmsg__text">빠땀업</span></p></li>
-            <li class="wmsg"><img class="wmsg__avatar" src="assets/watch/v3/avatar/eurat.png" width="24" height="24" alt=""><p><span class="wmsg__name">@으랏차차-b9s</span><span class="wmsg__badge"><img src="assets/watch/crown.svg" width="12" height="12" alt="">#2</span><span class="wmsg__text">꺄 자박업</span></p></li>
-            <li class="wmsg"><img class="wmsg__avatar" src="assets/watch/v3/avatar/dopamin.png" width="24" height="24" alt=""><p><span class="wmsg__name">@도파민TV3</span><span class="wmsg__text">자리흥님<img class="wmsg__emote" src="assets/watch/v3/emote-dab.png" width="24" height="20" alt=":dab:"><img class="wmsg__emote" src="assets/watch/v3/emote-dab.png" width="24" height="20" alt=":dab:"><img class="wmsg__emote" src="assets/watch/v3/emote-dab.png" width="24" height="20" alt=":dab:"><img class="wmsg__emote" src="assets/watch/v3/emote-dab.png" width="24" height="20" alt=":dab:"><img class="wmsg__emote" src="assets/watch/v3/emote-dab.png" width="24" height="20" alt=":dab:"></span></p></li>
-            <li class="wmsg"><img class="wmsg__avatar" src="assets/watch/v3/avatar/ippeun.png" width="24" height="24" alt=""><p><span class="wmsg__name wmsg__name--member">@이쁜아씨를지키는호위<img class="wmsg__icon" src="assets/watch/v3/badge-member.png" width="14" height="16" alt="멤버"></span><span class="wmsg__text">크으으응</span></p></li>
-            <li class="wmsg"><img class="wmsg__avatar" src="assets/watch/v3/avatar/eurat.png" width="24" height="24" alt=""><p><span class="wmsg__name">@으랏차차-b9s</span><span class="wmsg__badge"><img src="assets/watch/crown.svg" width="12" height="12" alt="">#2</span><span class="wmsg__text">자박업 🐬</span></p></li>
-            <li class="wmsg"><img class="wmsg__avatar" src="assets/watch/v3/avatar/ippeun.png" width="24" height="24" alt=""><p><span class="wmsg__name wmsg__name--member">@이쁜아씨를지키는호위<img class="wmsg__icon" src="assets/watch/v3/badge-member.png" width="14" height="16" alt="멤버"></span><span class="wmsg__text">대----자----박</span></p></li>
-            <li class="wmsg"><img class="wmsg__avatar" src="assets/watch/v3/avatar/trangam.png" width="24" height="24" alt=""><p><span class="wmsg__name wmsg__name--mod">@트난감<img class="wmsg__icon" src="assets/watch/v3/badge-mod.png" width="12" height="15" alt="모더레이터"><img class="wmsg__icon" src="assets/watch/v3/badge-member.png" width="14" height="16" alt="멤버"></span><span class="wmsg__badge"><img src="assets/watch/crown.svg" width="12" height="12" alt="">#2</span><span class="wmsg__text">꽃벼리님 1,000,000캐시(지코토닉) 감사합니다 💗 은지언니 이쁘다아</span></p></li>
-            <li class="wmsg"><img class="wmsg__avatar" src="assets/watch/v3/avatar/cheon.png" width="24" height="24" alt=""><p><span class="wmsg__name">@천척결</span><span class="wmsg__badge"><img src="assets/watch/crown.svg" width="12" height="12" alt="">#1</span><span class="wmsg__text">차수아가 ym의 미래다</span></p></li>
-            <li class="wmsg"><img class="wmsg__avatar" src="assets/watch/v3/avatar/ippeun.png" width="24" height="24" alt=""><p><span class="wmsg__name wmsg__name--member">@이쁜아씨를지키는호위<img class="wmsg__icon" src="assets/watch/v3/badge-member.png" width="14" height="16" alt="멤버"></span><span class="wmsg__text">대----자----박</span></p></li>
-            </ol>
-            <!-- 고정 메시지 -->
-            <div class="wchat__pin">
-              <img src="assets/watch/v3/avatar/ym.png" width="24" height="24" alt="">
-              <span class="wchat__pin-name">@YM상사</span>
-              <p class="wchat__pin-text">**후원안내** 투네이션 : <a href="#">https://toon.at/donate/</a></p>
-              <button class="wchat__more" type="button" aria-label="고정 메시지 메뉴"><img src="assets/watch/more.svg" width="20" height="20" alt=""></button>
-            </div>
-            <form class="wchat__form" id="wchat-form">
-              <input class="wchat__input" name="msg" type="text" maxlength="200" placeholder="채팅..." aria-label="채팅 입력" autocomplete="off">
-              <button class="wchat__icon" type="button" aria-label="이모티콘" data-chat-emoji><img src="assets/watch/v3/ic-emoji.png" width="24" height="24" alt=""></button>
-              <button class="wchat__icon" type="button" aria-label="후원하기" data-chat-tab="donate"><img src="assets/watch/v3/ic-cash.png" width="24" height="24" alt=""></button>
-              <button class="wchat__icon" type="button" aria-label="좋아요" aria-pressed="false" data-chat-like><img src="assets/watch/v3/ic-heart.png" width="24" height="24" alt=""></button>
-            </form>
+            <!-- YouTube 라이브 채팅 임베드 — 라이브 · 최초 공개 영상에서만 보임. 후원 시트는 이 위에 겹침 -->
+            <iframe class="wchat__yt" data-yt-chat title="YouTube 라이브 채팅"></iframe>
+            <p class="wchat__yt-off" data-yt-chat-off hidden>YouTube 채팅은 로컬 서버(http://localhost)나 실제 도메인에서 열어야 보여요.</p>
           <section class="donate" id="donate-general" data-donate-panel="general" aria-label="일반후원" data-node-id="64624:81075" hidden>
             <header class="donate__head">
               <h3>일반후원</h3>

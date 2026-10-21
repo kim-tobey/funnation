@@ -1277,47 +1277,36 @@
   var watch = document.querySelector(".watch");
   if (!watch) return;
 
-  // 채팅 입력 — 엔터로 목록 맨 아래에 내 메시지 추가
-  var list = document.getElementById("wchat-list");
-  var chatForm = document.getElementById("wchat-form");
-  list.scrollTop = list.scrollHeight;
-  chatForm.addEventListener("submit", function (e) {
-    e.preventDefault();
-    var input = chatForm.elements.msg;
-    var text = input.value.trim();
-    if (!text) return;
-    var li = document.createElement("li");
-    li.className = "wmsg wmsg--mine";
-    li.innerHTML = '<span class="wmsg__avatar wmsg__avatar--white" aria-hidden="true"></span><p><span class="wmsg__name">@나</span><span class="wmsg__text"></span></p>';
-    li.querySelector(".wmsg__text").textContent = text;
-    list.appendChild(li);
-    input.value = "";
-    list.scrollTop = list.scrollHeight;
-  });
-
-  // 이모티콘 — 입력칸에 😊 추가 / 좋아요 — 누를 때마다 켜고 끔
-  watch.querySelector("[data-chat-emoji]").addEventListener("click", function () {
-    var input = chatForm.elements.msg;
-    input.value += "😊";
-    input.focus();
-  });
-  watch.querySelector("[data-chat-like]").addEventListener("click", function () {
-    this.setAttribute("aria-pressed", this.getAttribute("aria-pressed") === "true" ? "false" : "true");
-  });
-
-  /* 플레이어 버튼 (샘플) — 음소거 · 자막 · 나중에 볼 동영상은 켜고 끔, 전체화면은 플레이어만 꽉 채움 */
-  var ytToggles = watch.querySelectorAll("[data-yt-toggle]");
-  for (var y = 0; y < ytToggles.length; y++) ytToggles[y].addEventListener("click", function () {
-    this.setAttribute("aria-pressed", this.getAttribute("aria-pressed") === "true" ? "false" : "true");
-  });
-  var yt = watch.querySelector(".yt");
-  watch.querySelector("[data-yt-fs]").addEventListener("click", function () {
-    if (document.fullscreenElement) document.exitFullscreen();
-    else if (yt.requestFullscreen) yt.requestFullscreen();
-  });
+  /* YouTube 임베드 — 영상 ID 는 .watch 의 data-yt-id. 라이브 채팅은 embed_domain 이 지금 주소의 도메인과 같아야 하고
+     라이브 · 최초 공개 영상에서만 보임. file:// 로 열면 YouTube 가 막아 안내 문구를 보여줌 */
+  var ytId = watch.getAttribute("data-yt-id");
+  var player = watch.querySelector("[data-yt-player]");
+  var ytChat = watch.querySelector("[data-yt-chat]");
+  var host = location.hostname;
+  // 파일로 열면 Referer 가 없어 YouTube 가 "동영상 플레이어 구성 오류(153)" 를 냄 → 플레이어 · 채팅 대신 안내 문구
+  if (location.protocol === "file:" || !host) {
+    player.hidden = true;
+    ytChat.hidden = true;
+    watch.querySelector("[data-yt-player-off]").hidden = false;
+    watch.querySelector("[data-yt-chat-off]").hidden = false;
+  } else {
+    player.src = "https://www.youtube.com/embed/" + ytId + "?autoplay=1&mute=1&playsinline=1&origin=" + encodeURIComponent(location.origin);
+  }
+  function chatSrc() {
+    var dark = root.getAttribute("data-theme") !== "light";
+    return "https://www.youtube.com/live_chat?v=" + ytId + "&embed_domain=" + encodeURIComponent(host) + (dark ? "&dark_theme=1" : "");
+  }
+  if (!ytChat.hidden) {
+    ytChat.src = chatSrc();
+    // 테마를 바꾸면 채팅도 같은 테마로 다시 불러옴
+    new MutationObserver(function () {
+      var next = chatSrc();
+      if (ytChat.src !== next) ytChat.src = next;
+    }).observe(root, { attributes: true, attributeFilter: ["data-theme"] });
+  }
 
   /* 채팅 ↔ 후원하기 탭 — 후원하기는 종류 탭(일반후원·시그니처·영상·미션) + 패널, 마지막에 고른 종류를 기억.
-     입력줄 $ 버튼도 후원하기로 넘어감. show(null) 은 채팅으로 돌아감 */
+     show(null) 은 채팅으로 돌아감 */
   var chat = document.getElementById("wchat");
   var modeTabs = watch.querySelectorAll(".wchat__mode-tab");
   var tabs = watch.querySelectorAll("[data-donate]");
@@ -1331,7 +1320,6 @@
     for (var m = 0; m < modeTabs.length; m++) modeTabs[m].setAttribute("aria-selected", (modeTabs[m].getAttribute("data-chat-tab") === "donate") === !!key ? "true" : "false");
     for (var i = 0; i < panels.length; i++) panels[i].hidden = panels[i].getAttribute("data-donate-panel") !== key;
     for (var j = 0; j < tabs.length; j++) tabs[j].setAttribute("aria-pressed", tabs[j].getAttribute("data-donate") === key ? "true" : "false");
-    if (!key) list.scrollTop = list.scrollHeight;
   }
   var modeBtns = watch.querySelectorAll("[data-chat-tab]");
   for (var b = 0; b < modeBtns.length; b++) modeBtns[b].addEventListener("click", function () {
@@ -1522,14 +1510,6 @@
     BALANCE -= won;
     var bals = watch.querySelectorAll("[data-donate-balance]");
     for (var i = 0; i < bals.length; i++) bals[i].textContent = fmt(BALANCE);
-    var li = document.createElement("li");
-    li.className = "wmsg wmsg--mine";
-    li.innerHTML = '<span class="wmsg__avatar wmsg__avatar--white" aria-hidden="true"></span><p><span class="wmsg__name"></span><span class="wmsg__text"></span></p>';
-    li.querySelector(".wmsg__name").textContent = "@" + panel.querySelector("[data-donate-nick]").textContent;
-    var note = panel.querySelector("[data-donate-msg]").value.trim();
-    li.querySelector(".wmsg__text").textContent = "💰 " + fmt(won) + "원 후원" + (note ? " · " + note : "");
-    list.appendChild(li);
-    list.scrollTop = list.scrollHeight;
     reset(panel);
     show(null);
   }
