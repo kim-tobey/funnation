@@ -460,6 +460,39 @@ ul {
   height: 24px;
 }
 
+/* GNB 아이콘 호버 설명 — data-tooltip 값을 아이콘 아래에 표시 */
+.nav-icon[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 50%;
+  z-index: 1;
+  padding: 6px 10px;
+  border: 1px solid var(--color-border-400);
+  border-radius: 6px;
+  background: var(--color-bg-400);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  color: var(--color-text-normal);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-50%, -2px);
+  transition: opacity 0.15s, transform 0.15s, visibility 0.15s;
+}
+.nav-icon[data-tooltip]:hover::after,
+.nav-icon[data-tooltip]:focus-visible::after {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
+}
+/* 알림 팝업이 열려 있을 땐 설명을 숨김 */
+.nav-icon[aria-expanded="true"]::after {
+  display: none;
+}
+
 .nav-icon__badge {
   position: absolute;
   top: 2px;
