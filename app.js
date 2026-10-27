@@ -1595,3 +1595,52 @@
     }
   }, true);
 })();
+
+/* GNB 아이콘 호버 레이어 — data-tooltip 이 있는 버튼에 마우스를 올리면 바로 띄우고, 벗어나면 닫음.
+   body 에 붙인 레이어 하나를 버튼 아래 가운데로 옮겨 씀. 키보드 포커스에서도 같은 레이어 표시 */
+(function () {
+  var targets = document.querySelectorAll("[data-tooltip]");
+  if (!targets.length) return;
+  var layer = document.createElement("div");
+  layer.className = "hover-layer";
+  layer.setAttribute("role", "tooltip");
+  layer.hidden = true;
+  document.body.appendChild(layer);
+  var current = null;
+
+  function show(el) {
+    // 알림 팝업처럼 버튼이 연 창이 떠 있으면 겹치지 않게 띄우지 않음
+    if (el.getAttribute("aria-expanded") === "true") return hide();
+    current = el;
+    layer.textContent = el.getAttribute("data-tooltip");
+    layer.hidden = false;
+    var r = el.getBoundingClientRect();
+    var w = layer.offsetWidth;
+    // 화면 밖으로 나가지 않게 좌우 8px 안쪽으로 맞춤
+    var left = Math.min(Math.max(r.left + r.width / 2 - w / 2, 8), window.innerWidth - w - 8);
+    layer.style.left = left + "px";
+    layer.style.top = r.bottom + 4 + "px";
+  }
+  function hide() {
+    current = null;
+    layer.hidden = true;
+  }
+
+  for (var i = 0; i < targets.length; i++) {
+    targets[i].addEventListener("mouseenter", function () { show(this); });
+    targets[i].addEventListener("mouseleave", hide);
+    targets[i].addEventListener("focus", function () {
+      if (this.matches(":focus-visible")) show(this);
+    });
+    targets[i].addEventListener("blur", hide);
+    // 누르면 팝업 등이 열리므로 일단 닫고, 마우스가 남아 있으면 바뀐 상태에 맞춰 다시 판단
+    targets[i].addEventListener("click", function () {
+      var el = this;
+      hide();
+      setTimeout(function () { if (el.matches(":hover")) show(el); }, 0);
+    });
+  }
+  // 레이어는 화면 고정 위치라 스크롤·크기 변경 시 버튼과 어긋나지 않게 닫음
+  window.addEventListener("scroll", function () { if (current) hide(); }, { passive: true });
+  window.addEventListener("resize", function () { if (current) hide(); });
+})();

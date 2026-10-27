@@ -460,6 +460,37 @@ ul {
   height: 24px;
 }
 
+/* GNB 아이콘 호버 레이어 (app.js) — [구현 제안 · Figma 시안 없음] 호버하는 동안만 버튼 아래 4px 에 표시.
+   다크: BG400 · Border400 · Normal / 라이트는 알림 팝업 라이트 색을 따름 */
+:root {
+  --hover-layer-bg: var(--color-bg-400);
+  --hover-layer-border: var(--color-border-400);
+  --hover-layer-text: var(--color-text-normal);
+}
+[data-theme="light"] {
+  --hover-layer-bg: #ffffff;
+  --hover-layer-border: #e3e7ee;
+  --hover-layer-text: #202938;
+}
+.hover-layer {
+  position: fixed;
+  z-index: 60;
+  padding: 6px 10px;
+  border: 1px solid var(--hover-layer-border);
+  border-radius: 6px;
+  background: var(--hover-layer-bg);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  color: var(--hover-layer-text);
+  white-space: nowrap;
+  pointer-events: none;
+}
+.hover-layer[hidden] {
+  display: none;
+}
+
 .nav-icon__badge {
   position: absolute;
   top: 2px;
