@@ -460,7 +460,7 @@ ul {
   height: 24px;
 }
 
-/* GNB 아이콘 호버 레이어 (app.js) — [구현 제안 · Figma 시안 없음] 호버하는 동안만 버튼 아래 4px 에 표시.
+/* GNB 아이콘 호버 레이어 (app.js) — [구현 제안 · Figma 시안 없음] 호버하는 동안만 아이콘 그림 아래 20px 에 표시.
    다크: BG400 · Border400 · Normal / 라이트는 알림 팝업 라이트 색을 따름 */
 :root {
   --hover-layer-bg: var(--color-bg-400);
@@ -4112,10 +4112,6 @@ ul {
   padding: 16px 24px 24px;
   overflow-y: auto;
   overscroll-behavior: contain;
-}
-.nav-icon[aria-expanded="true"] {
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.06);
 }
 @media (max-width: 767px) {
   .notice-pop { display: none; }
