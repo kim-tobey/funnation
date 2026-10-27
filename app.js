@@ -30,7 +30,8 @@
 
 /* LNB 열기 / 접기 — GNB 햄버거 버튼
    데스크톱: 펼침(full) ↔ 아이콘 레일(mini), 선택 저장
-   모바일(767px 이하): 좌측 드로어 열기 ↔ 닫기, 저장하지 않음 */
+   모바일(767px 이하): 좌측 드로어 열기 ↔ 닫기, 저장하지 않음
+   자동 접힘(768~1439px): [구현 제안 · Figma 미확정] 기본을 접힘(mini)으로 — 1440 Figma 기준 화면은 펼침 유지 */
 (function () {
   var KEY = "funnation-lnb";
   var root = document.documentElement;
@@ -38,6 +39,9 @@
   var btnMo = document.getElementById("lnb-toggle-mo");
   var backdrop = document.getElementById("lnb-backdrop");
   var mobile = matchMedia("(max-width: 767px)");
+  // [구현 제안] LNB 자동 접힘 구간 — Figma 에서 확정된 breakpoint 아님.
+  // 1440(Desktop 시안)과 모바일(767 이하)에 영향이 없는 최소 범위로만 잡음
+  var autoMini = matchMedia("(min-width: 768px) and (max-width: 1439px)");
 
   // 접힌 상태에선 라벨이 숨으므로 툴팁으로 메뉴 이름 노출
   var items = document.querySelectorAll(".lnb__item, .creator");
@@ -53,6 +57,11 @@
   var desktopState = forced === "mini" || forced === "full" ? forced
                    : saved === "mini" ? "mini" : "full";
   var drawerOpen = false;
+  // 자동 접힘 구간에서 버튼(또는 ?lnb=)으로 바꾼 상태 — 저장하지 않고, 구간을 벗어나면 초기화
+  var autoState = forced === "mini" || forced === "full" ? forced : null;
+  function currentDesktopState() {
+    return autoMini.matches ? autoState || "mini" : desktopState;
+  }
   // 영상 상세(watch.html)는 LNB 를 숨겨 두고 햄버거로 영상 위에 겹쳐 엶 (펼침/접힘 저장과 무관)
   var watch = root.getAttribute("data-page") === "watch";
 
@@ -73,9 +82,10 @@
     } else {
       drawerOpen = false;
       root.removeAttribute("data-drawer");
-      root.setAttribute("data-lnb", desktopState);
-      btn.setAttribute("aria-expanded", desktopState === "full" ? "true" : "false");
-      btn.setAttribute("aria-label", desktopState === "full" ? "메뉴 접기" : "메뉴 펼치기");
+      var state = currentDesktopState();
+      root.setAttribute("data-lnb", state);
+      btn.setAttribute("aria-expanded", state === "full" ? "true" : "false");
+      btn.setAttribute("aria-label", state === "full" ? "메뉴 접기" : "메뉴 펼치기");
     }
   }
 
@@ -95,8 +105,13 @@
       render();
       return;
     }
-    desktopState = desktopState === "mini" ? "full" : "mini";
-    try { localStorage.setItem(KEY, desktopState); } catch (e) {}
+    if (autoMini.matches) {
+      // 자동 접힘 구간에서는 이번 화면에서만 바꾸고 저장하지 않음 (넓은 화면의 선택을 덮어쓰지 않게)
+      autoState = currentDesktopState() === "mini" ? "full" : "mini";
+    } else {
+      desktopState = desktopState === "mini" ? "full" : "mini";
+      try { localStorage.setItem(KEY, desktopState); } catch (e) {}
+    }
     if (!reduced.matches) {
       // 연달아 누르면 내용 페이드를 처음부터 다시 재생
       root.removeAttribute("data-lnb-anim");
@@ -120,6 +135,10 @@
     if (e.key === "Escape") close();
   });
   mobile.addEventListener("change", render);
+  autoMini.addEventListener("change", function () {
+    autoState = null;
+    render();
+  });
   render();
 })();
 
