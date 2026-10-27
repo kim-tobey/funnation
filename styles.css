@@ -135,21 +135,32 @@
    밝은 테마 (Figma 64001:10152)
    ------------------------------------------------------------ */
 [data-theme="light"] {
-  /* 라이트는 Figma 미확정 — v2.0 Primary 적용 전 값(--azure) 그대로 */
-  --color-brand-primary: #4782ff;
+  /* 라이트 색상표 [구현 제안 · v2.0 라이트 Figma 미확정] — 다크 Semantic 토큰과 같은 역할에 1:1 대응.
+     브랜드 Primary(#4a92ff)는 테마 공통이라 다시 지정하지 않음 */
+  --color-bg-100: #ffffff;          /* 다크 #0e0e14 — GNB */
+  --color-bg-200: #f4f6fa;          /* 다크 #12131a — LNB */
+  --color-bg-400: #f0f3f8;          /* 다크 #1f212e — 검색 · 메뉴 버튼 · 필터 · 퀵 카드 */
+  --color-border-100: #e0e5ed;      /* 다크 #1f212e — GNB 아래 · 푸터 위 선 */
+  --color-border-400: #d9e0ea;      /* 다크 #31354f — 검색 테두리 */
+  --color-text-strong: #202938;     /* 다크 #ffffff */
+  --color-text-normal: #414b5d;     /* 다크 #dfe5ed — 메뉴 버튼 · 스튜디오 카메라 */
+  --color-text-depth-300: #687385;  /* 다크 #969da8 — GNB 아이콘 · 스튜디오 글자/테두리 */
+  --color-text-depth-400: #8a93a6;  /* 다크 #7c8594 — 검색 placeholder */
+
+  /* 흰 바탕에서 #4a92ff 글자는 대비가 낮아 링크 글자만 진한 파랑 유지 */
   --section-link: var(--azure-text);
   --bg-page: #ffffff;
-  --bg-nav: #ffffff;
-  --bg-lnb: #f4f6fa;
+  --bg-nav: var(--color-bg-100);
+  --bg-lnb: var(--color-bg-200);
   --bg-lnb-item: transparent;
   --bg-surface: #ffffff;
-  --bg-control: #f0f3f8;
+  --bg-control: var(--color-bg-400);
   /* 64021:3341 / 64021:3348 — 버튼은 흰색, 등급 카드는 배경 없음 */
   --btn-outline-bg: #ffffff;
   --grade-bg: transparent;
   --bg-card: #ffffff;
   --subnav-bg: #ffffff;
-  --border-nav: #e0e5ed;
+  --border-nav: var(--color-border-100);
   --border-card: #d9e0ea;
   --border-thumb: #e0e5ed;
   --rule: #e0e5ed;
@@ -173,11 +184,12 @@
   /* 시안 실측 #adccf5 중심 */
   --btn-spin: #cbdef7, #adccf5, #8db2e4, #adccf5, #cbdef7;
   --subnav-sep: #787b82;
-  --menu-toggle-fg: #414b5d;
+  /* GNB — 다크와 같은 위계: 메뉴 버튼 Normal / 아이콘 · 스튜디오 Depth300 / 검색 BG400 · Border400 · Depth400 */
+  --menu-toggle-fg: var(--color-text-normal);
   --mo-menu-fg: #596579;
-  --search-bg: #f7f9fb;
-  --search-border: #e5e8ec;
-  --search-text: #687385;
+  --search-bg: var(--color-bg-400);
+  --search-border: var(--color-border-400);
+  --search-text: var(--color-text-depth-400);
   --nav-search-value: #202938;
   --nav-search-caret: #202938;
   --nav-search-focus-placeholder: #8a93a6;
@@ -185,7 +197,7 @@
   --nav-search-panel-bg: rgba(255, 255, 255, 0.96);
   --nav-search-term-icon-bg: #e9edf4;
   --studio-bg: #fafbfc;
-  --studio-fg: #687385;
+  --studio-fg: var(--color-text-depth-300);
 
   --chip: #e9edf4;
   --chip-alt: #e9edf4;
@@ -937,7 +949,8 @@ ul {
 }
 
 /* 등급 info 카드 */
-/* 펀캐시 (64021:3377) — 라이트 시안에만 존재, 다크에선 숨김 */
+/* 펀캐시 (64021:3377) — 예전 라이트 시안에만 존재. 홈은 다크 기준으로 맞춰 두 테마 모두 숨김
+   (다시 보이려면 display: flex) */
 .cash {
   display: none;
   align-items: center;
@@ -945,9 +958,6 @@ ul {
   padding: 0 6px;
   font-size: 15px;
   white-space: nowrap;
-}
-[data-theme="light"] .cash {
-  display: flex;
 }
 .cash__info {
   display: flex;
