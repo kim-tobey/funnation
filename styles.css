@@ -118,7 +118,8 @@
   --font-display: "Sandoll 격동굴림", "Sandoll Gyeokdonggulim", var(--font-base);
   /* 에스코어 드림 7 ExtraBold(시안: 네모니2 · G마켓 산스) — 섹션 제목 · 후원 패널 제목 · 퀵 카드 제목 (font-weight: 700 과 함께 사용) */
   --font-score: "S-Core Dream", var(--font-base);
-  --font-hero: "Sandoll 맵씨", "Sandoll Mapssi", var(--font-base);
+  /* 맵씨 — 산돌구름 웹폰트(HTML head, 등록 도메인에서만 로드)를 먼저, 로컬은 설치 폰트(한글명)로 */
+  --font-hero: "Sandoll Mapssi", "Sandoll 맵씨", var(--font-base);
 
   --body-bg: #07070d;
 
