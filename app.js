@@ -1614,14 +1614,14 @@
     current = el;
     layer.textContent = el.getAttribute("data-tooltip");
     layer.hidden = false;
-    // 버튼(48px) 대신 보이는 아이콘 그림(24px) 기준으로 아래 20px 에 띄움
+    // 버튼(48px) 대신 보이는 아이콘 그림(24px) 기준으로 아래 10px 에 띄움
     var icon = el.querySelector("img") || el;
     var r = icon.getBoundingClientRect();
     var w = layer.offsetWidth;
     // 화면 밖으로 나가지 않게 좌우 8px 안쪽으로 맞춤
     var left = Math.min(Math.max(r.left + r.width / 2 - w / 2, 8), window.innerWidth - w - 8);
     layer.style.left = left + "px";
-    layer.style.top = r.bottom + 20 + "px";
+    layer.style.top = r.bottom + 10 + "px";
   }
   function hide() {
     current = null;

@@ -460,7 +460,7 @@ ul {
   height: 24px;
 }
 
-/* GNB 아이콘 호버 레이어 (app.js) — [구현 제안 · Figma 시안 없음] 호버하는 동안만 아이콘 그림 아래 20px 에 표시.
+/* GNB 아이콘 호버 레이어 (app.js) — [구현 제안 · Figma 시안 없음] 호버하는 동안만 아이콘 그림 아래 10px 에 표시.
    다크: BG400 · Border400 · Normal / 라이트는 알림 팝업 라이트 색을 따름 */
 :root {
   --hover-layer-bg: var(--color-bg-400);
