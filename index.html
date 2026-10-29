@@ -8,9 +8,9 @@
 <link rel="icon" href="assets/favicon/favicon-32.png" type="image/png" sizes="32x32">
 <link rel="icon" href="assets/favicon/favicon-192.png" type="image/png" sizes="192x192">
 <link rel="apple-touch-icon" href="assets/favicon/apple-touch-icon.png">
-<!-- 산돌구름 웹폰트 (Sandoll Mapssi) — 등록 도메인(funnation.co.kr · kim-tobey.github.io)에서만 로드, 로컬은 설치 폰트로 표시 -->
+<!-- 산돌구름 웹폰트 (Sandoll Mapssi · Sandoll Gyeokdonggulim, 둘 다 400) — 등록 도메인(funnation.co.kr · kim-tobey.github.io)에서만 로드, 로컬은 설치 폰트로 표시 -->
 <link rel="preconnect" href="https://o6cdhdutve.execute-api.ap-northeast-2.amazonaws.com">
-<link rel="stylesheet" href="https://o6cdhdutve.execute-api.ap-northeast-2.amazonaws.com/v1/api/css/drop_fontstream_css/?sid=gAAAAABq1Zn6RaFxEO3v6fwyPK87sBRb0cYAsR2MW1KHUsLwCBCSKMT-nnwuRv7ldbCVVM80tqbtVRlFRWD1PTKT7uOFwh03qL44RUChpsnagZGGp7GL6BTGGRG163xzpsvlADca0_8Dn77Ji9AF0XcZtQF-D3mPpRDEGB7ka5NYP5BL1WkdtaSPRwBqCawSTw9YZRxha-xRzidUCRCAGDmrXc6SbkIjZF4i9M3v12ZXY8pMg6JnTea46MELLHV4zTxnZaw0Ikzl" charset="utf-8" referrerpolicy="origin">
+<link rel="stylesheet" href="https://o6cdhdutve.execute-api.ap-northeast-2.amazonaws.com/v1/api/css/drop_fontstream_css/?sid=gAAAAABq4sdeUvN_k3MsbvmMbZ_hBQFXfvEFSB2urLi1zybsfs0w_bksF-xrdzoNI69oxk_6Hv077SoP0M2EzWJCT3KGRbt5qdq9vhMcW010SeUDh5R02FT8iGpCI5xOjMvgScgXjRxcMcwj8Jo8ZvH4AE903t3kwE6qp7f6jM47d9dtp77LGtu6LAOFROE9J4kMMclS5je4qcppj1EPJJmQq0oUEN6FFF_ggb35Gkx0vhXI1AbrJ0xF6e_eenerTiwRE-Nlu49u" charset="utf-8" referrerpolicy="origin">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -65,16 +65,16 @@
       </form>
 
       <div class="top-nav__right">
-        <div class="gold-chip auth-in" data-node-id="63998:5553">
-          <img src="assets/imgGold.png" alt="">
-          <span>1,250만원</span>
+        <div class="gold-chip auth-in" data-node-id="65183:61522">
+          <img src="assets/watch/cash.png" width="16" height="16" alt="">
+          <span>9억 9,999만원</span>
         </div>
 
         <div class="top-nav__icons auth-in">
           <button class="nav-icon" type="button" aria-label="내 정보" data-tooltip="내 정보">
             <img src="assets/imgAccountCircle.svg" width="24" height="24" alt="">
           </button>
-          <button class="nav-icon" type="button" aria-label="언어 변경" data-tooltip="언어 변경">
+          <button class="nav-icon" type="button" aria-label="언어 변경" data-tooltip="언어 변경" aria-haspopup="menu" aria-expanded="false" aria-controls="lang-pop" data-lang-btn>
             <img src="assets/imgLanguage.svg" width="24" height="24" alt="">
           </button>
           <button class="nav-icon" type="button" aria-label="알림" data-tooltip="알림" aria-haspopup="dialog" aria-expanded="false" aria-controls="notice-pop" id="notice-btn">
@@ -89,7 +89,7 @@
         </button>
 
         <!-- 로그아웃 상태 (v2.0 64372:140618) — 언어 설정은 로그인 상태와 같은 아이콘 버튼 -->
-        <button class="nav-icon auth-out" type="button" aria-label="언어 변경" data-tooltip="언어 변경" data-node-id="64372:140627">
+        <button class="nav-icon auth-out" type="button" aria-label="언어 변경" data-tooltip="언어 변경" data-node-id="64372:140627" aria-haspopup="menu" aria-expanded="false" aria-controls="lang-pop" data-lang-btn>
           <img src="assets/imgLanguage.svg" width="24" height="24" alt="">
         </button>
         <button class="login-btn auth-out" type="button" id="login-btn">로그인</button>
@@ -98,10 +98,24 @@
       <!-- PC 알림 팝업 (64686:113964) — 목록은 아래 모바일 알림 화면(#notice-view)을 그대로 복사해 채움 -->
       <div class="notice-pop" id="notice-pop" role="dialog" aria-labelledby="notice-pop-title" data-node-id="64686:113964" hidden>
         <header class="notice-pop__head">
-          <h2 id="notice-pop-title">알림</h2>
+          <div class="notice-pop__title">
+            <h2 id="notice-pop-title">알림</h2>
+            <!-- 알림 전체보기 바로가기 (65517:39473) — 전체 알림 페이지가 아직 없어 연결 전 -->
+            <a class="notice-pop__all" href="#" aria-label="알림 전체보기"><img src="assets/v2/notice/external-link.svg" width="24" height="24" alt=""></a>
+          </div>
           <button class="notice-pop__close" type="button" aria-label="알림 닫기" data-notice-close><img src="assets/v2/notice/close.svg" width="24" height="24" alt=""></button>
         </header>
         <div class="notice-pop__body" data-notice-body></div>
+      </div>
+
+      <!-- 언어 변경 팝업 (65514:33873) — GNB 지구본 아이콘(로그인 · 로그아웃 공통)과 모바일 앱바 언어 아이콘으로 열고,
+           누른 아이콘 아래 가운데에 띄움 (모바일은 PC 시안을 그대로 씀). 실제 번역은 아직 없어 고른 언어만 표시해 둠 -->
+      <div class="lang-pop" id="lang-pop" role="menu" aria-labelledby="lang-pop-title" data-node-id="65514:33873" hidden>
+        <p class="lang-pop__title" id="lang-pop-title">언어 변경</p>
+        <button class="lang-pop__item" type="button" role="menuitemradio" aria-checked="true" lang="ko"><img src="assets/v2/lang/flag-kr.svg" width="24" height="17.1429" alt="">한국어</button>
+        <button class="lang-pop__item" type="button" role="menuitemradio" aria-checked="false"><img src="assets/v2/lang/flag-us.svg" width="24" height="17.1429" alt="">영어</button>
+        <button class="lang-pop__item" type="button" role="menuitemradio" aria-checked="false"><img src="assets/v2/lang/flag-cn.svg" width="24" height="17.1429" alt="">중국어</button>
+        <button class="lang-pop__item" type="button" role="menuitemradio" aria-checked="false"><img src="assets/v2/lang/flag-jp.svg" width="24" height="17.1429" alt="">일본어</button>
       </div>
 
     </div>
@@ -141,7 +155,7 @@
         <img src="assets/mo/appbar-bell.svg" width="24" height="24" alt="">
         <span class="mo-appbar__badge">2</span>
       </button>
-      <button class="mo-appbar__btn" type="button" aria-label="언어 설정">
+      <button class="mo-appbar__btn" type="button" aria-label="언어 설정" aria-haspopup="menu" aria-expanded="false" aria-controls="lang-pop" data-lang-btn>
         <img src="assets/mo/appbar-lang.svg" width="24" height="24" alt="">
       </button>
       <button class="mo-appbar__btn" type="button" id="lnb-toggle-mo" aria-label="메뉴 열기" aria-expanded="false" aria-controls="lnb">
@@ -228,8 +242,11 @@
             <a class="lnb__item lnb__item--active" href="index.html" aria-current="page">
               <span class="lnb__item-icon"><img src="assets/v2/lnb-home-active.svg" width="24" height="24" alt=""></span>홈
             </a>
+            <a class="lnb__item" href="#">
+              <img src="assets/v2/lnb-fun-live.svg" width="24" height="24" alt=""><span class="lnb__label">펀네이션 라이브<span class="lnb__beta">BETA</span></span>
+            </a>
             <a class="lnb__item" href="live.html">
-              <img src="assets/v2/lnb-live.svg" width="24" height="24" alt="">라이브 방송
+              <img src="assets/v2/lnb-live.svg" width="24" height="24" alt="">유튜브 라이브
             </a>
             <a class="lnb__item" href="#">
               <img src="assets/imgComponent2.svg" width="24" height="24" alt="">크리에이터 찾기
@@ -347,12 +364,46 @@
         <!-- Hero -->
         <!-- 히어로 슬라이더 (로그인/로그아웃과 무관하게 순환) -->
         <section class="hero" id="hero">
-          <!-- slide 1 : 63998:5059 -->
+          <!-- slide 1 : 65514:38763 -->
           <article class="hero__slide is-active">
             <div class="hero__media" aria-hidden="true">
-              <img class="hero__media-front" src="assets/hero/slide1.png" alt="">
+              <div class="hero__media-overlay">
+                <img src="assets/hero/slide3.png" alt="">
+              </div>
             </div>
-            <div class="hero__scrim hero__scrim--2" aria-hidden="true"></div>
+            <div class="hero__scrim" aria-hidden="true"></div>
+            <div class="hero__glow hero__glow--a" aria-hidden="true"></div>
+            <div class="hero__glow hero__glow--b" aria-hidden="true"></div>
+            <canvas class="hero__arc" aria-hidden="true"></canvas>
+
+            <div class="hero__text">
+              <div class="hero__eyebrow">
+                <span>👋🏼 후원이 즐거워지는</span>
+                <span class="badge-live">LIVE 세상</span>
+              </div>
+              <h2 class="hero__h1">라이브를 더<br class="mo-br"> 재미있게!</h2>
+              <p class="hero__desc">로그인하고 후원과 실시간 소통을 지금 바로 시작해 보세요</p>
+            </div>
+
+            <div class="hero__cta">
+              <button class="btn-primary" type="button">인기라이브 보기</button>
+              <button class="btn-secondary" type="button">크리에이터 찾기</button>
+            </div>
+
+            <div class="hero__dots">
+              <button class="is-active" type="button" data-slide="0" aria-label="1번 배너"></button>
+              <button type="button" data-slide="1" aria-label="2번 배너"></button>
+            </div>
+          </article>
+
+          <!-- slide 2 : 65517:39296 -->
+          <article class="hero__slide">
+            <div class="hero__media" aria-hidden="true">
+              <div class="hero__media-overlay">
+                <img src="assets/hero/slide1.png" alt="">
+              </div>
+            </div>
+            <div class="hero__scrim" aria-hidden="true"></div>
             <div class="hero__glow hero__glow--a" aria-hidden="true"></div>
             <div class="hero__glow hero__glow--b" aria-hidden="true"></div>
             <canvas class="hero__arc" aria-hidden="true"></canvas>
@@ -371,70 +422,8 @@
             </div>
 
             <div class="hero__dots">
-              <button class="is-active" type="button" data-slide="0" aria-label="1번 배너"></button>
-              <button type="button" data-slide="1" aria-label="2번 배너"></button>
-              <button type="button" data-slide="2" aria-label="3번 배너"></button>
-            </div>
-          </article>
-
-          <!-- slide 2 : 63998:5435 -->
-          <article class="hero__slide">
-            <div class="hero__media" aria-hidden="true">
-              <div class="hero__media-overlay">
-                <img src="assets/hero/slide2.png" alt="">
-              </div>
-            </div>
-            <div class="hero__scrim hero__scrim--1" aria-hidden="true"></div>
-            <canvas class="hero__arc" aria-hidden="true"></canvas>
-
-            <div class="hero__text">
-              <div class="hero__eyebrow">
-                <span>👋🏼 후원이 즐거워지는</span>
-                <span class="badge-live">LIVE 세상</span>
-              </div>
-              <h2 class="hero__h1">라이브를 더<br class="mo-br"> 재미있게!</h2>
-              <p class="hero__desc">로그인하고 후원과 실시간 소통을 지금 바로 시작해 보세요</p>
-            </div>
-
-            <div class="hero__cta">
-              <button class="btn-primary" type="button">인기라이브 보기</button>
-              <button class="btn-secondary" type="button">크리에이터 찾기</button>
-            </div>
-
-            <div class="hero__dots">
               <button type="button" data-slide="0" aria-label="1번 배너"></button>
               <button class="is-active" type="button" data-slide="1" aria-label="2번 배너"></button>
-              <button type="button" data-slide="2" aria-label="3번 배너"></button>
-            </div>
-          </article>
-
-          <!-- slide 3 : 이미지 assets/hero/slide3.png (시안 없음 — 2번 배치 재사용) -->
-          <article class="hero__slide">
-            <div class="hero__media" aria-hidden="true">
-              <div class="hero__media-overlay">
-                <img src="assets/hero/slide3.png" alt="">
-              </div>
-            </div>
-            <div class="hero__scrim hero__scrim--3" aria-hidden="true"></div>
-            <canvas class="hero__arc" aria-hidden="true"></canvas>
-
-            <div class="hero__text">
-              <div class="hero__eyebrow">
-                <span>👋🏼 방송이 즐거워지는</span>
-                <span class="badge-live">펀네이션</span>
-              </div>
-              <h2 class="hero__h1">방송을 더<br class="mo-br"> 쉽고 편하게!</h2>
-              <p class="hero__desc">로그인하고 후원과 실시간 소통을 지금 바로 시작해 보세요</p>
-            </div>
-
-            <div class="hero__cta">
-              <button class="btn-primary" type="button">방송 시작하기</button>
-            </div>
-
-            <div class="hero__dots">
-              <button type="button" data-slide="0" aria-label="1번 배너"></button>
-              <button type="button" data-slide="1" aria-label="2번 배너"></button>
-              <button class="is-active" type="button" data-slide="2" aria-label="3번 배너"></button>
             </div>
           </article>
 

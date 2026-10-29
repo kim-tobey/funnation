@@ -47,7 +47,8 @@
   var items = document.querySelectorAll(".lnb__item, .creator");
   for (var k = 0; k < items.length; k++) {
     var label = items[k].querySelector(".creator__name") || items[k];
-    items[k].title = label.textContent.trim();
+    var badge = label.querySelector(".lnb__beta"); // BETA 배지는 툴팁에서 뺌
+    items[k].title = label.textContent.replace(badge ? badge.textContent : "", "").trim();
   }
 
   var saved = null;
@@ -1594,6 +1595,70 @@
       btn.focus();
     }
   }, true);
+})();
+
+/* 언어 변경 팝업 (65514:33873) — PC 지구본 아이콘(로그인 · 로그아웃 상태 각각) · 모바일 앱바 언어 아이콘으로 열고 닫음.
+   팝업 하나를 누른 아이콘이 있는 헤더로 옮겨, 아이콘 아래 3px · 가운데에 띄움 (화면 밖으로는 8px 안쪽까지).
+   바깥 클릭 · ESC 로 닫힘. 번역 기능은 아직 없어 선택 표시만 바꿈 */
+(function () {
+  var pop = document.getElementById("lang-pop");
+  var btns = document.querySelectorAll("[data-lang-btn]");
+  if (!pop || !btns.length) return;
+  var items = pop.querySelectorAll(".lang-pop__item");
+  var owner = null;
+
+  function close() {
+    if (pop.hidden) return;
+    pop.hidden = true;
+    if (owner) owner.setAttribute("aria-expanded", "false");
+  }
+  function place() {
+    var wrap = pop.offsetParent.getBoundingClientRect();
+    var r = owner.getBoundingClientRect();
+    var w = pop.offsetWidth;
+    var left = Math.min(Math.max(r.left + r.width / 2 - w / 2, 8), window.innerWidth - w - 8);
+    pop.style.left = left - wrap.left + "px";
+    pop.style.top = r.bottom + 3 - wrap.top + "px";
+  }
+  function open(btn) {
+    owner = btn;
+    var host = btn.closest(".top-nav__inner, .mo-appbar");
+    if (host && pop.parentNode !== host) host.appendChild(pop);
+    pop.hidden = false;
+    btn.setAttribute("aria-expanded", "true");
+    place();
+  }
+  for (var i = 0; i < btns.length; i++) {
+    btns[i].addEventListener("click", function () {
+      var same = owner === this && !pop.hidden;
+      close();
+      if (!same) open(this);
+    });
+  }
+  for (var k = 0; k < items.length; k++) {
+    items[k].addEventListener("click", function () {
+      for (var j = 0; j < items.length; j++) items[j].setAttribute("aria-checked", items[j] === this ? "true" : "false");
+      close();
+      owner.focus();
+    });
+  }
+  document.addEventListener("click", function (e) {
+    if (!pop.hidden && !pop.contains(e.target) && !owner.contains(e.target)) close();
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && !pop.hidden) {
+      e.stopImmediatePropagation();
+      close();
+      owner.focus();
+    }
+  }, true);
+  // 창 폭이 바뀌면 아이콘 위치도 바뀌므로 다시 맞춤
+  // PC ↔ 모바일 폭을 넘어가 누른 아이콘이 사라지면 닫음
+  window.addEventListener("resize", function () {
+    if (pop.hidden) return;
+    if (owner.offsetParent) place();
+    else close();
+  });
 })();
 
 /* GNB 아이콘 호버 레이어 — data-tooltip 이 있는 버튼에 마우스를 올리면 바로 띄우고, 벗어나면 닫음.

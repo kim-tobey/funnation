@@ -1,0 +1,17 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="24" height="17.1429" viewBox="0 0 24 17.1429" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Flag">
+<path id="Mask" d="M2 0.25H22C22.9665 0.25 23.75 1.0335 23.75 2V15.1429C23.75 16.1094 22.9665 16.8929 22 16.8929H2C1.0335 16.8929 0.25 16.1094 0.25 15.1429V2C0.25 1.0335 1.0335 0.25 2 0.25Z" fill="white" stroke-width="0.5" stroke="#F5F5F5"/>
+<mask id="mask0_0_61" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="18">
+<path id="Mask_2" d="M2 0.25H22C22.9665 0.25 23.75 1.0335 23.75 2V15.1429C23.75 16.1094 22.9665 16.8929 22 16.8929H2C1.0335 16.8929 0.25 16.1094 0.25 15.1429V2C0.25 1.0335 1.0335 0.25 2 0.25Z" fill="white" stroke-width="0.5" stroke="white"/>
+</mask>
+<g mask="url(#mask0_0_61)">
+<path id="Oval 9" d="M12.0003 13.7144C14.8406 13.7144 17.1431 11.4119 17.1431 8.57157C17.1431 5.73125 14.8406 3.42871 12.0003 3.42871C9.15996 3.42871 6.85742 5.73125 6.85742 8.57157C6.85742 11.4119 9.15996 13.7144 12.0003 13.7144Z" fill-rule="evenodd" clip-rule="evenodd" fill="url(#paint0_linear_0_61)"/>
+</g>
+</g>
+<defs>
+<linearGradient id="paint0_linear_0_61" x1="6.85742" y1="3.42871" x2="6.85742" y2="13.7144" gradientUnits="userSpaceOnUse">
+<stop stop-color="#D81441"/>
+<stop offset="1" stop-color="#BB0831"/>
+</linearGradient>
+</defs>
+</svg>

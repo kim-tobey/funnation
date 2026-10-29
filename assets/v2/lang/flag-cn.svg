@@ -1,0 +1,13 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="24" height="17.1429" viewBox="0 0 24 17.1429" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Flag">
+<rect id="Mask" width="24" height="17.1429" rx="2" fill="white"/>
+<mask id="mask0_0_70" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="18">
+<rect id="Mask_2" width="24" height="17.1429" rx="2" fill="white"/>
+</mask>
+<g mask="url(#mask0_0_70)">
+<rect id="Mask_3" width="24" height="17.1429" fill="#F1361D"/>
+<path id="Star 2" d="M10.261 9.54769L10.7229 10.2508L9.88115 10.2606L9.17803 10.7235L9.16728 9.88168L8.70537 9.17758L9.54717 9.16781L10.2503 8.70492L10.261 9.54769ZM11.5267 6.86605L12.3636 6.77328L11.9896 7.52719L12.0823 8.36508L11.3274 7.99105L10.4905 8.08383L10.8646 7.32894L10.7718 6.49203L11.5267 6.86605ZM11.9788 4.42367L12.4163 5.14242L11.5745 5.12289L10.8558 5.56137L10.8753 4.71957L10.4378 3.99984L11.2796 4.01937L11.9983 3.58187L11.9788 4.42367ZM9.96416 1.7723L10.7942 1.9139L10.2269 2.53598L10.0862 3.36605L9.46318 2.79867L8.63311 2.65805L9.20049 2.035L9.34209 1.20492L9.96416 1.7723Z" fill="#FFDC42"/>
+<path id="Star 8" d="M5.71373 7.05136L3.69846 8.48799L4.44203 6.12742L2.45296 4.65473L4.92777 4.63244L5.71373 2.28564L6.49968 4.63244L8.97449 4.65473L6.98543 6.12742L7.72899 8.48799L5.71373 7.05136Z" fill-rule="evenodd" clip-rule="evenodd" fill="#FFDC42"/>
+</g>
+</g>
+</svg>

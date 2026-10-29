@@ -18,10 +18,13 @@
   /* v2.0 디자인 시스템 Semantic 토큰 (Color Theme 65095:90606, Dark) — 아래 역할 토큰이 이 값을 참조.
      라이트 테마는 역할 토큰을 직접 덮어쓰므로 영향 없음 */
   --color-brand-primary: #4a92ff;
+  --color-brand-tertial: #a72fc5;
   --color-bg-100: #0e0e14;
   --color-bg-200: #12131a;
+  --color-bg-300: #191b24;
   --color-bg-400: #1f212e;
   --color-border-100: #1f212e;
+  --color-border-300: #2a2d3f;
   --color-border-400: #31354f;
   --color-text-strong: #ffffff;
   --color-text-normal: #dfe5ed;
@@ -103,7 +106,6 @@
   --live: #ff0015;
   --orange: #f96217;
   --yellow: #ffd230;
-  --gold: #f59e0b;
 
   /* chips — 홈 비선택 필터 = BG400 (65161:72559) */
   --chip: var(--color-bg-400);
@@ -114,8 +116,8 @@
     BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
   /* 산돌구름 설치 폰트 — 패밀리명이 한글이라 한글명으로 지정해야 매칭됨.
      미설치 환경에서는 Pretendard 로 폴백 */
-  /* 격동굴림 — 띠 광고 문구 */
-  --font-display: "Sandoll 격동굴림", "Sandoll Gyeokdonggulim", var(--font-base);
+  /* 격동굴림 — 띠 광고 문구. 산돌구름 웹폰트(HTML head, 등록 도메인에서만 로드)를 먼저, 로컬은 설치 폰트(한글명)로 */
+  --font-display: "Sandoll Gyeokdonggulim", "Sandoll 격동굴림", var(--font-base);
   /* 에스코어 드림 7 ExtraBold(시안: 네모니2 · G마켓 산스) — 섹션 제목 · 후원 패널 제목 · 퀵 카드 제목 (font-weight: 700 과 함께 사용) */
   --font-score: "S-Core Dream", var(--font-base);
   /* 맵씨 — 산돌구름 웹폰트(HTML head, 등록 도메인에서만 로드)를 먼저, 로컬은 설치 폰트(한글명)로 */
@@ -217,6 +219,7 @@
 [data-theme="light"] img[src$="imgLanguage.svg"] { content: url("assets/light/imgLanguage.svg"); }
 [data-theme="light"] img[src$="icHome.svg"] { content: url("assets/light/icHome.svg"); }
 [data-theme="light"] img[src$="v2/lnb-live.svg"] { content: url("assets/light/v2/lnb-live.svg"); }
+[data-theme="light"] img[src$="v2/lnb-fun-live.svg"] { content: url("assets/light/v2/lnb-fun-live.svg"); }
 [data-theme="light"] img[src$="v2/mo-search.svg"] { content: url("assets/light/v2/mo-search.svg"); }
 [data-theme="light"] img[src$="v2/mo-logo.svg"] { content: url("assets/light/v2/mo-logo.svg"); }
 [data-theme="light"] img[src$="icTag.svg"] { content: url("assets/light/icTag.svg"); }
@@ -295,7 +298,9 @@ ul {
   display: flex;
   flex-direction: column;
   width: 100%;
-  min-width: 1440px;
+  /* 1440 고정이면 1280~1439 창에서 접힌 LNB 옆 4열 카드의 마지막 열이 화면 밖으로 밀림.
+     1280 아래는 GNB 검색창·퀵카드 문구가 겹쳐 그 폭에서만 가로 스크롤 */
+  min-width: 1280px;
   min-height: 1520px;
   overflow: hidden;
   border-bottom-left-radius: 8px;
@@ -433,24 +438,35 @@ ul {
   gap: 15px;
 }
 
-/* 골드(캐시) 칩 */
+/* 지갑(캐시) 칩 (65183:61522) — BG300 · Border300 1px · 모서리 16, 캐시 아이콘 16px + 4px, Bold 12.5px Normal */
+:root {
+  --wallet-bg: var(--color-bg-300);
+  --wallet-line: var(--color-border-300);
+  --wallet-text: var(--color-text-normal);
+}
+/* [구현 제안] 라이트 시안 없음 — 언어 팝업 라이트 값에 맞춤 */
+[data-theme="light"] {
+  --wallet-bg: #fff;
+  --wallet-line: #e3e7ee;
+  --wallet-text: #202938;
+}
 .gold-chip {
   display: flex;
   align-items: center;
   gap: 4px;
   padding: 7px 13px;
-  border: 1px solid rgba(245, 158, 11, 0.1);
+  border: 1px solid var(--wallet-line);
   border-radius: 16px;
-  background: rgba(245, 158, 11, 0.1);
+  background: var(--wallet-bg);
 }
 .gold-chip img {
-  width: 14px;
-  height: 14px;
+  width: 16px;
+  height: 16px;
 }
 .gold-chip span {
   font-size: 12.5px;
   font-weight: 700;
-  color: var(--gold);
+  color: var(--wallet-text);
 }
 
 .top-nav__icons {
@@ -616,31 +632,6 @@ ul {
 }
 .nav-search.is-open .nav-search__input::placeholder {
   color: var(--nav-search-focus-placeholder);
-}
-/* 영상 상세 GNB 검색 (64822:102997) — 300×36 · 모서리 4px, 돋보기 왼쪽 7px, 안내 글자 가운데 #bfbfbf */
-[data-page="watch"] .nav-search {
-  top: 14px;
-  width: 300px;
-  height: 36px;
-  border-color: rgba(86, 94, 106, 0.1);
-  border-radius: 4px;
-  background: rgba(49, 55, 64, 0.5);
-}
-[data-page="watch"] .nav-search__icon {
-  left: 7px;
-  transform: translate(0, -50%);
-}
-[data-page="watch"] .nav-search__input {
-  padding: 0 34px;
-}
-[data-page="watch"] .nav-search__input:placeholder-shown {
-  text-align: center;
-}
-[data-page="watch"] .nav-search__input::placeholder {
-  color: #bfbfbf;
-}
-[data-page="watch"] .nav-search.is-open .nav-search__input {
-  text-align: left;
 }
 .nav-search.is-open .nav-search__icon {
   transform: translate(0, -50%);
@@ -1172,6 +1163,25 @@ ul {
 .lnb__item--toggle {
   justify-content: space-between;
 }
+/* 펀네이션 라이브 BETA 배지 (65514:20203) — 메뉴명 오른쪽 4px, 16px 높이 · 모서리 4 · Brand Tertial */
+.lnb__label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.lnb__beta {
+  display: flex;
+  align-items: center;
+  height: 16px;
+  padding: 2px 4px;
+  border-radius: 4px;
+  background: var(--color-brand-tertial);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  letter-spacing: 0;
+  color: #fff;
+}
 .lnb__item-left {
   display: flex;
   align-items: center;
@@ -1348,13 +1358,14 @@ ul {
   height: 630px;
   pointer-events: none;
 }
+/* 배경 이미지 (65514:38768) — 1124x375, 630 묶음 아래에서 -2px · 가운데보다 1px 오른쪽 */
 .hero__media-overlay {
   position: absolute;
-  bottom: -1px;
-  left: 50%;
+  bottom: -2px;
+  left: calc(50% + 1px);
   transform: translateX(-50%);
-  width: 100.18%;
-  height: 374px;
+  width: 100%;
+  height: 375px;
 }
 .hero__media-overlay img {
   position: absolute;
@@ -1363,30 +1374,17 @@ ul {
   height: 100%;
   object-fit: cover;
 }
+/* 왼쪽 어둠 (65514:38769) — 580x320, 검정 70% → 85.776% 에서 투명 */
 .hero__scrim {
   position: absolute;
-  inset: 0;
-  opacity: 0.75;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 580px;
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 85.776%);
   pointer-events: none;
 }
-/* Figma: radialGradient matrix(63.15 0 0 18.043 26.5 160) */
-.hero__scrim--1 {
-  background: radial-gradient(
-    631.5px 180.43px at 26.5px 160px,
-    rgba(0, 0, 0, 1) 0%,
-    rgba(0, 0, 0, 0) 100%
-  );
-}
-/* slide 2 : matrix(95.25 0 0 27.214 26.5 160) — slide 3 는 이미지가 밝아 같은 큰 어둠 사용 */
-.hero__scrim--2,
-.hero__scrim--3 {
-  background: radial-gradient(
-    952.5px 272.14px at 26.5px 160px,
-    rgba(0, 0, 0, 1) 0%,
-    rgba(0, 0, 0, 0) 100%
-  );
-}
-/* slide 2 블러 글로우 (63998:5067 / 5068) */
+/* 블러 글로우 (65514:38770 / 38771) — 두 슬라이드 공통. 가로 위치는 1124 기준 비율 */
 .hero__glow {
   position: absolute;
   border-radius: 400px;
@@ -1394,16 +1392,16 @@ ul {
   pointer-events: none;
 }
 .hero__glow--a {
-  left: 75.89%;
-  top: 25px;
+  left: 2.94%;
+  top: -192px;
   width: 448px;
   height: 448px;
   background: #0072da;
   filter: blur(75px);
 }
 .hero__glow--b {
-  left: 41.16%;
-  top: -134px;
+  left: 41.01%;
+  top: 109px;
   width: 438px;
   height: 438px;
   background: #0039ff;
@@ -1422,17 +1420,6 @@ ul {
 }
 .hero--no-fx .hero__arc {
   display: none;
-}
-/* slide 2 미디어 레이어 */
-.hero__media-front {
-  position: absolute;
-  bottom: -88px;
-  left: calc(50% + 0.5px);
-  transform: translateX(-50%);
-  width: 131.16%;
-  height: 490px;
-  max-width: none;
-  object-fit: cover;
 }
 .hero__text,
 .hero__cta,
@@ -1462,7 +1449,7 @@ ul {
 /* .hero__eyebrow > span(16px/600) 보다 우선하도록 같은 경로로 지정 — 배지는 14px Bold */
 .badge-live,
 .hero__eyebrow > .badge-live {
-  padding: 4px 7px 4px 8px;
+  padding: 4px 6px 4px 8px;
   border-radius: 6px;
   background: var(--live);
   font-size: 14px;
@@ -1480,7 +1467,9 @@ ul {
   letter-spacing: -0.01em;
   color: #eee;
 }
+/* 제목 ↔ 설명 10px (65514:38782) — .hero__text 간격 8px 에 2px 더함 */
 .hero__desc {
+  margin-top: 2px;
   padding: 0 4px;
   font-size: 14px;
   font-weight: 600;
@@ -1514,7 +1503,8 @@ ul {
   background: rgba(8, 8, 14, 0.5);
   color: #eee;
 }
-/* PC Hero CTA (65161:72544) — Pretendard SemiBold 14px, 줄 높이 1, -1%, Primary #4a92ff · 42px.
+/* PC Hero CTA (design.md §11) — Pretendard SemiBold 14px, 줄 높이 1, -1%, Primary #4a92ff · 42px.
+   새 배너 시안(65514:38789)은 ExtraBold · #4782ff 지만 design.md 기준 유지.
    모바일(800 · #4782ff)은 모바일 블록에서 따로 지정 */
 .hero__cta .btn-primary,
 .hero__cta .btn-secondary {
@@ -1538,9 +1528,9 @@ ul {
   background: #d9d9d9;
   transition: width 0.3s ease, background 0.3s ease;
 }
-/* 선택 위치 40px (64026:36168) */
+/* 선택 위치 25px · #4782ff (65514:38795) */
 .hero__dots button.is-active {
-  width: 40px;
+  width: 25px;
   background: var(--azure);
 }
 
@@ -2442,6 +2432,7 @@ ul {
 [data-lnb="mini"] .kakao-banner,
 [data-lnb="mini"] .lnb__caption,
 [data-lnb="mini"] .lnb__rule.auth-in,
+[data-lnb="mini"] .lnb__beta,
 [data-lnb="mini"] .toggle {
   display: none;
 }
@@ -3628,25 +3619,26 @@ ul {
     height: 590px;
     transform: translateX(-50%);
   }
-  .hero__media-front {
-    left: calc(50% + 1px);
-    width: 1469px;
-  }
-  /* 슬라이드 1 은 모바일 시안이 없음 — 데스크톱용 어둠(좌측 631x180)이 가운데 정렬
-     글자에 거의 닿지 않아, 글자 쪽을 중심으로 다시 깔아 슬라이드 2 와 비슷한 밝기로 맞춤 */
-  .hero__scrim--1,
-  .hero__scrim--3 {
+  /* 새 PC 배너(65183:133690)의 모바일 시안은 없음 — PC 왼쪽 어둠은 가운데 정렬 글자에 닿지 않아,
+     글자 쪽을 중심으로 다시 깔아 둠 (이전 모바일 보정 그대로) */
+  .hero__scrim {
+    width: auto;
+    right: 0;
+    opacity: 0.75;
     background: radial-gradient(
       420px 200px at 50% 45%,
       rgba(0, 0, 0, 1) 0%,
       rgba(0, 0, 0, 0) 100%
     );
   }
+  /* 글로우는 이전 모바일 배치 유지 (PC 위치가 바뀌어 top 도 고정) */
   .hero__glow--a {
     left: 850px;
+    top: 25px;
   }
   .hero__glow--b {
     left: 461px;
+    top: -134px;
   }
 
   /* 좌우 버튼 — 터치 화면엔 hover 가 없으므로 항상 표시, 조금 작게 */
@@ -4106,6 +4098,15 @@ ul {
   letter-spacing: -0.18px;
   color: var(--np-title);
 }
+/* 제목 + 알림 전체보기 바로가기 (65517:39466) — 사이 2px, 아이콘 24px · #4a92ff */
+.notice-pop__title {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.notice-pop__all {
+  display: flex;
+}
 .notice-pop__close {
   display: flex;
 }
@@ -4127,6 +4128,68 @@ ul {
 @media (max-width: 767px) {
   .notice-pop { display: none; }
 }
+
+/* 언어 변경 팝업 (65514:33873) — 112x184, 모서리 19, 안쪽 10·18 (+ 위 4 · 아래 8), 항목 사이 8px.
+   위치(left · top)는 app.js 가 누른 아이콘 아래 3px · 가운데로 잡음. 모바일도 같은 팝업 (모바일 시안 없음) */
+:root {
+  --lp-bg: var(--color-bg-300);
+  --lp-line: var(--color-border-100);
+  --lp-title: var(--color-text-strong);
+  --lp-text: var(--color-text-normal);
+}
+/* [구현 제안] 라이트 시안 없음 — 알림 팝업 라이트 값에 맞춤 */
+[data-theme="light"] {
+  --lp-bg: #fff;
+  --lp-line: #e3e7ee;
+  --lp-title: #202938;
+  --lp-text: #414b5d;
+}
+.lang-pop {
+  position: absolute;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 18px 18px;
+  border: 1px solid var(--lp-line);
+  border-radius: 19px;
+  background: var(--lp-bg);
+  animation: notice-pop-in 0.16s ease-out;
+}
+.lang-pop[hidden] {
+  display: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .lang-pop { animation: none; }
+}
+/* Body/14R_Multi */
+.lang-pop__title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.6;
+  letter-spacing: -0.01em;
+  color: var(--lp-title);
+}
+/* Label/16SB_Single — 국기 24 칸 + 8px */
+.lang-pop__item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 24px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: var(--lp-text);
+  white-space: nowrap;
+}
+.lang-pop__item img {
+  flex: none;
+  width: 24px;
+  height: 17.1429px;
+}
+
 
 
 /* PC 시안은 없음 — PC 에서는 열리지 않고 상단 검색창을 그대로 씀 */
