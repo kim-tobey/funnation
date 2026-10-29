@@ -220,6 +220,7 @@
 [data-theme="light"] img[src$="icHome.svg"] { content: url("assets/light/icHome.svg"); }
 [data-theme="light"] img[src$="v2/lnb-live.svg"] { content: url("assets/light/v2/lnb-live.svg"); }
 [data-theme="light"] img[src$="v2/lnb-fun-live.svg"] { content: url("assets/light/v2/lnb-fun-live.svg"); }
+[data-theme="light"] img[src$="v2/lnb-external.svg"] { content: url("assets/light/v2/lnb-external.svg"); }
 [data-theme="light"] img[src$="v2/mo-search.svg"] { content: url("assets/light/v2/mo-search.svg"); }
 [data-theme="light"] img[src$="v2/mo-logo.svg"] { content: url("assets/light/v2/mo-logo.svg"); }
 [data-theme="light"] img[src$="icTag.svg"] { content: url("assets/light/icTag.svg"); }
@@ -298,9 +299,9 @@ ul {
   display: flex;
   flex-direction: column;
   width: 100%;
-  /* 1440 고정이면 1280~1439 창에서 접힌 LNB 옆 4열 카드의 마지막 열이 화면 밖으로 밀림.
-     1280 아래는 GNB 검색창·퀵카드 문구가 겹쳐 그 폭에서만 가로 스크롤 */
-  min-width: 1280px;
+  /* 최소 폭보다 좁은 창에선 4열 카드의 마지막 열이 화면 밖으로 밀림.
+     1024~1279 는 GNB 검색창·퀵카드 문구를 줄여서 맞추고, 1024 아래만 가로 스크롤 */
+  min-width: 1024px;
   min-height: 1520px;
   overflow: hidden;
   border-bottom-left-radius: 8px;
@@ -688,6 +689,41 @@ ul {
   .nav-search__input,
   .nav-search__panel,
   .nav-search.is-open .nav-search__panel {
+    transition: none;
+  }
+}
+/* 1024~1299 — 가운데 고정(396px)이면 지갑 칩과 겹치거나 20px 안으로 붙어서, 로고와 오른쪽 버튼 사이에서 줄어들게 [구현 제안] */
+@media (min-width: 768px) and (max-width: 1299px) {
+  .top-nav__left,
+  .top-nav__right > * {
+    flex-shrink: 0;
+  }
+  .gold-chip {
+    white-space: nowrap;
+  }
+  .nav-search {
+    position: relative;
+    top: auto;
+    left: auto;
+    flex: 0 1 396px;
+    min-width: 200px;
+    margin: 0 20px;
+    transform: none;
+  }
+  .nav-search__icon {
+    left: calc(100% - 26px);
+    transform: translate(0, -50%);
+    transition: left 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .nav-search.is-open .nav-search__icon {
+    left: 8px;
+  }
+  .nav-search__panel {
+    width: calc(100% + 2px);
+  }
+}
+@media (min-width: 768px) and (max-width: 1299px) and (prefers-reduced-motion: reduce) {
+  .nav-search__icon {
     transition: none;
   }
 }
@@ -1171,6 +1207,14 @@ ul {
   display: flex;
   align-items: center;
   gap: 4px;
+}
+/* 외부 링크 메뉴 (고객센터 65522:103235) — 이름 옆 2px 에 16px 바로가기 아이콘 */
+.lnb__label--ext {
+  gap: 2px;
+}
+.lnb__item .lnb__ext {
+  width: 16px;
+  height: 16px;
 }
 .lnb__beta {
   display: flex;
@@ -2436,6 +2480,7 @@ ul {
 [data-lnb="mini"] .lnb__caption,
 [data-lnb="mini"] .lnb__rule.auth-in,
 [data-lnb="mini"] .lnb__beta,
+[data-lnb="mini"] .lnb__ext,
 [data-lnb="mini"] .toggle {
   display: none;
 }
@@ -2782,6 +2827,32 @@ ul {
   width: 141px;
   height: 84px;
   margin-top: -1px;
+}
+/* 1024~1279 — 카드가 좁아지면 문구가 그림 밑으로 들어가서, 그림 자리를 비우고 제목은 넘칠 때만 말줄임 · 설명은 두 줄.
+   비우는 폭은 그림 왼쪽 끝까지(108px) — 위젯·커뮤니티 그림은 투명 여백이 있어 1440 시안처럼 몇 px 겹쳐도 됨 [구현 제안] */
+@media (min-width: 768px) and (max-width: 1279px) {
+  .quick-card__text {
+    max-width: calc(100% - 108px);
+  }
+  .quick-card:has(.quick-card__img--community) .quick-card__text {
+    max-width: calc(100% - 106px);
+  }
+  .quick-card__text strong {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  /* 호버 화살표(22 + 6px)는 평소 투명이라 폭만 차지해서 제목이 먼저 잘림 → 이 구간에선 뺌 */
+  .quick-card__text strong::after {
+    display: none;
+  }
+  .quick-card__text span {
+    display: -webkit-box;
+    overflow: hidden;
+    white-space: normal;
+    word-break: keep-all;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
 }
 .quick-cards + .live-section,
 .ad-banner--top + .live-section {
