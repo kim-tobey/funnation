@@ -941,6 +941,18 @@
   }
 })();
 
+/* 크리에이터 카드 팔로우 하트 (65415:42570) — 누를 때마다 빈 하트 ↔ 채운 하트. 서버 연동 전이라 저장하지 않음 */
+(function () {
+  var btns = document.querySelectorAll("[data-follow]");
+  for (var i = 0; i < btns.length; i++) {
+    btns[i].addEventListener("click", function () {
+      var on = this.getAttribute("aria-pressed") !== "true";
+      this.setAttribute("aria-pressed", on ? "true" : "false");
+      this.querySelector("img").src = "assets/v2/creator/" + (on ? "heart-on.svg" : "heart.svg");
+    });
+  }
+})();
+
 /* 라이브 방송 서브탭 — 인기라이브 ↔ 전체라이브(64586:116579) 화면 전환.
    새로고침 없이 바꾸고 주소에 ?tab=all 을 남겨 공유·새로고침해도 같은 탭이 열림 */
 (function () {
