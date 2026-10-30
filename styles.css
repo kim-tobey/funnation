@@ -1199,6 +1199,9 @@ ul {
 [data-theme="light"] .lnb__item--active .lnb__item-icon img[src$="lnb-creator-active.svg"] {
   content: url("assets/light/v2/lnb-creator-active.svg");
 }
+[data-theme="light"] .lnb__item--active .lnb__item-icon img[src$="lnb-fun-live-active.svg"] {
+  content: url("assets/light/v2/lnb-fun-live-active.svg");
+}
 .lnb__item--toggle {
   justify-content: space-between;
 }
@@ -3524,6 +3527,8 @@ ul {
     margin: 0;
     overflow: hidden;
     transform: translateY(-50%);
+    /* 제목 칸이 좌우 버튼(홈 검색 옆 알림 등) 위에 겹쳐 있어 클릭은 아래 버튼으로 통과 */
+    pointer-events: none;
     font-size: 22px;
     font-weight: 600;
     line-height: 28px;
