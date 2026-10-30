@@ -145,6 +145,11 @@
       <button class="mo-appbar__btn mo-appbar__search" type="button" aria-label="검색" data-node-id="64162:199925">
         <img src="assets/v2/mo-search.svg" width="24" height="24" alt="">
       </button>
+      <!-- 알림 (65562:21234) — 홈 앱바는 검색 옆. 검색·알림·로그인 화면에서는 숨김 -->
+      <button class="mo-appbar__btn mo-appbar__home-bell" type="button" aria-label="알림">
+        <img src="assets/mo/appbar-bell.svg" width="24" height="24" alt="">
+        <span class="mo-appbar__badge">2</span>
+      </button>
       <button class="mo-appbar__btn" type="button" aria-label="뒤로 가기" data-login-back data-history-back>
         <img src="assets/mo/appbar-back.svg" width="24" height="24" alt="">
       </button>
@@ -497,7 +502,7 @@
         <section class="live-section" data-node-id="63998:5471">
 
           <div class="section-header" data-node-id="64112:13464">
-            <h2>🏆 추천 토크 채널</h2>
+            <h2>🏆 펀네이션 라이브</h2>
             <a href="#">전체보기</a>
           </div>
 
@@ -665,7 +670,7 @@
           </div>
 
           <div class="section-header" data-node-id="64112:13518">
-            <h2>🔥 라이브 탑 50</h2>
+            <h2>🔥 유튜브 라이브 탑 50</h2>
             <a href="#">전체보기</a>
           </div>
 
@@ -1290,10 +1295,12 @@
     <a class="bottom-nav__item" href="#">
       <img src="assets/imgComponent4.svg" width="24" height="24" alt="">커뮤니티
     </a>
-    <!-- 로그인 / 내 정보 (v2.0 64085:89486) — 로그아웃 상태면 "로그인"이고 로그인 화면을 연다 -->
+    <!-- 내 정보 (v2.0 64085:89486) — 로그아웃 상태면 로그인 화면을 연다 -->
     <a class="bottom-nav__item" href="#login" id="bn-account">
-      <img src="assets/mo/nav-user.svg" width="24" height="24" alt="">
-      <span class="auth-out">로그인</span><span class="auth-in">내 정보</span>
+      <!-- 로그아웃은 사람 아이콘, 로그인은 프로필 사진 (65183:65641) — 라벨은 둘 다 "내 정보" -->
+      <img class="auth-out" src="assets/mo/nav-user-out.svg" width="24" height="24" alt="">
+      <img class="bottom-nav__avatar auth-in" src="assets/mo/nav-avatar.png" width="24" height="24" alt="">
+      내 정보
     </a>
   </div>
   <!-- 홈 인디케이터 — [테스트용] 시안 재현 -->

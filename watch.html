@@ -967,10 +967,12 @@
     <a class="bottom-nav__item" href="#">
       <img src="assets/imgComponent4.svg" width="24" height="24" alt="">커뮤니티
     </a>
-    <!-- 로그인 / 내 정보 (v2.0 64085:89486) — 로그아웃 상태면 "로그인"이고 로그인 화면을 연다 -->
+    <!-- 내 정보 (v2.0 64085:89486) — 로그아웃 상태면 로그인 화면을 연다 -->
     <a class="bottom-nav__item" href="#login" id="bn-account">
-      <img src="assets/mo/nav-user.svg" width="24" height="24" alt="">
-      <span class="auth-out">로그인</span><span class="auth-in">내 정보</span>
+      <!-- 로그아웃은 사람 아이콘, 로그인은 프로필 사진 (65183:65641) — 라벨은 둘 다 "내 정보" -->
+      <img class="auth-out" src="assets/mo/nav-user-out.svg" width="24" height="24" alt="">
+      <img class="bottom-nav__avatar auth-in" src="assets/mo/nav-avatar.png" width="24" height="24" alt="">
+      내 정보
     </a>
   </div>
   <!-- 홈 인디케이터 (시안 재현용) -->

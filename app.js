@@ -356,7 +356,7 @@
     open("search");
     document.querySelector("#search-form input").focus({ preventScroll: true });
   });
-  var bells = document.querySelectorAll(".mo-appbar__bell");
+  var bells = document.querySelectorAll(".mo-appbar__bell, .mo-appbar__home-bell");
   for (var i = 0; i < bells.length; i++) bells[i].addEventListener("click", function () { open("notice"); });
   var closes = document.querySelectorAll("[data-subview-close]");
   for (var c = 0; c < closes.length; c++) closes[c].addEventListener("click", close);

@@ -3909,6 +3909,17 @@ ul {
   [data-theme="light"] .bottom-nav__item img[src$="nav-live.svg"] { content: url("assets/light/mo/nav-live.svg"); }
   [data-theme="light"] .bottom-nav__item img[src$="nav-fav.svg"] { content: url("assets/light/mo/nav-fav.svg"); }
   [data-theme="light"] .bottom-nav__item img[src$="nav-user.svg"] { content: url("assets/light/mo/nav-user.svg"); }
+  /* 내 정보 (65183:65641) — 라벨만 SemiBold. 로그인 프로필 사진은 24 칸 안에 21.12 (흰 테두리·그림자 포함 이미지) */
+  #bn-account {
+    font-weight: 600;
+  }
+  .bottom-nav__item .bottom-nav__avatar {
+    box-sizing: border-box;
+    padding: 1.44px;
+  }
+  [data-theme="light"] .bottom-nav__item img[src$="nav-user-out.svg"] { content: url("assets/light/mo/nav-user-out.svg"); }
+  .bottom-nav__item.is-active img[src$="nav-user-out.svg"] { content: url("assets/mo/nav-user-out-active.svg"); }
+  [data-theme="light"] .bottom-nav__item.is-active img[src$="nav-user-out.svg"] { content: url("assets/light/mo/nav-user-out-active.svg"); }
 
   /* 플로팅 버튼 — 하단 내비 위로 */
   .fab-auth {
@@ -4299,8 +4310,9 @@ ul {
   [data-view="notice"] [data-login-back] {
     display: none;
   }
-  /* 홈 앱바의 알림 버튼은 홈 시안에 없어 검색·알림 화면에서만 표시 */
-  :root:not([data-view="search"]):not([data-view="notice"]) .mo-appbar--home .mo-appbar__bell {
+  /* 홈 앱바 알림은 왼쪽 검색 옆(65562:21234) — 오른쪽 알림 버튼은 검색·알림 화면에서만 표시 */
+  :root:not([data-view="search"]):not([data-view="notice"]) .mo-appbar--home .mo-appbar__bell,
+  [data-view] .mo-appbar__home-bell {
     display: none;
   }
   /* 라이브 방송 — 앱바와 2뎁스 탭 사이 1px 선 없음 (탭이 보일 때만. 검색·알림·로그인 화면은 선 유지) */
