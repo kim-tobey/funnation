@@ -5229,8 +5229,9 @@ ul {
   min-width: 0;
 }
 
-/* LNB — 평소엔 숨기고, 햄버거를 누르면 GNB 아래 왼쪽에서 영상 위로 겹쳐 열림 */
-[data-page="watch"] .lnb {
+/* LNB — 평소엔 숨기고, 햄버거를 누르면 GNB 아래 왼쪽에서 영상 위로 겹쳐 열림 (PC 정책안내 terms.html 도 같은 방식) */
+[data-page="watch"] .lnb,
+[data-page="terms"] .lnb {
   position: fixed;
   top: 65px;
   bottom: 0;
@@ -5243,11 +5244,13 @@ ul {
   visibility: hidden;
   transition: transform 0.25s ease, visibility 0.25s;
 }
-[data-page="watch"][data-drawer="open"] .lnb {
+[data-page="watch"][data-drawer="open"] .lnb,
+[data-page="terms"][data-drawer="open"] .lnb {
   transform: none;
   visibility: visible;
 }
-[data-page="watch"] .lnb-backdrop {
+[data-page="watch"] .lnb-backdrop,
+[data-page="terms"] .lnb-backdrop {
   position: fixed;
   top: 65px;
   right: 0;
@@ -5260,7 +5263,8 @@ ul {
   pointer-events: none;
   transition: opacity 0.25s ease;
 }
-[data-page="watch"][data-drawer="open"] .lnb-backdrop {
+[data-page="watch"][data-drawer="open"] .lnb-backdrop,
+[data-page="terms"][data-drawer="open"] .lnb-backdrop {
   opacity: 1;
   pointer-events: auto;
 }
@@ -5271,7 +5275,9 @@ ul {
 }
 @media (prefers-reduced-motion: reduce) {
   [data-page="watch"] .lnb,
-  [data-page="watch"] .lnb-backdrop {
+  [data-page="watch"] .lnb-backdrop,
+  [data-page="terms"] .lnb,
+  [data-page="terms"] .lnb-backdrop {
     transition: none;
   }
 }
@@ -6771,5 +6777,170 @@ ul {
   .creators-pager {
     gap: 8px;
     padding: 8px 0;
+  }
+}
+
+/* ============================================================
+   펀네이션 정책안내 · 이용안내 (v2.0 65571:109874) — terms.html. 시안은 PC 다크만 있음
+   ============================================================ */
+/* 위 64 · 좌우 44 · 아래 64(푸터까지) — 제목 → 탭 44 · 탭 → 본문 64 */
+.terms {
+  display: flex;
+  flex-direction: column;
+  gap: 44px;
+  width: 100%;
+  /* [구현 제안] 1440 시안은 꽉 찬 폭 — 아주 넓은 화면에서 줄 길이만 XL 컨테이너(1536)로 제한 */
+  max-width: 1536px;
+  margin: 0 auto;
+  padding: 64px 44px;
+}
+/* Headline/H7 — Pretendard Bold 25 · 행간 30 */
+.terms__title {
+  margin: 0;
+  font-size: 25px;
+  font-weight: 700;
+  line-height: 30px;
+  color: var(--color-text-strong);
+}
+.terms__body {
+  display: flex;
+  flex-direction: column;
+  gap: 64px;
+}
+/* 정책 탭 (65571:109881) — 7칸 균등 · 56px, 선택은 아래 3px Primary, 나머지는 1px Border100.
+   좁은 창에서 글자보다 칸이 좁아지면 가로 스크롤 */
+.terms-tabs {
+  display: flex;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.terms-tabs::-webkit-scrollbar {
+  display: none;
+}
+.terms-tabs__item {
+  display: flex;
+  flex: 1 0 0;
+  align-items: center;
+  justify-content: center;
+  min-width: max-content;
+  height: 56px;
+  padding: 10px;
+  border-bottom: 1px solid var(--color-border-100);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 21px;
+  color: var(--color-text-normal);
+  white-space: nowrap;
+}
+.terms-tabs__item.is-active {
+  border-bottom: 3px solid var(--color-brand-primary);
+  color: var(--color-brand-primary);
+}
+/* 시행일 줄 → 조항 24 */
+.terms__content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+/* 시행일 (65571:109897) — 오른쪽 정렬, 라벨과 선택 사이 14 */
+.terms-date {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 14px;
+}
+.terms-date__label {
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--color-text-depth-400);
+}
+/* select box (65571:109902) — 지갑 select 와 같은 틀, 글자만 Body/B1 14 · 시안 폭 145 (안쪽 선 포함 왼쪽 16) */
+.terms-date__select select {
+  padding: 0 30px 0 15px;
+  font-size: 14px;
+}
+/* 조항 사이 28 · 제목 → 본문 12 */
+.terms-articles {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+.terms-article {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--color-text-depth-400);
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+.terms-article h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 21px;
+  color: var(--color-text-normal);
+}
+.terms-article p,
+.terms-article ol {
+  margin: 0;
+}
+/* 번호 목록 — 1. 2. 3. 은 22.5 들여쓰기, 하위 a. b. c. 는 45 */
+.terms-article ol {
+  padding-left: 22.5px;
+  list-style: decimal;
+}
+.terms-article ol ol {
+  list-style: lower-alpha;
+}
+
+/* [구현 제안] 모바일 시안 없음 — 앱바 제목(정책안내)이 있어 본문 제목은 숨기고, 탭은 가로 스크롤 */
+@media (max-width: 767px) {
+  /* 모바일은 다른 화면과 같은 드로어 (PC 의 겹침 LNB 위치 · 그림자 되돌림) */
+  [data-page="terms"] .lnb {
+    top: var(--mo-top);
+    bottom: var(--bottom-nav-h);
+    box-shadow: none;
+  }
+  [data-page="terms"] .lnb-backdrop {
+    top: var(--mo-top);
+    bottom: var(--bottom-nav-h);
+  }
+  .terms {
+    gap: 0;
+    padding: 8px 16px 40px;
+  }
+  .terms__title {
+    display: none;
+  }
+  .terms__body {
+    gap: 24px;
+  }
+  .terms-tabs {
+    margin: 0 -16px;
+  }
+  .terms-tabs__item {
+    flex: none;
+    min-width: 0;
+    height: 48px;
+    padding: 10px 14px;
+    font-size: 15px;
+  }
+  .terms-date__label {
+    font-size: 14px;
+  }
+  .terms-articles {
+    gap: 24px;
+  }
+  .terms-article {
+    gap: 8px;
+    font-size: 14px;
+  }
+  .terms-article h3 {
+    font-size: 16px;
+    line-height: 20px;
   }
 }

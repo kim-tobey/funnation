@@ -63,11 +63,14 @@
   function currentDesktopState() {
     return autoMini.matches ? autoState || "mini" : desktopState;
   }
-  // 영상 상세(watch.html)는 LNB 를 숨겨 두고 햄버거로 영상 위에 겹쳐 엶 (펼침/접힘 저장과 무관)
-  var watch = root.getAttribute("data-page") === "watch";
+  // 영상 상세(watch.html) · PC 정책안내(terms.html)는 LNB 를 숨겨 두고 햄버거로 본문 위에 겹쳐 엶 (펼침/접힘 저장과 무관)
+  var page = root.getAttribute("data-page");
+  function overlay() {
+    return page === "watch" || (page === "terms" && !mobile.matches);
+  }
 
   function render() {
-    if (watch) {
+    if (overlay()) {
       root.setAttribute("data-lnb", "full");
       root.setAttribute("data-drawer", drawerOpen ? "open" : "closed");
       btn.setAttribute("aria-expanded", drawerOpen ? "true" : "false");
@@ -101,7 +104,7 @@
   lnb.addEventListener("transitioncancel", endAnim);
 
   btn.addEventListener("click", function () {
-    if (watch) {
+    if (overlay()) {
       drawerOpen = !drawerOpen;
       render();
       return;
