@@ -6977,7 +6977,7 @@ ul {
   --fw-tool-line: #dcdcdc;
   --fw-tool-icon: none;
   --fw-rank-title: #dfe5ed;
-  --fw-rank-card: #31354f;
+  --fw-rank-card: var(--color-bg-400);
   --fw-rank-medal: #2a2d3f;
   --fw-title: #eef0f3;
   --fw-tag-bg: #283758;
@@ -7474,13 +7474,13 @@ ul {
 .fwatch.is-folded .fchat__fold img {
   transform: rotate(180deg);
 }
-/* 메뉴 (65605:98483) — 42px · 아래 선, 시청자 수(#FF4242) · 세로선 · 28px 원형 버튼 3개 */
+/* 메뉴 (65605:98483) — 42px · 좌우 12 · 아래 선, 시청자 수(#FF4242) · 세로선 · 28px 원형 버튼 3개 */
 .fchat__menu {
   display: flex;
   flex: none;
   align-items: center;
   height: 42px;
-  padding: 0 16px;
+  padding: 0 12px;
   border-bottom: 1px solid var(--fw-line);
 }
 .fchat__watching {
@@ -7516,17 +7516,17 @@ ul {
 .fchat__tool img {
   filter: var(--fw-tool-icon);
 }
-/* 이번 방송 후원 랭킹 — 접힘 42px(65605:98504) / 펼침 93px(65605:101510): 1~3위 카드 */
+/* 이번 방송 후원 랭킹 — 접힘 42px(65605:98504) / 펼침(65605:101510): 좌우 12, 1~3위 카드(BG 400) */
 .frank {
   display: flex;
   flex: none;
   flex-direction: column;
   gap: 4px;
-  padding: 7px 16px;
+  padding: 7px 12px;
   border-bottom: 1px solid var(--fw-line);
 }
 .frank:has(.frank__head[aria-expanded="true"]) {
-  padding: 4px 16px 12px;
+  padding: 4px 12px 12px;
 }
 .frank__head {
   display: flex;
@@ -7549,11 +7549,8 @@ ul {
 .frank__chevron img {
   transform: rotate(90deg);
 }
-[data-theme="light"] .frank__head[aria-expanded="false"] .frank__chevron img {
+[data-theme="light"] .frank__chevron img {
   filter: brightness(0.25);
-}
-.frank__head[aria-expanded="true"] .frank__chevron {
-  background: var(--color-brand-tertial);
 }
 /* 펼침 화살표는 시안에서 1px 위로 보정 */
 .frank__head[aria-expanded="true"] .frank__chevron img {
