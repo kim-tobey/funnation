@@ -7534,7 +7534,7 @@ ul {
   justify-content: space-between;
   width: 100%;
   height: 27px;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
   color: var(--fw-rank-title);
 }
@@ -7555,8 +7555,10 @@ ul {
 .frank__head[aria-expanded="true"] .frank__chevron {
   background: var(--color-brand-tertial);
 }
+/* 펼침 화살표는 시안에서 1px 위로 보정 */
 .frank__head[aria-expanded="true"] .frank__chevron img {
   content: url("assets/fun-watch/rank-chevron-on.svg");
+  transform: rotate(90deg) translateX(-1px);
 }
 .frank__list {
   display: flex;
@@ -7574,22 +7576,20 @@ ul {
   align-items: center;
   gap: 6px;
   min-width: 0;
-  padding: 8px;
+  padding: 8px 8px 9px;
   border-radius: 8px;
   background: var(--fw-rank-card);
 }
+/* 메달 (fluent-emoji-flat) — 24 · 모서리 4 칸 가운데 */
 .frank__medal {
   display: flex;
   flex: none;
   align-items: center;
   justify-content: center;
-  width: 20px;
-  height: 20px;
-  border-radius: 10px;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
   background: var(--fw-rank-medal);
-  font-size: 16px;
-  line-height: 16px;
-  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.13));
 }
 .frank__who {
   display: flex;
@@ -7599,17 +7599,17 @@ ul {
   color: var(--fw-rank-title);
   white-space: nowrap;
 }
-/* 이름 S-Core Dream 12 (시안 6 Bold — 웹폰트는 7 ExtraBold 만 있음) · 금액 Pretendard Medium 11 */
+/* 이름 Pretendard Bold 13/1.2 · 금액 Pretendard Medium 11 (1px 들여씀) */
 .frank__who strong {
   overflow: hidden;
-  font-family: var(--font-score);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
-  line-height: 1;
+  line-height: 1.2;
   letter-spacing: -0.01em;
   text-overflow: ellipsis;
 }
 .frank__who span {
+  padding-left: 1px;
   font-size: 11px;
   font-weight: 500;
   line-height: normal;
