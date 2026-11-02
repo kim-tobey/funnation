@@ -63,10 +63,10 @@
   function currentDesktopState() {
     return autoMini.matches ? autoState || "mini" : desktopState;
   }
-  // 영상 상세(watch.html) · PC 정책안내(terms.html)는 LNB 를 숨겨 두고 햄버거로 본문 위에 겹쳐 엶 (펼침/접힘 저장과 무관)
+  // 영상 상세(watch.html · fun-watch.html) · PC 정책안내(terms.html)는 LNB 를 숨겨 두고 햄버거로 본문 위에 겹쳐 엶 (펼침/접힘 저장과 무관)
   var page = root.getAttribute("data-page");
   function overlay() {
-    return page === "watch" || (page === "terms" && !mobile.matches);
+    return page === "watch" || ((page === "fun-watch" || page === "terms") && !mobile.matches);
   }
 
   function render() {
@@ -1286,6 +1286,7 @@
 })();
 
 /* 홈 · 라이브 방송 — 방송/영상 썸네일을 누르면 영상 상세(watch.html)로 이동.
+   펀네이션 라이브(fun-live.html)는 자체 스트리밍 상세(fun-watch.html)로.
    서버 연동 전이라 어떤 썸네일이든 같은 데모 영상을 연다. 광고 카드는 제외 */
 (function () {
   var thumbs = document.querySelectorAll(".card:not(.card--ad) .card__thumb, .vod-card .vod-card__thumb");
@@ -1301,15 +1302,17 @@
       if (e.key === "Enter") go();
     });
   }
+  var target = /fun-live\.html$/.test(location.pathname) ? "fun-watch.html" : "watch.html";
   function go() {
-    location.href = "watch.html";
+    location.href = target;
   }
 })();
 
-/* 영상 상세 ver.3 (64795:14999) — 채팅 · 후원 패널 4종. 서버 연동 전 데모라 보내거나 결제하지 않음 */
+/* 영상 상세 ver.3 (64795:14999) — 채팅 · 후원 패널 4종. 서버 연동 전 데모라 보내거나 결제하지 않음
+   펀네이션 라이브 상세(.fwatch)도 같은 후원 패널(후원 · 시그니처)을 써서 이 부분을 함께 씀 */
 (function () {
   var root = document.documentElement;
-  var watch = document.querySelector(".watch");
+  var watch = document.querySelector(".watch, .fwatch");
   if (!watch) return;
 
   /* YouTube 임베드 — 영상 ID 는 .watch 의 data-yt-id. 라이브 채팅은 embed_domain 이 지금 주소의 도메인과 같아야 하고
@@ -1318,32 +1321,35 @@
   var player = watch.querySelector("[data-yt-player]");
   var ytChat = watch.querySelector("[data-yt-chat]");
   var host = location.hostname;
-  // 파일로 열면 Referer 가 없어 YouTube 가 "동영상 플레이어 구성 오류(153)" 를 냄 → 플레이어 · 채팅 대신 안내 문구
-  if (location.protocol === "file:" || !host) {
-    player.hidden = true;
-    ytChat.hidden = true;
-    watch.querySelector("[data-yt-player-off]").hidden = false;
-    watch.querySelector("[data-yt-chat-off]").hidden = false;
-  } else {
-    player.src = "https://www.youtube.com/embed/" + ytId + "?autoplay=1&mute=1&playsinline=1&origin=" + encodeURIComponent(location.origin);
-  }
-  function chatSrc() {
-    var dark = root.getAttribute("data-theme") !== "light";
-    return "https://www.youtube.com/live_chat?v=" + ytId + "&embed_domain=" + encodeURIComponent(host) + (dark ? "&dark_theme=1" : "");
-  }
-  if (!ytChat.hidden) {
-    ytChat.src = chatSrc();
-    // 테마를 바꾸면 채팅도 같은 테마로 다시 불러옴
-    new MutationObserver(function () {
-      var next = chatSrc();
-      if (ytChat.src !== next) ytChat.src = next;
-    }).observe(root, { attributes: true, attributeFilter: ["data-theme"] });
+  // YouTube 상세(watch.html)에만 있음 — 펀네이션 라이브 상세는 자체 플레이어
+  if (player) {
+    // 파일로 열면 Referer 가 없어 YouTube 가 "동영상 플레이어 구성 오류(153)" 를 냄 → 플레이어 · 채팅 대신 안내 문구
+    if (location.protocol === "file:" || !host) {
+      player.hidden = true;
+      ytChat.hidden = true;
+      watch.querySelector("[data-yt-player-off]").hidden = false;
+      watch.querySelector("[data-yt-chat-off]").hidden = false;
+    } else {
+      player.src = "https://www.youtube.com/embed/" + ytId + "?autoplay=1&mute=1&playsinline=1&origin=" + encodeURIComponent(location.origin);
+    }
+    function chatSrc() {
+      var dark = root.getAttribute("data-theme") !== "light";
+      return "https://www.youtube.com/live_chat?v=" + ytId + "&embed_domain=" + encodeURIComponent(host) + (dark ? "&dark_theme=1" : "");
+    }
+    if (!ytChat.hidden) {
+      ytChat.src = chatSrc();
+      // 테마를 바꾸면 채팅도 같은 테마로 다시 불러옴
+      new MutationObserver(function () {
+        var next = chatSrc();
+        if (ytChat.src !== next) ytChat.src = next;
+      }).observe(root, { attributes: true, attributeFilter: ["data-theme"] });
+    }
   }
 
   /* 채팅 ↔ 후원하기 탭 — 후원하기는 종류 탭(일반후원·시그니처·영상·미션) + 패널, 마지막에 고른 종류를 기억.
      show(null) 은 채팅으로 돌아감 */
   var chat = document.getElementById("wchat");
-  var modeTabs = watch.querySelectorAll(".wchat__mode-tab");
+  var modeTabs = watch.querySelectorAll("[data-chat-tab]");
   var tabs = watch.querySelectorAll("[data-donate]");
   var panels = watch.querySelectorAll("[data-donate-panel]");
   var current = null;
@@ -1354,7 +1360,8 @@
     chat.setAttribute("data-mode", key ? "donate" : "chat");
     for (var m = 0; m < modeTabs.length; m++) modeTabs[m].setAttribute("aria-selected", (modeTabs[m].getAttribute("data-chat-tab") === "donate") === !!key ? "true" : "false");
     for (var i = 0; i < panels.length; i++) panels[i].hidden = panels[i].getAttribute("data-donate-panel") !== key;
-    for (var j = 0; j < tabs.length; j++) tabs[j].setAttribute("aria-pressed", tabs[j].getAttribute("data-donate") === key ? "true" : "false");
+    // 펀네이션 라이브 상세는 채팅 · 후원 · 시그니처가 한 줄 탭(role=tab)
+    for (var j = 0; j < tabs.length; j++) tabs[j].setAttribute(tabs[j].getAttribute("role") === "tab" ? "aria-selected" : "aria-pressed", tabs[j].getAttribute("data-donate") === key ? "true" : "false");
   }
   var modeBtns = watch.querySelectorAll("[data-chat-tab]");
   for (var b = 0; b < modeBtns.length; b++) modeBtns[b].addEventListener("click", function () {
@@ -1575,6 +1582,258 @@
       if (panel) panel.querySelector("[data-donate-submit]").focus();
     }
   }, true);
+})();
+
+/* 펀네이션 라이브 영상 상세 (v2.0 65605:98199) — 자체 스트리밍 플레이어 · 방송 정보 · 채팅.
+   서버 연동 전 데모: 송출 주소가 없으면 시안 화면(포스터)만 보이고, 채팅은 시안 메시지에 몇 초마다 새 메시지를 더함.
+   후원 · 시그니처 패널은 위 영상 상세 코드가 함께 처리 */
+(function () {
+  var root = document.documentElement;
+  var fw = document.querySelector(".fwatch");
+  if (!fw) return;
+
+  /* 플레이어 — .fplayer 의 data-stream-src 에 송출 주소를 넣으면 재생.
+     HLS(.m3u8)는 Safari 만 바로 재생되고, 다른 브라우저는 hls.js 같은 재생기를 붙여야 함 (아직 없음) */
+  var box = fw.querySelector(".fplayer");
+  var video = fw.querySelector("[data-fplayer-video]");
+  var src = box.getAttribute("data-stream-src");
+  if (src) {
+    video.src = src;
+    video.play().catch(function () {
+      // 소리 있는 자동 재생이 막히면 음소거로 다시 시도
+      video.muted = true;
+      sync();
+      video.play().catch(function () {});
+    });
+  }
+  var playBtn = fw.querySelector("[data-fplayer-play]");
+  var muteBtn = fw.querySelector("[data-fplayer-mute]");
+  var demoPaused = false;
+  // aria-pressed="true" 면 꺼진 아이콘(재생 · 음소거)을 보여줌
+  function sync() {
+    var paused = src ? video.paused : demoPaused;
+    playBtn.setAttribute("aria-pressed", paused ? "true" : "false");
+    playBtn.setAttribute("aria-label", paused ? "재생" : "일시정지");
+    muteBtn.setAttribute("aria-pressed", video.muted ? "true" : "false");
+    muteBtn.setAttribute("aria-label", video.muted ? "음소거 해제" : "음소거");
+  }
+  video.addEventListener("play", sync);
+  video.addEventListener("pause", sync);
+  video.addEventListener("volumechange", sync);
+  playBtn.addEventListener("click", function () {
+    if (!src) demoPaused = !demoPaused;
+    else if (video.paused) video.play();
+    else video.pause();
+    sync();
+  });
+  muteBtn.addEventListener("click", function () {
+    video.muted = !video.muted;
+    sync();
+  });
+  // 실시간 — 라이브 맨 끝으로 이동해 재생
+  fw.querySelector("[data-fplayer-live]").addEventListener("click", function () {
+    if (src && video.seekable.length) video.currentTime = video.seekable.end(video.seekable.length - 1);
+    if (src) video.play();
+    demoPaused = false;
+    sync();
+  });
+
+  // 화질 — 목록에서 고르면 버튼 글자만 바뀜 (화질별 송출 주소는 서버 연동 때)
+  var qBtn = fw.querySelector("[data-fquality-btn]");
+  var qMenu = document.getElementById("fquality-menu");
+  function qToggle(open) {
+    qMenu.hidden = !open;
+    qBtn.setAttribute("aria-expanded", open ? "true" : "false");
+  }
+  qBtn.addEventListener("click", function () { qToggle(qMenu.hidden); });
+  qMenu.addEventListener("click", function (e) {
+    var item = e.target.closest("[role=menuitemradio]");
+    if (!item) return;
+    var items = qMenu.querySelectorAll("[role=menuitemradio]");
+    for (var i = 0; i < items.length; i++) items[i].setAttribute("aria-checked", items[i] === item ? "true" : "false");
+    fw.querySelector("[data-fquality-label]").textContent = item.textContent;
+    qToggle(false);
+    qBtn.focus();
+  });
+  document.addEventListener("click", function (e) {
+    if (!qMenu.hidden && !e.target.closest(".fquality")) qToggle(false);
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && !qMenu.hidden) {
+      qToggle(false);
+      qBtn.focus();
+    }
+  });
+
+  // 소리만 듣기 · 기본 화면(끄면 화면 꽉 채움) — [구현 제안] 시안은 버튼 모양만 있음
+  fw.querySelector("[data-fplayer-audio]").addEventListener("click", function () {
+    var on = this.getAttribute("aria-pressed") !== "true";
+    this.setAttribute("aria-pressed", on ? "true" : "false");
+    box.classList.toggle("is-audio", on);
+    fw.querySelector("[data-fplayer-audio-note]").hidden = !on;
+  });
+  fw.querySelector("[data-fplayer-fit]").addEventListener("click", function () {
+    var fit = this.getAttribute("aria-pressed") !== "true";
+    this.setAttribute("aria-pressed", fit ? "true" : "false");
+    this.setAttribute("aria-label", fit ? "기본 화면" : "꽉 찬 화면");
+    box.classList.toggle("is-cover", !fit);
+  });
+  // 작은 창 — 영상이 재생 중일 때만 (포스터만 있는 데모에선 동작 안 함)
+  fw.querySelector("[data-fplayer-pip]").addEventListener("click", function () {
+    if (document.pictureInPictureElement) document.exitPictureInPicture();
+    else if (document.pictureInPictureEnabled && video.readyState > 0) video.requestPictureInPicture().catch(function () {});
+  });
+  var fullBtn = fw.querySelector("[data-fplayer-full]");
+  fullBtn.addEventListener("click", function () {
+    if (document.fullscreenElement) document.exitFullscreen();
+    else if (box.requestFullscreen) box.requestFullscreen();
+  });
+  document.addEventListener("fullscreenchange", function () {
+    var on = document.fullscreenElement === box;
+    fullBtn.setAttribute("aria-pressed", on ? "true" : "false");
+    fullBtn.setAttribute("aria-label", on ? "전체화면 종료" : "전체화면");
+  });
+  sync();
+
+  // 방송 시간 — 1초마다 늘어남
+  var uptime = fw.querySelector("[data-fwatch-uptime]");
+  var sec = +uptime.getAttribute("data-fwatch-uptime");
+  function two(n) { return (n < 10 ? "0" : "") + n; }
+  setInterval(function () {
+    sec++;
+    uptime.textContent = two(Math.floor(sec / 3600)) + ":" + two(Math.floor(sec / 60) % 60) + ":" + two(sec % 60);
+  }, 1000);
+
+  // 팔로우 — 누르면 팔로잉, 팔로워 수 +1 ([구현 제안] 팔로잉 상태 시안 없음)
+  var followers = fw.querySelector("[data-fwatch-followers]");
+  fw.querySelector("[data-fwatch-follow]").addEventListener("click", function () {
+    var on = this.getAttribute("aria-pressed") !== "true";
+    this.setAttribute("aria-pressed", on ? "true" : "false");
+    this.querySelector("span").textContent = on ? "팔로잉" : "팔로우";
+    followers.textContent = (+followers.textContent.replace(/,/g, "") + (on ? 1 : -1)).toLocaleString("ko-KR");
+  });
+  // 공유 — 공유 시트가 있으면 열고, 없으면 주소 복사
+  fw.querySelector("[data-fwatch-share]").addEventListener("click", function () {
+    var btn = this;
+    if (navigator.share) {
+      navigator.share({ title: document.title, url: location.href }).catch(function () {});
+    } else if (navigator.clipboard) {
+      navigator.clipboard.writeText(location.href).then(function () {
+        btn.setAttribute("aria-label", "링크를 복사했어요");
+        btn.title = "링크를 복사했어요";
+        setTimeout(function () {
+          btn.setAttribute("aria-label", "공유하기");
+          btn.removeAttribute("title");
+        }, 2000);
+      });
+    }
+  });
+
+  // 채팅 접기 · 펼치기 — 접으면 플레이어가 오른쪽 끝까지 넓어짐
+  var foldBtn = fw.querySelector("[data-fchat-fold]");
+  function fold(folded) {
+    fw.classList.toggle("is-folded", folded);
+    foldBtn.setAttribute("aria-expanded", folded ? "false" : "true");
+    foldBtn.setAttribute("aria-label", folded ? "채팅 펼치기" : "채팅 접기");
+  }
+  foldBtn.addEventListener("click", function () { fold(!fw.classList.contains("is-folded")); });
+
+  // 방송인 카드 후원하기 — 채팅을 펼치고 후원 탭으로
+  fw.querySelector("[data-fwatch-donate]").addEventListener("click", function () {
+    fold(false);
+    var tab = fw.querySelector('.fsheet__tab[data-donate="general"]');
+    tab.click();
+    tab.focus();
+  });
+
+  // 후원 랭킹 펼치기 · 접기
+  var rankBtn = fw.querySelector("[data-frank-toggle]");
+  rankBtn.addEventListener("click", function () {
+    var open = this.getAttribute("aria-expanded") !== "true";
+    this.setAttribute("aria-expanded", open ? "true" : "false");
+    document.getElementById("frank-list").hidden = !open;
+  });
+
+  // 채팅 뷰 — 메뉴 · 랭킹을 숨기고 채팅만 길게. 다시 누르면 일반 뷰
+  var chat = document.getElementById("wchat");
+  var viewBtn = fw.querySelector("[data-fchat-view]");
+  viewBtn.addEventListener("click", function () {
+    var on = this.getAttribute("aria-pressed") !== "true";
+    this.setAttribute("aria-pressed", on ? "true" : "false");
+    this.querySelector("span").textContent = on ? "일반 뷰" : "채팅 뷰";
+    chat.classList.toggle("is-chat-view", on);
+  });
+
+  // 글자 크기 3단계 — 채팅 목록 글자만
+  var list = fw.querySelector("[data-fchat-list]");
+  var sizes = fw.querySelectorAll("[data-fchat-size]");
+  for (var z = 0; z < sizes.length; z++) sizes[z].addEventListener("click", function () {
+    for (var i = 0; i < sizes.length; i++) sizes[i].setAttribute("aria-pressed", sizes[i] === this ? "true" : "false");
+    list.style.setProperty("--fmsg-size", this.getAttribute("data-fchat-size") + "px");
+  });
+
+  /* 채팅 목록 — 맨 아래에 있을 때만 새 메시지를 따라 내려감 (위로 올려 읽는 중이면 그대로) */
+  function atBottom() { return list.scrollHeight - list.scrollTop - list.clientHeight < 40; }
+  function add(name, text, avatar) {
+    var follow = atBottom();
+    var li = document.createElement("li");
+    li.className = "fmsg";
+    var img = document.createElement("img");
+    img.className = "fmsg__av";
+    img.src = avatar;
+    img.width = img.height = 24;
+    img.alt = "";
+    var p = document.createElement("p");
+    var who = document.createElement("span");
+    who.className = "fmsg__name";
+    who.textContent = name;
+    p.appendChild(who);
+    p.appendChild(document.createTextNode(text));
+    li.appendChild(img);
+    li.appendChild(p);
+    list.appendChild(li);
+    while (list.children.length > 200) list.removeChild(list.firstElementChild);
+    if (follow) list.scrollTop = list.scrollHeight;
+  }
+  list.scrollTop = list.scrollHeight;
+  var DEMO = [
+    ["@barred7548", "i will try soon rose -_-", "av-barred.png"],
+    ["@moonlitvoid7", "sasha it's too quick~", "av-moonlit.jpg"],
+    ["@Čÿvïlłe_řoşeৎ", "Okay^^", "av-rose.png"],
+    ["@vatsaldvora", "hello", "av-vatsal.png"],
+    ["@Sasha.l9ve", "lol", "av-sasha.png"],
+    ["@barred7548", "ohh alright", "av-barred.png"],
+    ["@Čÿvïlłe_řoşeৎ", "brb I have to feed my pups", "av-rose.png"],
+    ["@moonlitvoid7", "🫩", "av-moonlit.jpg"]
+  ];
+  var d = 0;
+  setInterval(function () {
+    if (document.hidden) return;
+    var m = DEMO[d++ % DEMO.length];
+    add(m[0], m[1], "assets/fun-watch/chat/" + m[2]);
+  }, 3500);
+
+  // 보내기 — Enter 로 보내고 Shift+Enter 는 줄바꿈. 로그아웃 상태면 로그인 화면으로
+  var form = fw.querySelector("[data-fchat-form]");
+  var input = fw.querySelector("[data-fchat-input]");
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    if (root.getAttribute("data-auth") === "out") {
+      location.hash = "login";
+      return;
+    }
+    var text = input.value.trim();
+    if (!text) return;
+    list.scrollTop = list.scrollHeight;
+    add("@토비라마", text, "assets/mo/nav-avatar.png");
+    input.value = "";
+  });
+  input.addEventListener("keydown", function (e) {
+    if (e.key === "Enter" && !e.shiftKey && !e.isComposing) {
+      e.preventDefault();
+      form.requestSubmit();
+    }
+  });
 })();
 
 /* PC 알림 팝업 (64686:113964) — GNB 종 아이콘으로 열고 닫음. X · 바깥 클릭 · ESC 로도 닫힘.

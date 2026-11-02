@@ -5229,8 +5229,9 @@ ul {
   min-width: 0;
 }
 
-/* LNB — 평소엔 숨기고, 햄버거를 누르면 GNB 아래 왼쪽에서 영상 위로 겹쳐 열림 (PC 정책안내 terms.html 도 같은 방식) */
+/* LNB — 평소엔 숨기고, 햄버거를 누르면 GNB 아래 왼쪽에서 영상 위로 겹쳐 열림 (펀네이션 라이브 상세 fun-watch.html · PC 정책안내 terms.html 도 같은 방식) */
 [data-page="watch"] .lnb,
+[data-page="fun-watch"] .lnb,
 [data-page="terms"] .lnb {
   position: fixed;
   top: 65px;
@@ -5245,11 +5246,13 @@ ul {
   transition: transform 0.25s ease, visibility 0.25s;
 }
 [data-page="watch"][data-drawer="open"] .lnb,
+[data-page="fun-watch"][data-drawer="open"] .lnb,
 [data-page="terms"][data-drawer="open"] .lnb {
   transform: none;
   visibility: visible;
 }
 [data-page="watch"] .lnb-backdrop,
+[data-page="fun-watch"] .lnb-backdrop,
 [data-page="terms"] .lnb-backdrop {
   position: fixed;
   top: 65px;
@@ -5264,6 +5267,7 @@ ul {
   transition: opacity 0.25s ease;
 }
 [data-page="watch"][data-drawer="open"] .lnb-backdrop,
+[data-page="fun-watch"][data-drawer="open"] .lnb-backdrop,
 [data-page="terms"][data-drawer="open"] .lnb-backdrop {
   opacity: 1;
   pointer-events: auto;
@@ -5276,6 +5280,8 @@ ul {
 @media (prefers-reduced-motion: reduce) {
   [data-page="watch"] .lnb,
   [data-page="watch"] .lnb-backdrop,
+  [data-page="fun-watch"] .lnb,
+  [data-page="fun-watch"] .lnb-backdrop,
   [data-page="terms"] .lnb,
   [data-page="terms"] .lnb-backdrop {
     transition: none;
@@ -6097,7 +6103,7 @@ ul {
   outline: 2px solid #4a92ff;
   outline-offset: 2px;
 }
-/* 후원 패널 스크롤바 — 기본 회색 막대 대신 6px 둥근 막대, 바탕 투명.
+/* 후원 패널 · 펀네이션 라이브 채팅 스크롤바 — 기본 회색 막대 대신 6px 둥근 막대, 바탕 투명.
    Chrome·Safari 는 ::-webkit-scrollbar, Firefox 는 표준 속성
    (Chrome 121+ 은 표준 속성이 있으면 ::-webkit-scrollbar 를 무시해 Firefox 에만 적용) */
 :root {
@@ -6108,25 +6114,31 @@ ul {
   --w-scroll-thumb: #cfd6e1;
   --w-scroll-thumb-hover: #b4bccb;
 }
-.donate__body::-webkit-scrollbar {
+.donate__body::-webkit-scrollbar,
+.fchat__list::-webkit-scrollbar {
   width: 10px;
 }
-.donate__body::-webkit-scrollbar-track {
+.donate__body::-webkit-scrollbar-track,
+.fchat__list::-webkit-scrollbar-track {
   background: transparent;
 }
-.donate__body::-webkit-scrollbar-thumb {
+.donate__body::-webkit-scrollbar-thumb,
+.fchat__list::-webkit-scrollbar-thumb {
   border: 2px solid transparent;
   border-radius: 999px;
   background: var(--w-scroll-thumb) padding-box;
 }
-.donate__body::-webkit-scrollbar-thumb:hover {
+.donate__body::-webkit-scrollbar-thumb:hover,
+.fchat__list::-webkit-scrollbar-thumb:hover {
   background-color: var(--w-scroll-thumb-hover);
 }
-.donate__body::-webkit-scrollbar-button {
+.donate__body::-webkit-scrollbar-button,
+.fchat__list::-webkit-scrollbar-button {
   display: none;
 }
 @supports (-moz-appearance: none) {
-  .donate__body {
+  .donate__body,
+  .fchat__list {
     scrollbar-width: thin;
     scrollbar-color: var(--w-scroll-thumb) transparent;
   }
@@ -6942,5 +6954,991 @@ ul {
   .terms-article h3 {
     font-size: 16px;
     line-height: 20px;
+  }
+}
+
+/* ============================================================
+   펀네이션 라이브 영상 상세 (v2.0 65605:98199) — fun-watch.html. 자체 스트리밍, PC 다크 시안만 있음
+   플레이어 + 방송 정보(65605:100369) | 채팅 398 (메뉴 · 후원 랭킹 · 목록 · 아래 시트)
+   ============================================================ */
+:root {
+  --fw-chat-bg: var(--color-bg-100);
+  --fw-line: #262838;            /* Border 200 */
+  --fw-sheet-bg: #191b24;        /* BG 300 */
+  --fw-btn-bg: var(--color-bg-400);
+  --fw-btn-line: var(--color-border-300);
+  --fw-input-bg: var(--color-bg-100);
+  --fw-input-line: #7c8594;      /* Border strong */
+  --fw-input-text: #fff;
+  --fw-placeholder: #969da8;
+  --fw-msg: #fff;
+  --fw-name: #aaa;
+  --fw-tab-off: #969da8;
+  --fw-tool-line: #dcdcdc;
+  --fw-tool-icon: none;
+  --fw-rank-title: #dfe5ed;
+  --fw-rank-card: #31354f;
+  --fw-rank-medal: #2a2d3f;
+  --fw-title: #eef0f3;
+  --fw-tag-bg: #283758;
+  --fw-tag-text: #dadee8;
+  --fw-stat: #e4e6e9;
+  --fw-stat-line: #3b4049;
+  --fw-streamer: #dfe2ea;
+  --fw-followers: #c9cedc;
+  --fw-more-bg: #3b4049;
+  --fw-donate-bg: #dfe5ed;
+  --fw-donate-text: #12131a;
+}
+/* [구현 제안] 라이트 시안 없음 — 플레이어는 어두운 그대로, 채팅 · 방송 정보만 다른 라이트 화면 값에 맞춤 */
+[data-theme="light"] {
+  --fw-line: #e0e5ed;
+  --fw-sheet-bg: #ffffff;
+  --fw-btn-line: #d9e0ea;
+  --fw-input-line: #c3cad6;
+  --fw-input-text: #202938;
+  --fw-placeholder: #8a93a6;
+  --fw-chat-bg: #f6f8fb;
+  --fw-msg: #202938;
+  --fw-name: #687385;
+  --fw-tab-off: #8a93a6;
+  --fw-tool-line: #d9e0ea;
+  --fw-tool-icon: brightness(0.25);
+  --fw-rank-title: #202938;
+  --fw-rank-card: #e8ecf3;
+  --fw-rank-medal: #ffffff;
+  --fw-title: #202938;
+  --fw-tag-bg: #e3eaf7;
+  --fw-tag-text: #414b5d;
+  --fw-stat: #414b5d;
+  --fw-stat-line: #d9e0ea;
+  --fw-streamer: #202938;
+  --fw-followers: #687385;
+  --fw-more-bg: #e3e7ee;
+  --fw-donate-bg: #202938;
+  --fw-donate-text: #ffffff;
+}
+
+/* 셸 — 영상 상세(watch)처럼 화면 높이에 맞추고 푸터 · 조명은 끔 */
+.page--fwatch {
+  min-height: 100vh;
+}
+.page--fwatch .page__glow,
+.page--fwatch .footer {
+  display: none;
+}
+.page--fwatch .main__inner {
+  max-width: none;
+  padding: 0;
+}
+/* 데모용 로그인 플로팅 버튼 — 아래 방송 정보 버튼과 겹치지 않게 플레이어 오른쪽 위로 */
+[data-page="fun-watch"] .fab-auth {
+  top: 128px;
+  right: 422px;
+  bottom: auto;
+}
+.fwatch {
+  display: flex;
+  height: calc(100vh - 65px);
+  min-height: 640px;
+}
+.fwatch__main {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  min-width: 0;
+  background: var(--bg-page);
+}
+
+/* 자체 플레이어 (65605:98420) — 영상은 16:9 그대로 가운데 (기본 화면을 끄면 꽉 채움) */
+.fplayer {
+  position: relative;
+  flex: 1 1 0;
+  min-height: 0;
+  overflow: hidden;
+  background: #000;
+}
+.fplayer__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #000;
+}
+.fplayer.is-cover .fplayer__video {
+  object-fit: cover;
+}
+.fplayer.is-audio .fplayer__video {
+  visibility: hidden;
+}
+.fplayer__audio-only {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.6;
+  color: #969da8;
+}
+.fplayer__audio-only[hidden] {
+  display: none;
+}
+/* 제목줄 (65605:98458) — 51px, 뒤로 48 · 제목 Pretendard Bold 18/24 */
+.fplayer__bar {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  height: 51px;
+  padding-left: 12px;
+}
+.fplayer__back {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+}
+.fplayer__title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  padding: 10px 20px 10px 12px;
+}
+.fplayer__title h2 {
+  margin: 0;
+  overflow: hidden;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 24px;
+  color: #f5f4f7;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.fplayer__status {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 2px;
+}
+.fplayer__live,
+.fplayer__viewers {
+  display: flex;
+  align-items: center;
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: #fff;
+}
+.fplayer__live {
+  height: 16px;
+  background: #ff0015;
+}
+.fplayer__viewers {
+  height: 18px;
+  background: rgba(0, 0, 0, 0.75);
+}
+/* 컨트롤 (65605:98422) — 아래 그라디언트(0.4 → 0), 위 24 · 좌우 · 아래 16, 버튼 40 · 사이 8 */
+.fplayer__controls {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 24px 16px 16px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0));
+}
+.fplayer__group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.fctl {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 40px;
+  height: 40px;
+  border-radius: 9999px;
+  background: rgba(0, 0, 0, 0.5);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  font-size: 13px;
+  line-height: 19.5px;
+  color: #fff;
+  white-space: nowrap;
+}
+.fctl--pill {
+  width: auto;
+  padding: 0 14px;
+}
+/* [구현 제안] 호버 — 시안 없음 */
+@media (hover: hover) {
+  .fctl:hover {
+    background: rgba(0, 0, 0, 0.7);
+  }
+}
+.fctl__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ef4444;
+}
+/* 재생 · 음소거 — 눌린 상태(멈춤 · 음소거)면 꺼진 아이콘 */
+.fctl__off,
+.fctl[aria-pressed="true"] .fctl__on {
+  display: none;
+}
+.fctl[aria-pressed="true"] .fctl__off {
+  display: block;
+}
+/* 기본 화면 아이콘은 켜짐이 빨강(시안) — 끄면 흰색 */
+.fctl[data-fplayer-fit][aria-pressed="false"] img {
+  filter: brightness(0) invert(1);
+}
+/* [구현 제안] 소리만 듣기 켜짐 — 시안 없음 */
+.fctl[data-fplayer-audio][aria-pressed="true"] {
+  background: rgba(255, 255, 255, 0.25);
+}
+.fquality {
+  position: relative;
+}
+/* [구현 제안] 화질 목록 — 버튼 위로 열림 */
+.fquality__menu {
+  position: absolute;
+  right: 0;
+  bottom: 48px;
+  display: flex;
+  flex-direction: column;
+  min-width: 120px;
+  padding: 6px;
+  border-radius: 8px;
+  background: rgba(14, 14, 20, 0.92);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+.fquality__menu[hidden] {
+  display: none;
+}
+.fquality__menu button {
+  height: 36px;
+  padding: 0 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  text-align: left;
+  color: #dfe5ed;
+}
+.fquality__menu button:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+.fquality__menu button[aria-checked="true"] {
+  font-weight: 700;
+  color: var(--color-brand-primary);
+}
+
+/* 방송 정보 (65605:100369) — 위아래 18, 제목 블록 18 · 16 */
+.finfo {
+  flex: none;
+  padding: 18px 0;
+}
+.finfo__head {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 18px 16px;
+}
+.finfo__title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 29px;
+  color: var(--fw-title);
+  overflow-wrap: anywhere;
+}
+.finfo__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 2px 0;
+}
+.finfo__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.finfo__tags li {
+  padding: 2px 8px;
+  border-radius: 20px;
+  background: var(--fw-tag-bg);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 16px;
+  color: var(--fw-tag-text);
+  white-space: nowrap;
+}
+/* 184명 시청 중 | 00:15:31스트리밍 중 — Pretendard Medium 14/16 */
+.finfo__stat {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 7px;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 16px;
+  color: var(--fw-stat);
+  white-space: nowrap;
+}
+.finfo__stat i {
+  width: 1px;
+  height: 10px;
+  background: var(--fw-stat-line);
+}
+.finfo__stat time {
+  font-variant-numeric: tabular-nums;
+}
+/* 방송인 카드 (65605:100387) — 프로필 64(라이브 빨간 테두리 2) · 이름 Bold 18 · 팔로워 Medium 16 */
+.fstreamer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 2px 16px 6px;
+}
+.fstreamer__info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.fstreamer__pic {
+  position: relative;
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border: 2px solid #ff4242;
+  border-radius: 50%;
+}
+.fstreamer__pic img {
+  width: 59.5px;
+  height: 59.5px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.fstreamer__live {
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  height: 16px;
+  padding: 2px 4px;
+  border-radius: 4px;
+  background: #ff4242;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  color: #fff;
+  transform: translateX(-50%);
+}
+.fstreamer__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.fstreamer__text strong {
+  overflow: hidden;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 24px;
+  color: var(--fw-streamer);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.fstreamer__text > span {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 19px;
+  color: var(--fw-followers);
+}
+.fstreamer__text b {
+  font-weight: inherit;
+}
+.fstreamer__actions {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 12px;
+}
+/* 팔로우 (Button/Default) — 시안이 모바일 CTA 와 같은 #4782FF 를 직접 씀 */
+.fstreamer__follow,
+.fstreamer__donate {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 14px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+}
+.fstreamer__follow {
+  width: 97px;
+  padding: 14px 0;
+  background: #4782ff;
+  color: #fff;
+}
+.fstreamer__donate {
+  background: var(--fw-donate-bg);
+  color: var(--fw-donate-text);
+}
+.fstreamer__icon {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+.fstreamer__icon--more {
+  background: var(--fw-more-bg);
+}
+[data-theme="light"] .fstreamer__icon--more img {
+  filter: brightness(0.25);
+}
+
+/* 채팅 (65605:98477) — 398px, 왼쪽 1px Border 200 */
+.fchat {
+  position: relative;
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  width: 398px;
+  border-left: 1px solid var(--fw-line);
+  background: var(--fw-chat-bg);
+}
+/* 접기 버튼 (65605:98478) — 채팅 왼쪽 바깥 42×43, 왼쪽 모서리 8 */
+.fchat__fold {
+  position: absolute;
+  top: -1px;
+  left: -42px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 43px;
+  border: 1px solid var(--fw-line);
+  border-right: 0;
+  border-radius: 8px 0 0 8px;
+  background: var(--fw-sheet-bg);
+}
+[data-theme="light"] .fchat__fold img {
+  filter: brightness(0.25);
+}
+/* 접힘 (65605:99454) — 채팅은 1px 선만 남고 버튼 화살표가 반대로 */
+.fwatch.is-folded .fchat {
+  width: 0;
+}
+.fwatch.is-folded .fchat > :not(.fchat__fold) {
+  display: none;
+}
+.fwatch.is-folded .fchat__fold img {
+  transform: rotate(180deg);
+}
+/* 메뉴 (65605:98483) — 42px · 아래 선, 시청자 수(#FF4242) · 세로선 · 28px 원형 버튼 3개 */
+.fchat__menu {
+  display: flex;
+  flex: none;
+  align-items: center;
+  height: 42px;
+  padding: 0 16px;
+  border-bottom: 1px solid var(--fw-line);
+}
+.fchat__watching {
+  display: flex;
+  align-items: center;
+  height: 28px;
+  padding: 0 10px;
+  border-radius: 9999px;
+  background: #ff4242;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  color: #fff;
+  white-space: nowrap;
+}
+.fchat__tools {
+  display: flex;
+  gap: 4px;
+  margin-left: 12px;
+  padding-left: 12px;
+  border-left: 1px solid var(--fw-line);
+}
+.fchat__tool {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--fw-tool-line);
+  border-radius: 50%;
+  background: var(--color-bg-100);
+}
+.fchat__tool img {
+  filter: var(--fw-tool-icon);
+}
+/* 이번 방송 후원 랭킹 — 접힘 42px(65605:98504) / 펼침 93px(65605:101510): 1~3위 카드 */
+.frank {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  gap: 4px;
+  padding: 7px 16px;
+  border-bottom: 1px solid var(--fw-line);
+}
+.frank:has(.frank__head[aria-expanded="true"]) {
+  padding: 4px 16px 12px;
+}
+.frank__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 27px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--fw-rank-title);
+}
+.frank__chevron {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 99px;
+}
+.frank__chevron img {
+  transform: rotate(90deg);
+}
+[data-theme="light"] .frank__head[aria-expanded="false"] .frank__chevron img {
+  filter: brightness(0.25);
+}
+.frank__head[aria-expanded="true"] .frank__chevron {
+  background: var(--color-brand-tertial);
+}
+.frank__head[aria-expanded="true"] .frank__chevron img {
+  content: url("assets/fun-watch/rank-chevron-on.svg");
+}
+.frank__list {
+  display: flex;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.frank__list[hidden] {
+  display: none;
+}
+.frank__list li {
+  display: flex;
+  flex: 1 1 0;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  padding: 8px;
+  border-radius: 8px;
+  background: var(--fw-rank-card);
+}
+.frank__medal {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  background: var(--fw-rank-medal);
+  font-size: 16px;
+  line-height: 16px;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.13));
+}
+.frank__who {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  color: var(--fw-rank-title);
+  white-space: nowrap;
+}
+/* 이름 S-Core Dream 12 (시안 6 Bold — 웹폰트는 7 ExtraBold 만 있음) · 금액 Pretendard Medium 11 */
+.frank__who strong {
+  overflow: hidden;
+  font-family: var(--font-score);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  text-overflow: ellipsis;
+}
+.frank__who span {
+  font-size: 11px;
+  font-weight: 500;
+  line-height: normal;
+}
+/* 채팅 뷰 (65605:102339) — 메뉴 · 랭킹을 숨기고 채팅을 위까지 */
+.fchat.is-chat-view .fchat__menu,
+.fchat.is-chat-view .frank {
+  display: none;
+}
+
+/* 채팅 목록 — 메시지 위아래 4 · 좌우 24, 프로필 24 · 사이 16. 아래 시트(161)에 가리지 않게 아래 여백.
+   글자 크기는 입력창 위 가 · 가 · 가 버튼으로 12 · 14 · 17 */
+.fchat__list {
+  flex: 1 1 0;
+  min-height: 0;
+  margin: 0;
+  padding: 4px 0 169px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  list-style: none;
+  font-size: var(--fmsg-size, 14px);
+}
+.fmsg {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 4px 24px;
+}
+.fmsg__av {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 12px;
+  object-fit: cover;
+}
+.fmsg p {
+  min-width: 0;
+  margin: 0;
+  padding-top: 1.5px;
+  font-size: inherit;
+  line-height: 1.5;
+  color: var(--fw-msg);
+  overflow-wrap: anywhere;
+}
+.fmsg__name {
+  margin-right: 8px;
+  font-weight: 500;
+  color: var(--fw-name);
+}
+/* 팬 등급 배지 #3 — 보라 #7406AC · 높이 24 · 왕관 12 */
+.fmsg__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 24px;
+  margin-right: 8px;
+  padding: 0 8px;
+  border-radius: 12px;
+  background: #7406ac;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 24px;
+  color: #fff;
+  vertical-align: middle;
+}
+.fmsg__emo {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  vertical-align: middle;
+}
+
+/* 아래 시트 (65605:99260 · 후원 65605:104250) — 위 모서리 16 · 위 그림자, 채팅 목록 위에 겹침 */
+.fsheet {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: -1px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100% - 16px);
+  overflow: hidden;
+  border: 1px solid var(--fw-line);
+  border-bottom: 0;
+  border-radius: 16px 16px 0 0;
+  background: var(--fw-sheet-bg);
+  box-shadow: 0 -8px 8px rgba(0, 0, 0, 0.5);
+}
+/* 탭 — 48px 3칸(시안은 위 1px 선을 덮어 시트 전체 161), 선택은 Primary Bold + 아래 2px */
+.fsheet__tabs {
+  display: flex;
+  flex: none;
+  height: 47px;
+}
+.fsheet__tab {
+  position: relative;
+  flex: 1 1 0;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 19px;
+  color: var(--fw-tab-off);
+}
+.fsheet__tab[aria-selected="true"] {
+  font-weight: 700;
+  color: var(--color-brand-primary);
+}
+.fsheet__tab[aria-selected="true"]::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  background: var(--color-brand-primary);
+}
+/* 후원 · 시그니처 패널 — 영상 상세의 후원 패널을 시트 안에 그대로 (겹침 위치 · 모서리 · 그림자만 끔).
+   위아래 20 · 좌우 24, 칸 사이 20 (65605:104263) */
+.fsheet .donate {
+  position: static;
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: none;
+  border: 0;
+  border-top: 1px solid var(--fw-line);
+  border-radius: 0;
+  background: var(--fw-sheet-bg);
+  filter: none;
+  animation: none;
+}
+.fsheet .donate[hidden] {
+  display: none;
+}
+.fsheet .donate__body {
+  padding: 20px 24px 0;
+}
+.fsheet .donate__foot {
+  padding: 20px 24px;
+}
+/* 채팅 입력 (65605:99273) — 위 12 · 사이 8, 글자 크기 버튼 30 · 채팅 뷰 칩 · 입력칸 50 */
+.finput {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  border-top: 1px solid var(--fw-line);
+  background: var(--fw-sheet-bg);
+}
+.finput__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.finput__sizes {
+  display: flex;
+  gap: 8px;
+}
+.finput__size {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--fw-btn-line);
+  border-radius: 50%;
+  background: var(--fw-btn-bg);
+  letter-spacing: -0.5px;
+  color: var(--fw-input-text);
+}
+.finput__size--s {
+  font-size: 12px;
+  line-height: 18px;
+}
+.finput__size--m {
+  font-size: 14px;
+  line-height: 21px;
+}
+.finput__size--l {
+  font-size: 17px;
+  line-height: 25.5px;
+}
+/* 채팅 뷰 #4782FF (65605:102317) ↔ 일반 뷰 Tertial (65605:103296) */
+.finput__view {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 12px;
+  border-radius: 24px;
+  background: #4782ff;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 16px;
+  color: #fefefe;
+  white-space: nowrap;
+}
+.finput__view[aria-pressed="true"] {
+  background: var(--color-brand-tertial);
+}
+.finput__view-off,
+.finput__view[aria-pressed="true"] .finput__view-on {
+  display: none;
+}
+.finput__view[aria-pressed="true"] .finput__view-off {
+  display: block;
+}
+.finput__box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 12px;
+  border: 1px solid var(--fw-input-line);
+  border-radius: 6px;
+  background: var(--fw-input-bg);
+}
+.finput__box:focus-within {
+  border-color: var(--color-brand-primary);
+}
+.finput__text {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 20px;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  background: none;
+  resize: none;
+  font: inherit;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--fw-input-text);
+  outline: none;
+}
+.finput__text::placeholder {
+  color: var(--fw-placeholder);
+}
+.finput__btn {
+  display: flex;
+  flex: none;
+  padding: 1px 0;
+}
+[data-theme="light"] .finput__btn img {
+  filter: brightness(0.4);
+}
+
+/* [구현 제안] 모바일 시안 없음 — 플레이어(16:9) · 방송 정보 · 채팅을 세로로 쌓음 */
+@media (max-width: 767px) {
+  /* 모바일은 다른 화면과 같은 드로어 (PC 의 겹침 LNB 위치 · 그림자 되돌림) */
+  [data-page="fun-watch"] .lnb {
+    top: var(--mo-top);
+    bottom: var(--bottom-nav-h);
+    box-shadow: none;
+  }
+  [data-page="fun-watch"] .lnb-backdrop {
+    top: var(--mo-top);
+    bottom: var(--bottom-nav-h);
+  }
+  [data-page="fun-watch"] .fab-auth {
+    top: auto;
+    right: 16px;
+    bottom: calc(var(--bottom-nav-h) + 16px);
+  }
+  .fwatch {
+    flex-direction: column;
+    height: auto;
+    min-height: 0;
+    padding-bottom: var(--bottom-nav-h);
+  }
+  .fwatch__main {
+    flex: none;
+  }
+  .fplayer {
+    flex: none;
+    aspect-ratio: 16 / 9;
+  }
+  /* 앱바에 뒤로 가기가 있어 제목줄은 숨기고, 컨트롤은 재생 · 실시간 · 음소거 · 화질 · 전체화면만 */
+  .fplayer__bar,
+  .fctl[data-fplayer-audio],
+  .fctl[data-fplayer-pip],
+  .fctl[data-fplayer-fit] {
+    display: none;
+  }
+  .fplayer__controls {
+    padding: 16px 8px 8px;
+  }
+  .fctl {
+    width: 32px;
+    height: 32px;
+  }
+  .fctl--pill {
+    width: auto;
+    padding: 0 10px;
+  }
+  .finfo {
+    padding: 4px 0 12px;
+  }
+  .finfo__head {
+    padding: 12px 16px;
+  }
+  .finfo__title {
+    font-size: 18px;
+    line-height: 24px;
+  }
+  .finfo__row {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .fstreamer {
+    flex-wrap: wrap;
+  }
+  .fstreamer__actions {
+    width: 100%;
+  }
+  .fstreamer__follow,
+  .fstreamer__donate {
+    flex: 1 1 0;
+    width: auto;
+  }
+  .fchat {
+    width: auto;
+    height: 70vh;
+    min-height: 480px;
+    border-top: 1px solid var(--fw-line);
+    border-left: 0;
+  }
+  .fchat__fold {
+    display: none;
+  }
+  .fsheet {
+    left: 0;
   }
 }
