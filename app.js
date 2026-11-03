@@ -1986,3 +1986,53 @@
   window.addEventListener("scroll", function () { if (current) hide(); }, { passive: true });
   window.addEventListener("resize", function () { if (current) hide(); });
 })();
+
+// 서비스 소개 — WHY FUNNATION 카드 캐러셀 (화살표 · 점 · 좌우 밀기)
+(function () {
+  var root = document.querySelector("[data-about-carousel]");
+  if (!root) return;
+  var track = root.querySelector("[data-carousel-track]");
+  var cards = track.children;
+  var dots = root.querySelectorAll("[data-carousel-dot]");
+  var prev = root.querySelector("[data-carousel-prev]");
+  var next = root.querySelector("[data-carousel-next]");
+  var index = 0;
+
+  // 시안은 첫 카드에서도 양쪽 화살표가 모두 켜져 있음 — 끝에서 처음으로 돌아감
+  function go(i) {
+    index = (i + cards.length) % cards.length;
+    track.style.setProperty("--index", index);
+    for (var c = 0; c < cards.length; c++) {
+      cards[c].classList.toggle("is-active", c === index);
+      cards[c].classList.toggle("is-before", c < index);
+      cards[c].setAttribute("aria-hidden", c === index ? "false" : "true");
+    }
+    for (var d = 0; d < dots.length; d++) {
+      dots[d].classList.toggle("is-active", d === index);
+      dots[d].setAttribute("aria-current", d === index ? "true" : "false");
+    }
+  }
+
+  prev.addEventListener("click", function () { go(index - 1); });
+  next.addEventListener("click", function () { go(index + 1); });
+  for (var d = 0; d < dots.length; d++) {
+    dots[d].addEventListener("click", (function (n) { return function () { go(n); }; })(d));
+  }
+  // 옆에 걸친 카드를 누르면 그 카드로
+  for (var c = 0; c < cards.length; c++) {
+    cards[c].addEventListener("click", (function (n) { return function () { if (n !== index) go(n); }; })(c));
+  }
+
+  // 터치로 좌우 밀기 — 40px 넘게 밀면 넘김
+  var startX = null;
+  track.addEventListener("touchstart", function (e) { startX = e.touches[0].clientX; }, { passive: true });
+  track.addEventListener("touchend", function (e) {
+    if (startX === null) return;
+    var dx = e.changedTouches[0].clientX - startX;
+    startX = null;
+    var to = index + (dx < 0 ? 1 : -1);
+    if (Math.abs(dx) > 40 && to >= 0 && to < cards.length) go(to);
+  });
+
+  go(0);
+})();

@@ -8065,23 +8065,23 @@ ul {
 .about-btn--280 { width: 280px; }
 .about-btn--320 { width: 320px; }
 
-/* 01 Hero + 02 Brand Value — 시안 방사형 배경(1440 × 1270) 그대로 */
-.about-top {
-  background: var(--color-bg-100) url("data:image/svg+xml;utf8,<svg viewBox='0 0 1440 1270' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect width='100%' height='100%' fill='url(%23g)'/><defs><radialGradient id='g' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(140.35 -49.35 -3.9771 63.779 36.5 655.5)'><stop stop-color='%231a2a4a' offset='0'/><stop stop-color='%230e1428' offset='0.4'/><stop stop-color='%2307070d' offset='0.75'/></radialGradient></defs></svg>") center / 100% 100% no-repeat;
-  overflow: hidden;
-}
+/* 01 Hero — 시안 방사형 배경(1440 × 969, 아래 가운데 회색 → 위 남색) 그대로 */
 .about-hero {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 28px;
-  padding: 150px 28px;
+  padding: 93px 28px;
+  background: #1a2a4a url("data:image/svg+xml;utf8,<svg viewBox='0 0 1440 969' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect width='100%' height='100%' fill='url(%23g)'/><defs><radialGradient id='g' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(1.7365e-13 -82.85 123.12 5.7135e-8 720 969)'><stop stop-color='%23999999' offset='0'/><stop stop-color='%237a7e85' offset='0.25994'/><stop stop-color='%235a6272' offset='0.51989'/><stop stop-color='%2334415a' offset='0.76519'/><stop stop-color='%231a2a4a' offset='1'/></radialGradient></defs></svg>") center / 100% 100% no-repeat;
 }
 .about-head--hero {
-  gap: 24px;
+  gap: 20px;
 }
 .about-head--hero .about-eyebrow {
-  margin-bottom: 8px !important; /* 라벨 → 제목 32 */
+  margin-bottom: 12px !important; /* 라벨 → 제목 32 */
+}
+.about-head--hero .about-desc {
+  color: var(--color-text-normal);
 }
 /* Display/D1 — 맵씨 40 · 행간 0.8, 두 줄 사이 22 */
 .about-title--hero {
@@ -8093,54 +8093,139 @@ ul {
   justify-content: center;
   gap: 14px;
 }
+/* 라이브 화면 753 × 471 — CTA 아래 30 (gap 28 + 2) */
+.about-hero__shot {
+  display: block;
+  width: 753px;
+  max-width: 100%;
+  height: auto;
+  aspect-ratio: 753 / 471;
+  margin-top: 2px;
+  border-radius: 23px;
+  object-fit: cover;
+  box-shadow: 0 12px 16px rgba(26, 42, 74, 0.37), 0 4px 54px rgba(26, 42, 74, 0.25);
+}
 
+/* 02 Brand Value — 위 215px 동안 검정 → BG200 */
 .about-value {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 38px;
-  min-height: 684px;
-  padding: 70px 28px 120px;
+  padding: 129px 28px 120px;
+  overflow: hidden;
+  background: linear-gradient(180deg, #000 0, var(--color-bg-200) 215px);
+}
+.about-value__head {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  max-width: 1000px;
 }
 .about-head--value {
+  align-items: flex-start;
   gap: 20px;
+  text-align: left;
 }
 .about-head--value .about-eyebrow {
   margin-bottom: 0 !important;
 }
 .about-head--value .about-title {
+  align-items: flex-start;
   gap: 18px;
 }
-.about-value__list {
+.about-value__row {
   display: flex;
-  gap: 24px;
+  align-items: center;
+  gap: 20px;
+}
+.about-value__row .about-desc {
+  flex: 1 1 0;
+  min-width: 0;
+}
+.about-value__nav {
+  display: flex;
+  flex: none;
+  gap: 6px;
+}
+.about-value__arrow {
+  display: block;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+.about-value__arrow img {
+  display: block;
+}
+/* [구현 제안] 호버는 시안에 없음 — 옅은 원 */
+.about-value__arrow:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* 카드 1000 × 302, 카드 사이 34 — 지금 카드 말고는 0.894 배로 줄이고 60% 투명 (시안 2번 카드 실측) */
+.about-value__viewport {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
   width: 100%;
   max-width: 1000px;
+}
+.about-value__track {
+  --gap: 34px;
+  display: flex;
+  gap: var(--gap);
+  width: 100%;
+  transform: translateX(calc(var(--index, 0) * (-100% - var(--gap))));
+  transition: transform 0.4s ease;
 }
 .about-value__card {
   position: relative;
   display: flex;
-  flex: 1 1 0;
-  flex-direction: column;
-  gap: 22px;
-  min-width: 0;
-  padding: 28px;
+  flex: none;
+  width: 100%;
+  height: 302px;
   overflow: hidden;
   border-radius: 16px;
-  background: var(--color-bg-300);
+  background: var(--card-bg);
+  transform-origin: left center;
+  transition: transform 0.4s ease, opacity 0.4s ease;
 }
-.about-value__card > :not(.about-value__glow) {
-  position: relative;
+.about-value__card:not(.is-active) {
+  opacity: 0.6;
+  transform: scale(0.894);
 }
-/* 카드 뒤 번진 원 — 시안 위치 그대로 (SVG 가 블러 여백을 품고 있음) */
+.about-value__card.is-before {
+  transform-origin: right center;
+}
+.about-value__card--connect {
+  --card-bg: #253756;
+  --media-bg: #43597e;
+}
+.about-value__card--participate {
+  --card-bg: #1c1c30;
+  --media-bg: #393567;
+}
+/* [미확정] 03 카드 색은 시안에 없음 — glow-create 보라 계열로 제안 */
+.about-value__card--create {
+  --card-bg: #2a1d36;
+  --media-bg: #4d3864;
+}
+/* 카드 뒤 번진 원 — 시안 위치 그대로 (SVG 가 블러 여백 140 을 품고 있음) */
 .about-value__glow {
   position: absolute;
   max-width: none;
   pointer-events: none;
 }
 .about-value__card--connect .about-value__glow {
-  top: -140px;
-  left: -140px;
+  top: -155px;
+  left: -115px;
 }
 .about-value__card--participate .about-value__glow {
   top: -200px;
@@ -8150,12 +8235,27 @@ ul {
   top: -90px;
   left: -39.67px;
 }
+.about-value__text {
+  position: relative;
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  gap: 22px;
+  width: 331px;
+  padding: 28px;
+}
+.about-value__copy {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
 .about-value__num {
   font-size: 14px;
   font-weight: 700;
   line-height: 22px;
   letter-spacing: 0.25px;
   color: var(--color-brand-primary);
+  white-space: pre;
 }
 /* Headline/H1 — Pretendard SemiBold 22 · 행간 28 */
 .about-value__title,
@@ -8170,6 +8270,56 @@ ul {
   font-size: 14px;
   line-height: 1.5;
   color: var(--color-text-normal);
+}
+/* 오른쪽 화면 — 753 × 471 이미지를 위로 241 올려 아래쪽(후원 패널)만 보임. 오른쪽 끝에서 130 띄움 */
+.about-value__media {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  overflow: hidden;
+  background: var(--media-bg);
+}
+.about-value__shot {
+  position: absolute;
+  top: -241px;
+  right: 130px;
+  width: 753px;
+  height: 471px;
+}
+.about-value__shot > img:first-child {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  object-fit: cover;
+  box-shadow: 0 12px 16px rgba(26, 42, 74, 0.37), 0 4px 54px rgba(26, 42, 74, 0.25);
+}
+/* 손가락 커서 — 시안 Cursor/Pointer 위치 (이미지 기준 696.4, 408.9) */
+.about-value__cursor {
+  position: absolute;
+  top: 408.86px;
+  left: 696.36px;
+  width: 45.354px;
+  height: 48.368px;
+  max-width: none;
+}
+.about-value__dots {
+  display: flex;
+  gap: 6px;
+}
+.about-value__dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 99px;
+  background: #253756;
+  cursor: pointer;
+  transition: width 0.3s ease, background-color 0.3s ease;
+}
+.about-value__dot.is-active {
+  width: 36px;
+  background: var(--color-brand-primary);
 }
 
 /* 03 ~ 06 공통 섹션 — 위아래 120 · 좌우 28 */
@@ -8190,10 +8340,10 @@ ul {
 .about-viewer .about-title {
   gap: 14px;
 }
-/* 아래 크리에이터 섹션(BG400)이 둥글게 솟아오르는 곡선 — 시안: 섹션(878) 위에서 665 = 아래에서 -239 */
+/* 아래 크리에이터 섹션(BG400)이 둥글게 솟아오르는 곡선 — 시안: 섹션(875) 위에서 637 = 아래에서 -214 */
 .about-viewer__curve {
   position: absolute;
-  bottom: -239px;
+  bottom: -214px;
   left: 0;
   width: 100%;
   height: 452px;
@@ -8225,41 +8375,62 @@ ul {
 .about-final__list {
   position: relative;
 }
+/* 카드 3개(1000 · 간격 20) → CTA 44 */
 .about-viewer__body {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 64px;
+  gap: 44px;
   width: 100%;
+}
+.about-viewer__list {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+  max-width: 1000px;
 }
 .about-preview {
   display: flex;
-  flex: none;
+  flex: 1 1 0;
   flex-direction: column;
-  gap: 18px;
-  width: 560px;
+  gap: 20px;
+  min-width: 0;
   padding: 28px;
   border-radius: 20px;
   background: var(--color-bg-100);
 }
-.about-preview__img {
-  display: block;
-  width: 100%;
-  height: 270px;
+/* 177 높이 상자 안에 모바일 화면(134 × 312)이 위에서 26 내려와 아래가 잘림 */
+.about-preview__frame {
+  position: relative;
+  height: 177px;
+  overflow: hidden;
   border-radius: 12px;
+  background: var(--color-bg-400);
+}
+.about-preview__frame img {
+  position: absolute;
+  top: 26px;
+  left: 50%;
+  width: 134px;
+  height: 312px;
+  max-width: none;
+  border: 1px solid #000;
+  border-radius: 10px;
   object-fit: cover;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
+  transform: translateX(-50%);
 }
+.about-preview__copy {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+/* Headline/H2 — Pretendard Medium 18 · 행간 24 */
 .about-preview__title {
-  font-size: 24px;
-  font-weight: 700;
-  line-height: 1.6;
-  color: var(--color-text-strong);
-}
-.about-preview__flow {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 500;
-  line-height: 1.6;
-  color: var(--color-brand-primary);
+  line-height: 24px;
+  color: var(--color-text-strong);
 }
 .about-features {
   display: flex;
@@ -8547,7 +8718,6 @@ ul {
 
 /* [구현 제안] 1440 보다 좁은 PC — 시청자 · 크리에이터 2단을 세로로 쌓음 */
 @media (max-width: 1099px) {
-  .about-viewer__body,
   .about-creator__body {
     flex-direction: column;
     gap: 40px;
@@ -8571,6 +8741,10 @@ ul {
 @media (max-width: 767px) {
   .about-hero {
     padding: 64px 16px;
+  }
+  .about-hero__shot {
+    margin-top: 4px;
+    border-radius: 12px;
   }
   .about-title--hero {
     gap: 14px;
@@ -8604,14 +8778,36 @@ ul {
     width: 100%;
   }
   .about-value {
-    min-height: 0;
-    padding: 40px 16px 64px;
+    gap: 28px;
+    padding: 64px 16px;
   }
-  .about-value__list {
+  .about-value__row {
+    align-items: flex-end;
+  }
+  /* 모바일 카드 — 글 위 · 화면 아래로 쌓음 */
+  .about-value__track {
+    --gap: 12px;
+  }
+  .about-value__card {
+    flex-direction: column;
+    height: auto;
+  }
+  .about-value__text {
+    width: auto;
+    padding: 24px 20px;
+  }
+  .about-value__media {
+    flex: none;
+    height: 200px;
+  }
+  .about-value__shot {
+    top: -271px;
+    right: 24px;
+  }
+  .about-viewer__list {
     flex-direction: column;
     gap: 16px;
   }
-  .about-value__card,
   .about-final__card {
     flex: none;
   }
@@ -8634,13 +8830,9 @@ ul {
     display: none;
   }
   .about-preview {
-    width: 100%;
-    padding: 16px;
+    flex: none;
+    padding: 20px;
     border-radius: 16px;
-  }
-  .about-preview__img {
-    height: auto;
-    aspect-ratio: 504 / 270;
   }
   .about-contents {
     grid-template-columns: minmax(0, 1fr);
