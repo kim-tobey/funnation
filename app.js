@@ -1286,7 +1286,7 @@
 })();
 
 /* 홈 · 라이브 방송 — 방송/영상 썸네일을 누르면 영상 상세(watch.html)로 이동.
-   펀네이션 라이브(fun-live.html)는 자체 스트리밍 상세(fun-watch.html)로.
+   펀네이션 라이브(fun-live.html)와 홈의 펀네이션 라이브 섹션(data-watch)은 자체 스트리밍 상세(fun-watch.html)로.
    서버 연동 전이라 어떤 썸네일이든 같은 데모 영상을 연다. 광고 카드는 제외 */
 (function () {
   var thumbs = document.querySelectorAll(".card:not(.card--ad) .card__thumb, .vod-card .vod-card__thumb");
@@ -1299,12 +1299,13 @@
     thumbs[i].classList.add("is-link");
     thumbs[i].addEventListener("click", go);
     thumbs[i].addEventListener("keydown", function (e) {
-      if (e.key === "Enter") go();
+      if (e.key === "Enter") go.call(this);
     });
   }
   var target = /fun-live\.html$/.test(location.pathname) ? "fun-watch.html" : "watch.html";
   function go() {
-    location.href = target;
+    var area = this.closest("[data-watch]");
+    location.href = area ? area.getAttribute("data-watch") : target;
   }
 })();
 
