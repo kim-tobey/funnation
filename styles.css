@@ -5232,7 +5232,8 @@ ul {
 /* LNB — 평소엔 숨기고, 햄버거를 누르면 GNB 아래 왼쪽에서 영상 위로 겹쳐 열림 (펀네이션 라이브 상세 fun-watch.html · PC 정책안내 terms.html 도 같은 방식) */
 [data-page="watch"] .lnb,
 [data-page="fun-watch"] .lnb,
-[data-page="terms"] .lnb {
+[data-page="terms"] .lnb,
+[data-page="about"] .lnb {
   position: fixed;
   top: 65px;
   bottom: 0;
@@ -5247,13 +5248,15 @@ ul {
 }
 [data-page="watch"][data-drawer="open"] .lnb,
 [data-page="fun-watch"][data-drawer="open"] .lnb,
-[data-page="terms"][data-drawer="open"] .lnb {
+[data-page="terms"][data-drawer="open"] .lnb,
+[data-page="about"][data-drawer="open"] .lnb {
   transform: none;
   visibility: visible;
 }
 [data-page="watch"] .lnb-backdrop,
 [data-page="fun-watch"] .lnb-backdrop,
-[data-page="terms"] .lnb-backdrop {
+[data-page="terms"] .lnb-backdrop,
+[data-page="about"] .lnb-backdrop {
   position: fixed;
   top: 65px;
   right: 0;
@@ -5268,7 +5271,8 @@ ul {
 }
 [data-page="watch"][data-drawer="open"] .lnb-backdrop,
 [data-page="fun-watch"][data-drawer="open"] .lnb-backdrop,
-[data-page="terms"][data-drawer="open"] .lnb-backdrop {
+[data-page="terms"][data-drawer="open"] .lnb-backdrop,
+[data-page="about"][data-drawer="open"] .lnb-backdrop {
   opacity: 1;
   pointer-events: auto;
 }
@@ -5283,7 +5287,9 @@ ul {
   [data-page="fun-watch"] .lnb,
   [data-page="fun-watch"] .lnb-backdrop,
   [data-page="terms"] .lnb,
-  [data-page="terms"] .lnb-backdrop {
+  [data-page="about"] .lnb,
+  [data-page="terms"] .lnb-backdrop,
+  [data-page="about"] .lnb-backdrop {
     transition: none;
   }
 }
@@ -6912,12 +6918,14 @@ ul {
 /* [구현 제안] 모바일 시안 없음 — 앱바 제목(정책안내)이 있어 본문 제목은 숨기고, 탭은 가로 스크롤 */
 @media (max-width: 767px) {
   /* 모바일은 다른 화면과 같은 드로어 (PC 의 겹침 LNB 위치 · 그림자 되돌림) */
-  [data-page="terms"] .lnb {
+  [data-page="terms"] .lnb,
+  [data-page="about"] .lnb {
     top: var(--mo-top);
     bottom: var(--bottom-nav-h);
     box-shadow: none;
   }
-  [data-page="terms"] .lnb-backdrop {
+  [data-page="terms"] .lnb-backdrop,
+  [data-page="about"] .lnb-backdrop {
     top: var(--mo-top);
     bottom: var(--bottom-nav-h);
   }
@@ -7937,5 +7945,712 @@ ul {
   }
   .fsheet {
     left: 0;
+  }
+}
+
+/* ============================================================
+   서비스 소개 (about.html · v2.0 65632:39946)
+   시안은 PC 1440 만 있음 — 정책안내처럼 LNB 없이 전체 폭(햄버거로 LNB 를 겹쳐 엶)
+   ============================================================ */
+/* 로그인 · 회원가입 · 검색 · 알림 화면이 열리면 본문을 숨김 */
+[data-view] .about {
+  display: none;
+}
+/* [구현 제안] 시안은 다크만 있음 — 밝은 테마에서도 이 페이지는 다크 색상표를 유지 */
+[data-theme="light"] .about {
+  --color-bg-100: #0e0e14;
+  --color-bg-200: #12131a;
+  --color-bg-300: #191b24;
+  --color-bg-400: #1f212e;
+  --color-border-100: #1f212e;
+  --color-text-strong: #ffffff;
+  --color-text-normal: #dfe5ed;
+  --color-text-depth-300: #969da8;
+}
+.about {
+  color: var(--color-text-strong);
+  word-break: keep-all;
+}
+.about h2,
+.about h3,
+.about p,
+.about ul,
+.about ol {
+  margin: 0;
+}
+.about ul,
+.about ol {
+  padding: 0;
+  list-style: none;
+}
+
+/* 섹션 제목 — 영문 라벨(Headline/H3) · 맵씨 제목 · 설명(Body/B1) */
+.about-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  text-align: center;
+}
+.about-eyebrow {
+  margin-bottom: 6px !important; /* 라벨 → 제목 20 (gap 14 + 6) */
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 22px;
+  letter-spacing: 0.25px;
+  color: var(--color-brand-primary);
+}
+.about-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: var(--font-hero);
+  font-size: 32px;
+  font-weight: 400;
+  line-height: 0.8;
+  letter-spacing: -0.01em;
+  color: var(--color-text-strong);
+}
+.about-title > span {
+  display: block;
+}
+.about-desc {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--color-text-depth-300);
+}
+
+/* CTA — Button/3XL: Pretendard Bold 18 · 행간 20, 높이 52 · 모서리 9 */
+.about-btn {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 225px;
+  height: 52px;
+  border-radius: 9px;
+  background: var(--color-brand-primary);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 20px;
+  color: #fefefe;
+  white-space: nowrap;
+  transition: background-color 0.15s ease;
+}
+/* 기본 CTA 결 — 시안은 #4A92FF 위에 그라디언트 이미지 채우기(왼쪽 아래 보라 → 오른쪽 위 하늘색).
+   Figma 가 내보낸 이미지 배치값(음수 폭 · 회전 누락)으로는 같은 모양이 나오지 않아, 시안 렌더 색을 재서 CSS 그라디언트로 맞춤 */
+.about-btn:not(.about-btn--dark):not(.about-btn--outline) {
+  background: linear-gradient(60deg, #4b5bff 0%, #4a86ff 55%, #4aa3ff 100%);
+}
+/* [구현 제안] 호버는 시안에 없음 — 살짝 어둡게 */
+.about-btn:not(.about-btn--dark):not(.about-btn--outline):hover {
+  filter: brightness(0.9);
+}
+.about-btn--dark,
+.about-btn--outline {
+  border: 1px solid var(--color-border-100);
+}
+.about-btn--dark {
+  background: var(--color-bg-300);
+}
+.about-btn--outline {
+  background: var(--color-bg-100);
+}
+.about-btn--dark:hover,
+.about-btn--outline:hover {
+  background: var(--color-bg-400);
+}
+.about-btn--205 { width: 205px; }
+.about-btn--230 { width: 230px; }
+.about-btn--280 { width: 280px; }
+.about-btn--320 { width: 320px; }
+
+/* 01 Hero + 02 Brand Value — 시안 방사형 배경(1440 × 1270) 그대로 */
+.about-top {
+  background: var(--color-bg-100) url("data:image/svg+xml;utf8,<svg viewBox='0 0 1440 1270' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect width='100%' height='100%' fill='url(%23g)'/><defs><radialGradient id='g' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(140.35 -49.35 -3.9771 63.779 36.5 655.5)'><stop stop-color='%231a2a4a' offset='0'/><stop stop-color='%230e1428' offset='0.4'/><stop stop-color='%2307070d' offset='0.75'/></radialGradient></defs></svg>") center / 100% 100% no-repeat;
+  overflow: hidden;
+}
+.about-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  padding: 150px 28px;
+}
+.about-head--hero {
+  gap: 24px;
+}
+.about-head--hero .about-eyebrow {
+  margin-bottom: 8px !important; /* 라벨 → 제목 32 */
+}
+/* Display/D1 — 맵씨 40 · 행간 0.8, 두 줄 사이 22 */
+.about-title--hero {
+  gap: 22px;
+  font-size: 40px;
+}
+.about-hero__cta {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+}
+
+.about-value {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 38px;
+  min-height: 684px;
+  padding: 70px 28px 120px;
+}
+.about-head--value {
+  gap: 20px;
+}
+.about-head--value .about-eyebrow {
+  margin-bottom: 0 !important;
+}
+.about-head--value .about-title {
+  gap: 18px;
+}
+.about-value__list {
+  display: flex;
+  gap: 24px;
+  width: 100%;
+  max-width: 1000px;
+}
+.about-value__card {
+  position: relative;
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  gap: 22px;
+  min-width: 0;
+  padding: 28px;
+  overflow: hidden;
+  border-radius: 16px;
+  background: var(--color-bg-300);
+}
+.about-value__card > :not(.about-value__glow) {
+  position: relative;
+}
+/* 카드 뒤 번진 원 — 시안 위치 그대로 (SVG 가 블러 여백을 품고 있음) */
+.about-value__glow {
+  position: absolute;
+  max-width: none;
+  pointer-events: none;
+}
+.about-value__card--connect .about-value__glow {
+  top: -140px;
+  left: -140px;
+}
+.about-value__card--participate .about-value__glow {
+  top: -200px;
+  left: -20.33px;
+}
+.about-value__card--create .about-value__glow {
+  top: -90px;
+  left: -39.67px;
+}
+.about-value__num {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 22px;
+  letter-spacing: 0.25px;
+  color: var(--color-brand-primary);
+}
+/* Headline/H1 — Pretendard SemiBold 22 · 행간 28 */
+.about-value__title,
+.about-feature__title,
+.about-content__title {
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 28px;
+  color: var(--color-text-strong);
+}
+.about-value__desc {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--color-text-normal);
+}
+
+/* 03 ~ 06 공통 섹션 — 위아래 120 · 좌우 28 */
+.about-sec {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 120px 28px;
+}
+
+/* 03 Viewer Experience */
+.about-viewer {
+  gap: 48px;
+  overflow: hidden;
+  background: var(--color-bg-300);
+}
+.about-viewer .about-title {
+  gap: 14px;
+}
+/* 아래 크리에이터 섹션(BG400)이 둥글게 솟아오르는 곡선 — 시안: 섹션(878) 위에서 665 = 아래에서 -239 */
+.about-viewer__curve {
+  position: absolute;
+  bottom: -239px;
+  left: 0;
+  width: 100%;
+  height: 452px;
+  max-width: none;
+  pointer-events: none;
+}
+.about-viewer__note {
+  position: absolute;
+  top: 195.6px;
+  left: calc(50% + 174.6px);
+  width: 33.646px;
+  height: 33.646px;
+  opacity: 0.5;
+  transform: rotate(25.66deg);
+  pointer-events: none;
+}
+.about-viewer__spark {
+  position: absolute;
+  top: 132px;
+  left: calc(50% - 123px);
+  width: 27.029px;
+  height: 19.674px;
+  pointer-events: none;
+}
+.about-head,
+.about-viewer__body,
+.about-creator__body,
+.about-contents,
+.about-final__list {
+  position: relative;
+}
+.about-viewer__body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 64px;
+  width: 100%;
+}
+.about-preview {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  gap: 18px;
+  width: 560px;
+  padding: 28px;
+  border-radius: 20px;
+  background: var(--color-bg-100);
+}
+.about-preview__img {
+  display: block;
+  width: 100%;
+  height: 270px;
+  border-radius: 12px;
+  object-fit: cover;
+}
+.about-preview__title {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.6;
+  color: var(--color-text-strong);
+}
+.about-preview__flow {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.6;
+  color: var(--color-brand-primary);
+}
+.about-features {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 36px;
+  width: 400px;
+}
+.about-features__list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.about-features__list > li {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.about-features--creator .about-features__list > li {
+  gap: 6px;
+}
+.about-feature__desc,
+.about-content__desc {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--color-text-depth-300);
+}
+
+/* 04 Creator Experience */
+/* 시안 높이 822 고정 — 아래 여백은 카드 끝에서 92 */
+.about-creator {
+  gap: 48px;
+  padding-bottom: 92px;
+  background: var(--color-bg-400);
+}
+.about-creator__body {
+  display: flex;
+  align-items: center;
+  gap: 64px;
+  width: 100%;
+  max-width: 794px;
+}
+.about-features--creator {
+  flex: 1 1 0;
+  width: auto;
+  min-width: 0;
+}
+.about-studio {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+  padding: 28px;
+  border-radius: 20px;
+  background: var(--color-bg-300);
+}
+.about-studio__head {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.about-studio__head .about-eyebrow {
+  margin-bottom: 0 !important;
+}
+/* Headline/H7 — Pretendard Bold 25 · 행간 30 */
+.about-studio__title,
+.about-final__text h3 {
+  font-size: 25px;
+  font-weight: 700;
+  line-height: 30px;
+  color: var(--color-text-strong);
+}
+.about-studio__list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.about-studio__list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 20px;
+  border-radius: 10px;
+  background: var(--color-bg-200);
+}
+.about-studio__list strong {
+  flex: none;
+  width: 79px;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 20px;
+  color: var(--color-text-strong);
+}
+.about-studio__list span {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--color-text-depth-300);
+  white-space: nowrap;
+}
+.about-studio__note {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--color-text-depth-300);
+}
+
+/* 05 Interactive Contents */
+.about-interactive {
+  gap: 44px;
+  overflow: hidden;
+  background: var(--color-bg-400);
+}
+/* 아래쪽 격자 무늬 — 시안: 섹션 위에서 462, 높이 910, 1192 폭 반복 · 위아래 뒤집고 아래로 갈수록 진하게 */
+.about-interactive::before {
+  content: "";
+  position: absolute;
+  top: 462px;
+  left: 0;
+  width: 100%;
+  height: 910px;
+  background: url("assets/about/interactive-bg.png") 0 0 / 1192px 910px repeat-x;
+  transform: scaleY(-1);
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.827), transparent);
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.827), transparent);
+  pointer-events: none;
+}
+.about-contents {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  width: 100%;
+  max-width: 1000px;
+}
+.about-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+  height: 422px;
+  padding: 28px;
+  border-radius: 18px;
+  background: var(--color-bg-200);
+}
+.about-content__title {
+  margin-bottom: -8px !important; /* 제목 → 설명 12 (gap 20 - 8) */
+}
+.about-content__demo {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+  height: 241px;
+  padding: 20px;
+  border-radius: 12px;
+  background: var(--color-bg-300);
+}
+.about-bingo {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px 8px;
+}
+.about-bingo li {
+  padding: 8px;
+  background: var(--color-bg-200);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.6;
+  color: var(--color-text-strong);
+}
+.about-bingo li.is-on {
+  background: var(--color-brand-primary);
+}
+.about-mission p {
+  color: var(--color-text-normal);
+  line-height: 1.6;
+}
+.about-mission__label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-brand-primary) !important;
+}
+.about-mission__title {
+  font-size: 25px;
+  font-weight: 700;
+  line-height: 30px !important;
+  color: var(--color-text-strong) !important;
+}
+.about-mission__sub {
+  font-size: 15px;
+}
+.about-mission__foot {
+  font-size: 14px;
+  font-weight: 500;
+}
+/* 진행 막대 — 시안 392 중 340 */
+.about-mission__bar {
+  height: 12px;
+  background: var(--color-bg-200);
+}
+.about-mission__bar span {
+  display: block;
+  width: 86.735%;
+  height: 100%;
+  background: var(--color-brand-primary);
+}
+.about-roulette {
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+.about-roulette img {
+  display: block;
+  flex: none;
+}
+.about-roulette__text {
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.6;
+  color: var(--color-text-strong);
+}
+.about-rank {
+  height: auto;
+}
+.about-rank__list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.about-rank__list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 12px;
+  background: var(--color-bg-200);
+  line-height: 1.6;
+}
+.about-rank__list b {
+  flex: none;
+  width: 56px;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--color-brand-primary);
+}
+.about-rank__list span {
+  font-size: 17px;
+  font-weight: 500;
+  color: var(--color-text-strong);
+}
+
+/* 06 Final CTA — 시안 방사형 배경 (가로 1296 · 세로 330.5, 왼쪽 216 아래 끝 중심) */
+.about-final {
+  gap: 44px;
+  min-height: 661px;
+  background: radial-gradient(1296px 330.5px at 216px 100%, #1a2a4a 0%, #0e1428 40%, #07070d 75%);
+}
+.about-final__list {
+  display: flex;
+  gap: 24px;
+  width: 100%;
+  max-width: 906px;
+}
+.about-final__card {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  min-width: 0;
+  padding: 32px;
+  border-radius: 16px;
+  background: var(--color-bg-100);
+}
+.about-final__text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-align: center;
+}
+.about-final__text p {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--color-text-normal);
+}
+
+/* [구현 제안] 1440 보다 좁은 PC — 시청자 · 크리에이터 2단을 세로로 쌓음 */
+@media (max-width: 1099px) {
+  .about-viewer__body,
+  .about-creator__body {
+    flex-direction: column;
+    gap: 40px;
+  }
+  .about-creator__body {
+    align-items: stretch;
+    max-width: 560px;
+  }
+  .about-features {
+    align-items: center;
+    width: 100%;
+    max-width: 560px;
+    text-align: center;
+  }
+  .about-studio__list span {
+    white-space: normal;
+  }
+}
+
+/* [구현 제안] 모바일 시안 없음 — 한 단으로 쌓고 좌우 16 */
+@media (max-width: 767px) {
+  .about-hero {
+    padding: 64px 16px;
+  }
+  .about-title--hero {
+    gap: 14px;
+    font-size: 32px; /* design.md 모바일 Hero 제목 32 */
+  }
+  .about-title {
+    font-size: 24px;
+    line-height: 1.2; /* 0.8 은 줄바꿈되면 줄끼리 겹침 */
+  }
+  .about-title--hero {
+    line-height: 1;
+  }
+  .about-head--value .about-title,
+  .about-viewer .about-title {
+    gap: 10px;
+  }
+  .about-desc br,
+  .about-value__desc br,
+  .about-feature__desc br,
+  .about-content__desc br {
+    display: none;
+  }
+  .about-hero__cta,
+  .about-final__list {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+  }
+  .about-hero__cta .about-btn,
+  .about-btn--320 {
+    width: 100%;
+  }
+  .about-value {
+    min-height: 0;
+    padding: 40px 16px 64px;
+  }
+  .about-value__list {
+    flex-direction: column;
+    gap: 16px;
+  }
+  .about-value__card,
+  .about-final__card {
+    flex: none;
+  }
+  .about-sec {
+    padding: 64px 16px;
+  }
+  .about-viewer,
+  .about-creator {
+    gap: 32px;
+  }
+  .about-creator,
+  .about-final {
+    min-height: 0;
+  }
+  .about-interactive {
+    gap: 32px;
+  }
+  .about-viewer__note,
+  .about-viewer__spark {
+    display: none;
+  }
+  .about-preview {
+    width: 100%;
+    padding: 16px;
+    border-radius: 16px;
+  }
+  .about-preview__img {
+    height: auto;
+    aspect-ratio: 504 / 270;
+  }
+  .about-contents {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+  .about-content {
+    height: auto;
+    padding: 20px;
+  }
+  .about-final__card {
+    padding: 28px 20px;
   }
 }

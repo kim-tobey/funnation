@@ -63,10 +63,10 @@
   function currentDesktopState() {
     return autoMini.matches ? autoState || "mini" : desktopState;
   }
-  // 영상 상세(watch.html · fun-watch.html) · PC 정책안내(terms.html)는 LNB 를 숨겨 두고 햄버거로 본문 위에 겹쳐 엶 (펼침/접힘 저장과 무관)
+  // 영상 상세(watch.html · fun-watch.html) · PC 정책안내(terms.html) · PC 서비스 소개(about.html)는 LNB 를 숨겨 두고 햄버거로 본문 위에 겹쳐 엶 (펼침/접힘 저장과 무관)
   var page = root.getAttribute("data-page");
   function overlay() {
-    return page === "watch" || ((page === "fun-watch" || page === "terms") && !mobile.matches);
+    return page === "watch" || ((page === "fun-watch" || page === "terms" || page === "about") && !mobile.matches);
   }
 
   function render() {
