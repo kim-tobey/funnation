@@ -2073,3 +2073,11 @@
 
   go(0);
 })();
+
+/* 준비 중 메뉴 (LNB 크리에이터 랭킹 등) — 이동하지 않고 알림만 띄움. data-coming-soon 을 단 링크·버튼 공통 */
+document.addEventListener("click", function (e) {
+  var el = e.target.closest("[data-coming-soon]");
+  if (!el) return;
+  e.preventDefault();
+  alert("서비스 준비 중입니다.");
+});
