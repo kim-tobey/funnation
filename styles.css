@@ -1311,6 +1311,8 @@ ul {
 .main {
   flex: 1 0 0;
   min-width: 0;
+  /* 본문 폭(cqw) 기준 — 후원 컨텐츠 흐름 영역을 본문 양 끝까지 넓힐 때 씀 */
+  container-type: inline-size;
 }
 
 /* 2depth 메뉴 (63998:5408) */
@@ -2398,11 +2400,20 @@ ul {
 .donation-list::-webkit-scrollbar {
   display: none;
 }
+/* PC — 흐르는 영역을 본문 좌우 여백(28 · XL 바깥 여백 포함) 밖, LNB 오른쪽 ~ 화면 오른쪽 끝까지 넓힘.
+   처음 화면에서도 첫 카드(랜덤박스)가 왼쪽 끝(LNB 경계)에 붙어 시작 — 안쪽 여백 없음 */
+@media (min-width: 768px) {
+  .donation-list {
+    margin-right: calc((100% - 100cqw) / 2);
+    margin-left: calc((100% - 100cqw) / 2);
+  }
+}
 .donation-card {
   display: flex;
   flex: none;
   flex-direction: column;
   gap: 4px;
+  /* 카드 크기 3단 — 핸드폰(~767) 120 × 166 · PC(768~1599) 150 × 208 · 고해상도(1600~) B안 175 × 243. 비율 같음 */
   width: 150px;
   height: 208px;
   padding: 16px;
@@ -2413,6 +2424,13 @@ ul {
   /* 카드 이미지가 어두운 톤 → 테마와 무관하게 밝은 글자 */
   color: #eee;
   white-space: nowrap;
+}
+/* 고해상도(XL 1600~) — B안 175 × 243 */
+@media (min-width: 1600px) {
+  .donation-card {
+    width: 175px;
+    height: 243px;
+  }
 }
 .donation-card__en {
   font-size: 12px;
