@@ -254,13 +254,14 @@
               <img src="assets/v2/lnb-live.svg" width="24" height="24" alt="">유튜브 라이브
             </a>
             <a class="lnb__item" href="creators.html">
-              <img src="assets/imgComponent2.svg" width="24" height="24" alt="">크리에이터 찾기
+              <img src="assets/v2/lnb-creator.svg" width="24" height="24" alt="">크리에이터 찾기
+            </a>
+            <!-- 크리에이터 랭킹 (65183:62112) — 페이지 미정 -->
+            <a class="lnb__item" href="#">
+              <img src="assets/v2/lnb-ranking.svg" width="24" height="24" alt="">크리에이터 랭킹
             </a>
             <a class="lnb__item" href="#">
               <img src="assets/imgComponent3.svg" width="24" height="24" alt="">즐겨찾기
-            </a>
-            <a class="lnb__item" href="#">
-              <img src="assets/imgComponent4.svg" width="24" height="24" alt="">커뮤니티
             </a>
           </div>
 
@@ -506,6 +507,20 @@
             <a href="#">전체보기</a>
           </div>
 
+          <!-- 정렬 칩 + 구분선 + 카테고리 칩 (65771:60812). 정렬 메뉴는 칩 가로 스크롤에 잘리지 않게 .chips 밖에 둠 -->
+          <div class="chip-bar" data-node-id="65771:60812">
+            <div class="sort" data-sort>
+              <button class="sort__btn" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="sort-pop-live" data-node-id="65771:60928">
+                <img src="assets/v2/sort-ascending.svg" width="16" height="16" alt=""><span data-sort-label>최신순</span>
+              </button>
+              <!-- 정렬 메뉴 (65771:60849) — 고르면 칩 글자만 바뀜. 실제 정렬은 추후 연동 -->
+              <div class="sort__pop" id="sort-pop-live" role="menu" aria-label="정렬" data-node-id="65771:60849" hidden>
+                <button class="sort__item" type="button" role="menuitemradio" aria-checked="false">랭킹순</button>
+                <button class="sort__item" type="button" role="menuitemradio" aria-checked="false">시청자순</button>
+                <button class="sort__item" type="button" role="menuitemradio" aria-checked="true">최신순</button>
+              </div>
+            </div>
+            <span class="chip-bar__divider" aria-hidden="true"></span>
           <div class="chips" data-node-id="64112:13467">
             <button type="button" class="is-active">전체</button>
             <button type="button">LIVE</button>
@@ -520,6 +535,7 @@
             <button type="button">스포츠</button>
             <button type="button">전략</button>
             <button type="button">광고</button>
+          </div>
           </div>
 
           <!-- 펀네이션 라이브 카드 — 누르면 자체 스트리밍 상세(fun-watch.html)로 (data-watch). 아래 유튜브 라이브 탑 50 은 그대로 watch.html -->
@@ -1288,13 +1304,14 @@
     </a>
     <!-- 크리에이터 (64059:159015) -->
     <a class="bottom-nav__item" href="creators.html">
-      <img src="assets/mo/nav-my.svg" width="24" height="24" alt="">크리에이터
+      <img src="assets/mo/nav-creator.svg" width="24" height="24" alt="">크리에이터
     </a>
     <a class="bottom-nav__item" href="#">
       <img src="assets/mo/nav-fav.svg" width="24" height="24" alt="">즐겨찾기
     </a>
     <a class="bottom-nav__item" href="#">
-      <img src="assets/imgComponent4.svg" width="24" height="24" alt="">커뮤니티
+      <!-- 커뮤니티 아이콘 = Live / Planet (65771:62307), LNB 크리에이터 랭킹과 같은 파일 -->
+      <img src="assets/v2/lnb-ranking.svg" width="24" height="24" alt="">커뮤니티
     </a>
     <!-- 내 정보 (v2.0 64085:89486) — 로그아웃 상태면 로그인 화면을 연다 -->
     <a class="bottom-nav__item" href="#login" id="bn-account">

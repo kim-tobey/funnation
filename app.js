@@ -944,6 +944,43 @@
   }
 })();
 
+/* 정렬 칩 (65771:60928) + 정렬 메뉴 (65771:60849) — 칩을 누르면 메뉴, 고르면 칩 글자만 바뀜. 실제 정렬은 추후 연동 */
+(function () {
+  var sorts = document.querySelectorAll("[data-sort]");
+  for (var s = 0; s < sorts.length; s++) {
+    (function (wrap) {
+      var btn = wrap.querySelector(".sort__btn");
+      var pop = wrap.querySelector(".sort__pop");
+      var label = wrap.querySelector("[data-sort-label]");
+      var items = pop.querySelectorAll(".sort__item");
+      function close(focusBtn) {
+        if (pop.hidden) return;
+        pop.hidden = true;
+        btn.setAttribute("aria-expanded", "false");
+        if (focusBtn) btn.focus();
+      }
+      btn.addEventListener("click", function () {
+        if (!pop.hidden) return close();
+        pop.hidden = false;
+        btn.setAttribute("aria-expanded", "true");
+      });
+      for (var i = 0; i < items.length; i++) {
+        items[i].addEventListener("click", function () {
+          for (var j = 0; j < items.length; j++) items[j].setAttribute("aria-checked", items[j] === this ? "true" : "false");
+          label.textContent = this.textContent;
+          close(true);
+        });
+      }
+      document.addEventListener("click", function (e) {
+        if (!wrap.contains(e.target)) close();
+      });
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape" && !pop.hidden) close(true);
+      });
+    })(sorts[s]);
+  }
+})();
+
 /* 크리에이터 카드 팔로우 하트 (65415:42570) — 누를 때마다 빈 하트 ↔ 채운 하트. 서버 연동 전이라 저장하지 않음 */
 (function () {
   var btns = document.querySelectorAll("[data-follow]");
