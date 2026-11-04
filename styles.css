@@ -8062,7 +8062,6 @@ ul {
 }
 .about-btn--205 { width: 205px; }
 .about-btn--230 { width: 230px; }
-.about-btn--280 { width: 280px; }
 .about-btn--320 { width: 320px; }
 
 /* 01 Hero — 시안 방사형 배경(1440 × 969, 아래 가운데 회색 → 위 남색) 그대로 */
@@ -8322,7 +8321,7 @@ ul {
   background: var(--color-brand-primary);
 }
 
-/* 03 ~ 06 공통 섹션 — 위아래 120 · 좌우 28 */
+/* 03 · 06 공통 섹션 — 위아래 120 · 좌우 28 */
 .about-sec {
   position: relative;
   display: flex;
@@ -8331,7 +8330,7 @@ ul {
   padding: 120px 28px;
 }
 
-/* 03 Viewer Experience */
+/* 03 Viewer Experience (65688:50321) */
 .about-viewer {
   gap: 48px;
   overflow: hidden;
@@ -8340,10 +8339,10 @@ ul {
 .about-viewer .about-title {
   gap: 14px;
 }
-/* 아래 크리에이터 섹션(BG400)이 둥글게 솟아오르는 곡선 — 시안: 섹션(875) 위에서 637 = 아래에서 -214 */
+/* 아래 크리에이터 섹션(BG400)이 둥글게 솟아오르는 곡선 — 시안: 섹션(878) 위에서 637 = 아래에서 -211 */
 .about-viewer__curve {
   position: absolute;
-  bottom: -214px;
+  bottom: -211px;
   left: 0;
   width: 100%;
   height: 452px;
@@ -8370,12 +8369,11 @@ ul {
 }
 .about-head,
 .about-viewer__body,
-.about-creator__body,
-.about-contents,
+.about-contents-wrap,
 .about-final__list {
   position: relative;
 }
-/* 카드 3개(1000 · 간격 20) → CTA 44 */
+/* 카드 3개(1000 · 간격 20) → CTA 44 — 시청자 · 크리에이터 공용 */
 .about-viewer__body {
   display: flex;
   flex-direction: column;
@@ -8393,7 +8391,7 @@ ul {
   display: flex;
   flex: 1 1 0;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
   min-width: 0;
   padding: 28px;
   border-radius: 20px;
@@ -8420,37 +8418,22 @@ ul {
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
   transform: translateX(-50%);
 }
-.about-preview__copy {
+.about-preview__copy,
+.about-content__copy {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
 }
-/* Headline/H2 — Pretendard Medium 18 · 행간 24 */
-.about-preview__title {
-  font-size: 18px;
-  font-weight: 500;
-  line-height: 24px;
+/* Headline/H6 — S-Core Dream 7 ExtraBold 19 · 행간 1 · -1% (카드 제목 공용) */
+.about-preview__title,
+.about-content__title,
+.about-final__text h3 {
+  font-family: var(--font-score);
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.01em;
   color: var(--color-text-strong);
-}
-.about-features {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 36px;
-  width: 400px;
-}
-.about-features__list {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-.about-features__list > li {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.about-features--creator .about-features__list > li {
-  gap: 6px;
 }
 .about-feature__desc,
 .about-content__desc {
@@ -8459,249 +8442,138 @@ ul {
   color: var(--color-text-depth-300);
 }
 
-/* 04 Creator Experience */
-/* 시안 높이 822 고정 — 아래 여백은 카드 끝에서 92 */
-.about-creator {
-  gap: 48px;
-  padding-bottom: 92px;
-  background: var(--color-bg-400);
-}
-.about-creator__body {
+/* 04 Creator + 05 Interactive (65688:50357) — BG400 한 판, 위아래 50 (시안 높이 1819 → 아래 139), 두 묶음 사이 126 */
+.about-tools {
+  position: relative;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 64px;
-  width: 100%;
-  max-width: 794px;
-}
-.about-features--creator {
-  flex: 1 1 0;
-  width: auto;
-  min-width: 0;
-}
-.about-studio {
-  display: flex;
-  flex: 1 1 0;
-  flex-direction: column;
-  gap: 20px;
-  min-width: 0;
-  padding: 28px;
-  border-radius: 20px;
-  background: var(--color-bg-300);
-}
-.about-studio__head {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-.about-studio__head .about-eyebrow {
-  margin-bottom: 0 !important;
-}
-/* Headline/H7 — Pretendard Bold 25 · 행간 30 */
-.about-studio__title,
-.about-final__text h3 {
-  font-size: 25px;
-  font-weight: 700;
-  line-height: 30px;
-  color: var(--color-text-strong);
-}
-.about-studio__list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.about-studio__list li {
-  display: flex;
-  align-items: flex-start;
-  gap: 20px;
-  padding: 20px;
-  border-radius: 10px;
-  background: var(--color-bg-200);
-}
-.about-studio__list strong {
-  flex: none;
-  width: 79px;
-  font-size: 16px;
-  font-weight: 700;
-  line-height: 20px;
-  color: var(--color-text-strong);
-}
-.about-studio__list span {
-  font-size: 14px;
-  line-height: 1.5;
-  color: var(--color-text-depth-300);
-  white-space: nowrap;
-}
-.about-studio__note {
-  font-size: 12px;
-  line-height: 1.6;
-  color: var(--color-text-depth-300);
-}
-
-/* 05 Interactive Contents */
-.about-interactive {
-  gap: 44px;
+  gap: 126px;
+  padding: 50px 28px 139px;
   overflow: hidden;
   background: var(--color-bg-400);
 }
-/* 아래쪽 격자 무늬 — 시안: 섹션 위에서 462, 높이 910, 1192 폭 반복 · 위아래 뒤집고 아래로 갈수록 진하게 */
-.about-interactive::before {
+/* 격자 무늬 — 1192 폭 반복, 시안 마스크(위 불투명 → 아래 투명 선형) 그대로.
+   위 판(108~1018)은 위아래 뒤집혀 아래로 갈수록 진해지고(0 → 0.827), 아래 판(1018~)은 위에서부터 옅어짐(1 → 0.173) */
+.about-tools::before,
+.about-tools::after {
   content: "";
   position: absolute;
-  top: 462px;
   left: 0;
   width: 100%;
   height: 910px;
   background: url("assets/about/interactive-bg.png") 0 0 / 1192px 910px repeat-x;
+  pointer-events: none;
+}
+.about-tools::before {
+  top: 108px;
   transform: scaleY(-1);
   -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.827), transparent);
   mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.827), transparent);
-  pointer-events: none;
+}
+.about-tools::after {
+  top: 1018px;
+  -webkit-mask-image: linear-gradient(to bottom, #000, rgba(0, 0, 0, 0.173));
+  mask-image: linear-gradient(to bottom, #000, rgba(0, 0, 0, 0.173));
+}
+.about-creator,
+.about-interactive {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+.about-creator {
+  gap: 48px;
+}
+.about-interactive {
+  gap: 82px;
+}
+/* 후원 콘텐츠 줄 762 · 줄 사이 28 → CTA 48 */
+.about-contents-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 48px;
+  width: 100%;
 }
 .about-contents {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 24px;
-  width: 100%;
-  max-width: 1000px;
-}
-.about-content {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  min-width: 0;
-  height: 422px;
+  gap: 28px;
+  width: 100%;
+  max-width: 762px;
+}
+/* 줄 배경 — #12131A 위에 아래→위 옅은 회색, 왼쪽 위 모서리 번짐(시안 SVG 그대로) */
+.about-content {
+  position: relative;
   padding: 28px;
   border-radius: 18px;
-  background: var(--color-bg-200);
+  background:
+    url("data:image/svg+xml;utf8,<svg viewBox='0 0 762 129' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect width='100%' height='100%' fill='url(%23g)' opacity='0.15'/><defs><radialGradient id='g' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(33.4 0.98152 -0.06087 1.81 61.5 -2.337)'><stop stop-color='%23666' offset='0'/><stop stop-color='%234d4d4d' offset='0.25'/><stop stop-color='%23333' offset='0.5'/><stop stop-color='%231a1a1a' offset='0.75'/><stop stop-color='%230d0d0d' offset='0.875'/><stop stop-color='%23060606' offset='0.9375'/><stop stop-color='%23000' offset='1'/></radialGradient></defs></svg>") 0 0 / 100% 100% no-repeat,
+    linear-gradient(0deg, rgba(0, 0, 0, 0.2) 76.449%, rgba(102, 102, 102, 0.2) 110.14%),
+    var(--color-bg-200);
 }
-.about-content__title {
-  margin-bottom: -8px !important; /* 제목 → 설명 12 (gap 20 - 8) */
+.about-content__copy {
+  position: relative;
+  z-index: 1;
+  max-width: 532px;
 }
-.about-content__demo {
-  display: flex;
-  flex: none;
-  flex-direction: column;
-  justify-content: center;
-  gap: 12px;
-  height: 241px;
-  padding: 20px;
-  border-radius: 12px;
-  background: var(--color-bg-300);
+/* 3D 그림 — 줄 밖으로 튀어나옴 (시안 위치 · 크기 그대로) */
+.about-content__img {
+  position: absolute;
+  max-width: none;
+  pointer-events: none;
 }
-.about-bingo {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 12px 8px;
-}
-.about-bingo li {
-  padding: 8px;
-  background: var(--color-bg-200);
-  font-size: 18px;
-  font-weight: 700;
-  line-height: 1.6;
-  color: var(--color-text-strong);
-}
-.about-bingo li.is-on {
-  background: var(--color-brand-primary);
-}
-.about-mission p {
-  color: var(--color-text-normal);
-  line-height: 1.6;
-}
-.about-mission__label {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--color-brand-primary) !important;
-}
-.about-mission__title {
-  font-size: 25px;
-  font-weight: 700;
-  line-height: 30px !important;
-  color: var(--color-text-strong) !important;
-}
-.about-mission__sub {
-  font-size: 15px;
-}
-.about-mission__foot {
-  font-size: 14px;
-  font-weight: 500;
-}
-/* 진행 막대 — 시안 392 중 340 */
-.about-mission__bar {
-  height: 12px;
-  background: var(--color-bg-200);
-}
-.about-mission__bar span {
-  display: block;
-  width: 86.735%;
-  height: 100%;
-  background: var(--color-brand-primary);
-}
-.about-roulette {
-  justify-content: flex-start;
-  align-items: flex-start;
-}
-.about-roulette img {
-  display: block;
-  flex: none;
-}
-.about-roulette__text {
-  font-size: 17px;
-  font-weight: 700;
-  line-height: 1.6;
-  color: var(--color-text-strong);
-}
-.about-rank {
-  height: auto;
-}
-.about-rank__list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-.about-rank__list li {
-  display: flex;
-  align-items: flex-start;
-  gap: 16px;
-  padding: 12px;
-  background: var(--color-bg-200);
-  line-height: 1.6;
-}
-.about-rank__list b {
-  flex: none;
-  width: 56px;
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--color-brand-primary);
-}
-.about-rank__list span {
-  font-size: 17px;
-  font-weight: 500;
-  color: var(--color-text-strong);
-}
+.about-content--bingo .about-content__img { top: -46px; left: 536px; width: 185px; height: 185px; }
+.about-content--mission .about-content__img { top: -47px; left: 546px; width: 185px; height: 185px; }
+.about-content--roulette .about-content__img { top: -23px; left: 566px; width: 158px; height: 158px; }
+.about-content--ranking .about-content__img { top: -42px; left: 554px; width: 180px; height: 180px; }
 
-/* 06 Final CTA — 시안 방사형 배경 (가로 1296 · 세로 330.5, 왼쪽 216 아래 끝 중심) */
+/* 06 Final CTA (65688:50567) — 시안 높이 733, 방사형 배경 (가로 1296 · 세로 366.5, 왼쪽 216 아래 끝 중심) */
 .about-final {
   gap: 44px;
-  min-height: 661px;
-  background: radial-gradient(1296px 330.5px at 216px 100%, #1a2a4a 0%, #0e1428 40%, #07070d 75%);
+  min-height: 733px;
+  background: radial-gradient(1296px 366.5px at 216px 100%, #1a2a4a 0%, #0e1428 40%, #07070d 75%);
 }
 .about-final__list {
   display: flex;
+  align-items: flex-start;
   gap: 24px;
   width: 100%;
-  max-width: 906px;
+  max-width: 730px;
 }
 .about-final__card {
   display: flex;
   flex: 1 1 0;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 24px;
   min-width: 0;
   padding: 32px;
   border-radius: 16px;
   background: var(--color-bg-100);
+}
+.about-final__info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+.about-final__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 69px;
+  height: 69px;
+  border-radius: 999px;
+  background: var(--color-bg-400);
+}
+.about-final__icon img {
+  display: block;
 }
 .about-final__text {
   display: flex;
@@ -8713,28 +8585,7 @@ ul {
 .about-final__text p {
   font-size: 14px;
   line-height: 1.5;
-  color: var(--color-text-normal);
-}
-
-/* [구현 제안] 1440 보다 좁은 PC — 시청자 · 크리에이터 2단을 세로로 쌓음 */
-@media (max-width: 1099px) {
-  .about-creator__body {
-    flex-direction: column;
-    gap: 40px;
-  }
-  .about-creator__body {
-    align-items: stretch;
-    max-width: 560px;
-  }
-  .about-features {
-    align-items: center;
-    width: 100%;
-    max-width: 560px;
-    text-align: center;
-  }
-  .about-studio__list span {
-    white-space: normal;
-  }
+  color: var(--color-text-depth-300);
 }
 
 /* [구현 제안] 모바일 시안 없음 — 한 단으로 쌓고 좌우 16 */
@@ -8803,7 +8654,8 @@ ul {
     top: -271px;
     right: 24px;
   }
-  .about-viewer__list {
+  .about-viewer__list,
+  .about-final__list {
     flex-direction: column;
     gap: 16px;
   }
@@ -8814,15 +8666,16 @@ ul {
     padding: 64px 16px;
   }
   .about-viewer,
-  .about-creator {
+  .about-creator,
+  .about-interactive {
     gap: 32px;
   }
-  .about-creator,
   .about-final {
     min-height: 0;
   }
-  .about-interactive {
-    gap: 32px;
+  .about-tools {
+    gap: 64px;
+    padding: 64px 16px;
   }
   .about-viewer__note,
   .about-viewer__spark {
@@ -8833,13 +8686,19 @@ ul {
     padding: 20px;
     border-radius: 16px;
   }
+  /* [구현 제안] 3D 그림을 줄이고 오른쪽 끝에 붙임 — 글은 그림 앞까지만 */
   .about-contents {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 16px;
+    gap: 24px;
   }
   .about-content {
-    height: auto;
-    padding: 20px;
+    padding: 20px 104px 20px 20px;
+  }
+  .about-content .about-content__img {
+    top: -14px;
+    right: 4px;
+    left: auto;
+    width: 104px;
+    height: 104px;
   }
   .about-final__card {
     padding: 28px 20px;
