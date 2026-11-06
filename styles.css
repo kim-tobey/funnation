@@ -5408,6 +5408,14 @@ ul {
   right: 422px;
   bottom: 130px;
 }
+/* 세로 영상 — 가운데 영상 · YouTube 컨트롤을 가리지 않게 왼쪽 검은 여백(레터박스) 아래로. 정보줄(94) 위 24 */
+@media (min-width: 768px) {
+  [data-page="watch"]:has(.watch[data-orient="portrait"]) .fab-auth {
+    right: auto;
+    left: 24px;
+    bottom: 118px;
+  }
+}
 @media (prefers-reduced-motion: reduce) {
   [data-page="watch"] .lnb,
   [data-page="watch"] .lnb-backdrop,
