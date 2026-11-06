@@ -368,7 +368,7 @@
              가로 영상(66098:110635 · 111744)은 플레이어를 위에 붙이고 아래로 정보 · 설명 · 다시보기가 스크롤,
              세로 영상(66098:113753 · 114862)은 플레이어가 정보줄 위를 꽉 채우고 좌우 레터박스(YouTube 가 그림).
              data-orient 는 app.js 가 주소의 ?orient=vertical 로 정함. 세로 데모 영상 ID 는 data-yt-id-vertical (비어 있으면 data-yt-id) -->
-        <section class="watch" data-yt-id="0sfDth4lMLc" data-yt-id-vertical="Ezp2zr6jZ8s" data-orient="landscape" data-node-id="66098:110446">
+        <section class="watch" data-yt-id="0sfDth4lMLc" data-yt-id-vertical="wMNgr1eCleo" data-orient="landscape" data-node-id="66098:110446">
           <!-- 모바일 앱바 (66098:116109) — 767px 이하에서 기본 앱바 대신. 뒤로 · 채널(아바타 · 이름 · 팔로우) · 더보기 -->
           <div class="wbar" data-node-id="66098:116109">
             <a class="wbar__btn" href="index.html" aria-label="뒤로 가기" data-watch-back><img src="assets/mo/appbar-back.svg" width="24" height="24" alt=""></a>
@@ -858,8 +858,8 @@
               <button class="donate__submit" type="button" data-donate-submit>후원하기</button>
             </footer>
           </section>
-          <!-- 채팅 설정 (66098:114862) — 탭 바로 아래로 내려오는 시트. 글자 크기 · 설정 저장.
-               칭호 배지(시안에 있음)는 YouTube 채팅에 적용할 수 없어 YouTube 상세에서는 뺌. 설정은 저장하지 않아 새로고침하면 "작게"로
+          <!-- 채팅 설정 (66098:114862) — 탭 바로 아래로 내려오는 시트. 글자 크기 · 칭호 배지 · 설정 저장.
+               칭호 배지는 YouTube 채팅에 적용할 수 없어 선택 표시만 바뀜. 설정은 저장하지 않아 새로고침하면 "작게"로
                글자 크기는 YouTube 채팅 칸 전체를 100 · 115 · 130% 로 확대 (iframe 안 글자만 따로는 못 바꿈) -->
           <section class="donate fset" id="wchat-settings" data-donate-panel="settings" aria-label="채팅 설정" role="tabpanel" hidden>
             <div class="donate__body">
@@ -872,6 +872,17 @@
                   <button class="fset__size fset__size--s" type="button" aria-label="작게" aria-pressed="true" data-fset-size="1">가</button>
                   <button class="fset__size fset__size--m" type="button" aria-label="보통" aria-pressed="false" data-fset-size="1.15">가</button>
                   <button class="fset__size fset__size--l" type="button" aria-label="크게" aria-pressed="false" data-fset-size="1.3">가</button>
+                </div>
+              </div>
+              <div class="dbox" role="group" aria-labelledby="wset-badge-title">
+                <div class="dbox__head">
+                  <strong id="wset-badge-title">칭호 배지</strong>
+                  <button class="fset__link" type="button">설정</button>
+                </div>
+                <div class="fset__chips">
+                  <button class="fset__chip" type="button" aria-pressed="true" data-fset-badge>모두 표시함</button>
+                  <button class="fset__chip" type="button" aria-pressed="false" data-fset-badge>일부 표시</button>
+                  <button class="fset__chip" type="button" aria-pressed="false" data-fset-badge>표시 안함</button>
                 </div>
               </div>
             </div>

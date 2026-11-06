@@ -5349,6 +5349,11 @@ ul {
   overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: contain;
+  /* 영상 ↔ 채팅 사이에 스크롤바가 보이지 않게 (휠 · 터치 스크롤은 그대로) */
+  scrollbar-width: none;
+}
+.watch__main::-webkit-scrollbar {
+  display: none;
 }
 
 /* LNB — 평소엔 숨기고, 햄버거를 누르면 GNB 아래 왼쪽에서 영상 위로 겹쳐 열림 (펀네이션 라이브 상세 fun-watch.html · PC 정책안내 terms.html 도 같은 방식) */
