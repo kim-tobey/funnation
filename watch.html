@@ -364,30 +364,229 @@
 
       <div class="main__inner">
 
-        <!-- 영상 상세 ver.3 (64795:14999) — PC 전용. YouTube 플레이어(1076) + 오른쪽 채팅(398, 채팅/후원하기 탭) -->
-        <section class="watch" data-yt-id="0sfDth4lMLc" data-node-id="64795:14999">
+        <!-- 영상 상세 (66098:110446) — YouTube 플레이어 + 방송 정보 + 다시보기 | 오른쪽 채팅 398 (채팅 · 후원하기 · 채팅 설정).
+             가로 영상(66098:110635 · 111744)은 플레이어를 위에 붙이고 아래로 정보 · 설명 · 다시보기가 스크롤,
+             세로 영상(66098:113753 · 114862)은 플레이어가 정보줄 위를 꽉 채우고 좌우 레터박스(YouTube 가 그림).
+             data-orient 는 app.js 가 주소의 ?orient=vertical 로 정함. 세로 데모 영상 ID 는 data-yt-id-vertical (비어 있으면 data-yt-id) -->
+        <section class="watch" data-yt-id="0sfDth4lMLc" data-yt-id-vertical="Ezp2zr6jZ8s" data-orient="landscape" data-node-id="66098:110446">
+          <!-- 모바일 앱바 (66098:116109) — 767px 이하에서 기본 앱바 대신. 뒤로 · 채널(아바타 · 이름 · 팔로우) · 더보기 -->
+          <div class="wbar" data-node-id="66098:116109">
+            <a class="wbar__btn" href="index.html" aria-label="뒤로 가기" data-watch-back><img src="assets/mo/appbar-back.svg" width="24" height="24" alt=""></a>
+            <div class="wbar__channel">
+              <img class="wbar__pic" src="assets/watch/v4/avatar-ymss-sm.jpg" width="24" height="24" alt="">
+              <strong class="wbar__name">YM상사</strong>
+              <button class="wbar__follow" type="button" aria-pressed="false" data-watch-follow>팔로우</button>
+            </div>
+            <button class="wbar__btn" type="button" aria-label="더보기"><img src="assets/watch/v4/mo-more.svg" width="24" height="24" alt=""></button>
+          </div>
           <div class="watch__main">
             <!-- YouTube 플레이어 (64795:15029) — 실제 YouTube 임베드. 영상 ID 는 .watch 의 data-yt-id (app.js 가 src 를 채움) -->
             <div class="yt" data-node-id="64795:15029">
               <iframe class="yt__frame" data-yt-player title="YouTube 영상 플레이어" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
               <p class="yt__off" data-yt-player-off hidden>YouTube 영상은 파일로 직접 열면 재생되지 않아요(오류 153).<br>로컬 서버(http://localhost)나 실제 도메인에서 열어 주세요.</p>
             </div>
+
+            <!-- 방송 정보 (66098:111836) — 채널 · 제목 · 태그 | 팔로우 · 후원하기 · 더보기, 시청자 · 공유. 아래 설명(더보기/간략히) -->
+            <div class="winfo" data-node-id="66098:111836">
+              <div class="winfo__head">
+                <div class="winfo__channel">
+                  <a class="winfo__pic" href="#" aria-label="YM상사 채널">
+                    <img src="assets/watch/v4/avatar-ymss.jpg" width="56" height="56" alt="">
+                    <span class="winfo__live">LIVE</span>
+                  </a>
+                  <div class="winfo__text">
+                    <p class="winfo__name"><strong>YM상사</strong><img src="assets/watch/v4/verified-20.svg" width="20" height="20" alt="인증"></p>
+                    <h1 class="winfo__title">24/7 halloween ambience 🎃 spooky lofi to get chills to</h1>
+                    <ul class="tags"><li>#엑셀</li><li>팀플레이</li><li>서바이벌</li></ul>
+                  </div>
+                </div>
+                <div class="winfo__side">
+                  <div class="winfo__actions">
+                    <button class="fstreamer__follow" type="button" aria-pressed="false" data-watch-follow><img src="assets/fun-watch/heart.svg" width="16" height="16" alt=""><span>팔로우</span></button>
+                    <button class="fstreamer__donate" type="button" data-watch-donate>후원하기</button>
+                    <button class="fstreamer__icon fstreamer__icon--more" type="button" aria-label="더보기"><img src="assets/fun-watch/more.svg" width="23" height="23" alt=""></button>
+                  </div>
+                  <div class="winfo__stat">
+                    <p><img src="assets/watch/v4/viewers.svg" width="16" height="16" alt=""><b>184</b><span>명 시청중</span></p>
+                    <button class="winfo__share" type="button" aria-label="공유하기" data-watch-share><img src="assets/watch/v4/share.svg" width="16" height="16" alt=""></button>
+                  </div>
+                </div>
+              </div>
+              <!-- 설명 (66098:111891) — 접으면 한 줄 + "...더보기", 펼치면 전체 + "간략히" -->
+              <div class="wdesc" data-expanded="false">
+                <p class="wdesc__meta">조회수 154회&nbsp;&nbsp;2일 전</p>
+                <div class="wdesc__body" id="wdesc-body">
+                  <p>**후원안내**</p>
+                  <p>투네이션 : https://toon.at/donate/ymss</p>
+                  <p>펀네이션 : https://funn.at/ymss</p>
+                  <p>계좌 : 국민 5294-3701-0196-67 ㅅㅁㅅ(ㅈㅂ컴퍼니)</p>
+                  <p>점수는 만원이상부터 적용됩니다. 계좌 후원시 닉네임/스트리머 로 입력해주세요</p>
+                </div>
+                <button class="wdesc__toggle" type="button" aria-expanded="false" aria-controls="wdesc-body" data-wdesc-toggle>...더보기</button>
+              </div>
+            </div>
+
+            <!-- 이 채널의 다시보기 (66098:111904) — 정렬 칩(FilterChip M) · 210px 카드 한 줄, 넘치면 가로 스크롤 -->
+            <section class="wmore" aria-labelledby="wmore-title" data-node-id="66098:111904">
+              <div class="wmore__head">
+                <div class="section-header">
+                  <h2 id="wmore-title">🔥 이 채널의 다시보기</h2>
+                  <a href="#">전체보기</a>
+                </div>
+                <p class="wmore__desc">크리에이터의 라이브를 만나보세요.</p>
+                <!-- 정렬 — 선택 표시만 바뀌고 목록 정렬은 서버 연동 전 -->
+                <div class="chips creators-chips" data-wmore-sort>
+                  <button type="button" class="is-active" aria-pressed="true">인기순</button>
+                  <button type="button" aria-pressed="false">최신순</button>
+                  <button type="button" aria-pressed="false">후원순</button>
+                </div>
+              </div>
+              <div class="wmore__row">
+                <article class="card card--rich">
+                  <div class="card__thumb">
+                    <img src="assets/watch/v4/vod1.jpg" alt="">
+                    <div class="card__status"><span class="card__viewers">671명 시청</span></div>
+                  </div>
+                  <div class="card__info">
+                    <img class="card__avatar" src="assets/watch/v4/avatar-ymss-sm.jpg" width="24" height="24" alt="">
+                    <div class="card__text">
+                      <p class="card__title">YM상사 시즌7 5화 무한성 룰렛데이</p>
+                      <div>
+                        <p class="card__channel"><span>YM상사</span><img src="assets/watch/v4/verified-16.svg" width="16" height="16" alt="인증"></p>
+                        <p class="card__sub"><span>구분</span><span class="card__dot" aria-hidden="true"></span><span>2023.04.30</span></p>
+                      </div>
+                      <ul class="tags"><li>#인디</li><li>팀플레이</li><li>서바이벌</li></ul>
+                    </div>
+                  </div>
+                </article>
+                <article class="card card--rich">
+                  <div class="card__thumb">
+                    <img src="assets/watch/v4/vod2.jpg" alt="">
+                    <div class="card__status"><span class="card__viewers">671명 시청</span></div>
+                  </div>
+                  <div class="card__info">
+                    <img class="card__avatar" src="assets/watch/v4/avatar-ymss-sm.jpg" width="24" height="24" alt="">
+                    <div class="card__text">
+                      <p class="card__title">YM상사 시즌7 5화 무한성 룰렛데이</p>
+                      <div>
+                        <p class="card__channel"><span>YM상사</span><img src="assets/watch/v4/verified-16.svg" width="16" height="16" alt="인증"></p>
+                        <p class="card__sub"><span>구분</span><span class="card__dot" aria-hidden="true"></span><span>2023.04.30</span></p>
+                      </div>
+                      <ul class="tags"><li>#인디</li><li>팀플레이</li><li>서바이벌</li></ul>
+                    </div>
+                  </div>
+                </article>
+                <article class="card card--rich">
+                  <div class="card__thumb">
+                    <img src="assets/watch/v4/vod3.jpg" alt="">
+                    <div class="card__status"><span class="card__viewers">671명 시청</span></div>
+                  </div>
+                  <div class="card__info">
+                    <img class="card__avatar" src="assets/watch/v4/avatar-ymss-sm.jpg" width="24" height="24" alt="">
+                    <div class="card__text">
+                      <p class="card__title">YM상사 시즌7 5화 무한성 룰렛데이</p>
+                      <div>
+                        <p class="card__channel"><span>YM상사</span><img src="assets/watch/v4/verified-16.svg" width="16" height="16" alt="인증"></p>
+                        <p class="card__sub"><span>구분</span><span class="card__dot" aria-hidden="true"></span><span>2023.04.30</span></p>
+                      </div>
+                      <ul class="tags"><li>#인디</li><li>팀플레이</li><li>서바이벌</li></ul>
+                    </div>
+                  </div>
+                </article>
+                <article class="card card--rich">
+                  <div class="card__thumb">
+                    <img src="assets/watch/v4/vod4.jpg" alt="">
+                    <div class="card__status"><span class="card__viewers">671명 시청</span></div>
+                  </div>
+                  <div class="card__info">
+                    <img class="card__avatar" src="assets/watch/v4/avatar-ymss-sm.jpg" width="24" height="24" alt="">
+                    <div class="card__text">
+                      <p class="card__title">YM상사 시즌7 5화 무한성 룰렛데이</p>
+                      <div>
+                        <p class="card__channel"><span>YM상사</span><img src="assets/watch/v4/verified-16.svg" width="16" height="16" alt="인증"></p>
+                        <p class="card__sub"><span>구분</span><span class="card__dot" aria-hidden="true"></span><span>2023.04.30</span></p>
+                      </div>
+                      <ul class="tags"><li>#인디</li><li>팀플레이</li><li>서바이벌</li></ul>
+                    </div>
+                  </div>
+                </article>
+                <article class="card card--rich">
+                  <div class="card__thumb">
+                    <img src="assets/watch/v4/vod5.jpg" alt="">
+                    <div class="card__status"><span class="card__viewers">671명 시청</span></div>
+                  </div>
+                  <div class="card__info">
+                    <img class="card__avatar" src="assets/watch/v4/avatar-ymss-sm.jpg" width="24" height="24" alt="">
+                    <div class="card__text">
+                      <p class="card__title">YM상사 시즌7 5화 무한성 룰렛데이</p>
+                      <div>
+                        <p class="card__channel"><span>YM상사</span><img src="assets/watch/v4/verified-16.svg" width="16" height="16" alt="인증"></p>
+                        <p class="card__sub"><span>구분</span><span class="card__dot" aria-hidden="true"></span><span>2023.04.30</span></p>
+                      </div>
+                      <ul class="tags"><li>#인디</li><li>팀플레이</li><li>서바이벌</li></ul>
+                    </div>
+                  </div>
+                </article>
+                <article class="card card--rich">
+                  <div class="card__thumb">
+                    <img src="assets/watch/v4/vod6.jpg" alt="">
+                    <div class="card__status"><span class="card__viewers">671명 시청</span></div>
+                  </div>
+                  <div class="card__info">
+                    <img class="card__avatar" src="assets/watch/v4/avatar-ymss-sm.jpg" width="24" height="24" alt="">
+                    <div class="card__text">
+                      <p class="card__title">YM상사 시즌7 5화 무한성 룰렛데이</p>
+                      <div>
+                        <p class="card__channel"><span>YM상사</span><img src="assets/watch/v4/verified-16.svg" width="16" height="16" alt="인증"></p>
+                        <p class="card__sub"><span>구분</span><span class="card__dot" aria-hidden="true"></span><span>2023.04.30</span></p>
+                      </div>
+                      <ul class="tags"><li>#인디</li><li>팀플레이</li><li>서바이벌</li></ul>
+                    </div>
+                  </div>
+                </article>
+                <article class="card card--rich">
+                  <div class="card__thumb">
+                    <img src="assets/watch/v4/vod1.jpg" alt="">
+                    <div class="card__status"><span class="card__viewers">671명 시청</span></div>
+                  </div>
+                  <div class="card__info">
+                    <img class="card__avatar" src="assets/watch/v4/avatar-ymss-sm.jpg" width="24" height="24" alt="">
+                    <div class="card__text">
+                      <p class="card__title">YM상사 시즌7 5화 무한성 룰렛데이</p>
+                      <div>
+                        <p class="card__channel"><span>YM상사</span><img src="assets/watch/v4/verified-16.svg" width="16" height="16" alt="인증"></p>
+                        <p class="card__sub"><span>구분</span><span class="card__dot" aria-hidden="true"></span><span>2023.04.30</span></p>
+                      </div>
+                      <ul class="tags"><li>#인디</li><li>팀플레이</li><li>서바이벌</li></ul>
+                    </div>
+                  </div>
+                </article>
+              </div>
+            </section>
           </div>
 
-          <!-- 채팅 (64816:102304) — 위 탭(채팅/후원하기), 후원하기를 고르면 후원 종류 탭(64822:111705)과 패널 -->
-          <aside class="wchat" id="wchat" aria-label="채팅" data-mode="chat" data-node-id="64816:102304">
-            <div class="wchat__mode-tabs" role="tablist" data-node-id="64822:111733">
+          <!-- 채팅 (66098:112225) — 위 탭(채팅 · 후원하기 · 채팅 설정), 후원하기를 고르면 후원 종류 탭(66098:112235)과 패널 -->
+          <aside class="wchat" id="wchat" aria-label="채팅" data-mode="chat" data-node-id="66098:112225">
+            <div class="wchat__mode-tabs" role="tablist" data-node-id="66098:112226">
               <button class="wchat__mode-tab" type="button" role="tab" aria-selected="true" data-chat-tab="chat">채팅</button>
-              <button class="wchat__mode-tab" type="button" role="tab" aria-selected="false" data-chat-tab="donate">후원하기</button>
+              <button class="wchat__mode-tab wchat__mode-tab--pc" type="button" role="tab" aria-selected="false" data-chat-tab="donate">후원하기</button>
+              <!-- 모바일 탭 (66098:116276) — 후원 종류가 위 탭으로 올라옴: 채팅 · 일반 후원 · 시그니처 · 설정(톱니) -->
+              <button class="wchat__mode-tab wchat__mode-tab--mo" type="button" role="tab" aria-selected="false" aria-controls="donate-general" data-donate="general">일반 후원</button>
+              <button class="wchat__mode-tab wchat__mode-tab--mo" type="button" role="tab" aria-selected="false" aria-controls="donate-signature" data-donate="signature">시그니처</button>
+              <button class="wchat__mode-tab wchat__mode-tab--settings" type="button" role="tab" aria-selected="false" aria-controls="wchat-settings" aria-label="채팅 설정" data-chat-tab="settings"><span class="wchat__gear" aria-hidden="true"></span><span class="wchat__settings-text">채팅 설정</span></button>
             </div>
-            <div class="wchat__kinds" data-node-id="64822:111705">
-              <button class="wkind" type="button" aria-pressed="false" aria-controls="donate-general" data-donate="general">일반후원</button>
+            <!-- 후원 종류 (66098:112235) — 시안은 일반 후원 · 시그니처 2종. 영상 · 미션 패널은 코드에 남겨 두고 탭만 숨김 -->
+            <div class="wchat__kinds" data-node-id="66098:112235">
+              <button class="wkind" type="button" aria-pressed="false" aria-controls="donate-general" data-donate="general">일반 후원</button>
               <button class="wkind" type="button" aria-pressed="false" aria-controls="donate-signature" data-donate="signature">시그니처</button>
-              <button class="wkind" type="button" aria-pressed="false" aria-controls="donate-video" data-donate="video">영상</button>
-              <button class="wkind" type="button" aria-pressed="false" aria-controls="donate-mission" data-donate="mission">미션</button>
+              <button class="wkind" type="button" aria-pressed="false" aria-controls="donate-video" data-donate="video" hidden>영상</button>
+              <button class="wkind" type="button" aria-pressed="false" aria-controls="donate-mission" data-donate="mission" hidden>미션</button>
             </div>
-            <!-- YouTube 라이브 채팅 임베드 — 라이브 · 최초 공개 영상에서만 보임. 후원 시트는 이 위에 겹침 -->
-            <iframe class="wchat__yt" data-yt-chat title="YouTube 라이브 채팅"></iframe>
+            <!-- YouTube 라이브 채팅 임베드 — 라이브 · 최초 공개 영상에서만 보임. 후원 시트는 이 위에 겹침.
+                 iframe 안 글자는 바꿀 수 없어, 채팅 설정의 글자 크기는 칸 전체 배율(--chat-zoom)로 키움 -->
+            <div class="wchat__yt-wrap">
+              <iframe class="wchat__yt" data-yt-chat title="YouTube 라이브 채팅"></iframe>
+            </div>
             <p class="wchat__yt-off" data-yt-chat-off hidden>YouTube 채팅은 로컬 서버(http://localhost)나 실제 도메인에서 열어야 보여요.</p>
           <section class="donate" id="donate-general" data-donate-panel="general" aria-label="일반후원" data-node-id="64624:81075" hidden>
             <header class="donate__head">
@@ -657,6 +856,27 @@
             <footer class="donate__foot">
               <p class="dwarn" data-warn-form hidden>⚠️ 입력정보를 확인해주세요</p>
               <button class="donate__submit" type="button" data-donate-submit>후원하기</button>
+            </footer>
+          </section>
+          <!-- 채팅 설정 (66098:114862) — 탭 바로 아래로 내려오는 시트. 글자 크기 · 설정 저장.
+               칭호 배지(시안에 있음)는 YouTube 채팅에 적용할 수 없어 YouTube 상세에서는 뺌. 설정은 저장하지 않아 새로고침하면 "작게"로
+               글자 크기는 YouTube 채팅 칸 전체를 100 · 115 · 130% 로 확대 (iframe 안 글자만 따로는 못 바꿈) -->
+          <section class="donate fset" id="wchat-settings" data-donate-panel="settings" aria-label="채팅 설정" role="tabpanel" hidden>
+            <div class="donate__body">
+              <div class="dbox" role="group" aria-labelledby="wset-size-title">
+                <div class="dbox__head">
+                  <strong id="wset-size-title">글자 크기</strong>
+                  <span class="fset__value" data-fset-size-label>작게</span>
+                </div>
+                <div class="fset__sizes">
+                  <button class="fset__size fset__size--s" type="button" aria-label="작게" aria-pressed="true" data-fset-size="1">가</button>
+                  <button class="fset__size fset__size--m" type="button" aria-label="보통" aria-pressed="false" data-fset-size="1.15">가</button>
+                  <button class="fset__size fset__size--l" type="button" aria-label="크게" aria-pressed="false" data-fset-size="1.3">가</button>
+                </div>
+              </div>
+            </div>
+            <footer class="donate__foot">
+              <button class="donate__submit" type="button" data-fset-save>설정 저장</button>
             </footer>
           </section>
             <div class="dfail" id="donate-fail" hidden>

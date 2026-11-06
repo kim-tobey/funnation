@@ -515,10 +515,12 @@
 
             <!-- 아래 시트 (65605:99260 / 후원 65605:104250) — 탭 · 후원 패널 · 채팅 입력. 채팅 목록 위로 겹침 -->
             <div class="fsheet" data-node-id="65605:104250">
-              <div class="fsheet__tabs" role="tablist" aria-label="채팅 · 후원">
+              <div class="fsheet__tabs" role="tablist" aria-label="채팅 · 후원 · 설정">
                 <button class="fsheet__tab" type="button" role="tab" aria-selected="true" data-chat-tab="chat">채팅</button>
                 <button class="fsheet__tab" type="button" role="tab" aria-selected="false" aria-controls="donate-general" data-donate="general">후원</button>
                 <button class="fsheet__tab" type="button" role="tab" aria-selected="false" aria-controls="donate-signature" data-donate="signature">시그니처</button>
+                <!-- 설정 (66076:94051) — 32px Primary 원 + 16px 톱니, 선택돼도 아래 선 없음 -->
+                <button class="fsheet__tab fsheet__tab--settings" type="button" role="tab" aria-selected="false" aria-controls="sheet-settings" aria-label="설정" data-donate="settings"><span class="fsheet__gear"><img src="assets/fun-watch/settings.svg" width="16" height="16" alt=""></span></button>
               </div>
           <section class="donate" id="donate-general" data-donate-panel="general" aria-label="일반후원" data-node-id="64624:81075" role="tabpanel" hidden>
             <header class="donate__head">
@@ -651,6 +653,36 @@
             <footer class="donate__foot">
               <p class="dwarn" data-warn-form hidden>⚠️ 입력정보를 확인해주세요</p>
               <button class="donate__submit" type="button" data-donate-submit>후원하기</button>
+            </footer>
+          </section>
+          <!-- 설정 (66076:95140) — 글자 크기 · 칭호 배지 · 설정 저장. 후원 패널과 같은 틀 -->
+          <section class="donate fset" id="sheet-settings" data-donate-panel="settings" aria-label="설정" data-node-id="66076:95140" role="tabpanel" hidden>
+            <div class="donate__body">
+              <div class="dbox" role="group" aria-labelledby="fset-size-title">
+                <div class="dbox__head">
+                  <strong id="fset-size-title">글자 크기</strong>
+                  <span class="fset__value" data-fset-size-label>보통</span>
+                </div>
+                <div class="fset__sizes">
+                  <button class="fset__size fset__size--s" type="button" aria-label="작게" aria-pressed="false" data-fchat-size="12">가</button>
+                  <button class="fset__size fset__size--m" type="button" aria-label="보통" aria-pressed="true" data-fchat-size="14">가</button>
+                  <button class="fset__size fset__size--l" type="button" aria-label="크게" aria-pressed="false" data-fchat-size="17">가</button>
+                </div>
+              </div>
+              <div class="dbox" role="group" aria-labelledby="fset-badge-title">
+                <div class="dbox__head">
+                  <strong id="fset-badge-title">칭호 배지</strong>
+                  <button class="fset__link" type="button">설정</button>
+                </div>
+                <div class="fset__chips">
+                  <button class="fset__chip" type="button" aria-pressed="true" data-fset-badge>모두 표시함</button>
+                  <button class="fset__chip" type="button" aria-pressed="false" data-fset-badge>일부 표시</button>
+                  <button class="fset__chip" type="button" aria-pressed="false" data-fset-badge>표시 안함</button>
+                </div>
+              </div>
+            </div>
+            <footer class="donate__foot">
+              <button class="donate__submit" type="button" data-fset-save>설정 저장</button>
             </footer>
           </section>
               <!-- 채팅 입력 (65605:99273) — 글자 크기 3단계 · 채팅 뷰 전환 · 입력 -->

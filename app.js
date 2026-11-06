@@ -1343,7 +1343,9 @@
   var target = /fun-live\.html$/.test(location.pathname) ? "fun-watch.html" : "watch.html";
   function go() {
     var area = this.closest("[data-watch]");
-    location.href = area ? area.getAttribute("data-watch") : target;
+    // 세로 썸네일은 영상 상세를 세로 레이아웃으로 (YouTube 상세만)
+    var vertical = !area && target === "watch.html" && this.classList.contains("thumb--vertical");
+    location.href = area ? area.getAttribute("data-watch") : target + (vertical ? "?orient=vertical" : "");
   }
 })();
 
@@ -1356,7 +1358,10 @@
 
   /* YouTube 임베드 — 영상 ID 는 .watch 의 data-yt-id. 라이브 채팅은 embed_domain 이 지금 주소의 도메인과 같아야 하고
      라이브 · 최초 공개 영상에서만 보임. file:// 로 열면 YouTube 가 막아 안내 문구를 보여줌 */
-  var ytId = watch.getAttribute("data-yt-id");
+  // 가로 · 세로 — ?orient=vertical 이면 세로 레이아웃, 세로 데모 영상 ID 가 있으면 그 영상으로
+  var vertical = /[?&]orient=vertical(&|$)/.test(location.search) && watch.hasAttribute("data-orient");
+  if (vertical) watch.setAttribute("data-orient", "portrait");
+  var ytId = (vertical && watch.getAttribute("data-yt-id-vertical")) || watch.getAttribute("data-yt-id");
   var player = watch.querySelector("[data-yt-player]");
   var ytChat = watch.querySelector("[data-yt-chat]");
   var host = location.hostname;
@@ -1395,16 +1400,34 @@
   var lastKind = "general";
   function show(key) {
     current = key;
-    if (key) lastKind = key;
-    chat.setAttribute("data-mode", key ? "donate" : "chat");
-    for (var m = 0; m < modeTabs.length; m++) modeTabs[m].setAttribute("aria-selected", (modeTabs[m].getAttribute("data-chat-tab") === "donate") === !!key ? "true" : "false");
+    if (key && key !== "settings") lastKind = key;
+    var mode = key === "settings" ? "settings" : key ? "donate" : "chat";
+    chat.setAttribute("data-mode", mode);
+    for (var m = 0; m < modeTabs.length; m++) modeTabs[m].setAttribute("aria-selected", modeTabs[m].getAttribute("data-chat-tab") === mode ? "true" : "false");
     for (var i = 0; i < panels.length; i++) panels[i].hidden = panels[i].getAttribute("data-donate-panel") !== key;
     // 펀네이션 라이브 상세는 채팅 · 후원 · 시그니처가 한 줄 탭(role=tab)
     for (var j = 0; j < tabs.length; j++) tabs[j].setAttribute(tabs[j].getAttribute("role") === "tab" ? "aria-selected" : "aria-pressed", tabs[j].getAttribute("data-donate") === key ? "true" : "false");
   }
   var modeBtns = watch.querySelectorAll("[data-chat-tab]");
   for (var b = 0; b < modeBtns.length; b++) modeBtns[b].addEventListener("click", function () {
-    show(this.getAttribute("data-chat-tab") === "donate" ? lastKind : null);
+    var tab = this.getAttribute("data-chat-tab");
+    show(tab === "donate" ? lastKind : tab === "settings" ? "settings" : null);
+  });
+
+  /* 채팅 설정 (fun-watch 66076:95140 · watch 66098:114862) — 글자 크기 · 칭호 배지는 하나만 선택,
+     설정 저장은 채팅 탭으로 돌아감 (저장 동작은 시안에 없어 화면 상태만). 펀네이션 라이브는 아래에서 채팅 글자 크기도 바꿈 */
+  watch.addEventListener("click", function (e) {
+    var pick = e.target.closest("[data-fset-size], [data-fchat-size], [data-fset-badge]");
+    if (pick && pick.closest(".fset")) {
+      var group = pick.parentNode.children;
+      for (var i = 0; i < group.length; i++) group[i].setAttribute("aria-pressed", group[i] === pick ? "true" : "false");
+      var label = pick.closest(".dbox").querySelector("[data-fset-size-label]");
+      if (label && !pick.hasAttribute("data-fset-badge")) label.textContent = pick.getAttribute("aria-label");
+      // YouTube 상세 — 채팅 칸 전체 배율 (1 · 1.15 · 1.3)
+      var zoom = pick.getAttribute("data-fset-size");
+      if (zoom) chat.style.setProperty("--chat-zoom", zoom);
+    }
+    if (e.target.closest("[data-fset-save]")) watch.querySelector('[data-chat-tab="chat"]').click();
   });
   for (var k = 0; k < tabs.length; k++) tabs[k].addEventListener("click", function () {
     show(this.getAttribute("data-donate"));
@@ -1558,6 +1581,7 @@
     return ok;
   }
   for (var q = 0; q < panels.length; q++) {
+    if (!panels[q].querySelector("[data-donate-amount]")) continue; // 설정 패널처럼 후원 입력이 없는 패널은 확인하지 않음
     panels[q].addEventListener("input", function () { check(this); });
     check(panels[q]);
   }
@@ -1621,6 +1645,61 @@
       if (panel) panel.querySelector("[data-donate-submit]").focus();
     }
   }, true);
+})();
+
+/* 영상 상세 방송 정보 · 다시보기 (66098:111836 · 111904) — 팔로우, 후원하기(채팅 쪽 후원 탭으로), 공유, 설명 더보기, 정렬 칩 */
+(function () {
+  var watch = document.querySelector(".watch");
+  if (!watch) return;
+  // 팔로우 — PC 방송 정보와 모바일 앱바 버튼이 같은 상태
+  var follows = watch.querySelectorAll("[data-watch-follow]");
+  for (var f = 0; f < follows.length; f++) follows[f].addEventListener("click", function () {
+    var on = this.getAttribute("aria-pressed") !== "true";
+    for (var k = 0; k < follows.length; k++) {
+      follows[k].setAttribute("aria-pressed", on ? "true" : "false");
+      (follows[k].querySelector("span") || follows[k]).textContent = on ? "팔로잉" : "팔로우";
+    }
+  });
+  // 모바일 뒤로 — 같은 사이트에서 왔으면 이전 화면, 아니면 홈
+  var back = watch.querySelector("[data-watch-back]");
+  if (back) back.addEventListener("click", function (e) {
+    if (history.length > 1 && document.referrer.indexOf(location.origin) === 0) {
+      e.preventDefault();
+      history.back();
+    }
+  });
+  var donate = watch.querySelector("[data-watch-donate]");
+  if (donate) donate.addEventListener("click", function () {
+    var tab = watch.querySelector('[data-chat-tab="donate"]');
+    tab.click();
+    tab.focus();
+  });
+  var share = watch.querySelector("[data-watch-share]");
+  if (share) share.addEventListener("click", function () {
+    var btn = this;
+    if (navigator.share) {
+      navigator.share({ title: document.title, url: location.href }).catch(function () {});
+    } else if (navigator.clipboard) {
+      navigator.clipboard.writeText(location.href).then(function () {
+        btn.setAttribute("aria-label", "링크를 복사했어요");
+        setTimeout(function () { btn.setAttribute("aria-label", "공유하기"); }, 2000);
+      });
+    }
+  });
+  var toggle = watch.querySelector("[data-wdesc-toggle]");
+  if (toggle) toggle.addEventListener("click", function () {
+    var open = this.getAttribute("aria-expanded") !== "true";
+    this.setAttribute("aria-expanded", open ? "true" : "false");
+    this.textContent = open ? "간략히" : "...더보기";
+    this.closest(".wdesc").setAttribute("data-expanded", open ? "true" : "false");
+  });
+  var sorts = watch.querySelectorAll("[data-wmore-sort] button");
+  for (var i = 0; i < sorts.length; i++) sorts[i].addEventListener("click", function () {
+    for (var j = 0; j < sorts.length; j++) {
+      sorts[j].classList.toggle("is-active", sorts[j] === this);
+      sorts[j].setAttribute("aria-pressed", sorts[j] === this ? "true" : "false");
+    }
+  });
 })();
 
 /* 펀네이션 라이브 영상 상세 (v2.0 65605:98199) — 자체 스트리밍 플레이어 · 방송 정보 · 채팅.
@@ -1803,12 +1882,15 @@
     chat.classList.toggle("is-chat-view", on);
   });
 
-  // 글자 크기 3단계 — 채팅 목록 글자만
+  // 글자 크기 3단계 — 채팅 목록 글자만. 채팅 입력 위 버튼과 설정 탭 버튼이 같은 값을 함께 표시
   var list = fw.querySelector("[data-fchat-list]");
   var sizes = fw.querySelectorAll("[data-fchat-size]");
+  var sizeLabel = fw.querySelector("[data-fset-size-label]");
   for (var z = 0; z < sizes.length; z++) sizes[z].addEventListener("click", function () {
-    for (var i = 0; i < sizes.length; i++) sizes[i].setAttribute("aria-pressed", sizes[i] === this ? "true" : "false");
-    list.style.setProperty("--fmsg-size", this.getAttribute("data-fchat-size") + "px");
+    var px = this.getAttribute("data-fchat-size");
+    for (var i = 0; i < sizes.length; i++) sizes[i].setAttribute("aria-pressed", sizes[i].getAttribute("data-fchat-size") === px ? "true" : "false");
+    list.style.setProperty("--fmsg-size", px + "px");
+    if (sizeLabel) sizeLabel.textContent = this.getAttribute("aria-label");
   });
 
   /* 채팅 목록 — 맨 아래에 있을 때만 새 메시지를 따라 내려감 (위로 올려 읽는 중이면 그대로) */

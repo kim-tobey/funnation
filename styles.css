@@ -5257,12 +5257,12 @@ ul {
   --w-placeholder: #515151;
   --w-input-bg: #343434;
   --w-field-bg: #292929;
-  --w-box-bg: #202224;
+  --w-box-bg: var(--color-bg-400); /* 칭호 · 후원 금액 카드 — 66098:118150 에서 BG 400 으로 */
   --w-name: #b8b8b8;
   /* 채팅 메시지 영역(주요 채팅 바 + 목록) — 시안은 채팅 캡처 이미지 바탕 #0f0f0f, 제목·입력·탭은 패널색 #212121 */
   --w-chat-bg: #0f0f0f;
   /* ver.3 채팅 (64816:102304) — 탭 바탕 · 꺼진 탭 글자, YouTube 채팅 캡처 색 */
-  --w-tabs-bg: #101010;
+  --w-tabs-bg: var(--color-bg-200); /* 66098:112226 탭 · 후원 종류 바탕 BG 200 */
   --w-tab-off: #818181;
   --w-msg: #fff;
   --w-name-member: #56a14a;
@@ -5340,11 +5340,15 @@ ul {
   height: calc(100vh - 65px);
   min-height: 640px;
 }
+/* 왼쪽 — 가로 영상은 플레이어 · 방송 정보 · 다시보기를 이 안에서 세로 스크롤 (채팅은 오른쪽에 고정) */
 .watch__main {
   display: flex;
   flex: 1 1 0;
   flex-direction: column;
   min-width: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 /* LNB — 평소엔 숨기고, 햄버거를 누르면 GNB 아래 왼쪽에서 영상 위로 겹쳐 열림 (펀네이션 라이브 상세 fun-watch.html · PC 정책안내 terms.html 도 같은 방식) */
@@ -5412,25 +5416,292 @@ ul {
   }
 }
 
-/* YouTube 플레이어 (64795:15029) — 실제 YouTube iframe 을 16:9 로 영역 가운데에 */
+/* YouTube 플레이어 — 가로 영상(66098:110635)은 폭 가득 16:9 로 GNB 아래에 바로 붙음.
+   세로 영상(66098:113753)은 방송 정보줄 위를 꽉 채우고, 좌우 검은 레터박스는 YouTube 플레이어가 그림 */
 .yt {
   position: relative;
   display: flex;
-  flex: 1 1 0;
-  align-items: center;
-  justify-content: center;
-  min-height: 0;
-  overflow: hidden;
-  /* 시안 바탕 — 아래 왼쪽이 밝은 남색 */
-  background: var(--bg-page);
+  flex: none;
+  flex-direction: column;
+  background: #000;
 }
 .yt__frame {
   display: block;
   width: 100%;
-  max-height: 100%;
   aspect-ratio: 16 / 9;
   border: 0;
   background: #000;
+}
+.watch[data-orient="portrait"] .watch__main {
+  overflow: hidden;
+}
+.watch[data-orient="portrait"] .yt {
+  flex: 1 1 0;
+  min-height: 0;
+}
+.watch[data-orient="portrait"] .yt__frame {
+  flex: 1 1 0;
+  aspect-ratio: auto;
+  min-height: 0;
+}
+/* 세로 영상은 정보줄(94)만 — 설명 · 다시보기 없음 */
+.watch[data-orient="portrait"] .wdesc,
+.watch[data-orient="portrait"] .wmore {
+  display: none;
+}
+.watch[data-orient="portrait"] .winfo {
+  flex: none;
+}
+
+/* 방송 정보 (66098:111836) — 플레이어 아래 18 · 좌우 24. 왼쪽 채널 · 제목 · 태그, 오른쪽 버튼 · 시청자 */
+.winfo {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 18px 24px 0;
+}
+.winfo__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  min-height: 94px;
+}
+.winfo__channel {
+  display: flex;
+  gap: 16px;
+  min-width: 0;
+}
+/* 아바타 64 — 4px #01B1FD 테두리, 아래 LIVE 배지(#015AFA) */
+.winfo__pic {
+  position: relative;
+  flex: none;
+  width: 64px;
+  height: 64px;
+  margin-top: 2px;
+}
+.winfo__pic img {
+  display: block;
+  width: 64px;
+  height: 64px;
+  border: 4px solid #01b1fd;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.winfo__live {
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  padding: 4px 6px;
+  border-radius: 2px;
+  background: #015afa;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 12px;
+  color: var(--color-text-normal);
+  transform: translateX(-50%);
+}
+.winfo__text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.winfo__name {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 24px;
+  color: var(--w-title);
+}
+.winfo__title {
+  max-width: 666px;
+  margin: 0;
+  overflow: hidden;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 28px;
+  color: var(--w-title);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.winfo .tags li,
+.wmore .tags li {
+  background: var(--w-tag-bg);
+  color: var(--w-tag-text);
+}
+.winfo__side {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+.winfo__actions {
+  display: flex;
+  gap: 8px;
+}
+/* 팔로우 → 누르면 팔로잉 (66098:111868 — 밝은 바탕 · 진한 글자) */
+.winfo .fstreamer__follow {
+  height: 42px;
+}
+.winfo .fstreamer__follow[aria-pressed="true"] {
+  background: var(--fw-donate-bg);
+  color: var(--fw-donate-text);
+}
+.winfo .fstreamer__follow[aria-pressed="true"] img {
+  filter: brightness(0.1);
+}
+.winfo__stat {
+  display: flex;
+  align-items: center;
+  padding: 2px 0;
+}
+.winfo__stat p {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 20px;
+  color: var(--color-text-depth-300);
+}
+.winfo__stat b {
+  margin-right: 2px;
+  color: var(--color-brand-primary);
+}
+.winfo__share {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
+}
+[data-theme="light"] .winfo__share img {
+  filter: brightness(0.25);
+}
+/* 설명 (66098:111891) — 흰 10% 바탕 · 모서리 12 · 안 12. 접으면 본문 한 줄 */
+.wdesc {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  font-size: 14px;
+  line-height: 20px;
+}
+[data-theme="light"] .wdesc {
+  background: rgba(0, 0, 0, 0.05);
+}
+.wdesc__meta {
+  margin: 0;
+  font-weight: 500;
+  color: var(--w-title);
+}
+.wdesc__body {
+  align-self: stretch;
+  font-weight: 600;
+  color: #aaa;
+}
+.wdesc__body p {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.wdesc[data-expanded="false"] .wdesc__body p:not(:first-child) {
+  display: none;
+}
+.wdesc__toggle {
+  min-width: 40px;
+  margin-top: 20px;
+  padding: 0 0 0 3px;
+  font-weight: 500;
+  line-height: 20px;
+  color: var(--w-title);
+}
+.wdesc[data-expanded="false"] .wdesc__toggle {
+  margin-top: 0;
+}
+
+/* 이 채널의 다시보기 (66098:111904) — 위 18 · 좌우 24 · 아래 40, 제목줄과 카드 사이 20.
+   카드는 210 (썸네일 210×118 · 모서리 8, 아바타 24) 한 줄 · 간격 20, 넘치면 가로 스크롤 */
+.wmore {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 18px 24px 40px;
+}
+.wmore__head {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.wmore__head .section-header a {
+  font-weight: 700;
+  text-decoration: underline;
+  color: var(--color-brand-primary);
+}
+.wmore__desc {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.6;
+  letter-spacing: -0.01em;
+  color: var(--text-caption); /* Depth 500 #515E71 */
+}
+.wmore__row {
+  display: flex;
+  gap: 20px;
+  padding-bottom: 20px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.wmore__row::-webkit-scrollbar {
+  display: none;
+}
+.wmore .card {
+  flex: none;
+  gap: 14px;
+  width: 210px;
+}
+.wmore .card__thumb,
+.wmore .card__thumb > img {
+  border-radius: 8px;
+}
+.wmore .card__thumb {
+  aspect-ratio: 210 / 118;
+  padding: 7px 0 0 8px;
+}
+.wmore .card__viewers {
+  height: auto;
+  padding: 2px 3px 1px;
+  background: rgba(18, 18, 18, 0.7);
+  backdrop-filter: blur(30px);
+  line-height: 16px;
+  color: rgba(255, 255, 255, 0.7);
+}
+.wmore .card__avatar {
+  width: 24px;
+  height: 24px;
+}
+.wmore .card__channel,
+.wmore .card__sub {
+  font-weight: 400;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.7);
+}
+.wmore .card__channel {
+  gap: 2px;
+}
+[data-theme="light"] .wmore .card__channel,
+[data-theme="light"] .wmore .card__sub {
+  color: var(--rich-meta);
 }
 
 /* 채팅 (64816:102304) — 398px, 왼쪽 1px 선. 위 탭(채팅/후원하기) 48 */
@@ -5504,14 +5775,28 @@ ul {
   font-weight: 600;
   color: #fefefe;
 }
-/* YouTube 라이브 채팅 — 탭 아래 남은 높이를 모두 채움 */
-.wchat__yt {
-  display: block;
+/* YouTube 라이브 채팅 — 탭 아래 남은 높이를 모두 채움.
+   채팅 설정 글자 크기 = 칸 전체 배율: iframe 을 1/배율 크기로 두고 scale 로 키워 칸을 꼭 맞게 채움 */
+.wchat__yt-wrap {
+  position: relative;
   flex: 1 1 0;
-  width: 100%;
   min-height: 0;
+  overflow: hidden;
+}
+.wchat__yt {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  width: calc(100% / var(--chat-zoom, 1));
+  height: calc(100% / var(--chat-zoom, 1));
   border: 0;
   background: var(--w-chat-bg);
+  transform: scale(var(--chat-zoom, 1));
+  transform-origin: 0 0;
+}
+.wchat__yt-wrap:has(.wchat__yt[hidden]) {
+  display: none;
 }
 .yt__frame[hidden],
 .wchat__yt[hidden] {
@@ -5534,6 +5819,21 @@ ul {
   line-height: 1.5;
   text-align: center;
   color: var(--w-tab-off);
+}
+
+/* 모바일 전용 앱바 · 탭 · 톱니는 PC 에서 숨김 */
+.wbar,
+.wchat__mode-tab--mo,
+.wchat__gear {
+  display: none;
+}
+/* 채팅 설정 시트 (66098:114862) — 후원 종류 탭이 없어 탭(48) 바로 아래로 내려옴 */
+.wchat .fset {
+  top: 48px;
+  max-height: calc(100% - 48px - 24px);
+}
+.wkind[hidden] {
+  display: none;
 }
 
 /* 후원 시트 (64822:112729) — 후원 종류 탭 바로 아래에서 내려와 채팅 위에 겹침(채팅은 아래로 계속 보임).
@@ -5821,8 +6121,9 @@ ul {
   gap: 10px;
   padding: 16px;
   border-radius: 12px;
-  background: #4962ff;
-  color: #e0e0e0;
+  /* 톤다운 (66098:118150 · 66098:113672) — 다른 카드와 같은 BG 400, 글자 Normal */
+  background: var(--color-bg-400);
+  color: var(--color-text-normal);
 }
 .dmsg__top {
   display: flex;
@@ -5899,8 +6200,8 @@ ul {
   align-items: center;
   justify-content: center;
   height: 28px;
-  border-radius: 999px;
-  background: #2c43d1;
+  border-radius: 24px;
+  background: var(--color-border-300); /* BG Chips #2A2D3F */
 }
 /* 채팅 읽어주기 · 목소리 (64822:112745 · 112747) — 28px 알약, 14px */
 .dmsg__vol {
@@ -5910,7 +6211,7 @@ ul {
   font-weight: 500;
   line-height: 1.2;
   letter-spacing: 0.52px;
-  color: #e0e0e0;
+  color: var(--color-text-normal);
 }
 .dmsg__vol[aria-pressed="false"] {
   opacity: 0.5;
@@ -5922,7 +6223,12 @@ ul {
   font-weight: 600;
   line-height: 1.2;
   letter-spacing: 0.52px;
-  color: #e0e0e0;
+  color: var(--color-text-normal);
+}
+/* 밝은 테마 — 카드가 밝아져 흰 아이콘이 안 보이므로 어둡게 */
+[data-theme="light"] .dmsg__vol img,
+[data-theme="light"] .dmsg__tts img {
+  filter: brightness(0.25);
 }
 .dmsg__vol[aria-pressed="false"] + .dmsg__tts {
   opacity: 0.5;
@@ -5934,9 +6240,9 @@ ul {
   height: 79px;
   padding: 12px;
   margin-top: -2px; /* 목소리 버튼 ↔ 입력칸은 8px (카드 안 다른 간격은 10px) */
-  border: 1px solid transparent;
+  border: 1px solid var(--color-border-400);
   border-radius: 8px;
-  background: #3f56ea;
+  background: var(--color-bg-200);
 }
 .dmsg__input {
   flex: 1;
@@ -5944,17 +6250,17 @@ ul {
   font-weight: 500;
   line-height: 16px;
   letter-spacing: 0;
-  color: #fff;
-  caret-color: #fff;
+  color: var(--color-text-strong);
+  caret-color: var(--color-text-strong);
 }
 .dmsg__input::placeholder {
-  color: #97a4f6;
+  color: var(--color-text-depth-400);
 }
 .dmsg__count {
   align-self: flex-end;
   font-size: 12px;
   line-height: 14px;
-  color: #97a4f6;
+  color: var(--color-text-depth-400);
 }
 .dbox {
   display: flex;
@@ -7083,6 +7389,172 @@ ul {
   }
 }
 
+/* 영상 상세 모바일 (66098:116089 · 117119 · 120490) — 앱바 56 · 플레이어 16:9 · 채팅 탭 4개 · YouTube 채팅.
+   가로 · 세로 영상 모두 16:9 칸(세로는 YouTube 가 좌우 레터박스). 방송 정보 · 설명 · 다시보기는 시안에 없어 숨김 */
+@media (max-width: 767px) {
+  [data-page="watch"]:not([data-view]) .mo-appbar {
+    display: none;
+  }
+  /* 시안에 하단 내비가 없음 — [테스트용] 홈 인디케이터 줄만 남김 */
+  [data-page="watch"] .bottom-nav {
+    height: 20px;
+    border-top: 0;
+  }
+  [data-page="watch"] .bottom-nav__list {
+    display: none;
+  }
+  [data-page="watch"] .fab-auth {
+    right: 16px;
+    bottom: 96px;
+  }
+  .watch {
+    flex-direction: column;
+    height: calc(100dvh - var(--mo-statusbar-h) - 20px);
+    min-height: 480px;
+  }
+  .wbar {
+    position: relative;
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+    padding: 4px;
+    border-bottom: 1px solid var(--fw-line); /* Border 200 */
+    background: #0d0e1a;
+  }
+  [data-theme="light"] .wbar {
+    background: var(--bg-mo-appbar);
+  }
+  .wbar__btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+  }
+  [data-theme="light"] .wbar__btn img {
+    filter: brightness(0.25);
+  }
+  .wbar__channel {
+    position: absolute;
+    top: 50%;
+    right: 56px;
+    left: 56px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transform: translateY(-50%);
+  }
+  .wbar__pic {
+    flex: none;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  .wbar__name {
+    min-width: 0;
+    overflow: hidden;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 24px;
+    color: var(--mo-appbar-title);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  /* 팔로우 (Filter Chip - S) — Primary, 팔로잉이면 BG Cancel · Depth 300 */
+  .wbar__follow {
+    flex: none;
+    padding: 6px 12px;
+    border-radius: 24px;
+    background: var(--color-brand-primary);
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 16px;
+    color: #fff;
+  }
+  .wbar__follow[aria-pressed="true"] {
+    background: var(--color-border-300);
+    color: var(--color-text-depth-300);
+  }
+  .watch__main {
+    flex: none;
+    overflow: visible;
+  }
+  .watch[data-orient="portrait"] .watch__main {
+    overflow: visible;
+  }
+  .watch[data-orient="portrait"] .yt {
+    flex: none;
+  }
+  .watch[data-orient="portrait"] .yt__frame {
+    flex: none;
+    aspect-ratio: 16 / 9;
+  }
+  .winfo,
+  .wmore {
+    display: none;
+  }
+  .wchat {
+    flex: 1 1 0;
+    width: auto;
+    min-height: 0;
+    border-left: 0;
+  }
+  /* 탭 (66098:116276) — 4칸, 선택 Bold Primary · 비선택 Depth 400 */
+  .wchat__mode-tab {
+    color: var(--color-text-depth-400);
+  }
+  .wchat__mode-tab--pc,
+  .wchat[data-mode="donate"] .wchat__kinds {
+    display: none;
+  }
+  .wchat__mode-tab--mo {
+    display: block;
+  }
+  .wchat__settings-text {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+  /* 설정 톱니 16 — 고르면 32px Primary 원 안에 흰 톱니 (66098:120490), 아래 선 없음 */
+  .wchat__mode-tab--settings {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .wchat__gear {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+  }
+  .wchat__gear::before {
+    content: "";
+    width: 16px;
+    height: 16px;
+    background: currentColor;
+    -webkit-mask: url("assets/watch/v4/mo-settings.svg") center / 16px 16px no-repeat;
+    mask: url("assets/watch/v4/mo-settings.svg") center / 16px 16px no-repeat;
+  }
+  .wchat__mode-tab--settings[aria-selected="true"] .wchat__gear {
+    background: var(--color-brand-primary);
+    color: #fff;
+  }
+  .wchat__mode-tab--settings[aria-selected="true"]::after {
+    content: none;
+  }
+  /* 후원 · 설정 시트는 탭(48) 바로 아래로 */
+  .wchat .donate {
+    top: 48px;
+    max-height: calc(100% - 48px - 24px);
+  }
+}
+
 /* ============================================================
    펀네이션 라이브 영상 상세 (v2.0 65605:98199) — fun-watch.html. 자체 스트리밍, PC 다크 시안만 있음
    플레이어 + 방송 정보(65605:100369) | 채팅 398 (메뉴 · 후원 랭킹 · 목록 · 아래 시트)
@@ -7822,7 +8294,7 @@ ul {
   background: var(--fw-sheet-bg);
   box-shadow: 0 -8px 8px rgba(0, 0, 0, 0.5);
 }
-/* 탭 — 48px 3칸(시안은 위 1px 선을 덮어 시트 전체 161), 선택은 Primary Bold + 아래 2px */
+/* 탭 — 48px 4칸(채팅 · 후원 · 시그니처 · 설정, 시안은 위 1px 선을 덮어 시트 전체 161), 선택은 Primary Bold + 아래 2px */
 .fsheet__tabs {
   display: flex;
   flex: none;
@@ -7848,6 +8320,90 @@ ul {
   left: 0;
   height: 2px;
   background: var(--color-brand-primary);
+}
+/* 설정 칸 (66076:94051) — 4번째 칸 가운데 32px Primary 원, 16px 톱니 */
+.fsheet__tab--settings {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.fsheet__gear {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--color-brand-primary);
+}
+.fsheet__gear img {
+  display: block;
+}
+.fsheet__tab--settings[aria-selected="true"]::after {
+  content: none; /* 시안 66076:94051 — 설정은 선택돼도 아래 선 없음 */
+}
+/* 설정 패널 (66076:95140) — 후원 패널 틀 그대로. 카드 BG400 · 16 · 12R, 버튼 30 · 사이 8, 선택은 Primary */
+.fset .dbox {
+  background: var(--color-bg-400);
+}
+.fset__value {
+  font-size: 12px;
+  line-height: 14px;
+  color: var(--w-sub);
+}
+.fset__link {
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  line-height: 14px;
+  color: var(--color-brand-primary);
+}
+.fset__link::after {
+  content: "";
+  width: 20px;
+  height: 20px;
+  background: currentColor;
+  -webkit-mask: url("assets/watch/chevron-right.svg") center / 20px 20px no-repeat;
+  mask: url("assets/watch/chevron-right.svg") center / 20px 20px no-repeat;
+}
+.fset__sizes,
+.fset__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.fset__size,
+.fset__chip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 30px;
+  border: 1px solid var(--fw-btn-line);
+  border-radius: 9999px;
+  background: var(--fw-btn-bg);
+  color: var(--fw-input-text);
+}
+.fset__size {
+  width: 30px;
+}
+.fset__size--s { font-size: 11px; line-height: 18px; }
+.fset__size--m { font-size: 14px; line-height: 21px; }
+.fset__size--l { font-size: 17px; line-height: 26px; }
+.fset__chip {
+  padding: 0 8px;
+  font-size: 12px;
+  line-height: 21px;
+}
+.fset__size[aria-pressed="true"],
+.fset__chip[aria-pressed="true"] {
+  background: var(--color-brand-primary);
+  color: #fff;
+}
+.fset__size:focus-visible,
+.fset__chip:focus-visible,
+.fset__link:focus-visible {
+  outline: 2px solid var(--w-active);
+  outline-offset: 2px;
 }
 /* 후원 · 시그니처 패널 — 영상 상세의 후원 패널을 시트 안에 그대로 (겹침 위치 · 모서리 · 그림자만 끔).
    위아래 20 · 좌우 24, 칸 사이 20 (65605:104263) */
