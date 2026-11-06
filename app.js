@@ -1362,6 +1362,7 @@
   var vertical = /[?&]orient=vertical(&|$)/.test(location.search) && watch.hasAttribute("data-orient");
   if (vertical) watch.setAttribute("data-orient", "portrait");
   var ytId = (vertical && watch.getAttribute("data-yt-id-vertical")) || watch.getAttribute("data-yt-id");
+  watch.setAttribute("data-yt-current", ytId); // 더보기 메뉴(YouTube에서 보기 · 채팅 새 창)가 씀
   var player = watch.querySelector("[data-yt-player]");
   var ytChat = watch.querySelector("[data-yt-chat]");
   var host = location.hostname;
@@ -1674,8 +1675,8 @@
     tab.click();
     tab.focus();
   });
-  var share = watch.querySelector("[data-watch-share]");
-  if (share) share.addEventListener("click", function () {
+  var shares = watch.querySelectorAll("[data-watch-share]");
+  for (var sh = 0; sh < shares.length; sh++) shares[sh].addEventListener("click", function () {
     var btn = this;
     if (navigator.share) {
       navigator.share({ title: document.title, url: location.href }).catch(function () {});
@@ -1693,6 +1694,49 @@
     this.textContent = open ? "간략히" : "...더보기";
     this.closest(".wdesc").setAttribute("data-expanded", open ? "true" : "false");
   });
+  /* 더보기 메뉴 (모바일 66146:13940 · PC 66098:153613) — ⋮ 로 열고, 바깥 클릭 · ESC · 항목 선택으로 닫힘.
+     연결 화면이 없는 항목은 data-coming-soon("준비 중"). 관리자 페이지는 로그인 연동 전이라 데모로 항상 보임 */
+  var ytNow = watch.getAttribute("data-yt-current") || watch.getAttribute("data-yt-id");
+  var ytLinks = watch.querySelectorAll("[data-yt-open]");
+  for (var y = 0; y < ytLinks.length; y++) ytLinks[y].href = "https://www.youtube.com/watch?v=" + ytNow;
+  var menuBtns = watch.querySelectorAll("[data-wmenu-btn]");
+  var openBtn = null;
+  function menuOf(btn) { return document.getElementById(btn.getAttribute("aria-controls")); }
+  function closeMenu(focus) {
+    if (!openBtn) return;
+    menuOf(openBtn).hidden = true;
+    openBtn.setAttribute("aria-expanded", "false");
+    if (focus) openBtn.focus();
+    openBtn = null;
+  }
+  for (var mb = 0; mb < menuBtns.length; mb++) menuBtns[mb].addEventListener("click", function (e) {
+    e.stopPropagation();
+    var same = openBtn === this;
+    closeMenu();
+    if (same) return;
+    openBtn = this;
+    menuOf(this).hidden = false;
+    this.setAttribute("aria-expanded", "true");
+  });
+  document.addEventListener("click", function (e) {
+    if (!openBtn) return;
+    var menu = menuOf(openBtn);
+    var item = e.target.closest(".wmenu__item");
+    if (item && menu.contains(item)) {
+      var btn = openBtn;
+      closeMenu();
+      if (item.hasAttribute("data-wmenu-lang") && window.funOpenLangPop) setTimeout(function () { window.funOpenLangPop(btn); }, 0);
+      if (item.hasAttribute("data-chat-popout")) {
+        window.open("https://www.youtube.com/live_chat?is_popout=1&v=" + ytNow, "fun-chat", "width=420,height=720");
+      }
+      return;
+    }
+    if (!menu.contains(e.target)) closeMenu();
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && openBtn) closeMenu(true);
+  });
+
   var sorts = watch.querySelectorAll("[data-wmore-sort] button");
   for (var i = 0; i < sorts.length; i++) sorts[i].addEventListener("click", function () {
     for (var j = 0; j < sorts.length; j++) {
@@ -2017,7 +2061,7 @@
   }
   function open(btn) {
     owner = btn;
-    var host = btn.closest(".top-nav__inner, .mo-appbar");
+    var host = btn.closest(".top-nav__inner, .mo-appbar, .wbar");
     if (host && pop.parentNode !== host) host.appendChild(pop);
     pop.hidden = false;
     btn.setAttribute("aria-expanded", "true");
@@ -2047,6 +2091,11 @@
       owner.focus();
     }
   }, true);
+  // 영상 상세 더보기 메뉴의 "언어 변경"에서 ⋮ 버튼 아래로 엶
+  window.funOpenLangPop = function (btn) {
+    close();
+    open(btn);
+  };
   // 창 폭이 바뀌면 아이콘 위치도 바뀌므로 다시 맞춤
   // PC ↔ 모바일 폭을 넘어가 누른 아이콘이 사라지면 닫음
   window.addEventListener("resize", function () {

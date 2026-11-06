@@ -377,7 +377,25 @@
               <strong class="wbar__name">YM상사</strong>
               <button class="wbar__follow" type="button" aria-pressed="false" data-watch-follow>팔로우</button>
             </div>
-            <button class="wbar__btn" type="button" aria-label="더보기"><img src="assets/watch/v4/mo-more.svg" width="24" height="24" alt=""></button>
+            <button class="wbar__btn" type="button" aria-label="더보기" aria-haspopup="menu" aria-expanded="false" aria-controls="wmenu-mo" data-wmenu-btn><img src="assets/watch/v4/mo-more.svg" width="24" height="24" alt=""></button>
+            <!-- 더보기 메뉴 · 모바일 (66146:13940 M1) — 화면에서 빠진 기능 + 계정 · 설정. 연결 화면이 없는 항목은 "준비 중" -->
+            <div class="wmenu wmenu--mo" id="wmenu-mo" role="menu" aria-label="더보기" hidden>
+                <p class="wmenu__user auth-in"><strong>토비라마</strong><span>님</span></p>
+                <hr class="wmenu__line auth-in">
+                <button class="wmenu__item" type="button" role="menuitem" data-watch-share><img src="assets/watch/v4/share.svg" width="16" height="16" alt=""><span>공유하기</span></button>
+                <button class="wmenu__item" type="button" role="menuitem" data-coming-soon><img src="assets/watch/v4/menu/info.svg" width="20" height="20" alt=""><span>영상 정보</span></button>
+                <button class="wmenu__item" type="button" role="menuitem" data-coming-soon><img src="assets/watch/v4/menu/replay.svg" width="20" height="20" alt=""><span>이 채널의 다시보기</span></button>
+                <button class="wmenu__item" type="button" role="menuitem" data-coming-soon><img src="assets/imgAccountCircle.svg" width="20" height="20" alt=""><span>채널로 이동</span></button>
+                <hr class="wmenu__line">
+                <a class="wmenu__item" role="menuitem" href="#" target="_blank" rel="noopener" data-yt-open><img src="assets/watch/v4/menu/external.svg" width="20" height="20" alt=""><span>YouTube에서 보기</span></a>
+                <button class="wmenu__item" type="button" role="menuitem" data-coming-soon><img src="assets/watch/v4/menu/nickname.svg" width="20" height="20" alt=""><span>닉네임 설정</span></button>
+                <button class="wmenu__item" type="button" role="menuitem" data-wmenu-lang><img src="assets/mo/appbar-lang.svg" width="20" height="20" alt=""><span>언어 변경</span></button>
+                <button class="wmenu__item" type="button" role="menuitem" data-coming-soon><img src="assets/imgGroup15.svg" width="20" height="11.18" alt=""><span>스튜디오<small class="wmenu__note">크리에이터만</small></span></button>
+                <hr class="wmenu__line">
+                <button class="wmenu__item" type="button" role="menuitem" data-coming-soon><img src="assets/watch/v4/menu/report.svg" width="20" height="20" alt=""><span>신고하기</span></button>
+                <hr class="wmenu__line" data-admin-only>
+                <button class="wmenu__item" type="button" role="menuitem" data-coming-soon data-admin-only><img src="assets/watch/v4/menu/admin.svg" width="20" height="20" alt=""><span>관리자 페이지<small class="wmenu__note">관리자만</small></span></button>
+            </div>
           </div>
           <div class="watch__main">
             <!-- YouTube 플레이어 (64795:15029) — 실제 YouTube 임베드. 영상 ID 는 .watch 의 data-yt-id (app.js 가 src 를 채움) -->
@@ -404,7 +422,19 @@
                   <div class="winfo__actions">
                     <button class="fstreamer__follow" type="button" aria-pressed="false" data-watch-follow><img src="assets/fun-watch/heart.svg" width="16" height="16" alt=""><span>팔로우</span></button>
                     <button class="fstreamer__donate" type="button" data-watch-donate>후원하기</button>
-                    <button class="fstreamer__icon fstreamer__icon--more" type="button" aria-label="더보기"><img src="assets/fun-watch/more.svg" width="23" height="23" alt=""></button>
+                    <button class="fstreamer__icon fstreamer__icon--more" type="button" aria-label="더보기" aria-haspopup="menu" aria-expanded="false" aria-controls="wmenu-pc" data-wmenu-btn><img src="assets/fun-watch/more.svg" width="23" height="23" alt=""></button>
+                    <!-- 더보기 메뉴 · PC (66098:153613 P1) — 화면에 버튼이 없는 기능만. ⋮ 위로 열림 -->
+                    <div class="wmenu wmenu--pc" id="wmenu-pc" role="menu" aria-label="더보기" hidden>
+                      <p class="wmenu__user auth-in"><strong>토비라마</strong><span>님</span></p>
+                <hr class="wmenu__line auth-in">
+                      <a class="wmenu__item" role="menuitem" href="#" target="_blank" rel="noopener" data-yt-open><img src="assets/watch/v4/menu/external.svg" width="20" height="20" alt=""><span>YouTube에서 보기</span></a>
+                      <button class="wmenu__item" type="button" role="menuitem" data-chat-popout><img src="assets/watch/v4/menu/popout.svg" width="20" height="20" alt=""><span>채팅 새 창으로 보기</span></button>
+                      <button class="wmenu__item" type="button" role="menuitem" data-coming-soon><img src="assets/watch/v4/menu/nickname.svg" width="20" height="20" alt=""><span>닉네임 설정</span></button>
+                      <hr class="wmenu__line">
+                      <button class="wmenu__item" type="button" role="menuitem" data-coming-soon><img src="assets/watch/v4/menu/report.svg" width="20" height="20" alt=""><span>신고하기</span></button>
+                      <hr class="wmenu__line" data-admin-only>
+                      <button class="wmenu__item" type="button" role="menuitem" data-coming-soon data-admin-only><img src="assets/watch/v4/menu/admin.svg" width="20" height="20" alt=""><span>관리자 페이지<small class="wmenu__note">관리자만</small></span></button>
+                    </div>
                   </div>
                   <div class="winfo__stat">
                     <p><img src="assets/watch/v4/viewers.svg" width="16" height="16" alt=""><b>184</b><span>명 시청중</span></p>
