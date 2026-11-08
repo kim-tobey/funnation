@@ -7657,10 +7657,10 @@ ul {
   .wchat__mode-tab--settings[aria-selected="true"]::after {
     content: none;
   }
-  /* 후원 · 설정 시트는 탭(48) 바로 아래로 */
+  /* 후원 시트는 탭(48) 바로 아래로. 아래 24px 띄움 없이 홈 인디케이터 바로 위까지 늘려 스크롤을 최소화 */
   .wchat .donate {
     top: 48px;
-    max-height: calc(100% - 48px - 24px);
+    max-height: calc(100% - 48px);
   }
 }
 
