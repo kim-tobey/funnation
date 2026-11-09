@@ -146,7 +146,7 @@
         <img src="assets/mo/appbar-back.svg" width="24" height="24" alt="">
       </a>
     </div>
-    <h1 class="mo-appbar__title" id="mo-title">펀네이션 라이브</h1>
+    <h1 class="mo-appbar__title" id="mo-title">라이브 방송</h1>
     <div class="mo-appbar__side">
       <button class="mo-appbar__btn mo-appbar__bell" type="button" aria-label="알림">
         <img src="assets/mo/appbar-bell.svg" width="24" height="24" alt="">
@@ -367,7 +367,12 @@
           <h1>펀네이션 라이브</h1>
         </div>
         <span class="subnav__sep">ㅣ</span>
-        <div class="subnav__tabs">
+        <!-- 모바일 2뎁스 (66171:90080) — 라이브 방송: 펀네이션 라이브 · 유튜브 라이브 목록 페이지로 이동 -->
+        <nav class="subnav__tabs subnav__tabs--mo" aria-label="라이브 종류">
+          <a class="subnav__tab subnav__tab--active" href="fun-live.html" aria-current="page">펀네이션 라이브</a>
+          <a class="subnav__tab" href="live.html">유튜브 라이브</a>
+        </nav>
+        <div class="subnav__tabs subnav__tabs--pc">
           <a class="subnav__tab subnav__tab--active" href="?tab=popular" data-live-tab="popular" aria-current="page">인기라이브</a>
           <a class="subnav__tab" href="?tab=all" data-live-tab="all">전체라이브</a>
         </div>
@@ -2268,7 +2273,7 @@
     <a class="bottom-nav__item" href="index.html">
       <img src="assets/icHome.svg" width="24" height="24" alt="">홈
     </a>
-    <a class="bottom-nav__item" href="live.html">
+    <a class="bottom-nav__item is-active" href="live.html">
       <img src="assets/mo/nav-live.svg" width="24" height="24" alt="">라이브
     </a>
     <!-- 크리에이터 (64059:159015) -->

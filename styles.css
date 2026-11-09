@@ -1380,6 +1380,15 @@ ul {
   color: var(--tab-inactive);
   white-space: nowrap;
 }
+/* 모바일 2뎁스(펀네이션 라이브 · 유튜브 라이브, 66171:90080)는 767px 이하에서만 */
+.subnav__tabs--mo {
+  display: none;
+}
+@media (max-width: 767px) {
+  .subnav__tabs.subnav__tabs--mo {
+    display: flex;
+  }
+}
 .subnav__tab--active {
   border-bottom: 3px solid var(--azure-tab);
   color: var(--azure-tab);
@@ -3737,7 +3746,8 @@ ul {
     backdrop-filter: none;
   }
   .subnav__title,
-  .subnav__sep {
+  .subnav__sep,
+  .subnav__tabs--pc {
     display: none;
   }
   .subnav__tabs {
