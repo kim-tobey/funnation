@@ -71,7 +71,8 @@
 
   function render() {
     if (overlay()) {
-      root.setAttribute("data-lnb", "full");
+      // 펀네이션 라이브 상세(66132:100915)는 닫혀 있을 때 접힌 LNB 70 을 보여줌
+      root.setAttribute("data-lnb", page === "fun-watch" && !drawerOpen ? "mini" : "full");
       root.setAttribute("data-drawer", drawerOpen ? "open" : "closed");
       btn.setAttribute("aria-expanded", drawerOpen ? "true" : "false");
       btn.setAttribute("aria-label", drawerOpen ? "메뉴 닫기" : "메뉴 열기");
@@ -1406,9 +1407,14 @@
     chat.setAttribute("data-mode", mode);
     for (var m = 0; m < modeTabs.length; m++) modeTabs[m].setAttribute("aria-selected", modeTabs[m].getAttribute("data-chat-tab") === mode ? "true" : "false");
     for (var i = 0; i < panels.length; i++) panels[i].hidden = panels[i].getAttribute("data-donate-panel") !== key;
-    // 펀네이션 라이브 상세는 채팅 · 후원 · 시그니처가 한 줄 탭(role=tab)
+    // 모바일 YouTube 상세는 탭(role=tab), 나머지는 눌림 버튼
     for (var j = 0; j < tabs.length; j++) tabs[j].setAttribute(tabs[j].getAttribute("role") === "tab" ? "aria-selected" : "aria-pressed", tabs[j].getAttribute("data-donate") === key ? "true" : "false");
+    // 펀네이션 라이브 상세 — 채팅 보이스(후원 팝오버 안에서 여는 목록)는 패널이 바뀌면 함께 닫음
+    var voice = document.getElementById("fvoice");
+    if (voice) voice.hidden = true;
   }
+  window.funDonateShow = show;
+  window.funDonateCurrent = function () { return current; };
   var modeBtns = watch.querySelectorAll("[data-chat-tab]");
   for (var b = 0; b < modeBtns.length; b++) modeBtns[b].addEventListener("click", function () {
     var tab = this.getAttribute("data-chat-tab");
@@ -1430,8 +1436,20 @@
     }
     if (e.target.closest("[data-fset-save]")) watch.querySelector('[data-chat-tab="chat"]').click();
   });
+  // data-donate-toggle 버튼(펀네이션 라이브 상세의 후원 · 시그니처 · 설정)은 열린 패널을 다시 누르면 닫음
   for (var k = 0; k < tabs.length; k++) tabs[k].addEventListener("click", function () {
-    show(this.getAttribute("data-donate"));
+    var key = this.getAttribute("data-donate");
+    show(this.hasAttribute("data-donate-toggle") && current === key ? null : key);
+  });
+  // 패널 X · ESC — 닫고 채팅으로 (후원 실패 창이 떠 있으면 그 창이 먼저 ESC 를 받음)
+  watch.addEventListener("click", function (e) {
+    if (e.target.closest("[data-donate-close]")) show(null);
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key !== "Escape" || !current || !watch.querySelector("[data-donate-close]")) return;
+    var opener = watch.querySelector('[data-donate="' + current + '"][data-donate-toggle]');
+    show(null);
+    if (opener) opener.focus();
   });
 
   // 글자 수 표시 (0/200) — 200자를 넘겨 입력할 수 있고, 넘으면 오류 문구로 알림
@@ -1456,6 +1474,7 @@
   });
   var voices = watch.querySelectorAll("[data-donate-voice]");
   for (var w = 0; w < voices.length; w++) voices[w].addEventListener("click", function () {
+    if (this.hasAttribute("aria-controls")) return; // 펀네이션 라이브 상세는 채팅 보이스 목록을 엶 (아래 펀네이션 라이브 코드)
     var label = this.querySelector("span");
     label.textContent = VOICES[(VOICES.indexOf(label.textContent) + 1) % VOICES.length];
   });
@@ -1648,10 +1667,12 @@
   }, true);
 })();
 
-/* 영상 상세 방송 정보 · 다시보기 (66098:111836 · 111904) — 팔로우, 후원하기(채팅 쪽 후원 탭으로), 공유, 설명 더보기, 정렬 칩 */
+/* 영상 상세 방송 정보 · 다시보기 (66098:111836 · 111904) — 팔로우, 후원하기(채팅 쪽 후원 탭으로), 공유, 설명 더보기, 정렬 칩.
+   펀네이션 라이브 상세(.fwatch, 66132:101009)도 같은 방송 정보 · 다시보기 틀이라 함께 씀 */
 (function () {
-  var watch = document.querySelector(".watch");
+  var watch = document.querySelector(".watch, .fwatch");
   if (!watch) return;
+  var isFun = watch.classList.contains("fwatch");
   // 팔로우 — PC 방송 정보와 모바일 앱바 버튼이 같은 상태
   var follows = watch.querySelectorAll("[data-watch-follow]");
   for (var f = 0; f < follows.length; f++) follows[f].addEventListener("click", function () {
@@ -1669,10 +1690,11 @@
       history.back();
     }
   });
+  // 후원하기 — YouTube 상세는 채팅의 후원하기 탭, 펀네이션 라이브는 아래 후원 버튼(이미 열려 있으면 그대로)
   var donate = watch.querySelector("[data-watch-donate]");
   if (donate) donate.addEventListener("click", function () {
-    var tab = watch.querySelector('[data-chat-tab="donate"]');
-    tab.click();
+    var tab = watch.querySelector('[data-chat-tab="donate"]') || watch.querySelector('[data-donate="general"]');
+    if (tab.getAttribute("aria-pressed") !== "true") tab.click();
     tab.focus();
   });
   var shares = watch.querySelectorAll("[data-watch-share]");
@@ -1726,9 +1748,9 @@
       var btn = openBtn;
       closeMenu();
       if (item.hasAttribute("data-wmenu-lang") && window.funOpenLangPop) setTimeout(function () { window.funOpenLangPop(btn); }, 0);
-      if (item.hasAttribute("data-chat-popout")) {
+      if (item.hasAttribute("data-chat-popout") && !isFun) {
         window.open("https://www.youtube.com/live_chat?is_popout=1&v=" + ytNow, "fun-chat", "width=420,height=720");
-      }
+      } // 펀네이션 라이브는 아래 펀네이션 라이브 코드가 자체 채팅 창을 엶
       return;
     }
     if (!menu.contains(e.target)) closeMenu();
@@ -1746,13 +1768,15 @@
   });
 })();
 
-/* 펀네이션 라이브 영상 상세 (v2.0 65605:98199) — 자체 스트리밍 플레이어 · 방송 정보 · 채팅.
+/* 펀네이션 라이브 영상 상세 (v2.0 66132:92982) — 자체 스트리밍 플레이어 · 채팅 (방송 정보 · 다시보기는 위 영상 상세 코드).
    서버 연동 전 데모: 송출 주소가 없으면 시안 화면(포스터)만 보이고, 채팅은 시안 메시지에 몇 초마다 새 메시지를 더함.
    후원 · 시그니처 패널은 위 영상 상세 코드가 함께 처리 */
 (function () {
   var root = document.documentElement;
   var fw = document.querySelector(".fwatch");
   if (!fw) return;
+  // 채팅 팝업 창(?chat=popout) — 채팅만 화면 가득
+  if (/[?&]chat=popout(&|$)/.test(location.search)) root.setAttribute("data-chat-popout", "");
 
   /* 플레이어 — .fplayer 의 data-stream-src 에 송출 주소를 넣으면 재생.
      HLS(.m3u8)는 Safari 만 바로 재생되고, 다른 브라우저는 hls.js 같은 재생기를 붙여야 함 (아직 없음) */
@@ -1857,41 +1881,24 @@
   });
   sync();
 
-  // 방송 시간 — 1초마다 늘어남
+  // 멈춤 상태면 컨트롤을 계속 보여줌 (PC 는 평소 마우스를 올렸을 때만 보임)
+  function pausedClass() { box.classList.toggle("is-paused", playBtn.getAttribute("aria-pressed") === "true"); }
+  playBtn.addEventListener("click", pausedClass);
+  video.addEventListener("pause", pausedClass);
+  video.addEventListener("play", pausedClass);
+
+  // 방송 시간 — 1초마다 늘어남 (모바일 플레이어 위 시간)
   var uptime = fw.querySelector("[data-fwatch-uptime]");
-  var sec = +uptime.getAttribute("data-fwatch-uptime");
-  function two(n) { return (n < 10 ? "0" : "") + n; }
-  setInterval(function () {
-    sec++;
-    uptime.textContent = two(Math.floor(sec / 3600)) + ":" + two(Math.floor(sec / 60) % 60) + ":" + two(sec % 60);
-  }, 1000);
+  if (uptime) {
+    var sec = +uptime.getAttribute("data-fwatch-uptime");
+    var two = function (n) { return (n < 10 ? "0" : "") + n; };
+    setInterval(function () {
+      sec++;
+      uptime.textContent = two(Math.floor(sec / 3600)) + ":" + two(Math.floor(sec / 60) % 60) + ":" + two(sec % 60);
+    }, 1000);
+  }
 
-  // 팔로우 — 누르면 팔로잉, 팔로워 수 +1 ([구현 제안] 팔로잉 상태 시안 없음)
-  var followers = fw.querySelector("[data-fwatch-followers]");
-  fw.querySelector("[data-fwatch-follow]").addEventListener("click", function () {
-    var on = this.getAttribute("aria-pressed") !== "true";
-    this.setAttribute("aria-pressed", on ? "true" : "false");
-    this.querySelector("span").textContent = on ? "팔로잉" : "팔로우";
-    followers.textContent = (+followers.textContent.replace(/,/g, "") + (on ? 1 : -1)).toLocaleString("ko-KR");
-  });
-  // 공유 — 공유 시트가 있으면 열고, 없으면 주소 복사
-  fw.querySelector("[data-fwatch-share]").addEventListener("click", function () {
-    var btn = this;
-    if (navigator.share) {
-      navigator.share({ title: document.title, url: location.href }).catch(function () {});
-    } else if (navigator.clipboard) {
-      navigator.clipboard.writeText(location.href).then(function () {
-        btn.setAttribute("aria-label", "링크를 복사했어요");
-        btn.title = "링크를 복사했어요";
-        setTimeout(function () {
-          btn.setAttribute("aria-label", "공유하기");
-          btn.removeAttribute("title");
-        }, 2000);
-      });
-    }
-  });
-
-  // 채팅 접기 · 펼치기 — 접으면 플레이어가 오른쪽 끝까지 넓어짐
+  // 채팅 접기 · 펼치기 — 접으면 왼쪽(플레이어 · 정보)이 오른쪽 끝까지 넓어짐
   var foldBtn = fw.querySelector("[data-fchat-fold]");
   function fold(folded) {
     fw.classList.toggle("is-folded", folded);
@@ -1899,83 +1906,148 @@
     foldBtn.setAttribute("aria-label", folded ? "채팅 펼치기" : "채팅 접기");
   }
   foldBtn.addEventListener("click", function () { fold(!fw.classList.contains("is-folded")); });
+  // 방송 정보 후원하기 — 채팅을 펼침 (후원 팝오버는 위 방송 정보 코드가 엶)
+  var infoDonate = fw.querySelector("[data-watch-donate]");
+  if (infoDonate) infoDonate.addEventListener("click", function () { fold(false); });
 
-  // 방송인 카드 후원하기 — 채팅을 펼치고 후원 탭으로
-  fw.querySelector("[data-fwatch-donate]").addEventListener("click", function () {
-    fold(false);
-    var tab = fw.querySelector('.fsheet__tab[data-donate="general"]');
-    tab.click();
-    tab.focus();
-  });
-
-  // 후원 랭킹 펼치기 · 접기
+  // 후원 랭킹 펼치기 · 접기 — [구현 제안] 시안은 펼친 상태만 있어, 6명 ⌄ 를 누르면 카드 줄을 접음
   var rankBtn = fw.querySelector("[data-frank-toggle]");
   rankBtn.addEventListener("click", function () {
     var open = this.getAttribute("aria-expanded") !== "true";
     this.setAttribute("aria-expanded", open ? "true" : "false");
-    document.getElementById("frank-list").hidden = !open;
+    document.getElementById("frank-body").hidden = !open;
+  });
+  // 모바일 랭킹 줄 ⌄ — [구현 제안] 펼치면 PC 와 같은 2 · 1 · 3위 카드 + 한방 최고를 줄 아래로
+  var rank = fw.querySelector(".frank");
+  var rankMore = fw.querySelector("[data-frank-more]");
+  rankMore.addEventListener("click", function () {
+    var open = !rank.classList.contains("is-mo-open");
+    rank.classList.toggle("is-mo-open", open);
+    this.setAttribute("aria-expanded", open ? "true" : "false");
+    this.setAttribute("aria-label", open ? "후원 랭킹 접기" : "후원 랭킹 펼치기");
   });
 
-  // 채팅 뷰 — 메뉴 · 랭킹을 숨기고 채팅만 길게. 다시 누르면 일반 뷰
+  /* 모바일 재생화면 탭 (66132:100340) — 플레이어를 누르면 앱바 대신 플레이어 위 버튼 · 아래 방송 정보, 다시 누르거나 ⌄ 로 닫음 */
+  var mobile = matchMedia("(max-width: 767px)");
+  function tapped(on) { fw.classList.toggle("is-tapped", on); }
+  box.addEventListener("click", function (e) {
+    if (!mobile.matches || e.target.closest("button, a, .fquality__menu")) return;
+    tapped(!fw.classList.contains("is-tapped"));
+  });
+  fw.querySelector("[data-fpm-close]").addEventListener("click", function () { tapped(false); });
+  // 재생화면 탭의 실시간 · 소리 · 전체화면은 PC 컨트롤 버튼과 같은 동작
+  var fpmMap = { live: "[data-fplayer-live]", mute: "[data-fplayer-mute]", full: "[data-fplayer-full]" };
+  var fpms = fw.querySelectorAll("[data-fpm]");
+  for (var fp = 0; fp < fpms.length; fp++) fpms[fp].addEventListener("click", function () {
+    fw.querySelector(fpmMap[this.getAttribute("data-fpm")]).click();
+  });
+
   var chat = document.getElementById("wchat");
-  var viewBtn = fw.querySelector("[data-fchat-view]");
-  viewBtn.addEventListener("click", function () {
-    var on = this.getAttribute("aria-pressed") !== "true";
-    this.setAttribute("aria-pressed", on ? "true" : "false");
-    this.querySelector("span").textContent = on ? "일반 뷰" : "채팅 뷰";
-    chat.classList.toggle("is-chat-view", on);
-  });
-
-  // 글자 크기 3단계 — 채팅 목록 글자만. 채팅 입력 위 버튼과 설정 탭 버튼이 같은 값을 함께 표시
   var list = fw.querySelector("[data-fchat-list]");
+
+  // 글자 크기 3단계 (설정 66132:103272) — 채팅 목록 글자만
   var sizes = fw.querySelectorAll("[data-fchat-size]");
-  var sizeLabel = fw.querySelector("[data-fset-size-label]");
   for (var z = 0; z < sizes.length; z++) sizes[z].addEventListener("click", function () {
     var px = this.getAttribute("data-fchat-size");
     for (var i = 0; i < sizes.length; i++) sizes[i].setAttribute("aria-pressed", sizes[i].getAttribute("data-fchat-size") === px ? "true" : "false");
     list.style.setProperty("--fmsg-size", px + "px");
-    if (sizeLabel) sizeLabel.textContent = this.getAttribute("aria-label");
+  });
+
+  /* 설정 토글 (66132:103285~) — 배지 표시 · 메시지 시간 표시 · 채팅 얼리기.
+     [구현 제안] 시간은 이름 앞 작은 글자, 얼리기는 켜 둔 동안 새 메시지를 모아 두었다가 끄면 한꺼번에 보여줌 */
+  var frozen = false;
+  var queue = [];
+  var opts = fw.querySelectorAll("[data-fopt]");
+  for (var o = 0; o < opts.length; o++) opts[o].addEventListener("change", function () {
+    var key = this.getAttribute("data-fopt");
+    if (key === "badge") chat.classList.toggle("is-nobadge", !this.checked);
+    if (key === "time") chat.classList.toggle("is-time", this.checked);
+    if (key === "freeze") {
+      frozen = this.checked;
+      if (!frozen) {
+        var follow = atBottom();
+        while (queue.length) list.appendChild(queue.shift());
+        trim();
+        if (follow) list.scrollTop = list.scrollHeight;
+      }
+    }
+  });
+  // 바깥을 누르면 설정 카드를 닫음
+  var settings = document.getElementById("fchat-settings");
+  document.addEventListener("click", function (e) {
+    if (settings.hidden || settings.contains(e.target) || e.target.closest('[data-donate="settings"]')) return;
+    if (window.funDonateCurrent && window.funDonateCurrent() === "settings") window.funDonateShow(null);
+  });
+
+  // 채팅 팝업 · 채팅 새 창으로 보기 — 이 화면을 채팅만 보이는 작은 창으로 (?chat=popout)
+  var popouts = fw.querySelectorAll("[data-chat-popout]");
+  for (var po = 0; po < popouts.length; po++) popouts[po].addEventListener("click", function () {
+    window.open(location.pathname + "?chat=popout", "fun-chat", "width=420,height=760");
   });
 
   /* 채팅 목록 — 맨 아래에 있을 때만 새 메시지를 따라 내려감 (위로 올려 읽는 중이면 그대로) */
   function atBottom() { return list.scrollHeight - list.scrollTop - list.clientHeight < 40; }
-  function add(name, text, avatar) {
-    var follow = atBottom();
+  function trim() { while (list.children.length > 200) list.removeChild(list.firstElementChild); }
+  function now() {
+    var d = new Date();
+    return (d.getHours() < 10 ? "0" : "") + d.getHours() + ":" + (d.getMinutes() < 10 ? "0" : "") + d.getMinutes();
+  }
+  // m = { name, text, badge?, rank? } — 배지는 [crown 순위] 또는 칭호 글자
+  function add(m) {
     var li = document.createElement("li");
     li.className = "fmsg";
-    var img = document.createElement("img");
-    img.className = "fmsg__av";
-    img.src = avatar;
-    img.width = img.height = 24;
-    img.alt = "";
-    var p = document.createElement("p");
-    var who = document.createElement("span");
+    var time = document.createElement("time");
+    time.className = "fmsg__time";
+    time.textContent = now();
+    var who = document.createElement("button");
+    who.type = "button";
     who.className = "fmsg__name";
-    who.textContent = name;
-    p.appendChild(who);
-    p.appendChild(document.createTextNode(text));
-    li.appendChild(img);
-    li.appendChild(p);
+    who.setAttribute("data-fuser", "");
+    who.textContent = m.name;
+    li.appendChild(time);
+    li.appendChild(who);
+    if (m.badge) {
+      var b = document.createElement("span");
+      b.className = "fmsg__badge" + (m.rank ? " fmsg__badge--rank" : "");
+      if (m.rank) {
+        var crown = document.createElement("img");
+        crown.src = "assets/fun-watch/badge-crown.svg";
+        crown.width = crown.height = 12;
+        crown.alt = "";
+        b.appendChild(crown);
+      }
+      b.appendChild(document.createTextNode(m.badge));
+      li.appendChild(b);
+    }
+    var text = document.createElement("span");
+    text.className = "fmsg__text";
+    text.textContent = m.text;
+    li.appendChild(text);
+    if (frozen) {
+      queue.push(li);
+      return;
+    }
+    var follow = atBottom();
     list.appendChild(li);
-    while (list.children.length > 200) list.removeChild(list.firstElementChild);
+    trim();
     if (follow) list.scrollTop = list.scrollHeight;
   }
   list.scrollTop = list.scrollHeight;
+  // 데모 새 메시지 — 모바일 시안(66132:100189)의 메시지
   var DEMO = [
-    ["@barred7548", "i will try soon rose -_-", "av-barred.png"],
-    ["@moonlitvoid7", "sasha it's too quick~", "av-moonlit.jpg"],
-    ["@Čÿvïlłe_řoşeৎ", "Okay^^", "av-rose.png"],
-    ["@vatsaldvora", "hello", "av-vatsal.png"],
-    ["@Sasha.l9ve", "lol", "av-sasha.png"],
-    ["@barred7548", "ohh alright", "av-barred.png"],
-    ["@Čÿvïlłe_řoşeৎ", "brb I have to feed my pups", "av-rose.png"],
-    ["@moonlitvoid7", "🫩", "av-moonlit.jpg"]
+    { name: "커피", text: "송피아 도하나 맛나게 먹어라" },
+    { name: "불금", text: "피아는 안먹어도 될 거 같은데?", badge: "골드노블레스" },
+    { name: "살려단", text: "ㅋㅋㅋㅋㅋ" },
+    { name: "도파민고퀴", text: "송피아 도하나 맛나게 먹어라" },
+    { name: "@Sasha.l9ve", text: "lol moon", badge: "#3", rank: true },
+    { name: "초사단_미카엘", text: "ㅋㅋㅋ" },
+    { name: "은버들", text: "오늘 방송 재밌네요" },
+    { name: "청림호수", text: "다들 반가워요" }
   ];
   var d = 0;
   setInterval(function () {
     if (document.hidden) return;
-    var m = DEMO[d++ % DEMO.length];
-    add(m[0], m[1], "assets/fun-watch/chat/" + m[2]);
+    add(DEMO[d++ % DEMO.length]);
   }, 3500);
 
   // 보내기 — Enter 로 보내고 Shift+Enter 는 줄바꿈. 로그아웃 상태면 로그인 화면으로
@@ -1990,8 +2062,13 @@
     var text = input.value.trim();
     if (!text) return;
     list.scrollTop = list.scrollHeight;
-    add("@토비라마", text, "assets/mo/nav-avatar.png");
+    add({ name: "토비라마", text: text });
     input.value = "";
+    input.dispatchEvent(new Event("input"));
+  });
+  // 모바일 — 글이 있으면 입력칸 오른쪽 보내기 버튼을 보여줌 (66132:110337)
+  input.addEventListener("input", function () {
+    form.classList.toggle("has-text", !!this.value.trim());
   });
   input.addEventListener("keydown", function (e) {
     if (e.key === "Enter" && !e.shiftKey && !e.isComposing) {
@@ -1999,6 +2076,122 @@
       form.requestSubmit();
     }
   });
+
+  /* 채팅 보이스 (66132:105659) — 후원 팝오버의 목소리 버튼으로 열면 그 팝오버 자리에 목록. ← 로 돌아감,
+     줄을 누르면 그 목소리로 바꾸고 돌아감 [구현 제안] */
+  var voice = document.getElementById("fvoice");
+  var voiceFrom = null;
+  function voiceBack(focus) {
+    if (voice.hidden) return;
+    voice.hidden = true;
+    if (voiceFrom) {
+      voiceFrom.hidden = false;
+      if (focus) voiceFrom.querySelector("[data-donate-voice]").focus();
+    }
+    voiceFrom = null;
+  }
+  var voiceBtns = fw.querySelectorAll("[data-donate-voice]");
+  for (var vb = 0; vb < voiceBtns.length; vb++) voiceBtns[vb].addEventListener("click", function () {
+    voiceFrom = this.closest(".donate");
+    voiceFrom.hidden = true;
+    voice.hidden = false;
+    voice.querySelector('.fvoice__item[aria-pressed="true"]').focus();
+  });
+  voice.querySelector("[data-fvoice-back]").addEventListener("click", function () { voiceBack(true); });
+  var voiceItems = voice.querySelectorAll("[data-fvoice]");
+  for (var vi = 0; vi < voiceItems.length; vi++) voiceItems[vi].addEventListener("click", function () {
+    var name = this.getAttribute("data-fvoice");
+    for (var i = 0; i < voiceItems.length; i++) voiceItems[i].setAttribute("aria-pressed", voiceItems[i] === this ? "true" : "false");
+    for (var j = 0; j < voiceBtns.length; j++) voiceBtns[j].querySelector("span").textContent = name;
+    voiceBack(true);
+  });
+
+  /* 유저 찾기 (66132:107275) — 참여자 수 버튼으로 열고 X · ESC 로 닫음. 검색어가 들어간 이름만 보여줌 */
+  var users = document.getElementById("fusers");
+  // PC 는 채팅 메뉴의 참여자 수, 모바일은 재생화면 탭 정보의 참여자 수(66132:100461)
+  var usersBtns = fw.querySelectorAll("[data-fusers-btn]");
+  var usersBtn = usersBtns[0];
+  var search = users.querySelector("[data-fusers-search]");
+  function usersToggle(open) {
+    users.hidden = !open;
+    for (var i = 0; i < usersBtns.length; i++) usersBtns[i].setAttribute("aria-expanded", open ? "true" : "false");
+    if (open) search.focus();
+    else closeUser();
+  }
+  for (var ub = 0; ub < usersBtns.length; ub++) usersBtns[ub].addEventListener("click", function () {
+    usersBtn = this;
+    usersToggle(users.hidden);
+  });
+  users.querySelector("[data-fusers-close]").addEventListener("click", function () {
+    usersToggle(false);
+    usersBtn.focus();
+  });
+  search.addEventListener("input", function () {
+    var q = this.value.trim().toLowerCase();
+    var groups = users.querySelectorAll(".fusers__group");
+    var any = false;
+    for (var g = 0; g < groups.length; g++) {
+      var rows = groups[g].querySelectorAll("li");
+      var shown = 0;
+      for (var r = 0; r < rows.length; r++) {
+        var hit = !q || rows[r].textContent.toLowerCase().indexOf(q) > -1;
+        rows[r].hidden = !hit;
+        if (hit) shown++;
+      }
+      groups[g].hidden = !shown;
+      if (shown) any = true;
+    }
+    users.querySelector("[data-fusers-none]").hidden = any;
+  });
+
+  /* 유저 팝업 (66132:107341) — 채팅 이름 · 랭킹 · 유저 찾기 줄을 누르면 그 줄 높이에 맞춰 채팅 왼쪽에 띄움.
+     X · 바깥 클릭 · ESC 로 닫힘. 팔로우 날짜 · 프로필 사진은 서버 연동 전이라 시안 값 */
+  var pop = document.getElementById("fuser");
+  var popFrom = null;
+  function closeUser(focus) {
+    if (pop.hidden) return;
+    pop.hidden = true;
+    if (popFrom) {
+      popFrom.classList.remove("is-on");
+      if (focus) popFrom.focus();
+    }
+    popFrom = null;
+  }
+  fw.addEventListener("click", function (e) {
+    var who = e.target.closest("[data-fuser]");
+    if (!who) return;
+    var same = popFrom === who;
+    closeUser();
+    if (same) return;
+    popFrom = who;
+    who.classList.add("is-on");
+    var name = who.querySelector("span, b") || who;
+    pop.querySelector("[data-fuser-name]").textContent = name.textContent.trim();
+    pop.hidden = false;
+    // 모바일은 아래 시트로 뜨고, PC 는 누른 줄 높이에 맞춤 (채팅 칸 안으로)
+    if (matchMedia("(min-width: 768px)").matches) {
+      var box = chat.getBoundingClientRect();
+      var at = who.getBoundingClientRect();
+      var top = Math.max(8, Math.min(at.top - box.top - 12, box.height - pop.offsetHeight - 8));
+      pop.style.top = top + "px";
+    } else pop.style.top = "";
+    pop.querySelector("[data-fuser-close]").focus();
+  });
+  pop.querySelector("[data-fuser-close]").addEventListener("click", function () { closeUser(true); });
+  document.addEventListener("click", function (e) {
+    if (!pop.hidden && !pop.contains(e.target) && !e.target.closest("[data-fuser]")) closeUser();
+  });
+  // ESC — 유저 팝업 → 채팅 보이스 → 유저 찾기 순서로 하나씩 닫음 (후원 팝오버 ESC 보다 먼저)
+  document.addEventListener("keydown", function (e) {
+    if (e.key !== "Escape") return;
+    if (!pop.hidden) closeUser(true);
+    else if (!voice.hidden) voiceBack(true);
+    else if (!users.hidden) {
+      usersToggle(false);
+      usersBtn.focus();
+    } else return;
+    e.stopImmediatePropagation();
+  }, true);
 })();
 
 /* PC 알림 팝업 (64686:113964) — GNB 종 아이콘으로 열고 닫음. X · 바깥 클릭 · ESC 로도 닫힘.

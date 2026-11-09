@@ -2,8 +2,8 @@
 <html lang="ko" data-theme="dark" data-page="fun-watch">
 <head>
 <meta charset="UTF-8">
-<!-- 영상 상세는 아직 PC 시안만 있어 휴대폰에서도 1440px 화면을 축소해 보여줌 -->
-<meta name="viewport" content="width=1440">
+<!-- 모바일 시안(66132:100101 등)이 생겨 다른 페이지처럼 기기 폭에 맞춤 — 767px 이하는 모바일 레이아웃 -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>FUNNATION — 펀네이션 라이브</title>
 <link rel="icon" href="assets/favicon.ico" sizes="any">
 <link rel="icon" href="assets/favicon/favicon-32.png" type="image/png" sizes="32x32">
@@ -364,30 +364,45 @@
 
       <div class="main__inner">
 
-        <!-- 펀네이션 라이브 영상 상세 (v2.0 65605:98199) — 자체 스트리밍. PC 전용 시안
-             플레이어(위 제목줄 · 아래 컨트롤) + 방송 정보(65605:100369) | 오른쪽 채팅 398 (메뉴 · 후원 랭킹 · 채팅 · 아래 시트) -->
-        <section class="fwatch" data-node-id="65605:100368">
+        <!-- 펀네이션 라이브 영상 상세 (v2.0 66132:92982) — 자체 스트리밍.
+             PC (66132:100825): 플레이어(호버 때 컨트롤) · 방송 정보 · 설명 · 다시보기 | 오른쪽 채팅 398.
+             채팅 아래 후원 · 시그니처는 채팅 왼쪽 팝오버(66132:104065 · 106446), 목소리 고르기는 채팅 보이스(66132:105659),
+             설정(66132:103268) · 유저 찾기(66132:107275)는 채팅 안, 이름을 누르면 유저 팝업(66132:107341) -->
+        <section class="fwatch" data-node-id="66132:100914">
+          <!-- 모바일 앱바 (66132:100118) — 767px 이하에서 기본 앱바 대신. 뒤로 · 채널(아바타 · 이름) · 더보기 -->
+          <div class="fbar" data-node-id="66132:100118">
+            <a class="fbar__btn" href="fun-live.html" aria-label="뒤로 가기" data-watch-back><img src="assets/mo/appbar-back.svg" width="24" height="24" alt=""></a>
+            <div class="fbar__channel">
+              <img class="fbar__pic" src="assets/watch/v4/avatar-ymss-sm.jpg" width="24" height="24" alt="">
+              <strong class="fbar__name">YM상사</strong>
+            </div>
+            <button class="fbar__btn" type="button" aria-label="더보기" aria-haspopup="menu" aria-expanded="false" aria-controls="wmenu-mo" data-wmenu-btn><img src="assets/watch/v4/mo-more.svg" width="24" height="24" alt=""></button>
+          </div>
+          <!-- 더보기 메뉴 · 모바일 — YouTube 상세(66146:13940 M1)와 같은 틀. 앱바 · 재생화면 탭의 ⋮ 가 함께 엶 -->
+          <div class="wmenu wmenu--mo" id="wmenu-mo" role="menu" aria-label="더보기" hidden>
+            <p class="wmenu__user auth-in"><strong>토비라마</strong><span>님</span></p>
+            <hr class="wmenu__line auth-in">
+            <button class="wmenu__item" type="button" role="menuitem" data-watch-share><img src="assets/watch/v4/share.svg" width="16" height="16" alt=""><span>공유하기</span></button>
+            <button class="wmenu__item" type="button" role="menuitem" data-chat-popout><img src="assets/watch/v4/menu/popout.svg" width="20" height="20" alt=""><span>채팅 새 창으로 보기</span></button>
+            <button class="wmenu__item" type="button" role="menuitem" data-coming-soon><img src="assets/imgAccountCircle.svg" width="20" height="20" alt=""><span>채널로 이동</span></button>
+            <hr class="wmenu__line">
+            <button class="wmenu__item" type="button" role="menuitem" data-coming-soon><img src="assets/watch/v4/menu/nickname.svg" width="20" height="20" alt=""><span>닉네임 설정</span></button>
+            <button class="wmenu__item" type="button" role="menuitem" data-wmenu-lang><img src="assets/mo/appbar-lang.svg" width="20" height="20" alt=""><span>언어 변경</span></button>
+            <hr class="wmenu__line">
+            <button class="wmenu__item" type="button" role="menuitem" data-coming-soon><img src="assets/watch/v4/menu/report.svg" width="20" height="20" alt=""><span>신고하기</span></button>
+            <hr class="wmenu__line" data-admin-only>
+            <button class="wmenu__item" type="button" role="menuitem" data-coming-soon data-admin-only><img src="assets/watch/v4/menu/admin.svg" width="20" height="20" alt=""><span>관리자 페이지<small class="wmenu__note">관리자만</small></span></button>
+          </div>
           <div class="fwatch__main">
 
-            <!-- 자체 플레이어 (65605:98420) — 송출 주소(HLS .m3u8)는 data-stream-src. 서버 연동 전이라 비어 있고 시안 화면을 포스터로 씀 -->
-            <div class="fplayer" data-node-id="65605:98420" data-stream-src="">
+            <!-- 자체 플레이어 (66132:101007) — 송출 주소(HLS .m3u8)는 data-stream-src. 서버 연동 전이라 비어 있고 시안 화면을 포스터로 씀.
+                 컨트롤은 마우스를 올렸을 때만 (66132:101822) -->
+            <div class="fplayer" data-node-id="66132:101007" data-stream-src="">
               <video class="fplayer__video" poster="assets/fun-watch/stream.jpg" playsinline data-fplayer-video></video>
               <p class="fplayer__audio-only" data-fplayer-audio-note hidden>소리만 듣는 중이에요</p>
 
-              <!-- 제목줄 (65605:98458) — 뒤로 · 방송 제목 · LIVE · 시청자 -->
-              <div class="fplayer__bar" data-node-id="65605:98458">
-                <a class="fplayer__back" href="fun-live.html" aria-label="펀네이션 라이브로 돌아가기"><img src="assets/imgFrame.svg" width="20" height="20" alt=""></a>
-                <div class="fplayer__title">
-                  <h2>김인호x이노레이블 시즌2 8화</h2>
-                  <span class="fplayer__status">
-                    <span class="fplayer__live">LIVE</span>
-                    <span class="fplayer__viewers">875명</span>
-                  </span>
-                </div>
-              </div>
-
-              <!-- 컨트롤 (65605:98422) — 아래 그라디언트 위 40px 원형 버튼 -->
-              <div class="fplayer__controls" data-node-id="65605:98422">
+              <!-- 컨트롤 (66132:101824) — 아래 그라디언트 위 40px 원형 버튼 -->
+              <div class="fplayer__controls" data-node-id="66132:101824">
                 <div class="fplayer__group">
                   <button class="fctl" type="button" aria-label="일시정지" aria-pressed="false" data-fplayer-play>
                     <img class="fctl__on" src="assets/fun-watch/pause.svg" width="20" height="20" alt="">
@@ -420,293 +435,566 @@
                   <button class="fctl" type="button" aria-label="전체화면" aria-pressed="false" data-fplayer-full><img src="assets/fun-watch/fullscreen.svg" width="20" height="20" alt=""></button>
                 </div>
               </div>
+
+              <!-- 모바일 재생화면 탭 (66132:100366) — 플레이어를 누르면 위아래 그라디언트 위에 닫기 · LIVE · 더보기 / 실시간 · 방송 시간 · 소리 · 전체화면 -->
+              <div class="fpm" data-node-id="66132:100366">
+                <div class="fpm__top">
+                  <button class="fpm__btn" type="button" aria-label="재생 화면 닫기" data-fpm-close><img src="assets/fun-watch/v2/caret-down-24.svg" width="24" height="24" alt=""></button>
+                  <span class="fpm__live">LIVE</span>
+                  <button class="fpm__btn fpm__more" type="button" aria-label="더보기" aria-haspopup="menu" aria-expanded="false" aria-controls="wmenu-mo" data-wmenu-btn><img src="assets/fun-watch/v2/more-vertical.svg" width="24" height="24" alt=""></button>
+                </div>
+                <div class="fpm__bottom">
+                  <button class="fpm__now" type="button" data-fpm="live"><i aria-hidden="true"></i>실시간</button>
+                  <time class="fpm__time" data-fwatch-uptime="931">00:15:31</time>
+                  <button class="fpm__btn" type="button" aria-label="음소거" data-fpm="mute"><img src="assets/fun-watch/v2/volume-24.svg" width="22" height="22" alt=""></button>
+                  <button class="fpm__btn" type="button" aria-label="전체화면" data-fpm="full"><img src="assets/fun-watch/fullscreen.svg" width="20" height="20" alt=""></button>
+                </div>
+              </div>
             </div>
 
-            <!-- 방송 정보 (65605:100369) — 제목 · 태그 · 시청/방송 시간 · 방송인 카드 -->
-            <div class="finfo" data-node-id="65605:100369">
-              <div class="finfo__head">
-                <h1 class="finfo__title">김인호x이노레이블 시즌2 8화</h1>
-                <div class="finfo__row">
-                  <ul class="finfo__tags">
-                    <li>#엑셀</li>
-                    <li>팀플레이</li>
-                    <li>서바이벌</li>
-                  </ul>
-                  <p class="finfo__stat"><span>184명 시청 중</span><i aria-hidden="true"></i><span><time data-fwatch-uptime="931">00:15:31</time>스트리밍 중</span></p>
+            <!-- 모바일 재생화면 탭 방송 정보 (66132:100455) — 제목 · 참여자 수(누르면 유저 찾기) · 태그 · 방송인 -->
+            <div class="fminfo" data-node-id="66132:100455">
+              <div class="fminfo__head">
+                <h2 class="fminfo__title">김인호x이노레이블 시즌2 8화</h2>
+                <div class="fminfo__row">
+                  <button class="fminfo__people" type="button" aria-label="채팅 참여자 2,051명 — 유저 찾기" aria-expanded="false" aria-controls="fusers" data-fusers-btn><img src="assets/fun-watch/v2/users.svg" width="14" height="14" alt="">2,051명</button>
+                  <ul class="fminfo__tags"><li>#엑셀</li><li>팀플레이</li><li>서바이벌</li></ul>
                 </div>
               </div>
-              <div class="fstreamer" data-node-id="65605:100387">
-                <a class="fstreamer__info" href="#">
-                  <span class="fstreamer__pic">
-                    <img src="assets/home/avatar/vtuber-green.png" width="60" height="60" alt="">
-                    <span class="fstreamer__live">LIVE</span>
-                  </span>
-                  <span class="fstreamer__text">
-                    <strong>체리 of HANAVI</strong>
-                    <span>팔로워 <b data-fwatch-followers>2,607</b>명</span>
-                  </span>
-                </a>
-                <div class="fstreamer__actions">
-                  <button class="fstreamer__follow" type="button" aria-pressed="false" data-fwatch-follow><img src="assets/fun-watch/heart.svg" width="16" height="16" alt=""><span>팔로우</span></button>
-                  <button class="fstreamer__donate" type="button" data-fwatch-donate>후원하기</button>
-                  <button class="fstreamer__icon" type="button" aria-label="공유하기" data-fwatch-share><img src="assets/fun-watch/share.svg" width="40" height="40" alt=""></button>
-                  <button class="fstreamer__icon fstreamer__icon--more" type="button" aria-label="더보기"><img src="assets/fun-watch/more.svg" width="23" height="23" alt=""></button>
+              <a class="fminfo__streamer" href="#"><img src="assets/watch/v4/avatar-ymss-sm.jpg" width="24" height="24" alt="">YM상사</a>
+            </div>
+
+            <!-- 방송 정보 (66132:101009) — YouTube 상세와 같은 틀: 채널 · 제목 · 태그 | 팔로우 · 후원하기 · 더보기, 시청자 · 공유. 아래 설명(펼침이 기본) -->
+            <div class="winfo" data-node-id="66132:101009">
+              <div class="winfo__head">
+                <div class="winfo__channel">
+                  <a class="winfo__pic" href="#" aria-label="YM상사 채널">
+                    <img src="assets/watch/v4/avatar-ymss.jpg" width="56" height="56" alt="">
+                    <span class="winfo__live">LIVE</span>
+                  </a>
+                  <div class="winfo__text">
+                    <p class="winfo__name"><strong>YM상사</strong><img src="assets/watch/v4/verified-20.svg" width="20" height="20" alt="인증"></p>
+                    <h1 class="winfo__title">24/7 halloween ambience 🎃 spooky lofi to get chills to</h1>
+                    <ul class="tags"><li>#엑셀</li><li>팀플레이</li><li>서바이벌</li></ul>
+                  </div>
                 </div>
+                <div class="winfo__side">
+                  <div class="winfo__actions">
+                    <button class="fstreamer__follow" type="button" aria-pressed="true" data-watch-follow><img src="assets/fun-watch/heart.svg" width="16" height="16" alt=""><span>팔로잉</span></button>
+                    <button class="fstreamer__donate" type="button" data-watch-donate>후원하기</button>
+                    <button class="fstreamer__icon fstreamer__icon--more" type="button" aria-label="더보기" aria-haspopup="menu" aria-expanded="false" aria-controls="wmenu-pc" data-wmenu-btn><img src="assets/fun-watch/more.svg" width="23" height="23" alt=""></button>
+                    <!-- 더보기 메뉴 · PC — YouTube 상세(66098:153613 P1)와 같은 틀. 자체 방송이라 YouTube 관련 항목은 뺌 -->
+                    <div class="wmenu wmenu--pc" id="wmenu-pc" role="menu" aria-label="더보기" hidden>
+                      <p class="wmenu__user auth-in"><strong>토비라마</strong><span>님</span></p>
+                      <hr class="wmenu__line auth-in">
+                      <button class="wmenu__item" type="button" role="menuitem" data-chat-popout><img src="assets/watch/v4/menu/popout.svg" width="20" height="20" alt=""><span>채팅 새 창으로 보기</span></button>
+                      <button class="wmenu__item" type="button" role="menuitem" data-coming-soon><img src="assets/watch/v4/menu/nickname.svg" width="20" height="20" alt=""><span>닉네임 설정</span></button>
+                      <hr class="wmenu__line">
+                      <button class="wmenu__item" type="button" role="menuitem" data-coming-soon><img src="assets/watch/v4/menu/report.svg" width="20" height="20" alt=""><span>신고하기</span></button>
+                      <hr class="wmenu__line" data-admin-only>
+                      <button class="wmenu__item" type="button" role="menuitem" data-coming-soon data-admin-only><img src="assets/watch/v4/menu/admin.svg" width="20" height="20" alt=""><span>관리자 페이지<small class="wmenu__note">관리자만</small></span></button>
+                    </div>
+                  </div>
+                  <div class="winfo__stat">
+                    <p><img src="assets/watch/v4/viewers.svg" width="16" height="16" alt=""><b>184</b><span>명 시청중</span></p>
+                    <button class="winfo__share" type="button" aria-label="공유하기" data-watch-share><img src="assets/watch/v4/share.svg" width="16" height="16" alt=""></button>
+                  </div>
+                </div>
+              </div>
+              <!-- 설명 (66132:101064) — 시안은 펼친 상태 + "간략히", 접으면 한 줄 + "...더보기" -->
+              <div class="wdesc" data-expanded="true">
+                <p class="wdesc__meta">조회수 154회&nbsp;&nbsp;2일 전</p>
+                <div class="wdesc__body" id="wdesc-body">
+                  <p>**후원안내**</p>
+                  <p>투네이션 : https://toon.at/donate/ymss</p>
+                  <p>펀네이션 : https://funn.at/ymss</p>
+                  <p>계좌 : 국민 5294-3701-0196-67 ㅅㅁㅅ(ㅈㅂ컴퍼니)</p>
+                  <p>점수는 만원이상부터 적용됩니다. 계좌 후원시 닉네임/스트리머 로 입력해주세요</p>
+                </div>
+                <button class="wdesc__toggle" type="button" aria-expanded="true" aria-controls="wdesc-body" data-wdesc-toggle>간략히</button>
               </div>
             </div>
+
+            <!-- 이 채널의 다시보기 (66132:101077) — 정렬 칩(FilterChip M) · 210px 카드 한 줄, 넘치면 가로 스크롤 -->
+            <section class="wmore" aria-labelledby="wmore-title" data-node-id="66132:101077">
+              <div class="wmore__head">
+                <div class="section-header">
+                  <h2 id="wmore-title">🔥 이 채널의 다시보기</h2>
+                  <a href="#">전체보기</a>
+                </div>
+                <p class="wmore__desc">크리에이터의 라이브를 만나보세요.</p>
+                <!-- 정렬 — 선택 표시만 바뀌고 목록 정렬은 서버 연동 전 -->
+                <div class="chips creators-chips" data-wmore-sort>
+                  <button type="button" class="is-active" aria-pressed="true">인기순</button>
+                  <button type="button" aria-pressed="false">최신순</button>
+                  <button type="button" aria-pressed="false">후원순</button>
+                </div>
+              </div>
+              <div class="wmore__row">
+                <article class="card card--rich">
+                  <div class="card__thumb">
+                    <img src="assets/watch/v4/vod1.jpg" alt="">
+                    <div class="card__status"><span class="card__viewers">671명 시청</span></div>
+                  </div>
+                  <div class="card__info">
+                    <img class="card__avatar" src="assets/watch/v4/avatar-ymss-sm.jpg" width="24" height="24" alt="">
+                    <div class="card__text">
+                      <p class="card__title">YM상사 시즌7 5화 무한성 룰렛데이</p>
+                      <div>
+                        <p class="card__channel"><span>YM상사</span><img src="assets/watch/v4/verified-16.svg" width="16" height="16" alt="인증"></p>
+                        <p class="card__sub"><span>구분</span><span class="card__dot" aria-hidden="true"></span><span>2023.04.30</span></p>
+                      </div>
+                      <ul class="tags"><li>#인디</li><li>팀플레이</li><li>서바이벌</li></ul>
+                    </div>
+                  </div>
+                </article>
+                <article class="card card--rich">
+                  <div class="card__thumb">
+                    <img src="assets/watch/v4/vod2.jpg" alt="">
+                    <div class="card__status"><span class="card__viewers">671명 시청</span></div>
+                  </div>
+                  <div class="card__info">
+                    <img class="card__avatar" src="assets/watch/v4/avatar-ymss-sm.jpg" width="24" height="24" alt="">
+                    <div class="card__text">
+                      <p class="card__title">YM상사 시즌7 5화 무한성 룰렛데이</p>
+                      <div>
+                        <p class="card__channel"><span>YM상사</span><img src="assets/watch/v4/verified-16.svg" width="16" height="16" alt="인증"></p>
+                        <p class="card__sub"><span>구분</span><span class="card__dot" aria-hidden="true"></span><span>2023.04.30</span></p>
+                      </div>
+                      <ul class="tags"><li>#인디</li><li>팀플레이</li><li>서바이벌</li></ul>
+                    </div>
+                  </div>
+                </article>
+                <article class="card card--rich">
+                  <div class="card__thumb">
+                    <img src="assets/watch/v4/vod3.jpg" alt="">
+                    <div class="card__status"><span class="card__viewers">671명 시청</span></div>
+                  </div>
+                  <div class="card__info">
+                    <img class="card__avatar" src="assets/watch/v4/avatar-ymss-sm.jpg" width="24" height="24" alt="">
+                    <div class="card__text">
+                      <p class="card__title">YM상사 시즌7 5화 무한성 룰렛데이</p>
+                      <div>
+                        <p class="card__channel"><span>YM상사</span><img src="assets/watch/v4/verified-16.svg" width="16" height="16" alt="인증"></p>
+                        <p class="card__sub"><span>구분</span><span class="card__dot" aria-hidden="true"></span><span>2023.04.30</span></p>
+                      </div>
+                      <ul class="tags"><li>#인디</li><li>팀플레이</li><li>서바이벌</li></ul>
+                    </div>
+                  </div>
+                </article>
+                <article class="card card--rich">
+                  <div class="card__thumb">
+                    <img src="assets/watch/v4/vod4.jpg" alt="">
+                    <div class="card__status"><span class="card__viewers">671명 시청</span></div>
+                  </div>
+                  <div class="card__info">
+                    <img class="card__avatar" src="assets/watch/v4/avatar-ymss-sm.jpg" width="24" height="24" alt="">
+                    <div class="card__text">
+                      <p class="card__title">YM상사 시즌7 5화 무한성 룰렛데이</p>
+                      <div>
+                        <p class="card__channel"><span>YM상사</span><img src="assets/watch/v4/verified-16.svg" width="16" height="16" alt="인증"></p>
+                        <p class="card__sub"><span>구분</span><span class="card__dot" aria-hidden="true"></span><span>2023.04.30</span></p>
+                      </div>
+                      <ul class="tags"><li>#인디</li><li>팀플레이</li><li>서바이벌</li></ul>
+                    </div>
+                  </div>
+                </article>
+                <article class="card card--rich">
+                  <div class="card__thumb">
+                    <img src="assets/watch/v4/vod5.jpg" alt="">
+                    <div class="card__status"><span class="card__viewers">671명 시청</span></div>
+                  </div>
+                  <div class="card__info">
+                    <img class="card__avatar" src="assets/watch/v4/avatar-ymss-sm.jpg" width="24" height="24" alt="">
+                    <div class="card__text">
+                      <p class="card__title">YM상사 시즌7 5화 무한성 룰렛데이</p>
+                      <div>
+                        <p class="card__channel"><span>YM상사</span><img src="assets/watch/v4/verified-16.svg" width="16" height="16" alt="인증"></p>
+                        <p class="card__sub"><span>구분</span><span class="card__dot" aria-hidden="true"></span><span>2023.04.30</span></p>
+                      </div>
+                      <ul class="tags"><li>#인디</li><li>팀플레이</li><li>서바이벌</li></ul>
+                    </div>
+                  </div>
+                </article>
+                <article class="card card--rich">
+                  <div class="card__thumb">
+                    <img src="assets/watch/v4/vod6.jpg" alt="">
+                    <div class="card__status"><span class="card__viewers">671명 시청</span></div>
+                  </div>
+                  <div class="card__info">
+                    <img class="card__avatar" src="assets/watch/v4/avatar-ymss-sm.jpg" width="24" height="24" alt="">
+                    <div class="card__text">
+                      <p class="card__title">YM상사 시즌7 5화 무한성 룰렛데이</p>
+                      <div>
+                        <p class="card__channel"><span>YM상사</span><img src="assets/watch/v4/verified-16.svg" width="16" height="16" alt="인증"></p>
+                        <p class="card__sub"><span>구분</span><span class="card__dot" aria-hidden="true"></span><span>2023.04.30</span></p>
+                      </div>
+                      <ul class="tags"><li>#인디</li><li>팀플레이</li><li>서바이벌</li></ul>
+                    </div>
+                  </div>
+                </article>
+                <article class="card card--rich">
+                  <div class="card__thumb">
+                    <img src="assets/watch/v4/vod1.jpg" alt="">
+                    <div class="card__status"><span class="card__viewers">671명 시청</span></div>
+                  </div>
+                  <div class="card__info">
+                    <img class="card__avatar" src="assets/watch/v4/avatar-ymss-sm.jpg" width="24" height="24" alt="">
+                    <div class="card__text">
+                      <p class="card__title">YM상사 시즌7 5화 무한성 룰렛데이</p>
+                      <div>
+                        <p class="card__channel"><span>YM상사</span><img src="assets/watch/v4/verified-16.svg" width="16" height="16" alt="인증"></p>
+                        <p class="card__sub"><span>구분</span><span class="card__dot" aria-hidden="true"></span><span>2023.04.30</span></p>
+                      </div>
+                      <ul class="tags"><li>#인디</li><li>팀플레이</li><li>서바이벌</li></ul>
+                    </div>
+                  </div>
+                </article>
+              </div>
+            </section>
           </div>
 
-          <!-- 채팅 (65605:98477) — 398px. 접기 버튼(42×43)은 왼쪽 바깥에 붙음 -->
-          <aside class="fchat" id="wchat" aria-label="채팅" data-mode="chat" data-node-id="65605:98477">
+          <!-- 채팅 (66132:101491) — 398px, 왼쪽 Border 200. 접기 버튼(42×43)은 왼쪽 바깥에 붙음 -->
+          <aside class="fchat" id="wchat" aria-label="채팅" data-mode="chat" data-node-id="66132:101491">
             <button class="fchat__fold" type="button" aria-label="채팅 접기" aria-expanded="true" aria-controls="wchat" data-fchat-fold><img src="assets/fun-watch/chat-fold.svg" width="6" height="10.2734" alt=""></button>
 
-            <!-- 메뉴 (65605:98483) — 시청자 수 · 아이콘 버튼 3개 (연결 전) -->
-            <div class="fchat__menu" data-node-id="65605:98483">
-              <span class="fchat__watching">2,051명 시청<img src="assets/fun-watch/external-link.svg" width="14" height="14" alt=""></span>
-              <div class="fchat__tools">
-                <button class="fchat__tool" type="button" aria-label="시청자 목록"><img src="assets/fun-watch/users.svg" width="18" height="18" alt=""></button>
-                <button class="fchat__tool" type="button" aria-label="참여자 정보"><img src="assets/fun-watch/user-2.svg" width="12.3152" height="12.7117" alt=""></button>
-                <button class="fchat__tool" type="button" aria-label="채팅 설정"><img src="assets/fun-watch/settings.svg" width="17" height="17" alt=""></button>
+            <!-- 메뉴 (66132:101497) — 실시간 채팅 · 참여자 수(누르면 유저 찾기) -->
+            <div class="fchat__menu" data-node-id="66132:101497">
+              <h2 class="fchat__title">실시간 채팅</h2>
+              <button class="fchat__people" type="button" aria-label="채팅 참여자 2,051명 — 유저 찾기" aria-expanded="false" aria-controls="fusers" data-fusers-btn><img src="assets/fun-watch/v2/users.svg" width="14" height="14" alt=""><span>2,051명</span></button>
+            </div>
+
+            <!-- 이번 방송 후원 랭킹 (66132:101552) — 채팅 위에 겹친 2 · 1 · 3위 카드 + 한방 최고. 6명 ⌄ 로 접고 펼침 -->
+            <div class="frank" data-node-id="66132:101552">
+              <button class="frank__head" type="button" aria-expanded="true" aria-controls="frank-body" data-frank-toggle>
+                <span>이번 방송 후원 랭킹</span>
+                <span class="frank__count">6명<img src="assets/fun-watch/v2/chevron-down.svg" width="4.83337" height="8.16663" alt=""></span>
+              </button>
+              <!-- 모바일 랭킹 줄 (66132:100259) — 1 · 2 · 3위를 가로로, 오른쪽 ⌄ 로 PC 와 같은 카드를 펼침 -->
+              <div class="frank__strip">
+                <ol class="frank__pills">
+                  <li class="frank__pill frank__pill--1"><span class="frank__medal"><img src="assets/fun-watch/medal-1.svg" width="15.698" height="17.5" alt="1위"></span><span class="frank__pill-text"><button class="frank__who" type="button" data-fuser><img src="assets/fun-watch/v2/crown-1.png" width="20" height="20" alt=""><b class="fname fname--gold">백마토끼</b></button><span class="frank__won">3,924,000원</span></span></li>
+                  <li class="frank__pill frank__pill--2"><span class="frank__medal"><img src="assets/fun-watch/medal-2.svg" width="15.698" height="17.5" alt="2위"></span><span class="frank__pill-text"><button class="frank__who" type="button" data-fuser><img src="assets/fun-watch/v2/crown-2.png" width="20" height="20" alt=""><b class="fname fname--red">한량왕자</b></button><span class="frank__won">2,824,000원</span></span></li>
+                  <li class="frank__pill frank__pill--3"><span class="frank__medal"><img src="assets/fun-watch/medal-3.svg" width="15.698" height="17.5" alt="3위"></span><span class="frank__pill-text"><button class="frank__who" type="button" data-fuser><img src="assets/fun-watch/v2/crown-3.png" width="20" height="20" alt=""><b class="fname fname--green">부아앙</b></button><span class="frank__won">1,724,000원</span></span></li>
+                </ol>
+                <button class="frank__more" type="button" aria-label="후원 랭킹 펼치기" aria-expanded="false" data-frank-more><img src="assets/fun-watch/v2/caret-down.svg" width="20" height="20" alt=""></button>
+              </div>
+              <div class="frank__body" id="frank-body">
+                <ol class="frank__podium">
+                  <li class="frank__card frank__card--2" data-node-id="66132:101563">
+                    <span class="frank__medal"><img src="assets/fun-watch/medal-2.svg" width="15.698" height="17.5" alt="2위"></span>
+                    <span class="frank__text">
+                      <button class="frank__who" type="button" data-fuser><img src="assets/fun-watch/v2/crown-2.png" width="20" height="20" alt=""><b class="fname fname--red">한량왕자</b></button>
+                      <span class="frank__won">2,824,000원</span>
+                    </span>
+                  </li>
+                  <li class="frank__card frank__card--1" data-node-id="66132:101572">
+                    <span class="frank__medal"><img src="assets/fun-watch/medal-1.svg" width="15.698" height="17.5" alt="1위"></span>
+                    <span class="frank__text">
+                      <button class="frank__who" type="button" data-fuser><img src="assets/fun-watch/v2/crown-1.png" width="20" height="20" alt=""><b class="fname fname--gold">백마토끼</b></button>
+                      <span class="frank__won">3,924,000원</span>
+                    </span>
+                  </li>
+                  <li class="frank__card frank__card--3" data-node-id="66132:101582">
+                    <span class="frank__medal"><img src="assets/fun-watch/medal-3.svg" width="15.698" height="17.5" alt="3위"></span>
+                    <span class="frank__text">
+                      <button class="frank__who" type="button" data-fuser><img src="assets/fun-watch/v2/crown-3.png" width="20" height="20" alt=""><b class="fname fname--green">부아앙</b></button>
+                      <span class="frank__won">1,724,000원</span>
+                    </span>
+                  </li>
+                </ol>
+                <p class="frank__best" data-node-id="66132:101596">
+                  <span class="frank__bolt"><img src="assets/fun-watch/v2/high-voltage.svg" width="16" height="16" alt=""></span>
+                  <strong>한방 최고</strong>
+                  <button class="frank__who" type="button" data-fuser><img src="assets/fun-watch/v2/crown-1.png" width="20" height="20" alt=""><b class="fname fname--gold">백마토끼</b></button>
+                  <span class="frank__won">1,227,000원</span>
+                </p>
               </div>
             </div>
 
-            <!-- 이번 방송 후원 랭킹 (접힘 65605:98504 / 펼침 65605:101510) -->
-            <div class="frank" data-node-id="65605:101510">
-              <button class="frank__head" type="button" aria-expanded="false" aria-controls="frank-list" data-frank-toggle>
-                <span>이번 방송 후원 랭킹</span>
-                <span class="frank__chevron" aria-hidden="true"><img src="assets/fun-watch/rank-chevron.svg" width="4.83337" height="8.16663" alt=""></span>
-              </button>
-              <ol class="frank__list" id="frank-list" hidden>
-                <li><span class="frank__medal"><img src="assets/fun-watch/medal-1.svg" width="15.698" height="17.5" alt="1위"></span><span class="frank__who"><strong>백마토끼</strong><span>3,924,000원</span></span></li>
-                <li><span class="frank__medal"><img src="assets/fun-watch/medal-2.svg" width="15.698" height="17.5" alt="2위"></span><span class="frank__who"><strong>한량왕자</strong><span>2,824,000원</span></span></li>
-                <li><span class="frank__medal"><img src="assets/fun-watch/medal-3.svg" width="15.698" height="17.5" alt="3위"></span><span class="frank__who"><strong>부아앙</strong><span>1,724,000원</span></span></li>
-              </ol>
-            </div>
-
-            <!-- 채팅 목록 — 서버 연동 전 데모 (시안 메시지 + 몇 초마다 새 메시지) -->
-            <ol class="fchat__list" role="log" aria-live="polite" aria-label="채팅 메시지" data-fchat-list>
-              <li class="fmsg"><img class="fmsg__av" src="assets/fun-watch/chat/av-sasha.png" width="24" height="24" alt=""><p><span class="fmsg__name">@Sasha.l9ve</span><span class="fmsg__badge"><img src="assets/fun-watch/badge-crown.svg" width="12" height="12" alt="">#3</span>lol moon</p></li>
-              <li class="fmsg"><img class="fmsg__av" src="assets/fun-watch/chat/av-sasha.png" width="24" height="24" alt=""><p><span class="fmsg__name">@Sasha.l9ve</span><span class="fmsg__badge"><img src="assets/fun-watch/badge-crown.svg" width="12" height="12" alt="">#3</span>okie</p></li>
-              <li class="fmsg"><img class="fmsg__av" src="assets/fun-watch/chat/av-barred.png" width="24" height="24" alt=""><p><span class="fmsg__name">@barred7548</span>its obvious in ur bio rose <img class="fmsg__emo" src="assets/fun-watch/chat/emo-rofl.png" width="24" height="24" alt="🤣"></p></li>
-              <li class="fmsg"><img class="fmsg__av" src="assets/fun-watch/chat/av-moonlit.jpg" width="24" height="24" alt=""><p><span class="fmsg__name">@moonlitvoid7</span>Sasha hn</p></li>
-              <li class="fmsg"><img class="fmsg__av" src="assets/fun-watch/chat/av-rose.png" width="24" height="24" alt=""><p><span class="fmsg__name">@Čÿvïlłe_řoşeৎ</span>Oh….I forgot I put that in there</p></li>
-              <li class="fmsg"><img class="fmsg__av" src="assets/fun-watch/chat/av-rose.png" width="24" height="24" alt=""><p><span class="fmsg__name">@Čÿvïlłe_řoşeৎ</span>ANYGAY</p></li>
-              <li class="fmsg"><img class="fmsg__av" src="assets/fun-watch/chat/av-rose.png" width="24" height="24" alt=""><p><span class="fmsg__name">@Čÿvïlłe_řoşeৎ</span>🤠</p></li>
-              <li class="fmsg"><img class="fmsg__av" src="assets/fun-watch/chat/av-barred.png" width="24" height="24" alt=""><p><span class="fmsg__name">@barred7548</span>😶</p></li>
-              <li class="fmsg"><img class="fmsg__av" src="assets/fun-watch/chat/av-rose.png" width="24" height="24" alt=""><p><span class="fmsg__name">@Čÿvïlłe_řoşeৎ</span>Uhh soo how was ur dayyy</p></li>
-              <li class="fmsg"><img class="fmsg__av" src="assets/fun-watch/chat/av-moonlit.jpg" width="24" height="24" alt=""><p><span class="fmsg__name">@moonlitvoid7</span>exit ~</p></li>
-              <li class="fmsg"><img class="fmsg__av" src="assets/fun-watch/chat/av-sasha.png" width="24" height="24" alt=""><p><span class="fmsg__name">@Sasha.l9ve</span><span class="fmsg__badge"><img src="assets/fun-watch/badge-crown.svg" width="12" height="12" alt="">#3</span>what's hn??</p></li>
-              <li class="fmsg"><img class="fmsg__av" src="assets/fun-watch/chat/av-sasha.png" width="24" height="24" alt=""><p><span class="fmsg__name">@Sasha.l9ve</span><span class="fmsg__badge"><img src="assets/fun-watch/badge-crown.svg" width="12" height="12" alt="">#3</span>tc moon 🌙</p></li>
-              <li class="fmsg"><img class="fmsg__av" src="assets/fun-watch/chat/av-vatsal.png" width="24" height="24" alt=""><p><span class="fmsg__name">@vatsaldvora</span>Hey</p></li>
-              <li class="fmsg"><img class="fmsg__av" src="assets/fun-watch/chat/av-barred.png" width="24" height="24" alt=""><p><span class="fmsg__name">@barred7548</span>I just woke up rose soo I wouldnt know yet ;-;</p></li>
-              <li class="fmsg"><img class="fmsg__av" src="assets/fun-watch/chat/av-barred.png" width="24" height="24" alt=""><p><span class="fmsg__name">@barred7548</span>how's your day tho?</p></li>
-              <li class="fmsg"><img class="fmsg__av" src="assets/fun-watch/chat/av-rose.png" width="24" height="24" alt=""><p><span class="fmsg__name">@Čÿvïlłe_řoşeৎ</span>Lol also it was good^^</p></li>
-              <li class="fmsg"><img class="fmsg__av" src="assets/fun-watch/chat/av-barred.png" width="24" height="24" alt=""><p><span class="fmsg__name">@barred7548</span>great to know ^^</p></li>
-              <li class="fmsg"><img class="fmsg__av" src="assets/fun-watch/chat/av-sasha.png" width="24" height="24" alt=""><p><span class="fmsg__name">@Sasha.l9ve</span><span class="fmsg__badge"><img src="assets/fun-watch/badge-crown.svg" width="12" height="12" alt="">#3</span>did it do yall wrong or smth</p></li>
-              <li class="fmsg"><img class="fmsg__av" src="assets/fun-watch/chat/av-barred.png" width="24" height="24" alt=""><p><span class="fmsg__name">@barred7548</span>wdym sasha?</p></li>
-              <li class="fmsg"><img class="fmsg__av" src="assets/fun-watch/chat/av-barred.png" width="24" height="24" alt=""><p><span class="fmsg__name">@barred7548</span>oh nvrm</p></li>
-              <li class="fmsg"><img class="fmsg__av" src="assets/fun-watch/chat/av-rose.png" width="24" height="24" alt=""><p><span class="fmsg__name">@Čÿvïlłe_řoşeৎ</span>I haven’t played Genshin in a couple of weeks bc it keeps kicking me out of a world quest… <img class="fmsg__emo" src="assets/fun-watch/chat/emo-sob.png" width="24" height="24" alt="😭"><img class="fmsg__emo" src="assets/fun-watch/chat/emo-v.png" width="24" height="24" alt="✌"> AND IT JUST KEEPS HAPPENING ITS BEEN THE FOURTH TIME THIS HAPPENED <img class="fmsg__emo" src="assets/fun-watch/chat/emo-sob.png" width="24" height="24" alt="😭"><img class="fmsg__emo" src="assets/fun-watch/chat/emo-v.png" width="24" height="24" alt="✌"><img class="fmsg__emo" src="assets/fun-watch/chat/emo-v.png" width="24" height="24" alt="✌"></p></li>
-              <li class="fmsg"><img class="fmsg__av" src="assets/fun-watch/chat/av-rose.png" width="24" height="24" alt=""><p><span class="fmsg__name">@Čÿvïlłe_řoşeৎ</span>And I’m going insane bc of it</p></li>
-              <li class="fmsg"><img class="fmsg__av" src="assets/fun-watch/chat/av-barred.png" width="24" height="24" alt=""><p><span class="fmsg__name">@barred7548</span>ouch..I wouldnt know much abt genshin..</p></li>
-              <li class="fmsg"><img class="fmsg__av" src="assets/fun-watch/chat/av-sasha.png" width="24" height="24" alt=""><p><span class="fmsg__name">@Sasha.l9ve</span><span class="fmsg__badge"><img src="assets/fun-watch/badge-crown.svg" width="12" height="12" alt="">#3</span>like yall have been straight up ignoring me</p></li>
-              <li class="fmsg"><img class="fmsg__av" src="assets/fun-watch/chat/av-sasha.png" width="24" height="24" alt=""><p><span class="fmsg__name">@Sasha.l9ve</span><span class="fmsg__badge"><img src="assets/fun-watch/badge-crown.svg" width="12" height="12" alt="">#3</span>but its ok i don't wanna</p></li>
-              <li class="fmsg"><img class="fmsg__av" src="assets/fun-watch/chat/av-barred.png" width="24" height="24" alt=""><p><span class="fmsg__name">@barred7548</span>we're sorry sasha..</p></li>
+            <!-- 채팅 목록 (66132:101506) — 서버 연동 전 데모 (시안 메시지 + 몇 초마다 새 메시지). 이름을 누르면 유저 팝업 -->
+            <ol class="fchat__list" role="log" aria-live="polite" aria-label="채팅 메시지" data-fchat-list data-node-id="66132:101506">
+              <li class="fmsg fmsg--donate"><p class="fmsg__head"><time class="fmsg__time">21:03</time><button class="fmsg__name" type="button" data-fuser>불법충</button><span class="fmsg__won">100원</span></p><p class="fmsg__text">예또팬님 깡통까지는 본인이 계산 때려봐야할거같고 본계정은 10억 찍히네여</p></li>
+              <li class="fmsg"><time class="fmsg__time">21:03</time><button class="fmsg__name" type="button" data-fuser>초사단_미카엘</button><span class="fmsg__text">칭호빼면됨</span></li>
+              <li class="fmsg"><time class="fmsg__time">21:03</time><button class="fmsg__name" type="button" data-fuser>은버들</button><span class="fmsg__text">나 신규가입이고 등급신청안해서 아무것도 없었는데 그냥 들어가니 인사했어</span></li>
+              <li class="fmsg"><time class="fmsg__time">21:03</time><button class="fmsg__name" type="button" data-fuser>초사단_미카엘</button><span class="fmsg__text">ㅋㅋ</span></li>
+              <li class="fmsg"><time class="fmsg__time">21:03</time><button class="fmsg__name" type="button" data-fuser>초사단_미카엘</button><span class="fmsg__text">닉때문에</span></li>
+              <li class="fmsg"><time class="fmsg__time">21:03</time><button class="fmsg__name" type="button" data-fuser>초사단_미카엘</button><span class="fmsg__text">걸리신듯</span></li>
+              <li class="fmsg"><time class="fmsg__time">21:03</time><button class="fmsg__name" type="button" data-fuser>초사단_미카엘</button><span class="fmsg__text">나도 갑자기나도 인사함</span></li>
+              <li class="fmsg"><time class="fmsg__time">21:03</time><button class="fmsg__name" type="button" data-fuser>초사단_미카엘</button><span class="fmsg__text">ㅋㅋㅋ</span></li>
+              <li class="fmsg"><time class="fmsg__time">21:03</time><button class="fmsg__name" type="button" data-fuser>은버들</button><span class="fmsg__text">어쩔수없이 후원했는...</span></li>
+              <li class="fmsg"><time class="fmsg__time">21:03</time><button class="fmsg__name" type="button" data-fuser>초사단_미카엘</button><span class="fmsg__text">미카엘이여서</span></li>
+              <li class="fmsg"><time class="fmsg__time">21:03</time><button class="fmsg__name" type="button" data-fuser>초사단_미카엘</button><span class="fmsg__text">큰손 미카엘인줄알고</span></li>
+              <li class="fmsg"><time class="fmsg__time">21:03</time><button class="fmsg__name" type="button" data-fuser>초사단_미카엘</button><span class="fmsg__text">ㅋㅋㅋ</span></li>
+              <li class="fmsg"><time class="fmsg__time">21:03</time><button class="fmsg__name" type="button" data-fuser>청림호수</button><span class="fmsg__text">유튜브닉보면 형들은 거의다아는</span></li>
+              <li class="fmsg fmsg--donate"><p class="fmsg__head"><time class="fmsg__time">21:03</time><button class="fmsg__name" type="button" data-fuser>불법충</button><span class="fmsg__won">100원</span></p><p class="fmsg__text">ㅋㅋㅋㅋ 설정란에서 R 안뜨게 숨길수있어요 그거 안숨기면 열혈팬배처럼 떠요</p></li>
+              <li class="fmsg"><time class="fmsg__time">21:03</time><button class="fmsg__name" type="button" data-fuser>초사단_미카엘</button><span class="fmsg__text">미카엘은 6명이상봄</span></li>
+              <li class="fmsg"><time class="fmsg__time">21:03</time><button class="fmsg__name" type="button" data-fuser>청림호수</button><span class="fmsg__text">펀네이션은 생소한형들이 많음</span></li>
+              <li class="fmsg"><time class="fmsg__time">21:03</time><button class="fmsg__name" type="button" data-fuser>더유니크이예또팬</button><span class="fmsg__text">불법님 숲 닉 뭐임?</span></li>
+              <li class="fmsg"><time class="fmsg__time">21:03</time><button class="fmsg__name" type="button" data-fuser>초사단_미카엘</button><span class="fmsg__text">닉이</span></li>
+              <li class="fchat__new" role="separator">여기부터 새 채팅</li>
+              <li class="fmsg fmsg--donate"><p class="fmsg__head"><time class="fmsg__time">21:03</time><button class="fmsg__name" type="button" data-fuser>불법충</button><span class="fmsg__won">100원</span></p><p class="fmsg__text">닉 깔거였으면 불법충으로 안왔죠 ㅋㅋㅋ 그냥 산책중입니다</p></li>
+              <li class="fmsg"><time class="fmsg__time">21:03</time><button class="fmsg__name" type="button" data-fuser>초사단_미카엘</button><span class="fmsg__text">숲닉 내분캐아는분 없어서 모름.</span></li>
             </ol>
 
-            <!-- 아래 시트 (65605:99260 / 후원 65605:104250) — 탭 · 후원 패널 · 채팅 입력. 채팅 목록 위로 겹침 -->
-            <div class="fsheet" data-node-id="65605:104250">
-              <div class="fsheet__tabs" role="tablist" aria-label="채팅 · 후원 · 설정">
-                <button class="fsheet__tab" type="button" role="tab" aria-selected="true" data-chat-tab="chat">채팅</button>
-                <button class="fsheet__tab" type="button" role="tab" aria-selected="false" aria-controls="donate-general" data-donate="general">후원</button>
-                <button class="fsheet__tab" type="button" role="tab" aria-selected="false" aria-controls="donate-signature" data-donate="signature">시그니처</button>
-                <!-- 설정 (66076:94051) — 32px Primary 원 + 16px 톱니, 선택돼도 아래 선 없음 -->
-                <button class="fsheet__tab fsheet__tab--settings" type="button" role="tab" aria-selected="false" aria-controls="sheet-settings" aria-label="설정" data-donate="settings"><span class="fsheet__gear"><img src="assets/fun-watch/settings.svg" width="16" height="16" alt=""></span></button>
-              </div>
-          <section class="donate" id="donate-general" data-donate-panel="general" aria-label="일반후원" data-node-id="64624:81075" role="tabpanel" hidden>
-            <header class="donate__head">
-              <h3>일반후원</h3>
-              <button class="donate__close" type="button" aria-label="일반후원 닫기" data-donate-close><img src="assets/watch/close-sm.svg" width="24" height="24" alt=""></button>
-            </header>
-            <div class="donate__body">
-            <div class="dform" data-node-id="64617:31242">
-              <div class="dmsg">
-                <div class="dmsg__top">
-                  <p class="dmsg__name"><strong data-donate-nick>토비라마</strong><span>님</span></p>
-                  <label class="dmsg__anon">익명<input class="switch" type="checkbox" role="switch" data-donate-anon></label>
-                </div>
-                <div class="dmsg__voice">
-                  <button class="dmsg__vol" type="button" aria-pressed="true" data-donate-vol><img src="assets/watch/volume.svg" width="16" height="16" alt="">채팅 읽어주기</button>
-                  <button class="dmsg__tts" type="button" data-donate-voice aria-label="읽어줄 목소리 바꾸기"><span>야옹이</span><img src="assets/watch/chevron-right.svg" width="20" height="20" alt=""></button>
-                </div>
-                <div class="dmsg__box">
-                  <textarea class="dmsg__input" id="d-general-msg" rows="2" placeholder="응원의 한마디를 남겨주세요" aria-label="응원 메시지" aria-describedby="d-general-msg-warn" data-count data-donate-msg></textarea>
-                  <span class="dmsg__count" aria-hidden="true">0/200</span>
-                </div>
-                <p class="dwarn" id="d-general-msg-warn" data-warn hidden></p>
-              </div>
-              <button class="dbox dtitle" type="button">
-                <span class="dbox__head"><strong>🎖️칭호</strong><img src="assets/watch/chevron-right.svg" width="20" height="20" alt=""></span>
-                <span class="dtitle__value">표시 안 함</span>
-              </button>
-              <div class="dbox damount">
-                <div class="dbox__head">
-                  <label for="d-general-amount"><strong>💰후원 금액</strong></label>
-                  <span class="dcash"><img src="assets/watch/cash.png" width="14" height="14" alt="">내 펀캐시<i aria-hidden="true"></i><b data-donate-balance>100,000</b></span>
-                </div>
-                <div class="damount__box">
-                  <input class="damount__input" id="d-general-amount" type="text" inputmode="numeric" value="5,000" autocomplete="off" aria-describedby="d-general-amount-warn" data-donate-amount>
-                  <span class="damount__unit">원</span>
-                  <button class="damount__clear" type="button" aria-label="금액 지우기" data-donate-clear><img src="assets/watch/close-circle.svg" width="24" height="24" alt=""><img src="assets/watch/close-circle-active.svg" width="20" height="20" alt=""><img src="assets/watch/close-circle-warn.svg" width="20" height="20" alt=""></button>
-                </div>
-                <p class="dwarn" id="d-general-amount-warn" data-warn hidden></p>
-                <div class="damount__chips">
-                  <button type="button" data-add="1000">+1천</button>
-                  <button type="button" data-add="10000">+1만</button>
-                  <button type="button" data-add="100000">+10만</button>
-                  <button type="button" data-add="300000">+30만</button>
-                  <button type="button" data-add="500000">+50만</button>
-                  <button type="button" data-add="all">전액</button>
-                </div>
-              </div>
-            </div>
-            </div>
-            <footer class="donate__foot">
-              <p class="dwarn" data-warn-form hidden>⚠️ 입력정보를 확인해주세요</p>
-              <button class="donate__submit" type="button" data-donate-submit>후원하기</button>
-            </footer>
-          </section>
-          <section class="donate" id="donate-signature" data-donate-panel="signature" aria-label="시그니처 후원" data-node-id="64624:81249" role="tabpanel" hidden>
-            <header class="donate__head">
-              <h3>시그니처 후원</h3>
-              <button class="donate__close" type="button" aria-label="시그니처 후원 닫기" data-donate-close><img src="assets/watch/close-sm.svg" width="24" height="24" alt=""></button>
-            </header>
-            <div class="donate__body">
-              <div class="dsec">
-                <div class="dsec__head">
-                  <h4>시그니처 선택</h4>
-                  <button class="dsig__all" type="button">전체보기<b>68</b></button>
-                </div>
-                <p class="dsec__desc">이미지를 선택하시면 후원 금액이 자동으로 입력됩니다.</p>
-                <div class="dsig">
-                  <ul class="dsig__grid" data-sig-grid>
-                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="1000"><img src="assets/watch/signature/sig-1.png" width="84" height="48" alt="이쁜이 1,000원"></button></li>
-                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="1500"><img src="assets/watch/signature/sig-2.png" width="84" height="48" alt="오짝승 1,500원"></button></li>
-                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="1700"><img src="assets/watch/signature/sig-3.png" width="84" height="48" alt="키세스 1,700원"></button></li>
-                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="1700"><img src="assets/watch/signature/sig-3.png" width="84" height="48" alt="키세스 1,700원"></button></li>
-                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="2300"><img src="assets/watch/signature/sig-5.png" width="84" height="48" alt="GG EZ 2,300원"></button></li>
-                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="2500"><img src="assets/watch/signature/sig-6.png" width="84" height="48" alt="토카토카 2,500원"></button></li>
-                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="2700"><img src="assets/watch/signature/sig-7.png" width="84" height="48" alt="외모췍 2,700원"></button></li>
-                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="2700" data-unavailable><img src="assets/watch/signature/sig-7.png" width="84" height="48" alt="외모췍 2,700원"></button></li>
+            <!-- 유저 찾기 (66132:107275) — 메뉴 아래로 채팅을 덮음. 검색어로 이름을 거르고, 줄을 누르면 유저 팝업 -->
+            <section class="fusers" id="fusers" aria-labelledby="fusers-title" data-node-id="66132:107275" hidden>
+              <header class="fusers__head">
+                <h3 id="fusers-title">유저 찾기</h3>
+                <button class="fusers__close" type="button" aria-label="유저 찾기 닫기" data-fusers-close><img class="only-pc" src="assets/watch/close-sm.svg" width="24" height="24" alt=""><img class="only-mo" src="assets/fun-watch/v2/close-md-sheet.svg" width="24" height="24" alt=""></button>
+              </header>
+              <div class="fusers__body">
+                <label class="fusers__search">
+                  <input type="search" placeholder="닉네임 또는 아이디 검색" aria-label="닉네임 또는 아이디 검색" autocomplete="off" data-fusers-search>
+                  <img src="assets/v2/creator/search.svg" width="16" height="16" alt="">
+                </label>
+                <p class="fusers__sum">채팅 참여자 <b>2,051</b></p>
+                <div class="fusers__group">
+                  <p class="fusers__label">스트리머 <span>1</span></p>
+                  <ul>
+                    <li><button class="fusers__row" type="button" data-fuser><img src="assets/fun-watch/v2/crown-1.png" width="20" height="20" alt=""><span>이예또</span><small>스트리머</small></button></li>
                   </ul>
-                  <button class="dsig__next" type="button" aria-label="시그니처 더 보기" data-sig-next><img src="assets/watch/sig-arrow.svg" width="24" height="24" alt=""></button>
                 </div>
-                <!-- 등록된 시그니처 없음 (64624:82168) — 그리드에 항목이 없으면 대신 표시 -->
-                <div class="dsig-empty" data-sig-empty hidden>
-                  <img src="assets/watch/circle-warning.svg" width="24" height="24" alt="">
-                  <p>등록된 시그니처가 없습니다.<br>일반 후원을 이용해주세요.</p>
+                <div class="fusers__group">
+                  <p class="fusers__label">매니저 <span>2</span></p>
+                  <ul>
+                    <li><button class="fusers__row" type="button" data-fuser><img src="assets/fun-watch/v2/crown-1.png" width="20" height="20" alt=""><span>청림호수</span><small>매니저</small></button></li>
+                    <li><button class="fusers__row" type="button" data-fuser><img src="assets/fun-watch/v2/crown-1.png" width="20" height="20" alt=""><span>더유니크이예또팬</span><small>매니저</small></button></li>
+                  </ul>
                 </div>
-                <p class="dwarn" data-warn-sig hidden></p>
+                <div class="fusers__group">
+                  <p class="fusers__label">구독자 <span>128</span></p>
+                  <ul>
+                    <li><button class="fusers__row" type="button" data-fuser><img src="assets/fun-watch/v2/crown-1.png" width="20" height="20" alt=""><span>초사단_미카엘</span><small>구독</small></button></li>
+                    <li><button class="fusers__row" type="button" data-fuser><img src="assets/fun-watch/v2/crown-1.png" width="20" height="20" alt=""><span>백마토끼</span><small>구독</small></button></li>
+                    <li><button class="fusers__row" type="button" data-fuser><img src="assets/fun-watch/v2/crown-1.png" width="20" height="20" alt=""><span>은버들</span><small>구독</small></button></li>
+                    <li><button class="fusers__row" type="button" data-fuser><img src="assets/fun-watch/v2/crown-1.png" width="20" height="20" alt=""><span>예또팬</span><small>구독</small></button></li>
+                  </ul>
+                </div>
+                <div class="fusers__group">
+                  <p class="fusers__label">일반 참여자 <span>1,920</span></p>
+                  <ul>
+                    <li><button class="fusers__row" type="button" data-fuser><img src="assets/fun-watch/v2/crown-1.png" width="20" height="20" alt=""><span>산책중입니다</span></button></li>
+                    <li><button class="fusers__row" type="button" data-fuser><img src="assets/fun-watch/v2/crown-1.png" width="20" height="20" alt=""><span>오늘도함께</span></button></li>
+                  </ul>
+                </div>
+                <p class="fusers__none" data-fusers-none hidden>검색 결과가 없어요</p>
               </div>
-              <hr class="dsep">
-            <div class="dform" data-node-id="64617:31356">
-              <div class="dmsg">
-                <div class="dmsg__top">
-                  <p class="dmsg__name"><strong data-donate-nick>토비라마</strong><span>님</span></p>
-                  <label class="dmsg__anon">익명<input class="switch" type="checkbox" role="switch" data-donate-anon></label>
-                </div>
-                <div class="dmsg__voice">
-                  <button class="dmsg__vol" type="button" aria-pressed="true" data-donate-vol><img src="assets/watch/volume.svg" width="16" height="16" alt="">채팅 읽어주기</button>
-                  <button class="dmsg__tts" type="button" data-donate-voice aria-label="읽어줄 목소리 바꾸기"><span>야옹이</span><img src="assets/watch/chevron-right.svg" width="20" height="20" alt=""></button>
-                </div>
-                <div class="dmsg__box">
-                  <textarea class="dmsg__input" id="d-signature-msg" rows="2" placeholder="응원의 한마디를 남겨주세요" aria-label="응원 메시지" aria-describedby="d-signature-msg-warn" data-count data-donate-msg></textarea>
-                  <span class="dmsg__count" aria-hidden="true">0/200</span>
-                </div>
-                <p class="dwarn" id="d-signature-msg-warn" data-warn hidden></p>
-              </div>
-              <button class="dbox dtitle" type="button">
-                <span class="dbox__head"><strong>🎖️칭호</strong><img src="assets/watch/chevron-right.svg" width="20" height="20" alt=""></span>
-                <span class="dtitle__value">표시 안 함</span>
-              </button>
-              <div class="dbox damount">
-                <div class="dbox__head">
-                  <label for="d-signature-amount"><strong>💰후원 금액</strong></label>
-                  <span class="dcash"><img src="assets/watch/cash.png" width="14" height="14" alt="">내 펀캐시<i aria-hidden="true"></i><b data-donate-balance>100,000</b></span>
-                </div>
-                <div class="damount__box">
-                  <input class="damount__input" id="d-signature-amount" type="text" inputmode="numeric" value="5,000" autocomplete="off" aria-describedby="d-signature-amount-warn" data-donate-amount>
-                  <span class="damount__unit">원</span>
-                  <button class="damount__clear" type="button" aria-label="금액 지우기" data-donate-clear><img src="assets/watch/close-circle.svg" width="24" height="24" alt=""><img src="assets/watch/close-circle-active.svg" width="20" height="20" alt=""><img src="assets/watch/close-circle-warn.svg" width="20" height="20" alt=""></button>
-                </div>
-                <p class="dwarn" id="d-signature-amount-warn" data-warn hidden></p>
-                <div class="damount__chips">
-                  <button type="button" data-add="1000">+1천</button>
-                  <button type="button" data-add="10000">+1만</button>
-                  <button type="button" data-add="100000">+10만</button>
-                  <button type="button" data-add="300000">+30만</button>
-                  <button type="button" data-add="500000">+50만</button>
-                  <button type="button" data-add="all">전액</button>
+            </section>
+
+            <!-- 설정 (66132:103268) — 채팅 오른쪽 아래(입력칸 위 12)에 뜨는 카드. 톱니로 열고 X · 톱니 · ESC 로 닫음 -->
+            <section class="fopt" id="fchat-settings" data-donate-panel="settings" aria-labelledby="fopt-title" data-node-id="66132:103268" hidden>
+              <header class="fopt__head">
+                <h3 id="fopt-title">설정</h3>
+                <button class="fopt__close" type="button" aria-label="설정 닫기" data-donate-close><img class="only-pc" src="assets/watch/close-sm.svg" width="24" height="24" alt=""><img class="only-mo" src="assets/fun-watch/v2/close-md-sheet.svg" width="24" height="24" alt=""></button>
+              </header>
+              <div class="fopt__row fopt__row--size">
+                <span id="fopt-size">글자 크기</span>
+                <div class="fopt__sizes" role="group" aria-labelledby="fopt-size">
+                  <button class="fopt__size fopt__size--s" type="button" aria-label="작게" aria-pressed="false" data-fchat-size="14">가</button>
+                  <button class="fopt__size fopt__size--m" type="button" aria-label="보통" aria-pressed="true" data-fchat-size="16">가</button>
+                  <button class="fopt__size fopt__size--l" type="button" aria-label="크게" aria-pressed="false" data-fchat-size="18">가</button>
                 </div>
               </div>
-            </div>
-            </div>
-            <footer class="donate__foot">
-              <p class="dwarn" data-warn-form hidden>⚠️ 입력정보를 확인해주세요</p>
-              <button class="donate__submit" type="button" data-donate-submit>후원하기</button>
-            </footer>
-          </section>
-          <!-- 설정 (66076:95140) — 글자 크기 · 칭호 배지 · 설정 저장. 후원 패널과 같은 틀 -->
-          <section class="donate fset" id="sheet-settings" data-donate-panel="settings" aria-label="설정" data-node-id="66076:95140" role="tabpanel" hidden>
-            <div class="donate__body">
-              <div class="dbox" role="group" aria-labelledby="fset-size-title">
-                <div class="dbox__head">
-                  <strong id="fset-size-title">글자 크기</strong>
-                  <span class="fset__value" data-fset-size-label>보통</span>
-                </div>
-                <div class="fset__sizes">
-                  <button class="fset__size fset__size--s" type="button" aria-label="작게" aria-pressed="false" data-fchat-size="12">가</button>
-                  <button class="fset__size fset__size--m" type="button" aria-label="보통" aria-pressed="true" data-fchat-size="14">가</button>
-                  <button class="fset__size fset__size--l" type="button" aria-label="크게" aria-pressed="false" data-fchat-size="17">가</button>
-                </div>
-              </div>
-              <div class="dbox" role="group" aria-labelledby="fset-badge-title">
-                <div class="dbox__head">
-                  <strong id="fset-badge-title">칭호 배지</strong>
-                  <button class="fset__link" type="button">설정</button>
-                </div>
-                <div class="fset__chips">
-                  <button class="fset__chip" type="button" aria-pressed="true" data-fset-badge>모두 표시함</button>
-                  <button class="fset__chip" type="button" aria-pressed="false" data-fset-badge>일부 표시</button>
-                  <button class="fset__chip" type="button" aria-pressed="false" data-fset-badge>표시 안함</button>
-                </div>
-              </div>
-            </div>
-            <footer class="donate__foot">
-              <button class="donate__submit" type="button" data-fset-save>설정 저장</button>
-            </footer>
-          </section>
-              <!-- 채팅 입력 (65605:99273) — 글자 크기 3단계 · 채팅 뷰 전환 · 입력 -->
-              <form class="finput" data-fchat-form data-node-id="65605:99273">
-                <div class="finput__top">
-                  <div class="finput__sizes" role="group" aria-label="채팅 글자 크기">
-                    <button class="finput__size finput__size--s" type="button" aria-label="작게" aria-pressed="false" data-fchat-size="12">가</button>
-                    <button class="finput__size finput__size--m" type="button" aria-label="보통" aria-pressed="true" data-fchat-size="14">가</button>
-                    <button class="finput__size finput__size--l" type="button" aria-label="크게" aria-pressed="false" data-fchat-size="17">가</button>
-                  </div>
-                  <!-- 채팅 뷰 (65605:102317) ↔ 일반 뷰 (65605:103296) — 채팅 뷰는 메뉴 · 랭킹을 숨기고 채팅을 길게 -->
-                  <button class="finput__view" type="button" aria-pressed="false" data-fchat-view>
-                    <img class="finput__view-on" src="assets/fun-watch/chat-view-on.svg" width="16" height="16" alt="">
-                    <img class="finput__view-off" src="assets/fun-watch/chat-view-off.svg" width="16" height="16" alt="">
-                    <span>채팅 뷰</span>
-                  </button>
-                </div>
+              <hr class="fopt__line">
+              <label class="fopt__row">배지 표시<input class="switch switch--s" type="checkbox" role="switch" checked data-fopt="badge"></label>
+              <label class="fopt__row">메시지 시간 표시<input class="switch switch--s" type="checkbox" role="switch" data-fopt="time"></label>
+              <label class="fopt__row">채팅 얼리기<input class="switch switch--s" type="checkbox" role="switch" data-fopt="freeze"></label>
+              <hr class="fopt__line">
+              <button class="fopt__row fopt__link" type="button" data-chat-popout>채팅 팝업<img src="assets/fun-watch/external-link.svg" width="18" height="18" alt=""></button>
+            </section>
+
+            <!-- 아래 고정 (66132:101607) — 채팅 입력 + 후원 · 시그니처 · 설정 -->
+            <div class="fdock" data-node-id="66132:101607">
+              <form class="finput" data-fchat-form data-node-id="66132:101608">
                 <div class="finput__box">
-                  <textarea class="finput__text" rows="1" maxlength="200" placeholder="채팅하기" aria-label="채팅 입력" data-fchat-input></textarea>
+                  <textarea class="finput__text" rows="1" maxlength="200" placeholder="메시지 입력" aria-label="채팅 입력" data-fchat-input></textarea>
                   <button class="finput__btn" type="button" aria-label="이모티콘"><img src="assets/fun-watch/emoji.svg" width="24" height="24" alt=""></button>
-                  <button class="finput__btn" type="submit" aria-label="보내기"><img src="assets/fun-watch/send.svg" width="24" height="24" alt=""></button>
+                  <button class="finput__btn only-pc" type="submit" aria-label="보내기"><img src="assets/fun-watch/v2/send.svg" width="24" height="24" alt=""></button>
                 </div>
+                <!-- 모바일 보내기 (66132:110337) — 글을 쓰면 입력칸 오른쪽에 나타남 -->
+                <button class="finput__send" type="submit" aria-label="보내기"><img src="assets/fun-watch/v2/send.svg" width="24" height="24" alt=""></button>
               </form>
+              <div class="fdock__tabs" data-node-id="66132:101630">
+                <div class="fdock__kinds">
+                  <button class="fkind" type="button" aria-pressed="false" aria-controls="donate-general" data-donate="general" data-donate-toggle><img src="assets/fun-watch/v2/gift.svg" width="20" height="20" alt="">후원</button>
+                  <button class="fkind" type="button" aria-pressed="false" aria-controls="donate-signature" data-donate="signature" data-donate-toggle><img class="fkind__sig" src="assets/fun-watch/v2/signature.svg" width="15.5" height="15.5" alt="">시그니처</button>
+                </div>
+                <button class="fdock__gear" type="button" aria-label="채팅 설정" aria-pressed="false" aria-controls="fchat-settings" data-donate="settings" data-donate-toggle><img class="only-pc" src="assets/fun-watch/settings.svg" width="17" height="17" alt=""><img class="only-mo" src="assets/fun-watch/v2/settings-24.svg" width="24" height="24" alt=""></button>
+              </div>
             </div>
+
+            <!-- 후원 (66132:104065) — 채팅 왼쪽 아래 팝오버. 응원 메시지 · 칭호 · 금액 · 후원하기. 목소리(야옹이 ›)를 누르면 채팅 보이스 -->
+            <section class="donate fpop" id="donate-general" data-donate-panel="general" aria-labelledby="donate-general-title" data-node-id="66132:104065" hidden>
+              <header class="donate__head">
+                <h3 id="donate-general-title">후원</h3>
+                <button class="donate__close" type="button" aria-label="후원 닫기" data-donate-close><img class="only-pc" src="assets/watch/close-sm.svg" width="24" height="24" alt=""><img class="only-mo" src="assets/fun-watch/v2/close-md-sheet.svg" width="24" height="24" alt=""></button>
+              </header>
+              <div class="donate__body">
+                <div class="dform">
+                  <div class="dmsg">
+                    <div class="dmsg__top">
+                      <p class="dmsg__name"><strong data-donate-nick>토비라마</strong><span>님</span></p>
+                      <label class="dmsg__anon">익명<input class="switch" type="checkbox" role="switch" data-donate-anon></label>
+                    </div>
+                    <div class="dmsg__box">
+                      <textarea class="dmsg__input" id="d-general-msg" rows="2" placeholder="응원의 한마디를 남겨주세요" aria-label="응원 메시지" aria-describedby="d-general-msg-warn" data-count data-donate-msg></textarea>
+                      <div class="dmsg__foot">
+                        <div class="dmsg__voice">
+                          <button class="dmsg__vol" type="button" aria-pressed="true" data-donate-vol><img src="assets/fun-watch/v2/checkbox-check.svg" width="16" height="16" alt="">채팅 읽어주기</button>
+                          <i class="dmsg__bar" aria-hidden="true"></i>
+                          <button class="dmsg__tts" type="button" aria-label="읽어줄 목소리 바꾸기" aria-haspopup="dialog" aria-controls="fvoice" data-donate-voice><span>야옹이</span><img src="assets/watch/chevron-right.svg" width="20" height="20" alt=""><img class="dmsg__speaker" src="assets/fun-watch/v2/volume-16.svg" width="16" height="16" alt=""></button>
+                        </div>
+                        <span class="dmsg__count" aria-hidden="true">0/200</span>
+                      </div>
+                    </div>
+                    <p class="dwarn" id="d-general-msg-warn" data-warn hidden></p>
+                  </div>
+                  <button class="dbox dtitle" type="button" data-coming-soon>
+                    <span class="dbox__head"><strong>🎖️칭호</strong><img src="assets/watch/chevron-right.svg" width="20" height="20" alt=""></span>
+                    <span class="dtitle__value">표시 안 함</span>
+                  </button>
+                  <hr class="dform__line">
+                  <div class="dbox damount">
+                    <div class="dbox__head">
+                      <label for="d-general-amount"><strong>💰후원 금액</strong></label>
+                      <span class="dcash"><img src="assets/watch/cash.png" width="14" height="14" alt=""><span class="dcash__label">내 펀캐시</span><i aria-hidden="true"></i><b data-donate-balance>100,000</b></span>
+                    </div>
+                    <div class="damount__box">
+                      <input class="damount__input" id="d-general-amount" type="text" inputmode="numeric" value="5,000" autocomplete="off" aria-describedby="d-general-amount-warn" data-donate-amount>
+                      <span class="damount__unit">원</span>
+                      <button class="damount__clear" type="button" aria-label="금액 지우기" data-donate-clear><img src="assets/watch/close-circle.svg" width="24" height="24" alt=""><img src="assets/watch/close-circle-active.svg" width="20" height="20" alt=""><img src="assets/watch/close-circle-warn.svg" width="20" height="20" alt=""></button>
+                    </div>
+                    <p class="dwarn" id="d-general-amount-warn" data-warn hidden></p>
+                    <div class="damount__chips">
+                      <button type="button" data-add="1000">+1천</button>
+                      <button type="button" data-add="10000">+1만</button>
+                      <button type="button" data-add="100000">+10만</button>
+                      <button type="button" data-add="300000">+30만</button>
+                      <button type="button" data-add="500000">+50만</button>
+                      <button type="button" data-add="all">전액</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <footer class="donate__foot">
+                <p class="dwarn" data-warn-form hidden>⚠️ 입력정보를 확인해주세요</p>
+                <button class="donate__submit" type="button" data-donate-submit>후원하기</button>
+              </footer>
+            </section>
+
+            <!-- 시그니처 (66132:106446) — 후원 팝오버 위에 시그니처 선택(84×48 4열 2줄, 화살표로 넘김) -->
+            <section class="donate fpop" id="donate-signature" data-donate-panel="signature" aria-labelledby="donate-signature-title" data-node-id="66132:106446" hidden>
+              <header class="donate__head">
+                <h3 id="donate-signature-title">시그니처</h3>
+                <button class="donate__close" type="button" aria-label="시그니처 닫기" data-donate-close><img class="only-pc" src="assets/watch/close-sm.svg" width="24" height="24" alt=""><img class="only-mo" src="assets/fun-watch/v2/close-md-sheet.svg" width="24" height="24" alt=""></button>
+              </header>
+              <div class="donate__body">
+                <div class="dsec">
+                  <div class="dsec__head">
+                    <h4>시그니처 선택</h4>
+                    <button class="dsig__all" type="button" data-coming-soon>전체보기<b>68</b></button>
+                  </div>
+                  <p class="dsec__desc">이미지를 선택하시면 후원 금액이 자동으로 입력됩니다.</p>
+                  <div class="dsig">
+                    <ul class="dsig__grid" data-sig-grid>
+                      <li><button class="dsig__item" type="button" aria-pressed="false" data-price="1000"><img src="assets/watch/signature/sig-1.png" width="84" height="48" alt="이쁜이 1,000원"></button></li>
+                      <li><button class="dsig__item" type="button" aria-pressed="false" data-price="1500"><img src="assets/watch/signature/sig-2.png" width="84" height="48" alt="오짝승 1,500원"></button></li>
+                      <li><button class="dsig__item" type="button" aria-pressed="false" data-price="1700"><img src="assets/watch/signature/sig-3.png" width="84" height="48" alt="키세스 1,700원"></button></li>
+                      <li><button class="dsig__item" type="button" aria-pressed="false" data-price="1700"><img src="assets/watch/signature/sig-3.png" width="84" height="48" alt="키세스 1,700원"></button></li>
+                      <li><button class="dsig__item" type="button" aria-pressed="false" data-price="2300"><img src="assets/watch/signature/sig-5.png" width="84" height="48" alt="GG EZ 2,300원"></button></li>
+                      <li><button class="dsig__item" type="button" aria-pressed="false" data-price="2500"><img src="assets/watch/signature/sig-6.png" width="84" height="48" alt="토카토카 2,500원"></button></li>
+                      <li><button class="dsig__item" type="button" aria-pressed="false" data-price="2700"><img src="assets/watch/signature/sig-7.png" width="84" height="48" alt="외모췍 2,700원"></button></li>
+                      <li><button class="dsig__item" type="button" aria-pressed="false" data-price="2700" data-unavailable><img src="assets/watch/signature/sig-7.png" width="84" height="48" alt="외모췍 2,700원"></button></li>
+                    </ul>
+                    <button class="dsig__next" type="button" aria-label="시그니처 더 보기" data-sig-next><img src="assets/watch/sig-arrow.svg" width="24" height="24" alt=""></button>
+                  </div>
+                  <!-- 등록된 시그니처 없음 (64624:82168) — 그리드에 항목이 없으면 대신 표시 -->
+                  <div class="dsig-empty" data-sig-empty hidden>
+                    <img src="assets/watch/circle-warning.svg" width="24" height="24" alt="">
+                    <p>등록된 시그니처가 없습니다.<br>일반 후원을 이용해주세요.</p>
+                  </div>
+                  <p class="dwarn" data-warn-sig hidden></p>
+                </div>
+                <div class="dform">
+                  <div class="dmsg">
+                    <div class="dmsg__top">
+                      <p class="dmsg__name"><strong data-donate-nick>토비라마</strong><span>님</span></p>
+                      <label class="dmsg__anon">익명<input class="switch" type="checkbox" role="switch" data-donate-anon></label>
+                    </div>
+                    <div class="dmsg__box">
+                      <textarea class="dmsg__input" id="d-signature-msg" rows="2" placeholder="응원의 한마디를 남겨주세요" aria-label="응원 메시지" aria-describedby="d-signature-msg-warn" data-count data-donate-msg></textarea>
+                      <div class="dmsg__foot">
+                        <div class="dmsg__voice">
+                          <button class="dmsg__vol" type="button" aria-pressed="true" data-donate-vol><img src="assets/fun-watch/v2/checkbox-check.svg" width="16" height="16" alt="">채팅 읽어주기</button>
+                          <i class="dmsg__bar" aria-hidden="true"></i>
+                          <button class="dmsg__tts" type="button" aria-label="읽어줄 목소리 바꾸기" aria-haspopup="dialog" aria-controls="fvoice" data-donate-voice><span>야옹이</span><img src="assets/watch/chevron-right.svg" width="20" height="20" alt=""><img class="dmsg__speaker" src="assets/fun-watch/v2/volume-16.svg" width="16" height="16" alt=""></button>
+                        </div>
+                        <span class="dmsg__count" aria-hidden="true">0/200</span>
+                      </div>
+                    </div>
+                    <p class="dwarn" id="d-signature-msg-warn" data-warn hidden></p>
+                  </div>
+                  <button class="dbox dtitle" type="button" data-coming-soon>
+                    <span class="dbox__head"><strong>🎖️칭호</strong><img src="assets/watch/chevron-right.svg" width="20" height="20" alt=""></span>
+                    <span class="dtitle__value">표시 안 함</span>
+                  </button>
+                  <hr class="dform__line">
+                  <div class="dbox damount">
+                    <div class="dbox__head">
+                      <label for="d-signature-amount"><strong>💰후원 금액</strong></label>
+                      <span class="dcash"><img src="assets/watch/cash.png" width="14" height="14" alt=""><span class="dcash__label">내 펀캐시</span><i aria-hidden="true"></i><b data-donate-balance>100,000</b></span>
+                    </div>
+                    <div class="damount__box">
+                      <input class="damount__input" id="d-signature-amount" type="text" inputmode="numeric" value="5,000" autocomplete="off" aria-describedby="d-signature-amount-warn" data-donate-amount>
+                      <span class="damount__unit">원</span>
+                      <button class="damount__clear" type="button" aria-label="금액 지우기" data-donate-clear><img src="assets/watch/close-circle.svg" width="24" height="24" alt=""><img src="assets/watch/close-circle-active.svg" width="20" height="20" alt=""><img src="assets/watch/close-circle-warn.svg" width="20" height="20" alt=""></button>
+                    </div>
+                    <p class="dwarn" id="d-signature-amount-warn" data-warn hidden></p>
+                    <div class="damount__chips">
+                      <button type="button" data-add="1000">+1천</button>
+                      <button type="button" data-add="10000">+1만</button>
+                      <button type="button" data-add="100000">+10만</button>
+                      <button type="button" data-add="300000">+30만</button>
+                      <button type="button" data-add="500000">+50만</button>
+                      <button type="button" data-add="all">전액</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <footer class="donate__foot">
+                <p class="dwarn" data-warn-form hidden>⚠️ 입력정보를 확인해주세요</p>
+                <button class="donate__submit" type="button" data-donate-submit>후원하기</button>
+              </footer>
+            </section>
+
+            <!-- 채팅 보이스 (66132:105659) — 후원 팝오버의 목소리(야옹이 ›)를 누르면 같은 자리에. ← 로 돌아감.
+                 [구현 제안] 줄을 누르면 그 목소리로 바꾸고 돌아감, 고른 목소리는 재생 아이콘이 파랑(시안 마지막 줄) -->
+            <section class="fpop fvoice" id="fvoice" aria-labelledby="fvoice-title" data-node-id="66132:105659" hidden>
+              <header class="fvoice__head">
+                <button class="fvoice__back" type="button" aria-label="후원으로 돌아가기" data-fvoice-back><img src="assets/fun-watch/v2/arrow-left-md.svg" width="20" height="20" alt=""></button>
+                <h3 id="fvoice-title">채팅 보이스</h3>
+              </header>
+              <ul class="fvoice__list">
+                <li><button class="fvoice__item" type="button" aria-pressed="true" data-fvoice="야옹이"><span>야옹이</span><img src="assets/fun-watch/v2/play.svg" width="20" height="20" alt=""><img src="assets/fun-watch/v2/play-on.svg" width="20" height="20" alt=""></button></li>
+                <li><button class="fvoice__item" type="button" aria-pressed="false" data-fvoice="다은이"><span>다은이</span><img src="assets/fun-watch/v2/play.svg" width="20" height="20" alt=""><img src="assets/fun-watch/v2/play-on.svg" width="20" height="20" alt=""></button></li>
+                <li><button class="fvoice__item" type="button" aria-pressed="false" data-fvoice="최무비"><span>최무비</span><img src="assets/fun-watch/v2/play.svg" width="20" height="20" alt=""><img src="assets/fun-watch/v2/play-on.svg" width="20" height="20" alt=""></button></li>
+                <li><button class="fvoice__item" type="button" aria-pressed="false" data-fvoice="박리뷰"><span>박리뷰</span><img src="assets/fun-watch/v2/play.svg" width="20" height="20" alt=""><img src="assets/fun-watch/v2/play-on.svg" width="20" height="20" alt=""></button></li>
+              </ul>
+            </section>
+
+            <!-- 유저 팝업 (66132:107341) — 채팅 이름 · 랭킹 · 유저 찾기 줄을 누르면 채팅 왼쪽에 뜸 -->
+            <div class="fuser" id="fuser" role="dialog" aria-labelledby="fuser-name" data-node-id="66132:107341" hidden>
+              <button class="fuser__close" type="button" aria-label="닫기" data-fuser-close><img src="assets/fun-watch/v2/close-md.svg" width="24" height="24" alt=""></button>
+              <div class="fuser__id">
+                <img class="fuser__pic" src="assets/fun-watch/v2/user-avatar.png" width="74" height="70" alt="">
+                <p class="fuser__name"><img src="assets/fun-watch/v2/crown-1.png" width="30" height="30" alt=""><strong id="fuser-name" data-fuser-name>백마토끼</strong></p>
+              </div>
+              <p class="fuser__since"><img src="assets/fun-watch/v2/heart-14.svg" width="14" height="14" alt="">2026년 10월 28일부터 팔로우</p>
+              <hr class="fuser__line">
+              <button class="fuser__report" type="button" data-coming-soon><img src="assets/fun-watch/v2/warning.svg" width="24" height="24" alt="">신고하기</button>
+            </div>
+
             <div class="dfail" id="donate-fail" hidden>
               <div class="dfail__box" role="alertdialog" aria-modal="true" aria-labelledby="dfail-title" aria-describedby="dfail-desc" data-node-id="64624:81244">
                 <h3 id="dfail-title">후원에 실패했어요</h3>
