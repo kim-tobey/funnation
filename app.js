@@ -179,7 +179,6 @@
   // 홈 앱바 제목은 로고 이미지라 innerHTML 로 보관했다가 되돌린다 (검색·알림 화면도 같은 값을 씀)
   var pageTitle = moTitle.innerHTML;
   moTitle.setAttribute("data-page-title", pageTitle);
-  var bnLive = document.querySelector('.bottom-nav__item[aria-current="page"]');
   var pushed = false;
 
   function render() {
@@ -194,9 +193,7 @@
       root.removeAttribute("data-view");
       moTitle.innerHTML = pageTitle;
     }
-    // 시안처럼 로그인 화면에서는 하단 내비에 선택 표시 없음
-    // 영상 상세처럼 하단 내비에 해당 메뉴가 없는 페이지는 건너뜀
-    if (bnLive) bnLive.classList.toggle("is-active", !open);
+    // 하단 내비 선택 표시("내 정보")는 아래 하단 내비 내 정보 코드가 data-view 를 보고 맞춤
     form.classList.remove("is-error");
   }
   function openLogin() {
@@ -1040,8 +1037,6 @@
   var view = document.getElementById("signup-view");
   if (!view) return;
   var moTitle = document.getElementById("mo-title");
-  var bnAccount = document.getElementById("bn-account");
-  var bnPage = document.querySelector('.bottom-nav__item[aria-current="page"]');
   var pages = view.querySelectorAll("[data-signup-step]");
   var steps = view.querySelectorAll(".steps__item");
   var form = document.getElementById("signup-form");
@@ -1106,9 +1101,7 @@
       root.removeAttribute("data-view");
       moTitle.innerHTML = moTitle.getAttribute("data-page-title");
     }
-    // 시안: 회원가입 화면에서는 하단 내비 "내 정보"가 선택됨
-    if (bnAccount) bnAccount.classList.toggle("is-active", open);
-    if (bnPage && (open || was)) bnPage.classList.toggle("is-active", !open);
+    // 하단 내비 "내 정보" 선택은 아래 하단 내비 내 정보 코드가 data-view 를 보고 맞춤
   }
   function close() {
     if (location.hash !== "#signup") return;
@@ -2192,6 +2185,27 @@
     } else return;
     e.stopImmediatePropagation();
   }, true);
+})();
+
+/* 하단 내비 "내 정보" (65183:65641) — 로그인/로그아웃 × 선택/선택 안 됨 4가지.
+   선택: 로그아웃이면 로그인 · 회원가입 화면, 로그인이면 "내 정보"로 여는 모바일 메뉴 드로어가 열려 있을 때.
+   "내 정보"가 선택되면 지금 페이지 메뉴(홈 · 라이브 · 크리에이터)의 선택 표시는 끔 */
+(function () {
+  var root = document.documentElement;
+  var account = document.getElementById("bn-account");
+  if (!account) return;
+  var current = document.querySelector(".bottom-nav__item.is-active:not(#bn-account)");
+  var mobile = matchMedia("(max-width: 767px)");
+  function sync() {
+    var view = root.getAttribute("data-view");
+    var on = view === "login" || view === "signup" ||
+      (root.getAttribute("data-auth") !== "out" && mobile.matches && root.getAttribute("data-drawer") === "open");
+    account.classList.toggle("is-active", on);
+    if (current) current.classList.toggle("is-active", !on);
+  }
+  new MutationObserver(sync).observe(root, { attributes: true, attributeFilter: ["data-view", "data-auth", "data-drawer"] });
+  mobile.addEventListener("change", sync);
+  sync();
 })();
 
 /* PC 알림 팝업 (64686:113964) — GNB 종 아이콘으로 열고 닫음. X · 바깥 클릭 · ESC 로도 닫힘.
