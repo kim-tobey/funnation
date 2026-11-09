@@ -4191,8 +4191,11 @@ ul {
   }
 
   /* 하단 내비 — 홈 선택 시 채워진 파란 집 (64112:15797) */
-  .bottom-nav__item.is-active img[src$="icHome.svg"] { content: url("assets/v2/nav-home-active.svg"); }
-  [data-theme="light"] .bottom-nav__item.is-active img[src$="icHome.svg"] { content: url("assets/light/v2/nav-home-active.svg"); }
+  /* 선택 아이콘 — PC LNB 선택 아이콘처럼 속이 찬 모양 (홈 · 크리에이터 · 라이브 · 내 정보) */
+  .bottom-nav__item.is-active img[src$="icHome.svg"] { content: url("assets/mo/nav-home-active.svg"); }
+  [data-theme="light"] .bottom-nav__item.is-active img[src$="icHome.svg"] { content: url("assets/light/mo/nav-home-active.svg"); }
+  .bottom-nav__item.is-active img[src$="nav-creator.svg"] { content: url("assets/mo/nav-creator-active.svg"); }
+  [data-theme="light"] .bottom-nav__item.is-active img[src$="nav-creator.svg"] { content: url("assets/light/mo/nav-creator-active.svg"); }
 }
 
 /* ============================================================
