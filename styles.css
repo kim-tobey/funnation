@@ -6747,11 +6747,11 @@ ul {
   gap: 24px;
   padding-top: 36px;
 }
-/* Headline/H6 */
+/* Headline/H5 (65468:108947) — 2뎁스 메뉴가 없는 페이지의 제목은 H5 28 */
 .wallet-head__title {
   margin: 0;
   font-family: var(--font-score);
-  font-size: 19px;
+  font-size: 28px;
   font-weight: 700;
   line-height: 1;
   letter-spacing: -0.01em;
@@ -7080,11 +7080,12 @@ ul {
   gap: 24px;
   padding-bottom: 44px;
 }
+/* 2뎁스 메뉴 아래 32 (66339:56393 → 66339:56409) = 본문 위 28 + 4 */
 .creators-head {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  padding-top: 36px;
+  padding-top: 4px;
 }
 /* Headline/H6 */
 .creators-head__title {
@@ -7362,12 +7363,14 @@ ul {
   margin: 0 auto;
   padding: 64px 44px;
 }
-/* Headline/H7 — Pretendard Bold 25 · 행간 30 */
+/* Headline/H5 (65571:109879) — 2뎁스 메뉴가 없는 페이지의 제목은 S-Core Dream 28 */
 .terms__title {
   margin: 0;
-  font-size: 25px;
+  font-family: var(--font-score);
+  font-size: 28px;
   font-weight: 700;
-  line-height: 30px;
+  line-height: 1;
+  letter-spacing: -0.01em;
   color: var(--color-text-strong);
 }
 .terms__body {
@@ -11997,4 +12000,9 @@ ul {
   .st-table__sound td { text-align: center; }
 
   .st-toast { bottom: calc(var(--bottom-nav-h) + 16px); }
+}
+
+/* 모바일 시안이 없는 2뎁스 메뉴 (크리에이터 찾기 66339:56393) — 767px 이하에선 숨김 */
+@media (max-width: 767px) {
+  .subnav--pc-only { display: none; }
 }
