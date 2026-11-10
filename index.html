@@ -368,8 +368,62 @@
 
       <div class="main__inner">
 
+        <!-- 로그인 상태 PC — 히어로 슬라이더 · 퀵카드 대신 추천 라이브 플레이어 + 채팅 (66498:205419).
+             영상 · 채팅은 YouTube 임베드(영상 상세와 같은 방식). 추천 목록 · 영상 ID 는 app.js 의 FEATURED.
+             모바일 시안이 없어 모바일은 기존 히어로 슬라이더 그대로 -->
+        <section class="hero-live" id="hero-live" aria-label="추천 라이브" data-node-id="66498:205419">
+          <div class="hero-live__player">
+            <iframe class="hero-live__frame" data-hl-player title="추천 라이브 영상" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+            <p class="hero-live__off" data-hl-player-off hidden>YouTube 영상은 파일로 직접 열면 재생되지 않아요.<br>로컬 서버(http://localhost)나 실제 도메인에서 열어 주세요.</p>
+
+            <span class="hero-live__viewers hl-glass" data-node-id="66498:205428">
+              <img src="assets/hero-live/live-dot.svg" width="10" height="10" alt="">
+              <span data-hl-viewers aria-label="시청자 수">584</span>
+            </span>
+            <button class="hero-live__mute hl-glass" type="button" aria-pressed="false" aria-label="음소거 해제" data-hl-mute data-node-id="66498:205435">
+              <img class="hero-live__mute-on" src="assets/hero-live/muted.svg" width="16" height="16" alt="">
+              <img class="hero-live__mute-off" src="assets/fun-watch/v2/volume-16.svg" width="16" height="16" alt="">
+            </button>
+
+            <div class="hero-live__info hl-glass" data-node-id="66498:205439">
+              <a class="hero-live__avatar" href="watch.html" data-hl-link>
+                <img src="assets/watch/v4/avatar-ymss.jpg" width="56" height="56" alt="" data-hl-avatar>
+                <span class="hero-live__badge">LIVE</span>
+              </a>
+              <div class="hero-live__body">
+                <div class="hero-live__top">
+                  <div class="hero-live__text">
+                    <a class="hero-live__name" href="watch.html" data-hl-link data-hl-name>YM상사</a>
+                    <div class="hero-live__meta">
+                      <a class="hero-live__title" href="watch.html" data-hl-link data-hl-title>YM상사 시즌7 7화 팀전</a>
+                      <ul class="tags hero-live__tags" data-hl-tags><li>엑셀</li><li>팀플레이</li><li>서바이벌</li></ul>
+                    </div>
+                  </div>
+                  <a class="hero-live__cta" href="watch.html" data-hl-link>지금 시청하기</a>
+                </div>
+                <div class="hero-live__nav">
+                  <div class="hero-live__dots" data-hl-dots></div>
+                  <div class="hero-live__arrows">
+                    <button class="hero-live__arrow" type="button" data-hl-dir="-1" aria-label="이전 추천 라이브">
+                      <img src="assets/hero-live/prev.svg" width="16" height="16" alt="">
+                    </button>
+                    <button class="hero-live__arrow" type="button" data-hl-dir="1" aria-label="다음 추천 라이브">
+                      <img src="assets/hero-live/next.svg" width="16" height="16" alt="">
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <aside class="hero-live__chat" aria-label="라이브 채팅" data-node-id="66498:205493">
+            <iframe class="hero-live__chat-frame" data-hl-chat title="YouTube 라이브 채팅"></iframe>
+            <p class="hero-live__chat-off" data-hl-chat-off hidden>YouTube 채팅은 로컬 서버(http://localhost)나 실제 도메인에서 열어야 보여요.</p>
+          </aside>
+        </section>
+
         <!-- Hero -->
-        <!-- 히어로 슬라이더 (로그인/로그아웃과 무관하게 순환) -->
+        <!-- 히어로 슬라이더 (로그아웃 상태 · 모바일) -->
         <section class="hero" id="hero">
           <!-- slide 1 : 65514:38763 -->
           <article class="hero__slide is-active">

@@ -531,6 +531,143 @@
   }
 })();
 
+/* 추천 라이브 (66498:205419) — 로그인 상태 PC 에서 히어로 대신 보이는 플레이어 + 채팅.
+   보일 때만 YouTube 를 불러오고, 로그아웃 · 모바일로 바뀌면 src 를 비워 소리 · 재생을 멈춤.
+   자동 넘김 없음(영상 재생 중) — 점 · 화살표로만 바꿈.
+   ytId: 데모로 영상 상세(watch.html)와 같은 라이브 ID 를 씀 — 실제 추천 라이브 ID 로 바꿔야 함 */
+(function () {
+  var root = document.documentElement;
+  var box = document.getElementById("hero-live");
+  if (!box) return;
+
+  var YT_DEMO = "0sfDth4lMLc";
+  var FEATURED = [
+    { name: "YM상사", title: "YM상사 시즌7 7화 팀전", tags: ["엑셀", "팀플레이", "서바이벌"], viewers: "584", avatar: "assets/watch/v4/avatar-ymss.jpg", ytId: YT_DEMO },
+    { name: "YC레이블", title: "YC레이블 21회차, 팀전대결!", tags: ["#인디", "팀플레이", "서바이벌"], viewers: "2,051", avatar: "assets/home/avatar/chatting.png", ytId: YT_DEMO },
+    { name: "[앙엔터] 앙앙~진국 (Jinguk)", title: "[앙스티보이즈 17회차] 일반 회차", tags: ["#인디", "팀플레이", "서바이벌"], viewers: "2,051", avatar: "assets/home/avatar/lol.png", ytId: YT_DEMO },
+    { name: "목격자K", title: "목격자K 나이트 워치", tags: ["#인디", "팀플레이", "서바이벌"], viewers: "857", avatar: "assets/home/avatar/default.svg", ytId: YT_DEMO },
+    { name: "큰별TV", title: "🔴 WORLD CUP SEMIFINAL", tags: ["#버추얼", "관전", "스포츠"], viewers: "2,051", avatar: "assets/home/avatar/vtuber-white.png", ytId: YT_DEMO },
+    { name: "리르", title: "NEW리르💙마크 그냥", tags: ["#게임", "마인크래프트", "NEW"], viewers: "857", avatar: "assets/home/avatar/vtuber-purple.png", ytId: YT_DEMO },
+    { name: "침착맨 원본 박물관", title: "침펄풍 매력적인 악당 월드컵", tags: ["#LIVE", "#TALK"], viewers: "2,051", avatar: "assets/home/avatar/chim.png", ytId: YT_DEMO },
+    { name: "우왁굳의 게임방송", title: "파산게임2 팀전 리턴즈", tags: ["#인디", "팀플레이", "서바이벌"], viewers: "2,051", avatar: "assets/home/avatar/bear.jpg", ytId: YT_DEMO },
+    { name: "견자희의 게임방송", title: "파이널판타지 리버스 데모 플레이", tags: ["#LIVE", "플스5", "콘솔", "데모"], viewers: "20", avatar: "assets/home/avatar/vtuber-blue.png", ytId: YT_DEMO }
+  ];
+
+  var player = box.querySelector("[data-hl-player]");
+  var chat = box.querySelector("[data-hl-chat]");
+  var muteBtn = box.querySelector("[data-hl-mute]");
+  var dotsWrap = box.querySelector("[data-hl-dots]");
+  var host = location.hostname;
+  var blocked = location.protocol === "file:" || !host; // 파일로 열면 YouTube 가 막음(오류 153)
+  var i = 0;
+  var muted = true;
+  var loadedId = null;
+
+  if (blocked) {
+    player.hidden = true;
+    chat.hidden = true;
+    box.querySelector("[data-hl-player-off]").hidden = false;
+    box.querySelector("[data-hl-chat-off]").hidden = false;
+  }
+
+  // 점 — 추천 수만큼
+  var dots = FEATURED.map(function (_, n) {
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "hero-live__dot";
+    b.setAttribute("aria-label", (n + 1) + "번 추천 라이브");
+    b.addEventListener("click", function () { go(n); });
+    dotsWrap.appendChild(b);
+    return b;
+  });
+
+  function visible() {
+    return getComputedStyle(box).display !== "none";
+  }
+  function chatSrc(id) {
+    var dark = root.getAttribute("data-theme") !== "light";
+    return "https://www.youtube.com/live_chat?v=" + id + "&embed_domain=" + encodeURIComponent(host) + (dark ? "&dark_theme=1" : "");
+  }
+  function command(func) {
+    if (!player.contentWindow) return;
+    player.contentWindow.postMessage(JSON.stringify({ event: "command", func: func, args: [] }), "*");
+  }
+
+  function render() {
+    var f = FEATURED[i];
+    box.querySelector("[data-hl-name]").textContent = f.name;
+    box.querySelector("[data-hl-title]").textContent = f.title;
+    box.querySelector("[data-hl-viewers]").textContent = f.viewers;
+    box.querySelector("[data-hl-avatar]").src = f.avatar;
+    var tags = box.querySelector("[data-hl-tags]");
+    tags.textContent = "";
+    f.tags.forEach(function (t) {
+      var li = document.createElement("li");
+      li.textContent = t;
+      tags.appendChild(li);
+    });
+    for (var d = 0; d < dots.length; d++) {
+      if (d === i) dots[d].setAttribute("aria-current", "true");
+      else dots[d].removeAttribute("aria-current");
+    }
+    sync();
+  }
+
+  // 보일 때만 영상 · 채팅을 불러오고, 안 보이면 비움
+  function sync() {
+    if (blocked) return;
+    var id = FEATURED[i].ytId;
+    if (!visible()) {
+      if (loadedId) {
+        player.removeAttribute("src");
+        chat.removeAttribute("src");
+        loadedId = null;
+      }
+      return;
+    }
+    if (loadedId === id + ":" + i) return;
+    loadedId = id + ":" + i;
+    player.src = "https://www.youtube.com/embed/" + id + "?autoplay=1&mute=1&playsinline=1&enablejsapi=1&origin=" + encodeURIComponent(location.origin);
+    chat.src = chatSrc(id);
+  }
+
+  // 새 영상을 불러온 뒤에도 소리를 켜 둔 상태면 다시 켬
+  player.addEventListener("load", function () {
+    if (!muted) setTimeout(function () { command("unMute"); }, 600);
+  });
+
+  function go(n) {
+    i = (n + FEATURED.length) % FEATURED.length;
+    render();
+  }
+
+  box.addEventListener("click", function (e) {
+    var arrow = e.target.closest("[data-hl-dir]");
+    if (arrow) go(i + Number(arrow.getAttribute("data-hl-dir")));
+  });
+
+  muteBtn.addEventListener("click", function () {
+    muted = !muted;
+    command(muted ? "mute" : "unMute");
+    muteBtn.setAttribute("aria-pressed", muted ? "false" : "true");
+    muteBtn.setAttribute("aria-label", muted ? "음소거 해제" : "음소거");
+  });
+
+  // 로그인 · 로그아웃, 화면 폭이 바뀌면 다시 확인 / 테마가 바뀌면 채팅을 같은 테마로
+  new MutationObserver(function (list) {
+    for (var m = 0; m < list.length; m++) {
+      if (list[m].attributeName === "data-theme" && loadedId && !blocked) {
+        var next = chatSrc(FEATURED[i].ytId);
+        if (chat.src !== next) chat.src = next;
+      }
+    }
+    sync();
+  }).observe(root, { attributes: true, attributeFilter: ["data-auth", "data-theme", "data-view"] });
+  matchMedia("(min-width: 768px)").addEventListener("change", sync);
+
+  render();
+})();
+
 /* 히어로 배경 효과 — Predictive Arc (Originkit) 를 바닐라 WebGL 로 옮김.
    기본은 꺼 둠 — ?fx=on 일 때만 켬. WebGL 이 없거나 셰이더가 실패하면 캔버스만 숨기고 기존 배너 그대로 */
 (function () {
