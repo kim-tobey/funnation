@@ -1440,7 +1440,7 @@ ul {
 .hero-live {
   display: none;
   gap: 12px;
-  height: 665px;
+  container-type: inline-size; /* 콘텐츠 폭 기준으로 플레이어 높이를 정함 (아래 @container) */
 }
 @media (min-width: 768px) {
   [data-auth="in"] .hero-live { display: flex; }
@@ -1461,6 +1461,7 @@ ul {
   position: relative;
   flex: 1 1 0;
   min-width: 0;
+  height: 665px; /* 채팅은 이 높이에 맞춰 늘어남 */
   border-radius: 8px;
   background: #000;
   overflow: hidden;
@@ -1705,9 +1706,13 @@ ul {
   background: var(--color-bg-100);
 }
 /* 좁은 PC — 채팅까지 두면 플레이어가 너무 좁아져 채팅을 빼고 16:9 [구현 제안 · 시안 없음] */
+/* 최대 콘텐츠 폭(1480, XL 컨테이너 1536 - 28*2)에서는 레터박스 없이 16:9 —
+   플레이어 폭 = 콘텐츠 - 12 - 채팅 386 = 1082 → 높이 1082 * 9/16 = 608.6 [구현 제안 · 시안은 665] */
+@container (min-width: 1480px) {
+  .hero-live__player { height: calc((100cqw - 398px) * 9 / 16); }
+}
 @media (min-width: 768px) and (max-width: 1099px) {
-  .hero-live { height: auto; }
-  .hero-live__player { aspect-ratio: 16 / 9; }
+  .hero-live__player { height: auto; aspect-ratio: 16 / 9; }
   .hero-live__chat { display: none; }
   .hero-live__tags { display: none; }
 }
