@@ -992,6 +992,27 @@
   }
 })();
 
+/* 크리에이터 찾기 모바일 2뎁스 정렬 탭 — PC 정렬 칩과 같은 선택 상태 (목록 정렬은 서버 연동 전) */
+(function () {
+  var tabs = document.querySelectorAll("[data-creator-sort]");
+  var chips = document.querySelectorAll(".creators-chips button");
+  if (!tabs.length || !chips.length) return;
+  function sync() {
+    for (var i = 0; i < tabs.length; i++) {
+      var on = chips[+tabs[i].getAttribute("data-creator-sort")].classList.contains("is-active");
+      tabs[i].classList.toggle("subnav__tab--active", on);
+      tabs[i].setAttribute("aria-pressed", on ? "true" : "false");
+    }
+  }
+  for (var t = 0; t < tabs.length; t++) {
+    tabs[t].addEventListener("click", function () {
+      chips[+this.getAttribute("data-creator-sort")].click();
+    });
+  }
+  for (var c = 0; c < chips.length; c++) chips[c].addEventListener("click", function () { setTimeout(sync); });
+  sync();
+})();
+
 /* 라이브 방송 서브탭 — 인기라이브 ↔ 전체라이브(64586:116579) 화면 전환.
    새로고침 없이 바꾸고 주소에 ?tab=all 을 남겨 공유·새로고침해도 같은 탭이 열림 */
 (function () {

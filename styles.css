@@ -7324,7 +7324,7 @@ ul {
   padding: 0 16px;
 }
 
-/* [구현 제안] 모바일 시안 없음 — 2열 카드, 검색은 칩 아래 한 줄 */
+/* [구현 제안] 모바일 시안 없음 — 2열 카드, 정렬은 2뎁스 탭, 검색은 한 줄 */
 @media (max-width: 767px) {
   .creators-head {
     padding-top: 8px;
@@ -7335,6 +7335,10 @@ ul {
   .creators-filter {
     flex-wrap: wrap;
     height: auto;
+  }
+  /* 정렬은 위 2뎁스 탭(라이브 · 인기순 · 최신순)이 대신함 */
+  .creators-chips {
+    display: none;
   }
   .creators-search {
     width: 100%;
@@ -7407,6 +7411,7 @@ ul {
   border-bottom: 3px solid var(--color-brand-primary);
   color: var(--color-brand-primary);
 }
+.terms-tabs__mo { display: none; }
 /* 시행일 줄 → 조항 24 */
 .terms__content {
   display: flex;
@@ -7492,16 +7497,34 @@ ul {
   .terms__body {
     gap: 24px;
   }
+  /* 정책 2뎁스 (66352:131183) — 앱바 바로 아래 고정, 가로 스크롤 · 칸 좌우 18 · 16 SemiBold.
+     색은 다른 모바일 2뎁스와 같은 토큰 (선택 Primary — design.md 23장, 시안의 #6CA6FF 는 검색·알림 예외) */
   .terms-tabs {
-    margin: 0 -16px;
+    position: sticky;
+    top: var(--mo-top);
+    z-index: 25;
+    margin: -8px -16px 0;
+    border-bottom: 1px solid var(--mo-appbar-border);
+    background: var(--bg-mo-appbar);
   }
   .terms-tabs__item {
     flex: none;
     min-width: 0;
     height: 48px;
-    padding: 10px 14px;
-    font-size: 15px;
+    padding: 0 18px;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 19px;
+    color: var(--mo-tab);
   }
+  .terms-tabs__item.is-active {
+    border-bottom: 2px solid var(--mo-tab-active);
+    color: var(--mo-tab-active);
+  }
+  .terms-tabs__pc { display: none; }
+  .terms-tabs__mo { display: inline; }
   .terms-date__label {
     font-size: 14px;
   }
@@ -12002,7 +12025,12 @@ ul {
   .st-toast { bottom: calc(var(--bottom-nav-h) + 16px); }
 }
 
-/* 모바일 시안이 없는 2뎁스 메뉴 (크리에이터 찾기 66339:56393) — 767px 이하에선 숨김 */
-@media (max-width: 767px) {
-  .subnav--pc-only { display: none; }
+/* 2뎁스 탭을 버튼으로 쓸 때 (크리에이터 찾기 모바일 정렬 탭) */
+button.subnav__tab {
+  border-top: 0;
+  border-right: 0;
+  border-left: 0;
+  background: none;
+  font-family: inherit;
+  cursor: pointer;
 }

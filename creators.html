@@ -358,8 +358,9 @@
     <!-- ===================== Main ===================== -->
     <main class="main">
 
-      <!-- 2depth 메뉴 (66339:56393) — ← 크리에이터 찾기 ㅣ 크리에이터. 모바일 시안이 없어 PC 에서만 보임 -->
-      <div class="subnav subnav--pc-only" data-node-id="66339:56393">
+      <!-- 2depth 메뉴 (66339:56393) — PC: ← 크리에이터 찾기 ㅣ 크리에이터
+           모바일: 정렬 칩(라이브 · 인기순 · 최신순)을 2뎁스 탭으로 (모바일 시안 없음 · 요청) — 칩과 선택 상태를 같이 씀 -->
+      <div class="subnav" data-node-id="66339:56393">
         <div class="subnav__title">
           <a class="subnav__back" href="index.html" aria-label="홈으로">
             <img src="assets/imgFrame.svg" width="20" height="20" alt="">
@@ -367,6 +368,11 @@
           <h1>크리에이터 찾기</h1>
         </div>
         <span class="subnav__sep">ㅣ</span>
+        <nav class="subnav__tabs subnav__tabs--mo" aria-label="크리에이터 정렬">
+          <button class="subnav__tab subnav__tab--active" type="button" aria-pressed="true" data-creator-sort="0">라이브</button>
+          <button class="subnav__tab" type="button" aria-pressed="false" data-creator-sort="1">인기순</button>
+          <button class="subnav__tab" type="button" aria-pressed="false" data-creator-sort="2">최신순</button>
+        </nav>
         <div class="subnav__tabs subnav__tabs--pc">
           <a class="subnav__tab subnav__tab--active" href="creators.html" aria-current="page">크리에이터</a>
         </div>
