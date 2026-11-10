@@ -992,10 +992,9 @@
   }
 })();
 
-/* 즐겨찾기 보기 — 전체 · 라이브 · 최근 동영상 (PC 칩 · 모바일 2뎁스 탭 같은 상태) */
+/* 즐겨찾기 보기 — 전체 · 라이브 · 최근 동영상 칩 */
 (function () {
   var chips = document.querySelectorAll("[data-fav-filter]");
-  var tabs = document.querySelectorAll("[data-fav-tab]");
   var sections = document.querySelectorAll("[data-fav-section]");
   if (!chips.length || !sections.length) return;
   function show(name) {
@@ -1004,17 +1003,11 @@
       chips[i].classList.toggle("is-active", on);
       chips[i].setAttribute("aria-pressed", on ? "true" : "false");
     }
-    for (var j = 0; j < tabs.length; j++) {
-      var tOn = tabs[j].getAttribute("data-fav-tab") === name;
-      tabs[j].classList.toggle("subnav__tab--active", tOn);
-      tabs[j].setAttribute("aria-pressed", tOn ? "true" : "false");
-    }
     for (var k = 0; k < sections.length; k++) {
       sections[k].hidden = name !== "all" && sections[k].getAttribute("data-fav-section") !== name;
     }
   }
   for (var c = 0; c < chips.length; c++) chips[c].addEventListener("click", function () { show(this.getAttribute("data-fav-filter")); });
-  for (var t = 0; t < tabs.length; t++) tabs[t].addEventListener("click", function () { show(this.getAttribute("data-fav-tab")); });
 })();
 
 /* 크리에이터 찾기 모바일 2뎁스 정렬 탭 — PC 정렬 칩과 같은 선택 상태 (목록 정렬은 서버 연동 전) */

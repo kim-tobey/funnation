@@ -4195,11 +4195,13 @@ ul {
   }
 
   /* 하단 내비 — 홈 선택 시 채워진 파란 집 (64112:15797) */
-  /* 선택 아이콘 — PC LNB 선택 아이콘처럼 속이 찬 모양 (홈 · 크리에이터 · 라이브 · 내 정보) */
+  /* 선택 아이콘 — PC LNB 선택 아이콘처럼 속이 찬 모양 (홈 · 크리에이터 · 라이브 · 즐겨찾기 · 내 정보) */
   .bottom-nav__item.is-active img[src$="icHome.svg"] { content: url("assets/mo/nav-home-active.svg"); }
   [data-theme="light"] .bottom-nav__item.is-active img[src$="icHome.svg"] { content: url("assets/light/mo/nav-home-active.svg"); }
   .bottom-nav__item.is-active img[src$="nav-creator.svg"] { content: url("assets/mo/nav-creator-active.svg"); }
   [data-theme="light"] .bottom-nav__item.is-active img[src$="nav-creator.svg"] { content: url("assets/light/mo/nav-creator-active.svg"); }
+  .bottom-nav__item.is-active img[src$="nav-fav.svg"] { content: url("assets/mo/nav-fav-active.svg"); }
+  [data-theme="light"] .bottom-nav__item.is-active img[src$="nav-fav.svg"] { content: url("assets/light/mo/nav-fav-active.svg"); }
 }
 
 /* ============================================================
@@ -12327,14 +12329,32 @@ button.subnav__tab {
   color: var(--color-text-depth-300);
 }
 
-/* [구현 제안] 모바일 시안 없음 — 보기 칩은 2뎁스 탭이 대신, 카드 2열, 제목 숨김(앱바가 대신) */
+/* [구현 제안] 모바일 시안 없음 — 2뎁스 · 제목 · 설명 · 전체보기 없이 크리에이터 줄부터(요청),
+   보기 칩은 라이브 페이지 모바일과 같은 작은 필터 칩(28 · Primary 선택), 카드 2열 */
 @media (max-width: 767px) {
-  .fav-head { padding-top: 8px; }
-  .fav-head__title { display: none; }
-  .fav-head__row { justify-content: flex-end; }
-  .fav-people { margin: 20px -16px 0; padding: 0 16px; }
+  .subnav--pc-only { display: none; }
+  .fav-head { display: none; }
+  .fav-people { margin: 8px -16px 0; padding: 0 16px; }
   .fav-rule { margin-top: 20px; }
-  .chips.fav-chips { display: none; }
+  .chips.fav-chips { margin-top: 20px; }
+  .chips.fav-chips button {
+    height: 28px;
+    padding: 6px 12px;
+    border-radius: 24px;
+    background: var(--chip);
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 16px;
+    letter-spacing: 0;
+    color: var(--chip-text);
+  }
+  .chips.fav-chips button:first-child { background: var(--chip-alt); }
+  .chips.fav-chips button.is-active {
+    background: var(--color-brand-primary);
+    font-weight: 700;
+    color: #fff;
+  }
   .fav-section { margin-top: 28px; gap: 20px; }
   .fav-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));

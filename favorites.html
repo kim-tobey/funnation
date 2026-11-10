@@ -359,8 +359,8 @@
     <main class="main">
 
       <!-- 2depth 메뉴 — 시안(66305:94467)에는 빠져 있어 크리에이터 찾기(66339:56393)와 같은 형식으로 추가 (HTML 만, 요청).
-           PC: ← 즐겨찾기 ㅣ 즐겨찾기 / 모바일: 보기 칩(전체 · 라이브 · 최근 동영상)을 2뎁스 탭으로 -->
-      <div class="subnav">
+           PC: ← 즐겨찾기 ㅣ 즐겨찾기 / 모바일은 2뎁스 없이 앱바 제목만 (요청) -->
+      <div class="subnav subnav--pc-only">
         <div class="subnav__title">
           <a class="subnav__back" href="index.html" aria-label="홈으로">
             <img src="assets/imgFrame.svg" width="20" height="20" alt="">
@@ -368,11 +368,6 @@
           <h1>즐겨찾기</h1>
         </div>
         <span class="subnav__sep">ㅣ</span>
-        <nav class="subnav__tabs subnav__tabs--mo" aria-label="즐겨찾기 보기">
-          <button class="subnav__tab subnav__tab--active" type="button" aria-pressed="true" data-fav-tab="all">전체</button>
-          <button class="subnav__tab" type="button" aria-pressed="false" data-fav-tab="live">라이브</button>
-          <button class="subnav__tab" type="button" aria-pressed="false" data-fav-tab="vod">최근 동영상</button>
-        </nav>
         <div class="subnav__tabs subnav__tabs--pc">
           <a class="subnav__tab subnav__tab--active" href="favorites.html" aria-current="page">즐겨찾기</a>
         </div>
@@ -410,7 +405,7 @@
         </ul>
         <hr class="fav-rule">
 
-        <!-- 보기 칩 (66305:94661) — 전체 · 라이브 · 최근 동영상 -->
+        <!-- 보기 칩 (66305:94661) — 전체 · 라이브 · 최근 동영상. 모바일은 라이브 페이지의 작은 필터 칩 모양 -->
         <div class="chips fav-chips" data-node-id="66305:94666">
           <button type="button" class="is-active" data-fav-filter="all">전체</button>
           <button type="button" data-fav-filter="live">라이브</button>
