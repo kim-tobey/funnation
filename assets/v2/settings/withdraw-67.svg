@@ -1,0 +1,12 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="67" height="67" viewBox="0 0 67 67" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Group 1321315389">
+<circle id="Ellipse 175" opacity="0.15" cx="33.5" cy="33.5" r="31" stroke-width="5" stroke="#818181"/>
+<path id="Vector (Stroke)" d="M53.7159 7.24986C55.3824 5.58338 58.0837 5.58338 59.7501 7.24986C61.4166 8.91634 61.4166 11.6176 59.7501 13.2841L39.5342 33.4991L59.7501 53.715C61.4166 55.3815 61.4166 58.0837 59.7501 59.7501C58.0837 61.4166 55.3815 61.4166 53.715 59.7501L33.4991 39.5342L13.2841 59.7501C11.6176 61.4166 8.91634 61.4166 7.24986 59.7501C5.58338 58.0837 5.58338 55.3824 7.24986 53.7159L27.4649 33.5L7.24986 13.2841C5.58338 11.6176 5.58338 8.91634 7.24986 7.24986C8.91634 5.58338 11.6176 5.58338 13.2841 7.24986L33.5 27.4649L53.7159 7.24986Z" fill="url(#paint0_linear_0_12)"/>
+</g>
+<defs>
+<linearGradient id="paint0_linear_0_12" x1="60.5265" y1="5.52539" x2="7.89657" y2="60.526" gradientUnits="userSpaceOnUse">
+<stop stop-color="#FF0000"/>
+<stop offset="1" stop-color="#670606"/>
+</linearGradient>
+</defs>
+</svg>

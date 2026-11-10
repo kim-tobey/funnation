@@ -2198,7 +2198,8 @@
   var mobile = matchMedia("(max-width: 767px)");
   function sync() {
     var view = root.getAttribute("data-view");
-    var on = view === "login" || view === "signup" ||
+    // data-current: "내 정보" 자체가 지금 페이지 (설정)
+    var on = (account.hasAttribute("data-current") && !view) || view === "login" || view === "signup" ||
       (root.getAttribute("data-auth") !== "out" && mobile.matches && root.getAttribute("data-drawer") === "open");
     account.classList.toggle("is-active", on);
     if (current) current.classList.toggle("is-active", !on);
@@ -2420,3 +2421,389 @@ document.addEventListener("click", function (e) {
   e.preventDefault();
   alert("서비스 준비 중입니다.");
 });
+
+/* ============================================================
+   설정 (settings.html · Figma 66318:13684) — 계정 · 알림 · 보안 탭, 모달 · 시트 · 토스트.
+   서버 연동 전이라 저장 · 연결 · 탈퇴는 화면 상태만 바꿈
+   ============================================================ */
+(function () {
+  var page = document.querySelector(".page--settings");
+  if (!page) return;
+  var mobile = matchMedia("(max-width: 767px)");
+
+  /* ---------- 토스트 (3초) ---------- */
+  var toastEl = document.querySelector(".st-toast");
+  var toastTimer;
+  function toast(text) {
+    toastEl.querySelector("[data-toast-text]").textContent = text;
+    toastEl.hidden = false;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { toastEl.hidden = true; }, 3000);
+  }
+
+  /* ---------- 모달 · 시트 ---------- */
+  var openStack = [];
+  function openLayer(id, opener) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    // 시트에서 모달을 열면 시트는 닫고 모달만
+    if (openStack.length && el.classList.contains("st-modal")) {
+      var top = openStack[openStack.length - 1];
+      if (top.el.classList.contains("st-sheet")) closeLayer(true);
+    }
+    el.hidden = false;
+    openStack.push({ el: el, opener: opener || document.activeElement });
+    var f = el.querySelector(".st-modal__btn--primary, .st-modal__btn--danger, .st-modal__btn, .st-sheet__item, .st-seg__item");
+    if (f) f.focus();
+  }
+  function closeLayer(keepFocus) {
+    var item = openStack.pop();
+    if (!item) return;
+    item.el.hidden = true;
+    if (!keepFocus && item.opener && item.opener.focus) item.opener.focus();
+  }
+  document.addEventListener("click", function (e) {
+    var op = e.target.closest("[data-modal-open], [data-sheet-open]");
+    if (op && !op.disabled) {
+      e.preventDefault();
+      openLayer(op.getAttribute("data-modal-open") || op.getAttribute("data-sheet-open"), op);
+      return;
+    }
+    if (e.target.closest("[data-modal-close]")) { closeLayer(); return; }
+    // 어두운 바깥을 누르면 닫힘
+    if (e.target.classList && (e.target.classList.contains("st-modal") || e.target.classList.contains("st-sheet"))) closeLayer();
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && openStack.length) closeLayer();
+  });
+
+  /* ---------- 탭 (#account · #notify · #security) ---------- */
+  var tabs = page.querySelectorAll("[data-settings-tab]");
+  var panels = page.querySelectorAll("[data-settings-panel]");
+  var pendingLeave = null; // 저장 안 한 변경이 있을 때 "나가기" 뒤 할 일
+  function show(name) {
+    if (!page.querySelector('[data-settings-panel="' + name + '"]')) name = "account";
+    for (var i = 0; i < tabs.length; i++) {
+      var on = tabs[i].getAttribute("data-settings-tab") === name;
+      tabs[i].classList.toggle("subnav__tab--active", on);
+      tabs[i].setAttribute("aria-selected", on ? "true" : "false");
+      if (on) tabs[i].setAttribute("aria-current", "page"); else tabs[i].removeAttribute("aria-current");
+    }
+    for (var j = 0; j < panels.length; j++) panels[j].hidden = panels[j].getAttribute("data-settings-panel") !== name;
+  }
+  function currentTab() { return location.hash.replace("#", "") || "account"; }
+  for (var t = 0; t < tabs.length; t++) {
+    tabs[t].addEventListener("click", function (e) {
+      e.preventDefault();
+      var name = this.getAttribute("data-settings-tab");
+      if (name === currentTab()) return;
+      var go = function () { history.replaceState(null, "", "#" + name); show(name); };
+      if (isDirty()) { pendingLeave = function () { resetAccount(); go(); }; openLayer("unsaved-modal", this); }
+      else go();
+    });
+  }
+  window.addEventListener("hashchange", function () { show(currentTab()); });
+  show(currentTab());
+
+  /* ---------- 계정 ---------- */
+  var nickInput = page.querySelector("[data-nickname-input]");
+  var nickBtn = page.querySelector("[data-nickname-change]");
+  var bio = page.querySelector("[data-bio-input]");
+  var bioCount = page.querySelector("[data-bio-count]");
+  var saved = { nick: nickInput.value, bio: bio.value };
+  function isDirty() { return bio.value !== saved.bio || nickInput.value.trim() !== saved.nick; }
+  function resetAccount() { bio.value = saved.bio; nickInput.value = saved.nick; syncNick(); syncBio(); }
+  function syncNick() { var v = nickInput.value.trim(); nickBtn.disabled = !v || v === saved.nick; }
+  function syncBio() { bioCount.textContent = bio.value.length; }
+  nickInput.addEventListener("input", syncNick);
+  bio.addEventListener("input", syncBio);
+  nickBtn.addEventListener("click", function () {
+    document.querySelector("[data-nickname-from]").textContent = saved.nick;
+    document.querySelector("[data-nickname-to]").textContent = nickInput.value.trim();
+    openLayer("nickname-modal", nickBtn);
+  });
+  document.querySelector("[data-nickname-confirm]").addEventListener("click", function () {
+    saved.nick = nickInput.value.trim();
+    nickInput.value = saved.nick;
+    var labels = document.querySelectorAll("[data-nickname-label], .profile__name");
+    for (var i = 0; i < labels.length; i++) labels[i].textContent = saved.nick;
+    syncNick();
+    closeLayer();
+    toast("변경사항을 저장했어요.");
+  });
+  page.querySelector("[data-account-save]").addEventListener("click", function () {
+    saved.bio = bio.value;
+    toast("변경사항을 저장했어요.");
+  });
+  // 프로필 사진 — 고른 파일을 바로 미리 보여 줌 / 삭제하면 기본 이미지
+  var photoImgs = page.querySelectorAll("[data-profile-img]");
+  function setPhoto(src, isDefault) {
+    for (var i = 0; i < photoImgs.length; i++) {
+      photoImgs[i].src = src;
+      photoImgs[i].parentNode.classList.toggle("is-default", !!isDefault);
+    }
+  }
+  var photoInputs = document.querySelectorAll("[data-photo-input]");
+  for (var p = 0; p < photoInputs.length; p++) {
+    photoInputs[p].addEventListener("change", function () {
+      var file = this.files && this.files[0];
+      this.value = "";
+      if (!file) return;
+      var reader = new FileReader();
+      reader.onload = function () { setPhoto(reader.result, false); };
+      reader.readAsDataURL(file);
+      if (openStack.length) closeLayer(true);
+      toast("변경사항을 저장했어요.");
+    });
+  }
+  document.querySelector("[data-photo-delete]").addEventListener("click", function () {
+    setPhoto("assets/imgAccountCircle.svg", true);
+    closeLayer();
+  });
+  // 저장 안 하고 홈으로 나가기
+  var back = page.querySelector("[data-settings-leave]");
+  back.addEventListener("click", function (e) {
+    if (!isDirty() || currentTab() !== "account") return;
+    e.preventDefault();
+    var href = this.href;
+    pendingLeave = function () { location.href = href; };
+    openLayer("unsaved-modal", this);
+  });
+  document.querySelector("[data-unsaved-leave]").addEventListener("click", function () {
+    closeLayer(true);
+    if (pendingLeave) pendingLeave();
+    pendingLeave = null;
+  });
+
+  /* ---------- 알림 — 바꾸면 바로 저장 ---------- */
+  function notifySaved() { toast("알림 설정을 저장했어요."); }
+  var table = page.querySelector("[data-notify-table]");
+  var appNote = page.querySelector("[data-app-off-note]");
+  function syncApp(on) {
+    table.classList.toggle("is-app-off", !on);
+    appNote.hidden = on;
+    var cells = table.querySelectorAll('.st-check[data-col="app"]');
+    for (var i = 0; i < cells.length; i++) {
+      if (on) cells[i].removeAttribute("aria-disabled"); else cells[i].setAttribute("aria-disabled", "true");
+    }
+  }
+  var dndSwitches = page.querySelectorAll("[data-dnd-switch]");
+  var timeBtns = page.querySelectorAll("[data-time-btn]");
+  function syncDnd(on) {
+    for (var i = 0; i < dndSwitches.length; i++) dndSwitches[i].setAttribute("aria-checked", on ? "true" : "false");
+    for (var j = 0; j < timeBtns.length; j++) timeBtns[j].disabled = !on;
+  }
+  page.addEventListener("click", function (e) {
+    var sw = e.target.closest(".st-switch");
+    if (sw) {
+      var on = sw.getAttribute("aria-checked") !== "true";
+      sw.setAttribute("aria-checked", on ? "true" : "false");
+      if (sw.getAttribute("data-channel") === "app") syncApp(on);
+      if (sw.hasAttribute("data-dnd-switch")) syncDnd(on);
+      if (sw.hasAttribute("data-notify-change")) notifySaved();
+      return;
+    }
+    var ck = e.target.closest(".st-check");
+    if (ck && ck.getAttribute("aria-disabled") !== "true") {
+      ck.setAttribute("aria-checked", ck.getAttribute("aria-checked") === "true" ? "false" : "true");
+      notifySaved();
+    }
+  });
+  syncApp(page.querySelector('[data-channel="app"]').getAttribute("aria-checked") === "true");
+
+  // 방해금지 시간 — 0~47 (30분 단위)
+  var times = { start: 44, end: 16 };
+  // 입력칸은 "오전 08:00", 드롭다운 목록은 "오후 9:00" (시안 66318:17170)
+  function label(i, noPad) {
+    var h = Math.floor(i / 2), m = i % 2 ? "30" : "00";
+    var ampm = h < 12 ? "오전" : "오후";
+    var h12 = h % 12 === 0 ? 12 : h % 12;
+    return ampm + " " + (h12 < 10 && !noPad ? "0" + h12 : h12) + ":" + m;
+  }
+  function renderTimes() {
+    ["start", "end"].forEach(function (k) {
+      var els = document.querySelectorAll('[data-time-value="' + k + '"], [data-seg-value="' + k + '"]');
+      for (var i = 0; i < els.length; i++) els[i].textContent = label(times[k]);
+    });
+    page.querySelector("[data-dnd-summary]").textContent = "매일 " + label(times.start) + " ~ " + label(times.end);
+  }
+  // PC 드롭다운
+  var menus = page.querySelectorAll("[data-time-menu]");
+  function closeMenus() {
+    for (var i = 0; i < menus.length; i++) menus[i].hidden = true;
+    for (var j = 0; j < timeBtns.length; j++) timeBtns[j].setAttribute("aria-expanded", "false");
+  }
+  function openMenu(key, btn) {
+    var menu = page.querySelector('[data-time-menu="' + key + '"]');
+    var html = "";
+    for (var i = 0; i < 48; i++) html += '<li role="option" data-i="' + i + '" aria-selected="' + (i === times[key]) + '">' + label(i, true) + "</li>";
+    menu.innerHTML = html;
+    closeMenus();
+    menu.hidden = false;
+    btn.setAttribute("aria-expanded", "true");
+    var sel = menu.querySelector('[aria-selected="true"]');
+    menu.scrollTop = sel.offsetTop - 6 - 72;
+    menu.onclick = function (e) {
+      var li = e.target.closest("li");
+      if (!li) return;
+      times[key] = +li.getAttribute("data-i");
+      renderTimes();
+      closeMenus();
+      btn.focus();
+      notifySaved();
+    };
+  }
+  for (var tb = 0; tb < timeBtns.length; tb++) {
+    timeBtns[tb].addEventListener("click", function (e) {
+      e.stopPropagation();
+      var key = this.getAttribute("data-time-btn");
+      if (mobile.matches) { openSheet(key, this); return; }
+      if (this.getAttribute("aria-expanded") === "true") closeMenus(); else openMenu(key, this);
+    });
+  }
+  document.addEventListener("click", function (e) { if (!e.target.closest(".st-menu")) closeMenus(); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeMenus(); });
+
+  // 모바일 시간 시트 — 오전/오후 · 시 · 분 휠 (스크롤 스냅)
+  var draft = { start: 0, end: 0 }, seg = "start";
+  var cols = {
+    ampm: document.querySelector('[data-wheel-col="ampm"]'),
+    hour: document.querySelector('[data-wheel-col="hour"]'),
+    min: document.querySelector('[data-wheel-col="min"]')
+  };
+  cols.ampm.innerHTML = "<li>오전</li><li>오후</li>";
+  var hh = ""; for (var h = 1; h <= 12; h++) hh += "<li>" + h + "</li>";
+  cols.hour.innerHTML = hh;
+  cols.min.innerHTML = "<li>00</li><li>30</li>";
+  function colIndex(col) { return Math.max(0, Math.min(col.children.length - 1, Math.round(col.scrollTop / 48))); }
+  function markCol(col) {
+    var idx = colIndex(col);
+    for (var i = 0; i < col.children.length; i++) col.children[i].classList.toggle("is-on", i === idx);
+  }
+  function wheelValue() {
+    var pm = colIndex(cols.ampm) === 1, h12 = colIndex(cols.hour) + 1, half = colIndex(cols.min);
+    var h24 = (h12 % 12) + (pm ? 12 : 0);
+    return h24 * 2 + half;
+  }
+  function setWheel(i) {
+    var h = Math.floor(i / 2);
+    cols.ampm.scrollTop = (h >= 12 ? 1 : 0) * 48;
+    cols.hour.scrollTop = ((h % 12 === 0 ? 12 : h % 12) - 1) * 48;
+    cols.min.scrollTop = (i % 2) * 48;
+    Object.keys(cols).forEach(function (k) { markCol(cols[k]); });
+  }
+  Object.keys(cols).forEach(function (k) {
+    var col = cols[k];
+    col.addEventListener("scroll", function () {
+      markCol(col);
+      draft[seg] = wheelValue();
+      document.querySelector('[data-seg-value="' + seg + '"]').textContent = label(draft[seg]);
+    });
+    col.addEventListener("click", function (e) {
+      var li = e.target.closest("li");
+      if (li) col.scrollTo({ top: Array.prototype.indexOf.call(col.children, li) * 48, behavior: "smooth" });
+    });
+  });
+  var segBtns = document.querySelectorAll("[data-seg]");
+  function selectSeg(key) {
+    seg = key;
+    for (var i = 0; i < segBtns.length; i++) segBtns[i].setAttribute("aria-selected", segBtns[i].getAttribute("data-seg") === key ? "true" : "false");
+    setWheel(draft[key]);
+  }
+  for (var sb = 0; sb < segBtns.length; sb++) segBtns[sb].addEventListener("click", function () { selectSeg(this.getAttribute("data-seg")); });
+  function openSheet(key, opener) {
+    draft.start = times.start; draft.end = times.end;
+    renderTimes();
+    openLayer("time-sheet", opener);
+    selectSeg(key);
+  }
+  document.querySelector("[data-time-sheet-ok]").addEventListener("click", function () {
+    times.start = draft.start; times.end = draft.end;
+    renderTimes();
+    closeLayer();
+    notifySaved();
+  });
+  renderTimes();
+
+  /* ---------- 보안 ---------- */
+  var pwForm = page.querySelector("[data-pw-form]");
+  var pwInputs = pwForm.querySelectorAll("[data-pw-input]");
+  var pwSubmit = pwForm.querySelector("[data-pw-submit]");
+  var pwMismatch = pwForm.querySelector("[data-pw-mismatch]");
+  function syncPw() {
+    var a = pwInputs[0].value, b = pwInputs[1].value, c = pwInputs[2].value;
+    var mismatch = !!c && b !== c;
+    pwMismatch.hidden = !mismatch;
+    pwSubmit.disabled = !a || !b || !c || mismatch;
+  }
+  for (var pi = 0; pi < pwInputs.length; pi++) pwInputs[pi].addEventListener("input", syncPw);
+  pwForm.addEventListener("click", function (e) {
+    var eye = e.target.closest(".st-eye");
+    if (!eye) return;
+    var input = eye.parentNode.querySelector("input");
+    var show = input.type === "password";
+    input.type = show ? "text" : "password";
+    eye.setAttribute("aria-pressed", show ? "true" : "false");
+    eye.setAttribute("aria-label", show ? "비밀번호 숨기기" : "비밀번호 보기");
+  });
+  pwForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    if (pwSubmit.disabled) return;
+    pwForm.reset();
+    syncPw();
+    openLayer("pw-done-modal", pwSubmit);
+  });
+
+  // 로그인 연결 계정 — 연결하기 ↔ 연결 해제(확인 모달)
+  var unlinkRow = null;
+  page.addEventListener("click", function (e) {
+    var btn = e.target.closest("[data-sns-btn]");
+    if (!btn) return;
+    var row = btn.closest("[data-sns]");
+    var name = row.getAttribute("data-sns-name");
+    if (row.classList.contains("is-linked")) {
+      unlinkRow = row;
+      var slots = document.querySelectorAll("[data-sns-name-slot]");
+      for (var i = 0; i < slots.length; i++) slots[i].textContent = name;
+      openLayer("sns-unlink-modal", btn);
+    } else {
+      row.classList.add("is-linked");
+      row.querySelector("[data-sns-state]").textContent = "연결됨";
+      btn.textContent = "연결 해제";
+      toast(name + " 계정을 연결했어요.");
+    }
+  });
+  document.querySelector("[data-sns-unlink]").addEventListener("click", function () {
+    if (unlinkRow) {
+      unlinkRow.classList.remove("is-linked");
+      unlinkRow.querySelector("[data-sns-state]").textContent = "연결 안 됨";
+      unlinkRow.querySelector("[data-sns-btn]").textContent = "연결하기";
+    }
+    closeLayer();
+  });
+  // 연결된 서비스 끊기
+  document.querySelector("[data-app-unlink]").addEventListener("click", function () {
+    var row = page.querySelector("[data-app-row]");
+    if (row) row.remove();
+    page.querySelector("[data-apps-empty]").hidden = false;
+    closeLayer(true);
+  });
+
+  // 회원 탈퇴 — '탈퇴합니다' 그대로 입력해야 버튼이 켜짐
+  var leaveInput = page.querySelector("[data-leave-input]");
+  var leaveBtn = page.querySelector("[data-leave-submit]");
+  leaveInput.addEventListener("input", function () { leaveBtn.disabled = leaveInput.value.trim() !== "탈퇴합니다"; });
+  document.querySelector("[data-leave-confirm]").addEventListener("click", function () {
+    closeLayer(true);
+    openLayer("leave-done-modal");
+  });
+
+  /* ---------- 모바일 짧은 안내 문구 (placeholder) ---------- */
+  var phs = page.querySelectorAll("[data-mo-placeholder]");
+  for (var q = 0; q < phs.length; q++) phs[q].setAttribute("data-pc-placeholder", phs[q].placeholder);
+  function syncPh() {
+    for (var i = 0; i < phs.length; i++) phs[i].placeholder = phs[i].getAttribute(mobile.matches ? "data-mo-placeholder" : "data-pc-placeholder");
+  }
+  mobile.addEventListener("change", syncPh);
+  syncPh();
+})();
