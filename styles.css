@@ -12053,18 +12053,19 @@ button.subnav__tab {
 }
 
 /* ============================================================
-   즐겨찾기 (v2.0 66305:94467) — favorites.html. LNB · 하단 내비 "즐겨찾기"에서 진입.
-   시안에 없는 2뎁스 메뉴는 크리에이터 찾기와 같은 형식으로 추가(요청). 라이트 · 모바일 시안 없음
+   즐겨찾기 (v2.0 PC 66390:73186 · 모바일 66390:73412 · 모바일 관리 66390:73796 · PC 관리 팝업 66465:75940) — favorites.html.
+   LNB · 하단 내비 "즐겨찾기"에서 진입. 크리에이터 줄 → 구분선 → 라이브. 라이트 시안 없음
    ============================================================ */
-/* 2뎁스 아래 32 → 제목 · 설명(6) → 36 → 프로필 줄 → 24 · 구분선 · 24 → 칩 → 36 → 라이브 → 36 → 최근 동영상 */
-.favorites {
+/* PC 본문 (66390:73315) — 위 32 · 블록 사이 36 */
+.main__inner.favorites {
+  gap: 36px;
+  padding-top: 32px;
   padding-bottom: 60px;
 }
 .fav-head {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  padding-top: 4px;
 }
 .fav-head__row,
 .fav-section__head {
@@ -12073,7 +12074,7 @@ button.subnav__tab {
   justify-content: space-between;
   gap: 16px;
 }
-/* Headline/H6 · 숫자는 Primary */
+/* Headline/H6 · 숫자는 Primary · 사이 8 */
 .fav-head__title,
 .fav-section__title {
   margin: 0;
@@ -12098,60 +12099,66 @@ button.subnav__tab {
   letter-spacing: -0.01em;
   color: var(--text-caption);
 }
-/* 배경 없는 버튼 S — 전체보기 (밑줄) */
+/* 배경 없는 버튼 S — 즐겨찾기 관리 (PC 밑줄) */
 .fav-more {
   flex: none;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-family: inherit;
   font-size: 14px;
   font-weight: 700;
   line-height: 1;
   color: var(--color-brand-primary);
   text-decoration: underline;
+  cursor: pointer;
 }
 
-/* 즐겨찾기 크리에이터 (66305:94594) — 80 칸 · 사이 12, 넘치면 가로 스크롤(막대 숨김) */
+/* 즐겨찾기 크리에이터 (66390:73325) — 126 칸 · 안쪽 8 · 사이 6, 넘치면 가로 스크롤(막대 숨김) */
 .fav-people {
   display: flex;
-  gap: 12px;
-  margin: 36px 0 0;
+  gap: 6px;
+  margin: 0;
   padding: 0;
   list-style: none;
   overflow-x: auto;
   scrollbar-width: none;
 }
-.fav-people::-webkit-scrollbar {
-  display: none;
-}
+.fav-people::-webkit-scrollbar { display: none; }
 .fav-person {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
-  width: 80px;
+  gap: 6px;
+  width: 126px;
   padding: 8px;
+  text-decoration: none;
 }
+/* 사진 96 · 테두리 110 (사진보다 7씩 큼) · LIVE 는 테두리 아래에 걸침 → 칸 높이 117 */
 .fav-person__pic {
   position: relative;
-  width: 64px;
-  height: 64px;
+  width: 110px;
+  height: 117px;
 }
-.fav-person__pic > img:first-child {
-  display: block;
-  width: 64px;
-  height: 64px;
+.fav-person__img {
+  position: absolute;
+  top: 7px;
+  left: 7px;
+  width: 96px;
+  height: 96px;
   border-radius: 50%;
   object-fit: cover;
 }
-/* 방송 중 — 그라디언트 테두리 72 · LIVE 배지(Primary, 아래 가운데) */
 .fav-person__ring {
   position: absolute;
-  top: -4px;
-  left: -4px;
-  width: 72px;
-  height: 72px;
+  top: 0;
+  left: 0;
+  width: 110px;
+  height: 110px;
 }
 .fav-person__live {
   position: absolute;
-  top: 56px;
+  top: 101px;
   left: 50%;
   display: flex;
   align-items: center;
@@ -12175,53 +12182,28 @@ button.subnav__tab {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+/* 구분선 — 28 칸 가운데 1px Border 100 */
 .fav-rule {
   height: 1px;
-  margin: 37px 0 0;
+  margin: 13px 0;
   border: 0;
   background: var(--color-border-100);
 }
 
-/* 보기 칩 — Filter Chip M (크리에이터 찾기 정렬 칩과 같은 값) */
-.chips.fav-chips {
-  margin-top: 38px;
-}
-.chips.fav-chips button {
-  height: 36px;
-  padding: 9px 12px 8px;
-  border-radius: 50px;
-  background: var(--cr-chip-bg);
-  font-family: var(--font-score);
-  font-size: 14px;
-  font-weight: 700;
-  line-height: 16px;
-  letter-spacing: -0.01em;
-  color: var(--cr-chip-text);
-}
-.chips.fav-chips button.is-active {
-  background: var(--cr-chip-on-bg);
-  color: var(--cr-chip-on-text);
-}
-
+/* 라이브 — 제목 → 카드 28 */
 .fav-section {
   display: flex;
   flex-direction: column;
   gap: 28px;
-  margin-top: 36px;
 }
-.fav-section[hidden] {
-  display: none;
-}
-/* 카드 5열 · 가로 20 · 세로 24 (66305:94680) */
+/* 카드 5열 · 가로 20 · 세로 24 (66390:73396) */
 .fav-grid {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 24px 20px;
 }
 @media (min-width: 768px) and (max-width: 1279px) {
-  .fav-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
+  .fav-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
 /* 콘텐츠 카드 Small (64610:160573) — 썸네일 210×118 · R8 → 본문 14, 아바타 24 + 5 */
@@ -12240,6 +12222,8 @@ button.subnav__tab {
   background: var(--color-bg-100);
 }
 .fav-card__thumb > img {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -12264,7 +12248,6 @@ button.subnav__tab {
   color: var(--color-text-normal);
 }
 .fav-card__badge--live { background: #ff4242; }
-.fav-card__badge--time { background: rgba(18, 20, 28, 0.9); }
 .fav-card__body {
   display: flex;
   align-items: flex-start;
@@ -12331,37 +12314,229 @@ button.subnav__tab {
   color: var(--color-text-depth-300);
 }
 
-/* [구현 제안] 모바일 시안 없음 — 2뎁스 · 제목 · 설명 · 전체보기 없이 크리에이터 줄부터(요청),
-   보기 칩은 라이브 페이지 모바일과 같은 작은 필터 칩(28 · Primary 선택), 카드 2열 */
+/* 즐겨찾기 관리 목록 — 사진 48 (모바일은 56 칸 + 테두리) · 이름 S1 · 오른쪽 하트. 하트를 누르면 해제 표시(흐리게) */
+.fav-manage-view[hidden] { display: none; }
+.fav-manage-list {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.fav-manage {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 56px;
+}
+.fav-manage[hidden] { display: none; }
+.fav-manage__pic {
+  position: relative;
+  flex: none;
+  width: 56px;
+  height: 56px;
+}
+.fav-manage__img {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.fav-manage__ring {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 56px;
+  height: 56px;
+}
+.fav-manage__pic .fav-person__live { top: 44px; }
+.fav-manage__name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 20px;
+  color: #fff;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.fav-manage__heart {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+.fav-manage__heart img { display: block; }
+.fav-manage__heart[aria-pressed="false"] img { opacity: 0.3; }
+.fav-manage-list--pc { gap: 10px; }
+.fav-manage-list--pc .fav-manage__heart img { width: 20px; height: 20px; }
+
+/* PC 즐겨찾기 관리 팝업 (66465:76167) — 363 · BG 400 · Border 400 · R12 · 안쪽 24 · 사이 20, 목록은 안에서 스크롤 */
+.fav-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.65);
+}
+.fav-modal[hidden] { display: none; }
+.fav-modal__box {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 363px;
+  max-width: 100%;
+  height: 454px;
+  max-height: calc(100vh - 32px);
+  padding: 24px;
+  border: 1px solid var(--color-border-400);
+  border-radius: 12px;
+  background: var(--color-bg-400);
+}
+.fav-modal__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.fav-modal__title {
+  margin: 0;
+  font-family: var(--font-score);
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: var(--color-text-normal);
+}
+.fav-modal__close {
+  display: flex;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+/* 검색바 36 · BG 300 · Border 200 · R8 · 좌우 16 (검색바 → 목록 12) */
+.fav-modal__search {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  margin-bottom: -8px;
+  padding: 0 16px;
+  border: 1px solid #262838;
+  border-radius: 8px;
+  background: var(--color-bg-300);
+}
+.fav-modal__search:focus-within { border-color: var(--color-brand-primary); }
+.fav-modal__search input {
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: none;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 22px;
+  color: var(--color-text-normal);
+}
+.fav-modal__search input::placeholder { color: var(--color-text-depth-300); opacity: 1; }
+.fav-modal__search input::-webkit-search-cancel-button { display: none; }
+.fav-modal .fav-manage-list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+.fav-modal .fav-manage-list::-webkit-scrollbar { display: none; }
+.fav-modal__empty {
+  margin: 0;
+  font-size: 14px;
+  line-height: 21px;
+  color: var(--color-text-depth-300);
+  text-align: center;
+}
+.fav-modal__empty[hidden] { display: none; }
+
+/* 모바일 (66390:73412) — 2뎁스 없음, 위 32 · 제목 → 크리에이터 16 → 구분선(20 칸) 사이 20 → 라이브.
+   제목 17 · 설명 12 · 크리에이터 사진 48(테두리 56) · 라이브 카드 2열(164, 사이 16 · 줄 사이 28) */
 @media (max-width: 767px) {
-  .subnav--pc-only { display: none; }
-  .fav-head { display: none; }
-  .fav-people { margin: 8px -16px 0; padding: 0 16px; }
-  .fav-rule { margin-top: 20px; }
-  .chips.fav-chips { margin-top: 20px; }
-  .chips.fav-chips button {
-    height: 28px;
-    padding: 6px 12px;
-    border-radius: 24px;
-    background: var(--chip);
-    font-family: inherit;
+  .fav-subnav { display: none; }
+  .main__inner.favorites {
+    gap: 20px;
+    padding-top: 32px;
+  }
+  .fav-head { gap: 10px; }
+  .fav-head__title,
+  .fav-section__title { font-size: 17px; }
+  .fav-head__desc {
     font-size: 12px;
     font-weight: 500;
     line-height: 16px;
     letter-spacing: 0;
-    color: var(--chip-text);
   }
-  .chips.fav-chips button:first-child { background: var(--chip-alt); }
-  .chips.fav-chips button.is-active {
-    background: var(--color-brand-primary);
-    font-weight: 700;
-    color: #fff;
+  .fav-more {
+    font-size: 12px;
+    line-height: 16px;
+    text-decoration: none;
   }
-  .fav-section { margin-top: 28px; gap: 20px; }
+  .fav-head + .fav-people { margin-top: -4px; }
+  .fav-people {
+    gap: 4px;
+    margin-right: -16px;
+    padding-right: 16px;
+  }
+  .fav-person {
+    gap: 8px;
+    width: 64px;
+    padding: 4px;
+  }
+  .fav-person__pic { width: 56px; height: 60px; }
+  .fav-person__img { top: 4px; left: 4px; width: 48px; height: 48px; }
+  .fav-person__ring { width: 56px; height: 56px; }
+  .fav-person__live { top: 44px; }
+  .fav-person__name {
+    font-size: 12px;
+    line-height: 16px;
+  }
+  .fav-rule { margin: 9.5px 0; }
+  .fav-section { gap: 20px; }
   .fav-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 20px 12px;
+    gap: 28px 16px;
   }
+  .fav-card { gap: 8px; }
+  .fav-card__thumb { aspect-ratio: 164 / 118; }
+  .fav-card__avatar { display: none; }
+
+  /* 즐겨찾기 관리 화면 (66390:73796) — 본문을 감추고 "전체 N" + 목록. 줄 76 (위아래 8) · 사이 6 · 사진 → 이름 20 · 하트 24 */
+  [data-fav-view="manage"] > :not(.fav-manage-view) { display: none !important; }
+  .fav-manage-view {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .fav-manage-list--mo { gap: 6px; }
+  .fav-manage-list--mo .fav-manage {
+    gap: 20px;
+    min-height: 76px;
+    padding: 8px 0;
+  }
+  .fav-manage-list--mo .fav-manage__pic { height: 60px; }
 }
 
 /* ============================================================

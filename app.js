@@ -993,22 +993,75 @@
   }
 })();
 
-/* 즐겨찾기 보기 — 전체 · 라이브 · 최근 동영상 칩 */
+/* 즐겨찾기 관리 (PC 팝업 66465:76167 · 모바일 목록 화면 66390:73796) — 제목 줄 "즐겨찾기 관리"로 엶.
+   PC: 팝업(X · 바깥 · ESC 로 닫힘, 이름 검색). 모바일: 본문 대신 목록 화면(#manage), 앱바 뒤로 가기로 복귀.
+   하트를 누르면 즐겨찾기 해제 표시만 바꿈 (서버 연동 전) */
 (function () {
-  var chips = document.querySelectorAll("[data-fav-filter]");
-  var sections = document.querySelectorAll("[data-fav-section]");
-  if (!chips.length || !sections.length) return;
-  function show(name) {
-    for (var i = 0; i < chips.length; i++) {
-      var on = chips[i].getAttribute("data-fav-filter") === name;
-      chips[i].classList.toggle("is-active", on);
-      chips[i].setAttribute("aria-pressed", on ? "true" : "false");
-    }
-    for (var k = 0; k < sections.length; k++) {
-      sections[k].hidden = name !== "all" && sections[k].getAttribute("data-fav-section") !== name;
-    }
+  var open = document.querySelector("[data-fav-manage]");
+  var root = document.querySelector("[data-fav-view]");
+  var modal = document.getElementById("fav-manage-modal");
+  if (!open || !root || !modal) return;
+  var view = root.querySelector(".fav-manage-view");
+  var mobile = matchMedia("(max-width: 767px)");
+  var search = modal.querySelector("[data-fav-search]");
+  var empty = modal.querySelector("[data-fav-empty]");
+
+  function setModal(on) {
+    modal.hidden = !on;
+    if (on) { search.value = ""; filter(""); search.focus(); }
+    else open.focus();
   }
-  for (var c = 0; c < chips.length; c++) chips[c].addEventListener("click", function () { show(this.getAttribute("data-fav-filter")); });
+  function setView() {
+    var on = location.hash === "#manage" && mobile.matches;
+    root.setAttribute("data-fav-view", on ? "manage" : "main");
+    view.hidden = !on;
+    if (on) window.scrollTo(0, 0);
+  }
+  function filter(q) {
+    var rows = modal.querySelectorAll(".fav-manage"), shown = 0;
+    q = q.trim().toLowerCase();
+    for (var i = 0; i < rows.length; i++) {
+      var hit = !q || rows[i].querySelector(".fav-manage__name").textContent.toLowerCase().indexOf(q) > -1;
+      rows[i].hidden = !hit;
+      if (hit) shown++;
+    }
+    empty.hidden = shown > 0;
+  }
+
+  open.addEventListener("click", function () {
+    if (mobile.matches) location.hash = "manage";
+    else setModal(true);
+  });
+  modal.addEventListener("click", function (e) {
+    if (e.target === modal || e.target.closest("[data-fav-close]")) setModal(false);
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && !modal.hidden) setModal(false);
+  });
+  search.addEventListener("input", function () { filter(search.value); });
+  document.addEventListener("click", function (e) {
+    var heart = e.target.closest("[data-fav-heart]");
+    if (!heart) return;
+    var on = heart.getAttribute("aria-pressed") !== "true";
+    heart.setAttribute("aria-pressed", on ? "true" : "false");
+    var name = heart.closest(".fav-manage").querySelector(".fav-manage__name").textContent;
+    heart.setAttribute("aria-label", name + (on ? " 즐겨찾기 해제" : " 즐겨찾기 다시 추가"));
+  });
+  // 모바일 목록 화면에서 앱바 뒤로 가기 → 즐겨찾기 본문으로
+  document.addEventListener("click", function (e) {
+    if (root.getAttribute("data-fav-view") !== "manage") return;
+    if (e.target.closest(".mo-appbar [data-login-back]")) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      history.back();
+    }
+  }, true);
+  window.addEventListener("hashchange", setView);
+  mobile.addEventListener("change", function () {
+    setView();
+    if (mobile.matches && !modal.hidden) setModal(false);
+  });
+  setView();
 })();
 
 /* 크리에이터 찾기 모바일 2뎁스 정렬 탭 — PC 정렬 칩과 같은 선택 상태 (목록 정렬은 서버 연동 전) */
@@ -2847,6 +2900,7 @@ document.addEventListener("click", function (e) {
   mobile.addEventListener("change", syncPh);
   syncPh();
 })();
+
 /* GNB 사람 아이콘 "내 정보" (PC) — 내 정보 페이지로 이동 */
 (function () {
   var btns = document.querySelectorAll('.top-nav .nav-icon[aria-label="내 정보"]');
