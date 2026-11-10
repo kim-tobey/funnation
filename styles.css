@@ -226,6 +226,11 @@
 [data-theme="light"] img[src$="v2/lnb-external.svg"] { content: url("assets/light/v2/lnb-external.svg"); }
 [data-theme="light"] img[src$="v2/mo-search.svg"] { content: url("assets/light/v2/mo-search.svg"); }
 [data-theme="light"] img[src$="v2/mo-logo.svg"] { content: url("assets/light/v2/mo-logo.svg"); }
+/* 모바일 앱바 로고 애니메이션(logo-mo.webm → webp, 흰 글자) — 라이트 테마는 기존 어두운 SVG, 움직임 줄이기 설정이면 정지 SVG */
+[data-theme="light"] img[src$="logo/logo-mo-appbar.webp"] { content: url("assets/light/v2/mo-logo.svg"); }
+@media (prefers-reduced-motion: reduce) {
+  :root:not([data-theme="light"]) img[src$="logo/logo-mo-appbar.webp"] { content: url("assets/v2/mo-logo.svg"); }
+}
 [data-theme="light"] img[src$="icTag.svg"] { content: url("assets/light/icTag.svg"); }
 [data-theme="light"] img[src$="logout/language.svg"] { content: url("assets/light/logout/language.svg"); }
 [data-theme="light"] img[src$="imgNotifications24DpE3E3E3Fill0Wght400Grad0Opsz241.svg"] { content: url("assets/light/imgNotifications24DpE3E3E3Fill0Wght400Grad0Opsz241.svg"); }
@@ -424,6 +429,26 @@ ul {
   width: 100%;
   height: 100%;
   max-width: none;
+}
+/* 애니메이션 로고 (logo-pc.webp) — 심볼 · 워드마크 webm 을 원본 829x130 좌표에 같은 위치 · 크기로 합성.
+   다크 테마에서만 SVG 대신 보이고, 라이트 테마(어두운 워드마크)와 움직임 줄이기 설정은 기존 SVG */
+.logo__anim {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+}
+:root:not([data-theme="light"]) .logo__symbol,
+:root:not([data-theme="light"]) .logo__word,
+[data-theme="light"] .logo__anim {
+  display: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  :root:not([data-theme="light"]) .logo__symbol,
+  :root:not([data-theme="light"]) .logo__word { display: block; }
+  :root .logo__anim { display: none; }
 }
 .logo__crown {
   position: absolute;
