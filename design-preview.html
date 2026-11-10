@@ -81,6 +81,12 @@ body.dp {
 .dp-board { display: flex; flex-wrap: wrap; align-items: center; gap: 24px; padding: 28px; border: 1px solid var(--color-border-100); border-radius: 16px; background: var(--color-bg-200); }
 .dp-spec { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; min-width: 0; max-width: 100%; }
 .dp-spec__label { font-size: 11px; line-height: 1.5; color: var(--color-text-depth-400); }
+/* 11 설정 — settings.html 의 실제 클래스(st-*)를 그대로 쓰고, 화면에 고정되는 모달 · 토스트만 제자리에 놓음 */
+.dp-settings { display: grid; grid-template-columns: minmax(0, 1fr); gap: 24px; }
+.dp-settings .settings-panel { max-width: 800px; }
+.dp-settings .st-toast { position: static; transform: none; }
+.dp-modals { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 24px; }
+.dp-modals .st-modal__box { flex: none; }
 .dp-btn { display: inline-flex; align-items: center; justify-content: center; gap: 4px; white-space: nowrap; }
 .dp-btn--hero { height: 42px; padding: 14px 24px; border-radius: 8px; background: var(--color-brand-primary); font-size: 14px; font-weight: 600; line-height: 1; letter-spacing: -0.01em; color: #fff; }
 .dp-btn--hero:hover { background: #3569d1; }
@@ -330,6 +336,81 @@ body.dp {
     </div>
   </section>
 
+  <section class="dp-sec" aria-labelledby="s11">
+    <span class="dp-eyebrow">11 — 화면</span>
+    <h2 id="s11">설정 (계정 · 알림 · 보안)</h2>
+    <p class="dp-lead">design.md 28장 · Figma 66318:13684 · <a href="settings.html" style="color:var(--color-brand-primary)">settings.html</a>. PC 본문은 폭 800 가운데, 페이지 제목 H6 → 섹션 소제목 S1 · 설명 → 카드(BG 300 · Border 100 · R12 · 안쪽 24). 모바일은 카드 없이 8px 띠로 섹션을 나눕니다. 아래 견본은 settings.html 과 같은 클래스라 코드가 바뀌면 같이 바뀝니다.</p>
+    <div class="dp-settings page--settings">
+      <div class="dp-board">
+        <div class="dp-spec"><div class="dp-filters"><button class="st-switch" type="button" role="switch" aria-checked="false" aria-label="토글 Off 예시" data-dp-toggle></button><button class="st-switch" type="button" role="switch" aria-checked="true" aria-label="토글 On 예시" data-dp-toggle></button></div><span class="dp-spec__label">토글 66332:17843 · 44×24 · Off BG Cancel / On Primary · 눌러서 전환</span></div>
+        <div class="dp-spec"><div class="dp-filters"><button class="st-check" type="button" role="checkbox" aria-checked="false" aria-label="체크박스 Off 예시" data-dp-toggle></button><button class="st-check" type="button" role="checkbox" aria-checked="true" aria-label="체크박스 On 예시" data-dp-toggle></button><span class="st-check" role="checkbox" aria-checked="true" aria-disabled="true" aria-label="체크박스 Disabled 예시"></span></div><span class="dp-spec__label">체크박스 66332:17851 · 20 · R4 · 테두리 1.5 · Off / On / Disabled</span></div>
+        <div class="dp-spec"><div class="dp-filters"><button class="st-btn st-btn--primary" type="button">변경사항 저장</button><button class="st-btn st-btn--outline" type="button">연결하기</button><button class="st-btn st-btn--danger" type="button">회원 탈퇴</button><button class="st-btn" type="button" disabled>비밀번호 변경</button></div><span class="dp-spec__label">버튼 42 · R8 · 14 Bold / 목록 버튼 36 · 13 SemiBold / 꺼짐 BG 400 · Depth 500</span></div>
+        <div class="dp-spec"><div class="dp-filters"><span class="settings-role">관리자</span><span class="st-tag st-tag--on">로그인 확인</span><span class="st-tag">준비 중</span></div><span class="dp-spec__label">역할 배지 24 · R9999 / 태그 20 · #31354F</span></div>
+      </div>
+
+      <div class="dp-board">
+        <div class="settings-panel">
+          <header class="settings-head"><div><h3 class="settings-head__title">계정</h3><p class="settings-head__desc">프로필과 계정 정보를 관리해요.</p></div></header>
+          <section class="settings-section">
+            <div class="settings-section__head">
+              <h4 class="settings-section__title">프로필</h4>
+              <p class="settings-section__desc">방송·채팅·후원 내역에서 다른 사람에게 보이는 정보예요.</p>
+            </div>
+            <div class="settings-card">
+              <div class="st-field">
+                <label class="st-label" for="dp-st-nick">닉네임</label>
+                <div class="st-input-row"><input class="st-input" id="dp-st-nick" type="text" value="텔레토비"><button class="st-btn st-btn--side" type="button" disabled>변경</button></div>
+                <p class="settings-help settings-help--icon"><img src="assets/v2/settings/clock-14.svg" width="14" height="14" alt="">11월 10일 9시 이후 바꿀 수 있어요.</p>
+              </div>
+              <div class="st-field">
+                <span class="st-label">이메일</span>
+                <div class="st-input st-input--locked"><input type="email" value="kimiljoo@gmail.com" readonly aria-label="이메일 예시"><img src="assets/v2/settings/lock-18.svg" width="18" height="18" alt="바꿀 수 없음"></div>
+              </div>
+            </div>
+          </section>
+          <section class="settings-section">
+            <div class="settings-section__head">
+              <h4 class="settings-section__title settings-section__title--danger">회원 탈퇴</h4>
+              <p class="settings-section__desc">계정을 영구적으로 삭제해요. 탈퇴하면 되돌릴 수 없어요.</p>
+            </div>
+            <div class="settings-card settings-card--danger">
+              <div class="st-warn">
+                <p class="st-warn__title"><img src="assets/v2/settings/warning-16.svg" width="16" height="16" alt="">탈퇴 전에 확인해 주세요</p>
+                <ul class="st-warn__list"><li>포인트 내역과 업적 기록이 삭제돼요.</li></ul>
+              </div>
+            </div>
+          </section>
+        </div>
+        <span class="dp-spec__label">페이지 제목 H6 (S-Core Dream 19) · 소제목 S1 (Pretendard Bold 16) · 설명 13 Depth 400 · 설명 → 카드 16 · 입력 48 (모바일 56)</span>
+      </div>
+
+      <div class="dp-board">
+        <div class="dp-modals">
+          <div class="st-modal__box">
+            <img class="st-modal__icon" src="assets/v2/settings/success-67.svg" width="67" height="67" alt="">
+            <p class="st-modal__title">비밀번호를 바꿨어요</p>
+            <p class="st-modal__desc">다음 로그인부터 새 비밀번호를 사용해 주세요.</p>
+            <div class="st-modal__actions"><button class="st-modal__btn st-modal__btn--primary" type="button">확인</button></div>
+          </div>
+          <div class="st-modal__box">
+            <img class="st-modal__icon" src="assets/v2/settings/withdraw-67.svg" width="67" height="67" alt="">
+            <p class="st-modal__title">정말 탈퇴할까요?</p>
+            <p class="st-modal__desc">계정과 활동 기록이 삭제되고<br>되돌릴 수 없어요.</p>
+            <div class="st-modal__actions"><button class="st-modal__btn" type="button">취소</button><button class="st-modal__btn st-modal__btn--danger" type="button">탈퇴하기</button></div>
+          </div>
+          <div class="st-modal__box">
+            <p class="st-modal__title">탈퇴가 완료됐어요</p>
+            <p class="st-modal__desc">그동안 펀네이션을 이용해 주셔서 감사해요.</p>
+            <div class="st-modal__actions"><button class="st-modal__btn st-modal__btn--primary" type="button">확인</button></div>
+          </div>
+        </div>
+        <span class="dp-spec__label">Alert 363 · BG 400 · Border 400 · R12 · 버튼 50 · R10 · 사이 9 — 아이콘은 비밀번호 변경 완료 · 탈퇴 최종 확인에만 (탈퇴 완료는 아이콘 없음)</span>
+        <div class="dp-spec"><div class="st-toast"><img src="assets/v2/settings/toast-check-18.svg" width="18" height="18" alt=""><span>알림 설정을 저장했어요.</span></div>
+        <span class="dp-spec__label">토스트 344 · BG 400 · Border 400 · R4 · 화면 아래 가운데 · 3초 — 시안에 문구가 없는 동작은 띄우지 않아도 됨</span></div>
+      </div>
+    </div>
+  </section>
+
 </div>
 
 <div id="dp-md" role="tabpanel" hidden>
@@ -356,12 +437,15 @@ body.dp {
       ["Normal", "#DFE5ED", "본문", "--color-text-normal"],
       ["Depth 300", "#969DA8", "보조 글자", "--color-text-depth-300"],
       ["Depth 400", "#7C8594", "placeholder · 메타", "--color-text-depth-400"],
-      ["Depth 500", "#515E71", "약한 캡션"]]],
+      ["Depth 500", "#515E71", "약한 캡션 · 입력 안내 문구"]]],
     ["Border", [
       ["Border 100", "#1F212E", "구역 나눔선", "--color-border-100"],
       ["Border 200", "#262838", "카드 · 패널 선", "--fw-line"],
       ["Border 300", "#2A2D3F", "버튼 · 입력 선", "--color-border-300"],
       ["Border 400", "#31354F", "검색 · 강한 선", "--color-border-400"]]],
+    ["System · 위험 (design.md 28장)", [
+      ["Red 60", "#FF6363", "위험 글자 · 회원 탈퇴 제목 · 삭제"],
+      ["Sys/Fill/Error", "#CD0C0C", "위험 버튼 · 탈퇴 카드 테두리"]]],
     ["Interaction", [
       ["Primary", "#4A92FF", "기본"],
       ["Hovered", "#3569D1", "마우스 올림"],
@@ -432,6 +516,12 @@ body.dp {
   });
   probe.remove();
   document.getElementById("dp-diff-pill").innerHTML = "코드와 다른 색 <b>" + diffs + "개</b>";
+
+  /* ---- 11 설정 — 토글 · 체크박스 견본은 눌러서 전환 ---- */
+  document.addEventListener("click", function (e) {
+    var t = e.target.closest("[data-dp-toggle]");
+    if (t) t.setAttribute("aria-checked", t.getAttribute("aria-checked") === "true" ? "false" : "true");
+  });
 
   /* ---- 02 글자 — design.md 5장 표 ---- */
   var TYPE = [
