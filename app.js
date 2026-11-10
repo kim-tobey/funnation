@@ -226,7 +226,8 @@
   document.getElementById("bn-account").addEventListener("click", function (e) {
     e.preventDefault();
     if (root.getAttribute("data-auth") === "out") openLogin();
-    else document.getElementById("lnb-toggle-mo").click();
+    // 로그인 상태 — 내 정보 페이지로 (이미 내 정보면 그대로)
+    else if (!document.querySelector(".page--profile")) location.href = "profile.html";
   });
   var backs = document.querySelectorAll("[data-login-back]");
   for (var b = 0; b < backs.length; b++) {
@@ -2845,4 +2846,117 @@ document.addEventListener("click", function (e) {
   }
   mobile.addEventListener("change", syncPh);
   syncPh();
+})();
+/* GNB 사람 아이콘 "내 정보" (PC) — 내 정보 페이지로 이동 */
+(function () {
+  var btns = document.querySelectorAll('.top-nav .nav-icon[aria-label="내 정보"]');
+  for (var i = 0; i < btns.length; i++) {
+    btns[i].addEventListener("click", function () {
+      if (!document.querySelector(".page--profile")) location.href = "profile.html";
+    });
+  }
+})();
+
+/* 내 정보 (profile.html · Figma "내 정보" 보드 66398:153864) — 확인 모달 · 표시 토글(바로 저장 + 토스트) · 다음 등급 미리보기 */
+(function () {
+  var page = document.querySelector(".page--profile");
+  if (!page) return;
+  var root = document.documentElement;
+  var lastFocus = null;
+
+  function openModal(id) {
+    var m = document.getElementById(id);
+    if (!m) return;
+    lastFocus = document.activeElement;
+    m.hidden = false;
+    var b = m.querySelector("button");
+    if (b) b.focus();
+  }
+  function closeModals() {
+    var open = document.querySelectorAll(".st-modal:not([hidden])");
+    for (var i = 0; i < open.length; i++) open[i].hidden = true;
+    if (lastFocus) lastFocus.focus();
+  }
+  document.addEventListener("click", function (e) {
+    var opener = e.target.closest("[data-modal-open]");
+    if (opener) { e.preventDefault(); openModal(opener.getAttribute("data-modal-open")); return; }
+    if (e.target.closest("[data-modal-close]") || e.target.classList.contains("st-modal")) closeModals();
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && document.querySelector(".st-modal:not([hidden])")) closeModals();
+  });
+
+  // 로그아웃 — 화면 로그인 상태만 끄고 홈으로
+  var logout = document.querySelector("[data-logout-confirm]");
+  if (logout) logout.addEventListener("click", function () {
+    closeModals();
+    var auth = document.getElementById("auth-btn");
+    if (auth && root.getAttribute("data-auth") !== "out") auth.click();
+    location.href = "index.html";
+  });
+  // 크리에이터 화면 — 크리에이터 화면은 아직 없어 닫고 토스트만
+  var creator = document.querySelector("[data-creator-confirm]");
+  if (creator) creator.addEventListener("click", function () {
+    closeModals();
+    toast("크리에이터 화면은 준비 중이에요.");
+  });
+
+  var toastEl = document.querySelector(".st-toast");
+  var toastTimer;
+  function toast(text) {
+    if (!toastEl) return;
+    toastEl.querySelector("[data-toast-text]").textContent = text;
+    toastEl.hidden = false;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { toastEl.hidden = true; }, 3000);
+  }
+
+  var switches = page.querySelectorAll("[data-profile-switch]");
+  for (var i = 0; i < switches.length; i++) {
+    switches[i].addEventListener("click", function () {
+      var on = this.getAttribute("aria-checked") !== "true";
+      this.setAttribute("aria-checked", on ? "true" : "false");
+      var name = this.getAttribute("data-profile-switch");
+      var code = name.charCodeAt(name.length - 1) - 0xac00;
+      var josa = code >= 0 && code < 11172 && code % 28 === 0 ? "를" : "을";
+      toast(name + josa + (on ? " 켰어요." : " 껐어요."));
+    });
+  }
+
+  // 다음 등급 미리보기 — VIP → VVIP 모습, 되돌리기로 복귀
+  var card = page.querySelector("[data-grade-card]");
+  if (!card) return;
+  var q = function (s) { return card.querySelector(s); };
+  var steps = card.querySelectorAll(".grade-step");
+  var states = {
+    now: { name: "VIP", recent: "최근 30일 300,000원", fill: "23%", from: "VIP", pct: "23%", to: "VVIP",
+      next: "다음 등급까지 <strong>999,000원</strong> 후원 필요", benefit: "후원 알림에 VIP 배지 · 채팅 닉네임 반짝임", cur: 1 },
+    preview: { name: "VVIP", recent: "최근 30일 1,299,000원부터", fill: "100%", from: "VIP", pct: "100%", to: "VVIP",
+      next: "VVIP 달성 시 이렇게 보여요.", benefit: "후원 알림에 VVIP 배지 · 입장 알림 강조 · 채팅 닉네임 반짝임", cur: 2 }
+  };
+  function show(key) {
+    var s = states[key];
+    var preview = key === "preview";
+    card.classList.toggle("is-preview", preview);
+    q("[data-grade-name]").textContent = s.name;
+    q("[data-grade-preview-badge]").hidden = !preview;
+    q("[data-grade-recent]").textContent = s.recent;
+    q("[data-grade-fill]").style.width = s.fill;
+    q("[data-grade-from]").textContent = s.from;
+    q("[data-grade-pct]").textContent = s.pct;
+    q("[data-grade-to]").textContent = s.to;
+    q("[data-grade-next]").innerHTML = s.next;
+    q("[data-grade-benefit]").textContent = s.benefit;
+    q("[data-grade-reset]").hidden = !preview;
+    q("[data-grade-preview]").hidden = preview;
+    for (var j = 0; j < steps.length; j++) {
+      steps[j].classList.toggle("is-done", j < s.cur);
+      steps[j].classList.toggle("is-current", j === s.cur);
+      var dot = steps[j].querySelector(".grade-step__dot");
+      dot.innerHTML = j < s.cur ? '<img src="assets/v2/profile/check-12.svg" width="12" height="12" alt="">'
+        : j > s.cur ? '<img src="assets/v2/profile/lock-12.svg" width="12" height="12" alt="">' : "";
+    }
+  }
+  q("[data-grade-preview]").addEventListener("click", function () { show("preview"); });
+  q("[data-grade-reset]").addEventListener("click", function () { show("now"); });
 })();

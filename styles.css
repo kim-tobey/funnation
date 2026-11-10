@@ -10965,7 +10965,8 @@ ul {
    콘텐츠 800 가운데 · 섹션 제목(S1)·설명 위 + 카드 아래 · 페이지 제목 H6.
    다크 테마 시안만 있어 라이트 테마 값은 정하지 않음
    ============================================================ */
-.page--settings {
+.page--settings,
+.page--profile {
   --st-red: #ff6363;          /* Atomic/Red/60 — 위험 글자 */
   --st-error: #cd0c0c;        /* Semantic/Sys/Fill/Error — 위험 버튼 · 테두리 */
   --st-border-200: #262838;   /* Border 200 */
@@ -11909,7 +11910,8 @@ ul {
   .settings-tabs .subnav__tab--active { font-weight: 700; color: var(--color-brand-primary); }
 
   /* 모바일 바탕 BG100 (66318:15349) — 섹션 사이 8px 띠(#07070D)가 보이도록 */
-  .page--settings .main { background: var(--color-bg-100); }
+  .page--settings .main,
+  .page--profile .main { background: var(--color-bg-100); }
   .main__inner.settings {
     align-items: stretch;
     padding: 24px 16px 40px;
@@ -12360,4 +12362,453 @@ button.subnav__tab {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 20px 12px;
   }
+}
+
+/* ============================================================
+   내 정보 (Figma "내 정보" 보드 66398:153864 · 실서비스 /donor/profile 리디자인) — profile.html
+   설정 페이지 부품(settings-card · settings-section · st-row · st-switch · st-modal · st-toast)을 그대로 씀.
+   콘텐츠 800 가운데 · 2뎁스 메뉴가 없어 제목 Headline/H5 (design.md 29장). 다크 시안만
+   ============================================================ */
+.main__inner.profile-page {
+  align-items: center;
+  padding-top: 36px;
+  padding-bottom: 60px;
+}
+.profile-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  width: 100%;
+  max-width: 800px;
+}
+.profile-head__title {
+  margin: 0;
+  font-family: var(--font-score);
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: var(--color-text-strong);
+}
+.profile-head__desc {
+  margin: 12px 0 0;
+  font-size: 14px;
+  line-height: 21px;
+  color: var(--color-text-depth-300);
+}
+/* 제목 → 프로필 카드는 24 (섹션 사이 40 보다 가깝게) */
+.profile-head + .profile-card { margin-top: -16px; }
+
+/* 프로필 카드 — 사진 80 + 연필 배지 · 닉네임 20 Bold · 역할 배지 · 자기소개 · 이메일 */
+.profile-card {
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+}
+.profile-card__pic {
+  position: relative;
+  flex: none;
+  width: 80px;
+  height: 80px;
+}
+.profile-card__pic > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.profile-card__edit {
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: 2px solid var(--color-bg-300);
+  border-radius: 9999px;
+  background: var(--color-brand-primary);
+}
+.profile-card__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+.profile-card__name-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.profile-card__name {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 26px;
+  color: var(--color-text-strong);
+}
+.profile-card__bio {
+  margin: 0;
+  font-size: 14px;
+  line-height: 21px;
+  color: var(--color-text-normal);
+}
+.profile-card__mail {
+  margin: 0;
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--color-text-depth-400);
+}
+.profile-card__btn { text-decoration: none; }
+
+/* 활동 6칸 — 3열 · 사이 12, 칸은 BG300 · Border100 · 모서리 12 */
+.profile-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0;
+}
+.profile-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 18px 20px;
+  border: 1px solid var(--color-border-100);
+  border-radius: 12px;
+  background: var(--color-bg-300);
+}
+.profile-stat dt {
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 16px;
+  color: var(--color-text-depth-400);
+}
+.profile-stat dd {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 26px;
+  color: var(--color-text-strong);
+}
+.profile-stat dd small {
+  margin-left: 3px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-depth-300);
+}
+.profile-stat p {
+  margin: -4px 0 0;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--color-text-depth-400);
+}
+
+/* 바로가기 · 기타 목록 — 행 전체가 링크, 오른쪽 화살표 */
+.profile-link {
+  width: 100%;
+  border-right: 0;
+  border-bottom: 0;
+  border-left: 0;
+  background: none;
+  font-family: inherit;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+.profile-link:first-child { border-top: 0; }
+.profile-link .st-row__title { font-size: 15px; }
+.profile-link__arrow { flex: none; }
+.profile-link:hover .st-row__title { color: var(--color-text-strong); }
+
+/* 내 VIP 등급 카드 */
+.grade-card { gap: 20px; }
+.grade-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.grade-card__name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-family: var(--font-score);
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: var(--color-text-strong);
+}
+.grade-card.is-preview .grade-card__name > span:first-child { color: #6ce5ff; }
+.grade-card__preview {
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: rgba(255, 176, 32, 0.16);
+  font-family: Pretendard, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+  letter-spacing: 0;
+  color: #ffb020;
+}
+.grade-card__preview[hidden] { display: none; }
+.grade-card__recent {
+  margin: 10px 0 0;
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--color-text-depth-300);
+}
+.grade-card__badge { flex: none; }
+.grade-card__progress {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.grade-card__bar {
+  height: 8px;
+  overflow: hidden;
+  border-radius: 9999px;
+  background: var(--color-bg-400);
+}
+.grade-card__fill {
+  display: block;
+  height: 100%;
+  border-radius: 9999px;
+  background: var(--color-brand-primary);
+  transition: width 0.3s ease;
+}
+.grade-card.is-preview .grade-card__fill { background: #6ce5ff; }
+.grade-card__bar--title .grade-card__fill { background: #c87a3c; }
+.grade-card__scale {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+  color: var(--color-text-depth-400);
+}
+.grade-card__next {
+  margin: -8px 0 0;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-text-depth-300);
+}
+.grade-card__next strong { font-weight: 700; color: var(--color-text-strong); }
+.grade-card.is-preview .grade-card__next { color: #6ce5ff; font-weight: 600; }
+
+/* 등급 여정 — 점 24 · 선 2 */
+.grade-steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  margin: 0;
+  padding: 4px 0 0;
+  list-style: none;
+}
+.grade-step {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+  color: var(--color-text-depth-400);
+}
+.grade-step::before {
+  content: "";
+  position: absolute;
+  top: 11px;
+  right: 50%;
+  width: 100%;
+  height: 2px;
+  background: var(--color-bg-400);
+}
+.grade-step:first-child::before { display: none; }
+.grade-step.is-done::before,
+.grade-step.is-current::before { background: var(--color-brand-primary); }
+.grade-step__dot {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 9999px;
+  background: var(--color-bg-400);
+}
+.grade-step.is-done .grade-step__dot { background: var(--color-brand-primary); }
+.grade-step.is-current { color: var(--color-text-strong); }
+.grade-step.is-current .grade-step__dot {
+  background: var(--color-brand-primary);
+  box-shadow: 0 0 0 4px rgba(74, 146, 255, 0.24);
+}
+.grade-card.is-preview .grade-step.is-current .grade-step__dot,
+.grade-card.is-preview .grade-step.is-current::before { background: #6ce5ff; box-shadow: 0 0 0 4px rgba(108, 229, 255, 0.24); }
+.grade-card.is-preview .grade-step.is-current::before { box-shadow: none; }
+
+.grade-card__benefit {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  border-radius: 8px;
+  background: var(--color-bg-200);
+}
+.grade-card__benefit-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 16px;
+  color: var(--color-text-depth-300);
+}
+.grade-card__benefit-text {
+  margin: 0;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-text-normal);
+}
+.grade-card__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.grade-card__note {
+  display: flex;
+  gap: 6px;
+  margin: 0;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--color-text-depth-400);
+}
+.grade-card__note img { flex: none; }
+.grade-card__actions {
+  display: flex;
+  flex: none;
+  gap: 8px;
+}
+.grade-card__actions [hidden] { display: none; }
+
+/* 글로벌 칭호 카드 */
+.title-card { gap: 12px; }
+.title-card__top {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+.title-card__label,
+.title-card__rank {
+  margin: 0;
+  font-size: 13px;
+  line-height: 16px;
+  color: var(--color-text-depth-400);
+}
+.title-card__rank strong { font-weight: 700; color: var(--color-text-normal); }
+.title-card__name {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 26px;
+  color: var(--color-text-strong);
+}
+.title-card__xp {
+  margin: 0 0 8px;
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--color-text-depth-300);
+}
+.title-card__xp strong { margin-left: 4px; font-weight: 700; color: var(--color-text-strong); }
+.title-card__next { font-weight: 700; color: #e0955a; }
+.title-card__remain { color: #e0955a; }
+
+/* 랭킹 · 채팅 표시 — 제목 줄 오른쪽에 "바꾸면 바로 저장돼요" */
+.profile-section-head--saved {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  column-gap: 16px;
+}
+.profile-section-head--saved .settings-saved {
+  grid-row: 1 / span 2;
+  grid-column: 2;
+  align-self: end;
+}
+.profile-row__sub {
+  margin: 2px 0 0;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--st-depth-500);
+}
+.profile-note { margin-top: -4px; }
+
+/* 크리에이터 화면 전환 — 한 줄 카드 */
+.profile-switch {
+  flex-direction: row;
+  align-items: center;
+  gap: 14px;
+  padding: 20px 24px;
+}
+.profile-switch .st-row__title { font-size: 15px; }
+
+/* 모바일 (< 768) — 설정 모바일처럼 카드 없이 펼치고 섹션 사이 8px 띠 */
+@media (max-width: 767px) {
+  .main__inner.profile-page {
+    align-items: stretch;
+    padding: 24px 16px 40px;
+  }
+  .profile-wrap { gap: 32px; max-width: none; }
+  /* 제목은 앱바 "내 정보"가 대신함 */
+  .profile-head { display: none; }
+  .profile-head + .profile-card { margin-top: 0; }
+
+  .settings-card.profile-card {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+  }
+  .profile-card__pic { width: 96px; height: 96px; }
+  .profile-card__body { align-items: center; gap: 4px; }
+  .profile-card__name { font-size: 18px; line-height: 24px; }
+  .profile-card__btn { height: 36px; margin-top: 4px; padding: 0 14px; font-size: 13px; }
+
+  .profile-wrap > .settings-section,
+  .profile-wrap > .profile-switch {
+    margin: 0 -16px;
+    padding: 32px 16px 0;
+    border-top: 8px solid var(--body-bg);
+  }
+  .profile-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .profile-stat { gap: 6px; padding: 14px 16px; }
+  .profile-stat dd { font-size: 17px; line-height: 22px; }
+  .profile-stat dd small { font-size: 13px; }
+
+  .settings-card.grade-card,
+  .settings-card.title-card {
+    padding: 20px 16px;
+    border: 1px solid var(--color-border-100);
+    border-radius: 12px;
+    background: var(--color-bg-300);
+  }
+  .grade-card__name { font-size: 24px; }
+  .grade-card__badge { width: 56px; height: auto; }
+  .grade-card__foot { flex-direction: column; align-items: stretch; }
+  .grade-card__actions .st-btn { flex: 1; }
+  .profile-section-head--saved { display: flex; }
+  .profile-section-head--saved .settings-saved { align-self: flex-start; margin-top: 4px; }
+
+  .settings-card.profile-switch {
+    flex-direction: row;
+    gap: 12px;
+    padding: 32px 16px 0;
+    border-radius: 0;
+  }
+  .profile-switch .st-btn { height: 36px; padding: 0 14px; font-size: 13px; }
 }

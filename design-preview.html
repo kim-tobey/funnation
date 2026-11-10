@@ -84,6 +84,8 @@ body.dp {
 /* 11 설정 — settings.html 의 실제 클래스(st-*)를 그대로 쓰고, 화면에 고정되는 모달 · 토스트만 제자리에 놓음 */
 .dp-settings { display: grid; grid-template-columns: minmax(0, 1fr); gap: 24px; }
 .dp-settings .settings-panel { max-width: 800px; }
+.dp-settings .profile-wrap,
+.page--profile > .dp-board > .settings-card { width: 100%; max-width: 800px; box-sizing: border-box; }
 .dp-settings .st-toast { position: static; transform: none; }
 .dp-modals { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 24px; }
 .dp-modals .st-modal__box { flex: none; }
@@ -407,6 +409,70 @@ body.dp {
         <span class="dp-spec__label">Alert 363 · BG 400 · Border 400 · R12 · 버튼 50 · R10 · 사이 9 — 아이콘은 비밀번호 변경 완료 · 탈퇴 최종 확인에만 (탈퇴 완료는 아이콘 없음)</span>
         <div class="dp-spec"><div class="st-toast"><img src="assets/v2/settings/toast-check-18.svg" width="18" height="18" alt=""><span>알림 설정을 저장했어요.</span></div>
         <span class="dp-spec__label">토스트 344 · BG 400 · Border 400 · R4 · 화면 아래 가운데 · 3초 — 시안에 문구가 없는 동작은 띄우지 않아도 됨</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="dp-sec" aria-labelledby="s12">
+    <span class="dp-eyebrow">12 — 화면</span>
+    <h2 id="s12">내 정보</h2>
+    <p class="dp-lead">design.md 30장 · Figma 66398:153864 · <a href="profile.html" style="color:var(--color-brand-primary)">profile.html</a>. 설정과 같은 부품을 씁니다. 2뎁스 메뉴가 없어 제목은 H5(28), 섹션 소제목은 S1. PC 는 GNB 사람 아이콘, 모바일은 하단 내비 "내 정보"로 들어옵니다. 아래 견본은 profile.html 과 같은 클래스입니다.</p>
+    <div class="dp-settings page--profile">
+      <div class="dp-board">
+        <div class="profile-wrap">
+          <header class="profile-head"><h3 class="profile-head__title">내 정보</h3><p class="profile-head__desc">내 프로필과 후원 활동, 등급을 한눈에 봐요.</p></header>
+          <div class="settings-card profile-card">
+            <span class="profile-card__pic"><img src="assets/v2/settings/profile.png" width="80" height="80" alt=""><span class="profile-card__edit"><img src="assets/v2/profile/pencil-14.svg" width="14" height="14" alt=""></span></span>
+            <div class="profile-card__body">
+              <div class="profile-card__name-row"><p class="profile-card__name">텔레토비</p><span class="settings-role">관리자</span></div>
+              <p class="profile-card__bio">반갑습니다</p>
+              <p class="profile-card__mail">kimiljoo@gmail.com</p>
+            </div>
+            <span class="st-btn st-btn--outline profile-card__btn"><img src="assets/v2/profile/pencil-16.svg" width="16" height="16" alt="">프로필 변경</span>
+          </div>
+          <dl class="profile-stats">
+            <div class="profile-stat"><dt>활동 기간</dt><dd>9개월+</dd></div>
+            <div class="profile-stat"><dt>총 후원</dt><dd>73,000<small>캐시</small></dd></div>
+            <div class="profile-stat"><dt>보유 XP</dt><dd>73,000<small>XP</small></dd><p>펀네 20,000원 + 투네 53,000원</p></div>
+          </dl>
+        </div>
+        <span class="dp-spec__label">본문 800 가운데 · 섹션 사이 40 · 제목 H5 → 프로필 카드 24 · 프로필 사진 80 (모바일 96) + 연필 배지 28 · 활동 칸 3열(모바일 2열) · 사이 12</span>
+      </div>
+
+      <div class="dp-board">
+        <div class="settings-card grade-card">
+          <div class="grade-card__top"><div><p class="grade-card__name"><span>VIP</span></p><p class="grade-card__recent">최근 30일 300,000원</p></div><img class="grade-card__badge" src="assets/grade/vip.png" width="72" height="65" alt=""></div>
+          <div class="grade-card__progress"><div class="grade-card__bar"><span class="grade-card__fill" style="width: 23%"></span></div><div class="grade-card__scale"><span>VIP</span><span>23%</span><span>VVIP</span></div></div>
+          <p class="grade-card__next">다음 등급까지 <strong>999,000원</strong> 후원 필요</p>
+          <ol class="grade-steps" aria-label="등급 여정 예시">
+            <li class="grade-step is-done"><span class="grade-step__dot"><img src="assets/v2/profile/check-12.svg" width="12" height="12" alt=""></span>FRIEND</li>
+            <li class="grade-step is-current"><span class="grade-step__dot"></span>VIP</li>
+            <li class="grade-step"><span class="grade-step__dot"><img src="assets/v2/profile/lock-12.svg" width="12" height="12" alt=""></span>VVIP</li>
+            <li class="grade-step"><span class="grade-step__dot"><img src="assets/v2/profile/lock-12.svg" width="12" height="12" alt=""></span>SVIP</li>
+          </ol>
+        </div>
+        <span class="dp-spec__label">내 VIP 등급 — 등급명 S-Core Dream 28 · 진행 막대 8 · R9999 · 여정 점 24 (현재 등급 Primary + 4px 빛) · "다음 등급 미리보기"를 누르면 다음 등급 모습 + "미리보기 중" 배지 · 되돌리기</span>
+        <div class="settings-card settings-card--list">
+          <div class="st-row"><div class="st-row__body"><p class="st-row__title">공개 랭킹에서 숨기기</p><p class="st-row__desc">명예의 전당 · 스토어 후원 랭킹 · 후원자 랭킹에서 내 이름을 숨겨요.</p><p class="profile-row__sub">방송 화면(OBS) 후원자 랭킹에는 그대로 나와요.</p></div><button class="st-switch" type="button" role="switch" aria-checked="false" aria-label="공개 랭킹에서 숨기기 예시" data-dp-toggle></button></div>
+          <a class="st-row profile-link" href="#s12"><span class="st-row__icon"><img src="assets/v2/profile/wallet-20.svg" width="20" height="20" alt=""></span><span class="st-row__body"><span class="st-row__title">지갑</span></span><img class="profile-link__arrow" src="assets/v2/profile/chevron-right-18.svg" width="18" height="18" alt=""></a>
+        </div>
+        <span class="dp-spec__label">표시 토글 — 바꾸면 바로 저장 + 토스트 · 보조 안내 12 Depth 500 / 바로가기 행 — 아이콘 40 · R10 · 15 SemiBold · 오른쪽 화살표</span>
+      </div>
+
+      <div class="dp-board">
+        <div class="dp-modals">
+          <div class="st-modal__box">
+            <p class="st-modal__title">로그아웃할까요?</p>
+            <p class="st-modal__desc">다시 로그인하면 이어서 쓸 수 있어요.</p>
+            <div class="st-modal__actions"><button class="st-modal__btn" type="button">취소</button><button class="st-modal__btn st-modal__btn--primary" type="button">로그아웃</button></div>
+          </div>
+          <div class="st-modal__box">
+            <p class="st-modal__title">크리에이터 화면으로 바꿀까요?</p>
+            <p class="st-modal__desc">방송 관리 · 후원 · 위젯 메뉴가 있는 화면으로 바뀌어요.<br>내 정보에서 언제든 다시 돌아올 수 있어요.</p>
+            <div class="st-modal__actions"><button class="st-modal__btn" type="button">취소</button><button class="st-modal__btn st-modal__btn--primary" type="button">바꾸기</button></div>
+          </div>
+        </div>
+        <span class="dp-spec__label">확인 모달 — 설정과 같은 Alert 363, 아이콘 없음 · 로그아웃 · 크리에이터 전환</span>
       </div>
     </div>
   </section>
