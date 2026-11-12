@@ -74,7 +74,11 @@ const ic=(n,s=20)=>icV(n,s);
 const icV=(n,s=20)=>`<svg class="ic" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${P[n]||''}</svg>`;
 const hue=n=>{let h=0;for(const c of String(n))h=(h*31+c.charCodeAt(0))%360;return h};
 const PROFILE='assets/v2/station/profile.jpg';
-const av=(n,s=40)=>n==='\ud380\uc0c1\uc0ac'?`<span class="av pf" style="width:${s}px;height:${s}px"><img src="${PROFILE}" alt=""></span>`:`<span class="av" style="width:${s}px;height:${s}px;font-size:${Math.max(12,Math.round(s*.42))}px;background:linear-gradient(135deg,hsl(${hue(n)} 55% 45%),hsl(${(hue(n)+40)%360} 60% 32%))">${esc(String(n)[0])}</span>`;
+/* 프로필 사진 — 이니셜 대신 작업 파일(assets)의 실제 프로필 이미지. 이름마다 겹치지 않게 차례로 배정(풀을 다 쓰면 다시 처음부터) */
+const AVPOOL=['assets/v2/creator/photo1.png','assets/home/avatar/vtuber-blue.png','assets/logout/avatar3.png','assets/watch/v3/avatar/chaeyoung.png','assets/home/avatar/bear.jpg','assets/v2/notice/avatar1.png','assets/v2/creator/photo4.png','assets/home/avatar/vtuber-green.png','assets/logout/avatar4.png','assets/watch/v3/avatar/joker.png','assets/home/avatar/chim.png','assets/v2/creator/photo2.png','assets/home/avatar/vtuber-purple.png','assets/logout/avatar5.png','assets/watch/v3/avatar/eurat.png','assets/logout/avatar1.png','assets/v2/notice/avatar2.png','assets/v2/creator/photo5.png','assets/home/avatar/pixel.png','assets/watch/v3/avatar/frokynn.png','assets/logout/avatar6.png','assets/home/avatar/vtuber-white.png','assets/watch/v3/avatar/trangam.png','assets/logout/avatar2.png','assets/watch/v3/avatar/ippeun.png','assets/v2/creator/photo3.png','assets/watch/v3/avatar/ym.png','assets/watch/v3/avatar/love.png','assets/watch/v4/avatar-ymss.jpg','assets/watch/v3/avatar/cheon.png','assets/fun-watch/v2/user-avatar.png','assets/watch/v3/avatar/nightbot.png'];
+const AVMAP=new Map();
+function avSrc(n){n=String(n);if(AVMAP.has(n))return AVMAP.get(n);const N=AVPOOL.length;let i=(hue(n)>>>0)%N;const used=new Set(AVMAP.values());if(AVMAP.size<N){while(used.has(AVPOOL[i]))i=(i+1)%N}const src=AVPOOL[i];AVMAP.set(n,src);return src}
+const av=(n,s=40)=>`<span class="av pf" style="width:${s}px;height:${s}px"><img src="${n==='\ud380\uc0c1\uc0ac'?PROFILE:avSrc(n)}" alt="" loading="lazy" decoding="async"></span>`;
 const TIERN={none:'후원 없음',dirt:'흙수저',gold:'금수저',dia:'노블레스',black:'골드프라임'};
 const TIERO={none:-1,dirt:0,gold:1,dia:2,black:3};
 const tb=t=>`<span class="tb t-${t}">${TIERN[t]}</span>`;
@@ -356,9 +360,11 @@ document.addEventListener('mousedown',e=>{if(!e.target||!e.target.closest)return
 
 /* ---------- login ---------- */
 function need(){if(S.loggedIn)return true;openLogin();return false}
+/* 펀네이션 공용 로그인 화면(#login, app.js)으로 — 로그인하면 data-auth=in 이 방송국에도 반영됨 */
+function goLogin(){closeAllModals();closePop();const b=document.getElementById('login-btn');if(b)b.click();else location.hash='login'}
 function openLogin(){
   openModal({title:'로그인이 필요해요',qa:'G-06',body:'<p>즐겨찾기·알림·후원·글쓰기는 로그인 후 이용할 수 있어요.</p>',
-    foot:'<button class="btn sec" data-act="mclose">취소</button><button class="btn pri" data-act="loginOk">로그인(데모)</button>'});
+    foot:'<button class="btn sec" data-act="mclose">취소</button><button class="btn pri" data-act="loginOk">로그인</button>'});
 }
 
 /* ---------- header / sidebar / bnav ---------- */
@@ -665,8 +671,8 @@ const A={
  gsearch:oos,
  sbtoggle(){if(innerWidth>=1240)sb.collapsed=!sb.collapsed;else sb.open=!sb.open;layoutSB()},
  sbdrawer(){sb.open=!sb.open;layoutSB()},
- login:openLogin,
- loginOk(el){S.loggedIn=true;closeAllModals();closePop();renderHeader();renderSide();renderStation();renderDemo();toast('데모 계정으로 로그인했어요')},
+ login(){goLogin()},
+ loginOk(){goLogin()},
  mclose(el){const ov=el.closest('.ov-back');if(ov&&ov.parentNode===layer&&modals.some(m=>m.el===ov))closeModal(ov);else closePop()},
  tab(el,arg){if(arg==='crew'&&S.view==='crew'){return}go(arg)},
  nav(el,arg){go(arg)},
@@ -964,20 +970,8 @@ function renderHeader(){
    <div class="mo-only" style="justify-content:center;align-items:center;gap:6px"><a href="#" class="s-logo" data-act="oos"><span class="lgm">FUN</span></a>${ab}</div>
    <div class="hr"><button class="ib" data-act="oos" aria-label="언어">${ic('globe',22)}</button><span class="pc-only">${login}</span><button class="ib mo-only" data-act="sbdrawer" aria-label="메뉴">${ic('menu',22)}</button></div>`;
 }
-function renderDemo(){
-  const seg=(k,a,b,cur)=>`<div class="seg"><button class="${cur?'on':''}" data-act="dset" data-arg="${k}:1">${a}</button><button class="${cur?'':'on'}" data-act="dset" data-arg="${k}:0">${b}</button></div>`;
-  const m=S.mode,perms=mgr()?Object.keys(PL).filter(k=>mgr().perm[k]).map(k=>({station:'방송국',chat:'채팅',notice:'공지'})[k]).join('/'):'';
-  const cur=m==='streamer'?'펀상사(스트리머) · 전체 권한':m==='manager'?'사옥청소부(매니저) · 권한 '+(perms||'없음'):'펀시청자(시청자)';
-  $('#demo').innerHTML=`${dpOpen?`<div class="dpan" role="dialog" aria-label="데모 설정"><div class="nt">데모용 컨트롤 · 실제 서비스 UI 아님</div><div class="nt" style="color:var(--text)">현재: ${cur}</div>
-   <div class="row"><span>방송 상태</span>${seg('live','라이브','오프라인',S.live)}</div>
-   <div class="row"><span>로그인</span>${seg('login','로그인','비로그인',S.loggedIn)}</div>
-   <div class="row"><span>내 칭호(표시용)</span><select data-ch="dtier" aria-label="내 후원 등급">${demoGradeOpts()}</select></div>
-   <div class="row" data-qa="DEMO-crew"><span>크루원 등록</span><div class="seg"><button class="${S.noCrew?'':'on'}" data-act="dcrew" data-arg="1">있음</button><button class="${S.noCrew?'on':''}" data-act="dcrew" data-arg="0">없음</button></div></div>
-   <div class="row" data-qa="DEMO-rank"><span>내 팬 랭킹(VIP 기준)</span><select data-ch="drank" aria-label="내 팬 랭킹"><option value="auto" ${S.rankOv==='auto'?'selected':''}>후원 누적 기준</option><option value="none" ${S.rankOv==='none'?'selected':''}>순위 밖</option><option value="20" ${S.rankOv===20?'selected':''}>20위(VIP)</option><option value="10" ${S.rankOv===10?'selected':''}>10위(VVIP)</option><option value="1" ${S.rankOv===1?'selected':''}>1위</option></select></div>
-   <div class="row"><span>보기 모드</span><div class="seg">${[['viewer','시청자'],['manager','매니저'],['streamer','스트리머']].map(x=>`<button class="${m===x[0]?'on':''}" data-act="dset" data-arg="mode:${x[0]}">${x[1]}</button>`).join('')}</div></div>
-   <button class="btn sec block sm" data-act="dreset">데이터 초기화</button><div class="proto">프로토타입 · 목업 데이터</div></div>`:''}
-   <button class="dbtn" data-act="dtoggle" aria-expanded="${dpOpen}">데모 설정 ${dpOpen?'▼':'▲'}</button>`;
-}
+/* 데모 설정 패널은 삭제(2026-11-13) — 호출부가 많아 빈 함수로 남김. 상태 재현은 URL 해시(mode= · login= · live= …) */
+function renderDemo(){}
 function dset(k,v){
   if(k==='mode'){
     const run=()=>{S.mode=v;toast(v==='viewer'?'시청자 모드로 전환했어요':v==='manager'?'매니저 모드로 전환했어요(사옥청소부)':'스트리머 모드로 전환했어요');afterStateChange();renderDemo()};
@@ -2509,22 +2503,6 @@ renderView=function(){
   if(v==='write')wrBodyUpd();
   if(v==='home'){startOvSoon();shApply(true);ncInit()}
 };
-/* ---- 데모 설정: 쪽지 시뮬레이션 ---- */
-renderDemo=function(){
-  const seg=(k,a,b,cur)=>`<div class="seg"><button class="${cur?'on':''}" data-act="dset" data-arg="${k}:1">${a}</button><button class="${cur?'':'on'}" data-act="dset" data-arg="${k}:0">${b}</button></div>`;
-  const m=S.mode,perms=mgr()?Object.keys(PL).filter(k=>mgr().perm[k]).map(k=>({station:'방송국',chat:'채팅',notice:'공지'})[k]).join('/'):'';
-  const cur=m==='streamer'?'펀상사(스트리머) · 전체 권한':m==='manager'?'사옥청소부(매니저) · 권한 '+(perms||'없음'):'펀시청자(시청자)';
-  $('#demo').innerHTML=`${dpOpen?`<div class="dpan" role="dialog" aria-label="데모 설정"><div class="nt">데모용 컨트롤 · 실제 서비스 UI 아님</div><div class="nt" style="color:var(--text)">현재: ${cur}</div>
-   <div class="row"><span>방송 상태</span>${seg('live','라이브','오프라인',S.live)}</div>
-   <div class="row"><span>로그인</span>${seg('login','로그인','비로그인',S.loggedIn)}</div>
-   <div class="row"><span>내 칭호(표시용)</span><select data-ch="dtier" aria-label="내 후원 등급">${demoGradeOpts()}</select></div>
-   <div class="row" data-qa="DEMO-crew"><span>크루원 등록</span><div class="seg"><button class="${S.noCrew?'':'on'}" data-act="dcrew" data-arg="1">있음</button><button class="${S.noCrew?'on':''}" data-act="dcrew" data-arg="0">없음</button></div></div>
-   <div class="row" data-qa="DEMO-rank"><span>내 팬 랭킹(VIP 기준)</span><select data-ch="drank" aria-label="내 팬 랭킹"><option value="auto" ${S.rankOv==='auto'?'selected':''}>후원 누적 기준</option><option value="none" ${S.rankOv==='none'?'selected':''}>순위 밖</option><option value="20" ${S.rankOv===20?'selected':''}>20위(VIP)</option><option value="10" ${S.rankOv===10?'selected':''}>10위(VVIP)</option><option value="1" ${S.rankOv===1?'selected':''}>1위</option></select></div>
-   <div class="row"><span>보기 모드</span><div class="seg">${[['viewer','시청자'],['manager','매니저'],['streamer','스트리머']].map(x=>`<button class="${m===x[0]?'on':''}" data-act="dset" data-arg="mode:${x[0]}">${x[1]}</button>`).join('')}</div></div>
-   <div class="row" data-qa="MSG-sim"><span>쪽지 시뮬레이션</span><div class="dmsgb"><button class="btn sec sm" data-act="dmsg" data-arg="normal" data-qa="MSG-sim-normal">새 쪽지 도착</button><button class="btn sec sm" data-act="dmsg" data-arg="blocked" data-qa="MSG-sim-blocked">수신거부 유저 쪽지</button></div>${S.msgDemo?`<div class="dnote" data-qa="MSG-sim-note">${esc(S.msgDemo)}</div>`:''}</div>
-   <button class="btn sec block sm" data-act="dreset">데이터 초기화</button><div class="proto">프로토타입 · 목업 데이터</div></div>`:''}
-   <button class="dbtn" data-act="dtoggle" aria-expanded="${dpOpen}">데모 설정 ${dpOpen?'▼':'▲'}</button>`;
-};
 
 /* ================= 12차: 모바일 최적화 · 와이어프레임 모드 · 영역 번호 · URL 해시 ================= */
 const W={wire:false,areas:false,min:false,hide:false};
@@ -2571,30 +2549,11 @@ Object.assign(A,{
  dpmin(){W.min=true;dpOpen=false;applyWire();renderDemo()},
  dpmax(){W.min=false;dpOpen=true;applyWire();renderDemo()}
 });
-/* 데모 패널 재정의: 화면 모드 / 영역 번호 / 최소화 */
-renderDemo=function(){
-  const seg=(k,a,b,cur)=>`<div class="seg"><button class="${cur?'on':''}" data-act="dset" data-arg="${k}:1">${a}</button><button class="${cur?'':'on'}" data-act="dset" data-arg="${k}:0">${b}</button></div>`;
-  const sw=(k,a,b,cur)=>`<div class="seg"><button class="${cur?'':'on'}" data-act="dw" data-arg="${k}:0" data-qa="WIRE-${k}-0">${a}</button><button class="${cur?'on':''}" data-act="dw" data-arg="${k}:1" data-qa="WIRE-${k}-1">${b}</button></div>`;
-  const m=S.mode,perms=mgr()?Object.keys(PL).filter(k=>mgr().perm[k]).map(k=>({station:'방송국',chat:'채팅',notice:'공지'})[k]).join('/'):'';
-  const cur=m==='streamer'?'펀상사(스트리머) · 전체 권한':m==='manager'?'사옥청소부(매니저) · 권한 '+(perms||'없음'):'펀시청자(시청자)';
-  const el=$('#demo');el.classList.toggle('min',W.min);
-  if(W.min){el.innerHTML=`<button class="dbtn dmin" data-act="dpmax" aria-label="데모 설정 열기" title="데모 설정">&#9881;</button>`;return}
-  el.innerHTML=`${dpOpen?`<div class="dpan" role="dialog" aria-label="데모 설정"><div class="nt">데모용 컨트롤 · 실제 서비스 UI 아님</div><div class="nt" style="color:var(--text)">현재: ${cur}</div>
-   <div class="row" data-qa="WIRE-mode"><span>화면 모드</span>${sw('wire','디자인','와이어프레임',W.wire)}</div>
-   <div class="row" data-qa="WIRE-areas"><span>영역 번호(기획서 캡처용)</span>${sw('areas','끄기','켜기',W.areas)}</div>
-   <div class="row"><span>방송 상태</span>${seg('live','라이브','오프라인',S.live)}</div>
-   <div class="row"><span>로그인</span>${seg('login','로그인','비로그인',S.loggedIn)}</div>
-   <div class="row"><span>내 칭호(표시용)</span><select data-ch="dtier" aria-label="내 후원 등급">${demoGradeOpts()}</select></div>
-   <div class="row" data-qa="DEMO-crew"><span>크루원 등록</span><div class="seg"><button class="${S.noCrew?'':'on'}" data-act="dcrew" data-arg="1">있음</button><button class="${S.noCrew?'on':''}" data-act="dcrew" data-arg="0">없음</button></div></div>
-   <div class="row" data-qa="DEMO-rank"><span>내 팬 랭킹(VIP 기준)</span><select data-ch="drank" aria-label="내 팬 랭킹"><option value="auto" ${S.rankOv==='auto'?'selected':''}>후원 누적 기준</option><option value="none" ${S.rankOv==='none'?'selected':''}>순위 밖</option><option value="20" ${S.rankOv===20?'selected':''}>20위(VIP)</option><option value="10" ${S.rankOv===10?'selected':''}>10위(VVIP)</option><option value="1" ${S.rankOv===1?'selected':''}>1위</option></select></div>
-   <div class="row"><span>보기 모드</span><div class="seg">${[['viewer','시청자'],['manager','매니저'],['streamer','스트리머']].map(x=>`<button class="${m===x[0]?'on':''}" data-act="dset" data-arg="mode:${x[0]}">${x[1]}</button>`).join('')}</div></div>
-   <div class="row" data-qa="MSG-sim"><span>쪽지 시뮬레이션</span><div class="dmsgb"><button class="btn sec sm" data-act="dmsg" data-arg="normal" data-qa="MSG-sim-normal">새 쪽지 도착</button><button class="btn sec sm" data-act="dmsg" data-arg="blocked" data-qa="MSG-sim-blocked">수신거부 유저 쪽지</button></div>${S.msgDemo?`<div class="dnote" data-qa="MSG-sim-note">${esc(S.msgDemo)}</div>`:''}</div>
-   <button class="btn sec block sm" data-act="dreset">데이터 초기화</button><button class="btn out block sm" style="margin-top:6px" data-act="dpmin" data-qa="WIRE-min">패널 최소화(캡처용)</button><div class="proto">프로토타입 · 목업 데이터</div></div>`:''}
-   <button class="dbtn" data-act="dtoggle" aria-expanded="${dpOpen}">데모 설정 ${dpOpen?'▼':'▲'}</button>`;
-};
 /* ---- URL 해시로 화면/상태 직접 열기 ---- */
 const HASHKEYS=['view','live','login','mode','tier','wire','areas','panel','min','modal','msgtab','admin','don','per','page','rk','rkper','sec','drawer','cal','sigid','st'];
 function parseHash(){
+  /* 공용 화면(로그인 · 회원가입 · 검색 · 알림)은 app.js 가 처리 — 방송국 상태로 읽지 않음 */
+  if(/^#(login|signup|search|notice)$/.test(location.hash))return {};
   const o={};location.hash.replace(/^#/,'').split('&').forEach(p=>{if(!p)return;const i=p.indexOf('=');const k=decodeURIComponent(i<0?p:p.slice(0,i));o[k]=i<0?'1':decodeURIComponent(p.slice(i+1))});
   return o;
 }

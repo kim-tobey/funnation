@@ -424,16 +424,9 @@
 .stn .toast button{color:var(--accent);font-weight:700;font-size:13px;white-space:nowrap}
 @keyframes stn-tin{from{opacity:0;transform:translateY(8px)}}
 /* demo */
-.stn #demo{position:fixed;right:16px;bottom:16px;z-index:90;display:flex;flex-direction:column;align-items:flex-end;gap:8px}
-.stn .dbtn{height:36px;padding:0 14px;border-radius:9999px;background:var(--surface-2);border:1px dashed var(--accent);font-size:13px;font-weight:700;display:flex;align-items:center;gap:6px}
-.stn .dpan{width:260px;background:var(--surface);border:1px dashed var(--accent);border-radius:12px;padding:14px;box-shadow:0 12px 32px rgba(0,0,0,.5);font-size:13px}
-.stn .dpan .nt{font-size:11px;color:var(--text-meta);margin-bottom:10px;line-height:1.5}
-.stn .dpan .row{margin-bottom:10px}
-.stn .dpan .row>span{display:block;font-size:11px;color:var(--text-meta);margin-bottom:4px}
 .stn .seg{display:flex;background:var(--bg-300);border-radius:8px;padding:2px}
 .stn .seg button{flex:1;height:28px;border-radius:6px;font-size:12px;font-weight:600;text-align:center;color:var(--text-meta)}
 .stn .seg button.on{background:var(--accent);color:#ffffff}
-.stn .dpan select{width:100%;height:32px;border-radius:8px;background:var(--bg-300);border:1px solid var(--surface-3);padding:0 8px;font-size:13px}
 .stn .proto{margin-top:8px;font-size:11px;color:var(--accent);font-weight:700;text-align:center}
 .stn .lnbtop{padding:2px 0 4px}
 .stn .lt-pf{display:flex;align-items:center;gap:10px;padding:6px 8px;min-width:0}
@@ -512,7 +505,6 @@
 .stn .ov-back{align-items:flex-end;padding:0}
 .stn .modal,.stn .modal.wide,.stn .modal.mid{width:100%;border-radius:12px 12px 0 0;max-height:85%}
 .stn #toasts{bottom:calc(55px + 12px)}
-.stn #demo{bottom:67px;right:12px}
 .stn .ov-don{width:90%}
 .stn .ov-top{display:none}
 .stn .ov-goal{width:60%}
@@ -638,7 +630,6 @@
 .stn .sbmsg.bad{color:#ff6363;font-weight:700}
 .stn .sbbtns{display:flex;gap:8px}
 body.admm .stn #bnav{display:none}
-body.admm .stn #demo{bottom:84px}
 @media (max-width:1239px) and (min-width:960px){.stn .adm .adm-in{padding:24px}
 .stn .savebar{margin:24px -24px -24px;padding:12px 24px}
 }
@@ -651,7 +642,6 @@ body.admm .stn #demo{bottom:84px}
 .stn .bnimg.m{width:100%}
 .stn .bnimg.r{width:120px}
 .stn .rds .rd{width:100%}
-body.admm .stn #demo{bottom:76px}
 .stn .gside.drw{top:65px}
 
 }
@@ -966,10 +956,6 @@ body.admm .stn #toasts{bottom:76px}
 .stn .mbr{display:flex;align-items:center;gap:10px;padding:10px 4px;border-bottom:1px solid var(--line)}
 .stn .msgm .back{display:inline-flex;align-items:center;gap:4px;font-size:13px;color:var(--text-meta);font-weight:600;margin-bottom:4px}
 .stn .msgm .back:hover{color:var(--text)}
-.stn .dmsgb{display:flex;gap:6px}
-.stn .dmsgb .btn{flex:1;padding:0 6px;font-size:12px;height:32px}
-.stn .dpan{max-height:calc(100vh - 110px);overflow-y:auto}
-.stn .dpan .dnote{margin-top:6px;font-size:11px;line-height:1.45;color:var(--accent-text-active)}
 @media (max-width:767px){.stn .modal.msgm{width:100%}
 .stn .mmain{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"f m" "p p";gap:4px 8px}
 .stn .mmain .mfrom{grid-area:f}
@@ -1144,9 +1130,6 @@ body.admm .stn #toasts{bottom:76px}
 /* ===== 12차: 모바일 최적화 ===== */
 .stn .gkpl.compact{display:none}
 .stn .gkel{display:inline-flex;align-items:center;justify-content:center;width:20px;color:var(--text-meta)}
-.stn #demo .dmin{width:30px;height:30px;padding:0;justify-content:center;opacity:.55;border-radius:50%}
-.stn #demo.min .dmin:hover{opacity:1}
-body.nopanel .stn #demo{display:none!important}
 @media (max-width:959px){.stn .gkpod .gkcw.gk1{--as:max(calc(var(--u)*92),44px)}
 
 }
@@ -1166,8 +1149,6 @@ body.nopanel .stn #demo{display:none!important}
 .stn .gside.drw{top:calc(56px + env(safe-area-inset-top));bottom:calc(56px + env(safe-area-inset-bottom));padding-bottom:24px}
 .stn .gside .mi{min-height:48px}
 .stn #toasts{bottom:calc(56px + 12px + env(safe-area-inset-bottom))}
-.stn #demo{bottom:calc(56px + 12px + env(safe-area-inset-bottom))}
-body.admm .stn #demo{bottom:calc(84px + env(safe-area-inset-bottom))}
 .stn .st{padding-left:max(12px,env(safe-area-inset-left));padding-right:max(12px,env(safe-area-inset-right))}
 .stn .s-sns .snsb{width:44px;height:44px}
 .stn .s-sns{gap:6px}
@@ -1311,7 +1292,6 @@ body.wire .stn .evc,body.wire .stn .ce{border-left:3px solid #626262!important}
 body.wire .stn .mrow.unread .mnm b{text-decoration:underline}
 body.wire .stn .s-done .ckc{border:1px solid #959595!important;border-radius:50%}
 body.wire .stn .pl-tag,body.wire .stn .protob{opacity:.7}
-body.wire .stn .dpan .proto{color:#626262!important}
 /* 영역 번호 */
 body.areas .stn,body.wire.areas .stn{counter-reset:area}
 .stn .ov-back{counter-reset:area}
@@ -1960,7 +1940,7 @@ body.wire .stn .banner.def,body.wire .stn .rbi.def,body.wire .stn .mban.def .mb-
 .stn .gside hr{border-top:1px solid var(--line-soft);margin:8px 0}
 
 /* 시안 캡처 모드 (station.js capMode) */
-.is-cap .fab-auth,.is-cap #demo{display:none!important}
+.is-cap .fab-auth{display:none!important}
 .is-cap-fix,.is-cap-fix body{height:900px;overflow:hidden}
 .is-cap-fix .stn .ov-back{position:absolute;height:900px}
 @media (max-width:767px){.is-cap-fix,.is-cap-fix body{height:812px}.is-cap-fix .stn .ov-back{height:812px}}
