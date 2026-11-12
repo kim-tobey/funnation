@@ -180,10 +180,12 @@
     <div class="sbback" id="sbback" hidden></div>
 
     <!-- ===================== 방송국 본문 (기획서 프로토타입 yuujaeh.wixsite.com/funnation 기준) ===================== -->
-    <main class="main stn" id="main">
-      <header id="hdr" hidden></header>
+    <main class="main" id="main">
       <!-- 라이트/다크 전환은 방송국에서 쓰지 않음(다크 고정) — app.js 공용 스크립트용 자리 -->
       <button id="theme-toggle" type="button" hidden aria-checked="false"></button>
+      <!-- 방송국 본문만 .stn 으로 감싼다 — 아래 공용 화면 · 푸터는 styles.css 그대로 (프로토타입 초기화가 닿지 않게) -->
+      <div class="stn stn-body">
+      <header id="hdr" hidden></header>
       <div class="st">
         <div id="restrict"></div><div class="banner"><span></span></div>
         <div class="top" id="top"></div>
@@ -191,6 +193,7 @@
         <div class="cols" id="cols"><section class="view" id="view"></section><aside class="rban" id="rban" hidden></aside></div>
       </div>
       <div class="adm" id="admin" hidden></div><div class="fnv" id="fnv" hidden></div>
+      </div>
 
       <!-- 공용 화면(로그인 · 회원가입 · 모바일 검색 · 알림) — app.js 공용 스크립트가 씀 -->
       <!-- 로그인 (모바일 시안 64059:158794 — PC 도 같은 폼). 로그아웃 상태에서 #login 으로 열림 -->
