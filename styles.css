@@ -13299,3 +13299,6 @@ button.subnav__tab {
   }
   .profile-switch .st-btn { height: 36px; padding: 0 14px; font-size: 13px; }
 }
+
+/* 개인 방송국 진입 — 방송인 사진 · 이름은 누를 수 있음 (app.js 끝 "개인 방송국 진입") */
+.card__avatar, .card__channel, .winfo__name, .wbar__pic, .fav-card__avatar, .fav-card__channel { cursor: pointer; }

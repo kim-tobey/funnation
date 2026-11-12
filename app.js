@@ -3151,3 +3151,16 @@ document.addEventListener("click", function (e) {
   q("[data-grade-preview]").addEventListener("click", function () { show("preview"); });
   q("[data-grade-reset]").addEventListener("click", function () { show("now"); });
 })();
+
+/* 개인 방송국 진입 — 크리에이터 찾기 카드, 영상 목록 · 영상 상세의 방송인 사진 · 이름을 누르면 방송국(station.html)으로.
+   카드 전체 링크(영상 재생)보다 먼저 받아서 영상으로 넘어가지 않게 캡처 단계에서 처리 */
+(function () {
+  var SEL = ".creator-card__thumb, .creator-card__name, .winfo__pic, .winfo__name, .wbar__pic, .fbar__channel img, .card__avatar, .card__channel, .fav-card__avatar, .fav-card__channel";
+  document.addEventListener("click", function (e) {
+    var t = e.target.closest && e.target.closest(SEL);
+    if (!t) return;
+    e.preventDefault();
+    e.stopPropagation();
+    location.href = "station.html";
+  }, true);
+})();
