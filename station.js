@@ -3378,7 +3378,7 @@ function rankerView(){
   const u=S.ui,sub=u.rkSub==='activity'?'activity':'donate',per=u.bigPer,N=Math.min(50,u.rkN||10),isD=sub==='donate';
   const all=isD?bigList(per).slice(0,50):actBase(per).slice(0,50),rows=all.slice(0,N),mx=actMax(all);
   const body=(isD?gkPodium(rows,'don'):actPodium(rows))+`<div class="gkrows" data-qa="RNK-list">${rows.slice(3).map((r,i)=>isD?gkRow(r,i+4,'don'):actRow(r,i+4,mx)).join('')}</div>`;
-  const more=N<50?`<button class="btn sec rkmore" data-act="rkMore" data-qa="RNK-more">더보기 (${N+1}–${Math.min(50,N+10)}위)</button>`:'';
+  const more=N<50?`<button class="btn pri rkmore" data-act="rkMore" data-qa="RNK-more">더보기 (${N+1}–${Math.min(50,N+10)}위)</button>`:'';
   return `<div data-qa="T-05"><div class="vh"><h2>랭커</h2><p>${isD?'후원 금액이 많은 순서예요':'채팅·출석·게시글 활동을 합산한 점수 순서예요'} · 최대 50위까지 볼 수 있어요</p></div>
   <div class="rkw gkw${isD?'':' actw'}"><div class="rk-tabs" role="tablist" data-qa="RNK-sub"><button class="rkt${isD?' on':''}" role="tab" aria-selected="${isD}" data-act="rkSub" data-arg="donate" data-qa="RNK-sub-donate">${ic('coin',16)}후원 랭커</button><button class="rkt${isD?'':' on'}" role="tab" aria-selected="${!isD}" data-act="rkSub" data-arg="activity" data-qa="RNK-sub-activity">${ic('users',16)}활동 랭커</button></div>
   <div class="gkper" data-qa="RNK-per"><button class="chip${per==='all'?' act':''}" data-act="bigPer" data-arg="all">역대</button><button class="chip${per==='m11'?' act':''}" data-act="bigPer" data-arg="m11">이번 달</button><select class="rk-mon" data-ch="bigMon" aria-label="2026년 월별 선택"><option value="">2026년 월별</option>${[1,2,3,4,5,6,7,8,9,10,11].map(m=>`<option value="m${m}" ${per==='m'+m?'selected':''}>2026년 ${m}월</option>`).join('')}</select></div>
