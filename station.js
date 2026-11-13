@@ -1780,8 +1780,7 @@ sigView=function(){
   const u=S.ui,list=sigList();
   const cnt=p=>SG().filter(s=>s.amt>=p[1]&&s.amt<p[2]).length;
   return `<div data-qa="T-04"><div class="sigbn">아래 금액으로 후원하면 펀상사의 시그니처 리액션이 방송에 나와요</div>
-   <div class="sigtool"><div class="sigprice" role="group" aria-label="가격대">${PRICE.map(p=>`<button class="chip${u.sigPrice===p[0]?' act':''}" data-act="sigPrice" data-arg="${p[0]}">${p[0]}${p[0]==='전체'?'':' '+cnt(p)}</button>`).join('')}</div>
-   <label class="sigsort"><span class="sr">정렬</span><select class="rk-mon" data-ch="sigSort" aria-label="정렬">${SIGSORT.map(o=>`<option value="${o[0]}" ${u.sigSort===o[0]?'selected':''}>${o[1]}</option>`).join('')}</select></label></div>
+   <div class="sort-bar sigtool">${sortChip(SIGSORT,u.sigSort,'sigSortSet')}<div class="sort-bar__chips sigprice" role="group" aria-label="가격대">${PRICE.map(p=>`<button class="chip${u.sigPrice===p[0]?' act':''}" data-act="sigPrice" data-arg="${p[0]}">${p[0]}${p[0]==='전체'?'':' '+cnt(p)}</button>`).join('')}</div></div>
    <div class="fanl" style="margin:2px 0 12px">시그니처 ${list.length}개</div>
    ${list.length||canSt()?`<div class="sgrid4">${list.map(sigCard).join('')}${canSt()?`<button class="sgc add" data-act="sigAdd"><div class="sq">${ic('plus',28)}+ 시그니처 추가</div></button>`:''}</div>`:'<div class="empty">이 가격대의 시그니처가 없어요</div>'}</div>`;
 };
@@ -3459,15 +3458,19 @@ const FOLLOWERS=FANS.map(f=>{const h=String(f.n).split('').reduce((a,c)=>a+c.cha
 /* 팔로워 정렬 — 홈 · 영상 목록과 같은 정렬 칩(65771:60928) + 정렬 메뉴(65771:60849) + 구분선(65771:56827) + 필터 칩.
    styles.css 의 .sort · .chip-bar__divider 를 그대로 씀 */
 const FOL_SORT=[['rec','최근 즐겨찾기순'],['dur','즐겨찾기 오래된순']];
-function folSortBar(u,flt){
-  const cur=FOL_SORT.find(x=>x[0]===u.subSort)||FOL_SORT[0];
-  return `<div class="s-chips fol-bar"><div class="sort"><button class="sort__btn" type="button" aria-haspopup="menu" aria-expanded="false" data-act="folSortPop"><img src="assets/v2/sort-ascending.svg" width="16" height="16" alt=""><span>${cur[1]}</span></button>
-   <div class="sort__pop" role="menu" aria-label="정렬" hidden>${FOL_SORT.map(x=>`<button class="sort__item" type="button" role="menuitemradio" aria-checked="${x[0]===cur[0]}" data-act="ssort" data-arg="${x[0]}">${x[1]}</button>`).join('')}</div></div>
-   <span class="chip-bar__divider" aria-hidden="true"></span>${flt.map(t=>`<button class="chip${u.subTier===t?' act':''}" data-act="stier" data-arg="${t}">${t}</button>`).join('')}</div>`;
+function sortChip(items,curKey,act){
+  const cur=items.find(x=>x[0]===curKey)||items[0];
+  return `<div class="sort"><button class="sort__btn" type="button" aria-haspopup="menu" aria-expanded="false" data-act="sortPop"><img src="assets/v2/sort-ascending.svg" width="16" height="16" alt=""><span>${cur[1]}</span></button>
+   <div class="sort__pop" role="menu" aria-label="정렬" hidden>${items.map(x=>`<button class="sort__item" type="button" role="menuitemradio" aria-checked="${x[0]===cur[0]}" data-act="${act}" data-arg="${x[0]}">${x[1]}</button>`).join('')}</div></div>
+   <span class="chip-bar__divider" aria-hidden="true"></span>`;
 }
-A.folSortPop=el=>{const p=el.nextElementSibling;p.hidden=!p.hidden;el.setAttribute('aria-expanded',String(!p.hidden))};
-document.addEventListener('click',e=>{document.querySelectorAll('.stn .fol-bar .sort__pop:not([hidden])').forEach(p=>{if(!p.parentNode.contains(e.target)){p.hidden=true;p.previousElementSibling.setAttribute('aria-expanded','false')}})});
-document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;document.querySelectorAll('.stn .fol-bar .sort__pop:not([hidden])').forEach(p=>{p.hidden=true;p.previousElementSibling.setAttribute('aria-expanded','false');p.previousElementSibling.focus()})});
+function folSortBar(u,flt){
+  return `<div class="sort-bar">${sortChip(FOL_SORT,u.subSort,'ssort')}<div class="sort-bar__chips">${flt.map(t=>`<button class="chip${u.subTier===t?' act':''}" data-act="stier" data-arg="${t}">${t}</button>`).join('')}</div></div>`;
+}
+A.sortPop=el=>{const p=el.nextElementSibling;p.hidden=!p.hidden;el.setAttribute('aria-expanded',String(!p.hidden))};
+A.sigSortSet=(el,a)=>{S.ui.sigSort=a;renderView()};
+document.addEventListener('click',e=>{document.querySelectorAll('.stn .sort-bar .sort__pop:not([hidden])').forEach(p=>{if(!p.parentNode.contains(e.target)){p.hidden=true;p.previousElementSibling.setAttribute('aria-expanded','false')}})});
+document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;document.querySelectorAll('.stn .sort-bar .sort__pop:not([hidden])').forEach(p=>{p.hidden=true;p.previousElementSibling.setAttribute('aria-expanded','false');p.previousElementSibling.focus()})});
 subView=function(){
   const u=S.ui;let l=FOLLOWERS.slice();
   const flt=['전체','골드프라임','노블레스','금수저','흙수저'];

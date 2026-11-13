@@ -1997,18 +1997,35 @@ body.wire .stn .banner.def,body.wire .stn .rbi.def,body.wire .stn .mban.def .mb-
    공지 줄(.brow.notice)이 홈 공지 배너(.notice)의 위 20 · 아래 36 여백 · 둥근 모서리를 같이 받던 문제 —
    SOOP 방송국 게시판처럼 공지도 일반 글과 같은 높이 줄로 붙이고 "공지" 배지 · 옅은 바탕으로만 구분 */
 .stn .brow.notice{margin:0;width:auto;border-radius:0}
-/* 팔로워 정렬 — 홈 · 영상 목록의 정렬 칩 + 구분선 + 필터 칩 (styles.css .sort · .chip-bar__divider), 사이 8 */
-.stn .fol-bar{align-items:center;flex-wrap:wrap;gap:8px}
-.stn .fol-bar .sort__pop{min-width:max-content}
+/* 정렬 칩 줄 (팔로워 · 시그니처) — 홈 · 영상 목록의 정렬 칩 + 구분선 + 필터 칩 (styles.css .sort · .chip-bar__divider), 사이 8.
+   칩이 넘치면 모바일은 가로 스크롤, 정렬 메뉴는 스크롤 밖이라 잘리지 않음 */
+.stn .sort-bar{display:flex;align-items:flex-start;gap:8px;margin-bottom:14px}
+.stn .sort-bar .chip-bar__divider{margin-top:4px}
+.stn .sort-bar__chips{display:flex;flex-wrap:wrap;gap:8px;min-width:0}
+.stn .sort-bar .sort{position:relative;flex:none}
+.stn .sort-bar .sort__pop{position:absolute;top:32px;left:-12px;z-index:30}
+/* 시그니처 — 예전 선택 상자 자리 규칙(.sigtool 세로 배치 등)을 정렬 칩 줄로 덮음 */
+.stn .sort-bar.sigtool{flex-direction:row;align-items:flex-start;margin-bottom:6px}
+.stn .sort-bar .sigprice{flex:1}
+@media (max-width:767px){
+.stn .sort-bar,.stn .sort-bar.sigtool{align-items:center}
+.stn .sort-bar .chip-bar__divider{margin-top:0}
+.stn .sort-bar__chips{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding-bottom:0}
+.stn .sort-bar__chips::-webkit-scrollbar{display:none}
+.stn .sort-bar__chips .chip{flex:none}
+}
+.stn .sort-bar .sort__pop{min-width:max-content}
 /* .stn 초기화(.stn * · .stn button)가 styles.css 정렬 칩 값을 지우므로 같은 값을 방송국 범위로 다시 줌 */
-.stn .fol-bar .sort__btn{display:flex;align-items:center;gap:0;height:28px;padding:6px 12px 6px 10px;border-radius:24px;background:var(--color-brand-primary);font-size:12px;font-weight:700;line-height:16px;color:#fff;white-space:nowrap}
-.stn .fol-bar .chip-bar__divider{flex:none;width:1px;height:20px;background:var(--color-bg-cancel)}
-.stn .fol-bar .sort__pop{display:flex;flex-direction:column;align-items:flex-start;gap:8px;padding:14px 18px 18px;border:1px solid var(--lp-line);border-radius:19px;background:var(--lp-bg)}
-.stn .fol-bar .sort__pop[hidden]{display:none}
-.stn .fol-bar .sort__item{display:flex;align-items:center;height:24px;padding:0;font-size:16px;font-weight:600;line-height:1;letter-spacing:-0.01em;color:var(--lp-text);white-space:nowrap}
-.stn .fol-bar .sort__item:hover,.stn .fol-bar .sort__item[aria-checked="true"]{color:var(--color-brand-primary)}
+.stn .sort-bar .sort__btn{display:flex;align-items:center;gap:0;height:28px;padding:6px 12px 6px 10px;border-radius:24px;background:var(--color-brand-primary);font-size:12px;font-weight:700;line-height:16px;color:#fff;white-space:nowrap}
+.stn .sort-bar .chip-bar__divider{flex:none;width:1px;height:20px;background:var(--color-bg-cancel)}
+.stn .sort-bar .sort__pop{display:flex;flex-direction:column;align-items:flex-start;gap:8px;padding:14px 18px 18px;border:1px solid var(--lp-line);border-radius:19px;background:var(--lp-bg)}
+.stn .sort-bar .sort__pop[hidden]{display:none}
+.stn .sort-bar .sort__item{display:flex;align-items:center;height:24px;padding:0;font-size:16px;font-weight:600;line-height:1;letter-spacing:-0.01em;color:var(--lp-text);white-space:nowrap}
+.stn .sort-bar .sort__item:hover,.stn .sort-bar .sort__item[aria-checked="true"]{color:var(--color-brand-primary)}
 /* 모바일 공지 줄 — "공지" 배지를 제목 왼쪽 칸에 두어 일반 글과 높이 차이를 줄임 (SOOP 모바일처럼 배지 + 제목 한 줄) */
 @media (max-width:767px){
 .stn .brow.notice{grid-template-columns:auto minmax(0,1fr);column-gap:8px;align-items:start}
 .stn .brow.notice .c-num{padding-top:1px}
 }
+/* 모바일은 방송국 칩이 터치용 44 높이라 정렬 칩도 같은 높이로 (위 기본값보다 뒤에 둬야 함) */
+@media (max-width:767px){.stn .sort-bar .sort__btn{height:44px;padding:0 16px 0 14px}.stn .sort-bar .sort__pop{top:48px;left:0}}
