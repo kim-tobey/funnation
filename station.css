@@ -1940,7 +1940,8 @@ body.wire .stn .banner.def,body.wire .stn .rbi.def,body.wire .stn .mban.def .mb-
 .stn .gside hr{border-top:1px solid var(--line-soft);margin:8px 0}
 
 /* 시안 캡처 모드 (station.js capMode) */
-.is-cap .fab-auth{display:none!important}
+/* 플로팅 로그인/로그아웃(app.js 데모 토글) — 방송국에서는 숨김(2026-11-13). 요소는 남겨 둠: app.js 로그아웃이 #auth-btn 을 클릭해 상태를 바꿈 */
+.fab-auth{display:none!important}
 .is-cap-fix,.is-cap-fix body{height:900px;overflow:hidden}
 .is-cap-fix .stn .ov-back{position:absolute;height:900px}
 @media (max-width:767px){.is-cap-fix,.is-cap-fix body{height:812px}.is-cap-fix .stn .ov-back{height:812px}}
