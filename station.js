@@ -75,7 +75,7 @@ const icV=(n,s=20)=>`<svg class="ic" width="${s}" height="${s}" viewBox="0 0 24 
 const hue=n=>{let h=0;for(const c of String(n))h=(h*31+c.charCodeAt(0))%360;return h};
 const PROFILE='assets/v2/station/profile.jpg';
 /* 프로필 사진 — 이니셜 대신 작업 파일(assets)의 실제 프로필 이미지. 이름마다 겹치지 않게 차례로 배정(풀을 다 쓰면 다시 처음부터) */
-const AVPOOL=['assets/v2/creator/photo1.png','assets/home/avatar/vtuber-blue.png','assets/logout/avatar3.png','assets/watch/v3/avatar/chaeyoung.png','assets/home/avatar/bear.jpg','assets/v2/notice/avatar1.png','assets/v2/creator/photo4.png','assets/home/avatar/vtuber-green.png','assets/logout/avatar4.png','assets/watch/v3/avatar/joker.png','assets/home/avatar/chim.png','assets/v2/creator/photo2.png','assets/home/avatar/vtuber-purple.png','assets/logout/avatar5.png','assets/watch/v3/avatar/eurat.png','assets/logout/avatar1.png','assets/v2/notice/avatar2.png','assets/v2/creator/photo5.png','assets/home/avatar/pixel.png','assets/watch/v3/avatar/frokynn.png','assets/logout/avatar6.png','assets/home/avatar/vtuber-white.png','assets/watch/v3/avatar/trangam.png','assets/logout/avatar2.png','assets/watch/v3/avatar/ippeun.png','assets/v2/creator/photo3.png','assets/watch/v3/avatar/ym.png','assets/watch/v3/avatar/love.png','assets/watch/v4/avatar-ymss.jpg','assets/watch/v3/avatar/cheon.png','assets/fun-watch/v2/user-avatar.png','assets/watch/v3/avatar/nightbot.png'];
+const AVPOOL=['assets/v2/creator/photo1.png','assets/home/avatar/vtuber-blue.png','assets/logout/avatar3.png','assets/watch/v3/avatar/chaeyoung.png','assets/home/avatar/bear.jpg','assets/v2/notice/avatar1.png','assets/v2/creator/photo4.png','assets/home/avatar/vtuber-green.png','assets/logout/avatar4.png','assets/watch/v3/avatar/joker.png','assets/home/avatar/chim.png','assets/v2/creator/photo2.png','assets/home/avatar/vtuber-purple.png','assets/logout/avatar5.png','assets/watch/v3/avatar/eurat.png','assets/logout/avatar1.png','assets/v2/notice/avatar2.png','assets/v2/creator/photo5.png','assets/home/avatar/pixel.png','assets/watch/v3/avatar/frokynn.png','assets/logout/avatar6.png','assets/home/avatar/vtuber-white.png','assets/watch/v3/avatar/trangam.png','assets/logout/avatar2.png','assets/watch/v3/avatar/ippeun.png','assets/v2/creator/photo3.png','assets/watch/v3/avatar/ym.png','assets/watch/v3/avatar/love.png','assets/watch/v4/avatar-ymss.jpg','assets/watch/v3/avatar/nightbot.png'];
 const AVMAP=new Map();
 function avSrc(n){n=String(n);if(AVMAP.has(n))return AVMAP.get(n);const N=AVPOOL.length;let i=(hue(n)>>>0)%N;const used=new Set(AVMAP.values());if(AVMAP.size<N){while(used.has(AVPOOL[i]))i=(i+1)%N}const src=AVPOOL[i];AVMAP.set(n,src);return src}
 const av=(n,s=40)=>`<span class="av pf" style="width:${s}px;height:${s}px"><img src="${n==='\ud380\uc0c1\uc0ac'?PROFILE:avSrc(n)}" alt="" loading="lazy" decoding="async"></span>`;
@@ -1749,7 +1749,7 @@ function openCrewSched(){
 const SHORTS=[['칼퇴 5초 전 룰렛 대참사','0:58',46000,'2026.11.03'],['대표님 결재 도장 소리','0:32',38200,'2026.11.02'],['복사기 고장 난 대리의 표정','0:47',29100,'2026.10.31'],['직급전 1위 발표 순간','0:55',21400,'2026.10.29'],['탕비실 간식 쟁탈전','0:41',18700,'2026.10.27'],['신입사원 첫 출근 인사','0:36',15200,'2026.10.25'],['퇴근 도장 쾅','0:29',12900,'2026.10.23'],['야근 3시간 차 팀장 목소리','0:44',11200,'2026.10.20'],['인턴 정규직 전환 눈물','0:23',9800,'2026.10.17'],['회식 건배사 실패','0:58',8700,'2026.10.14'],['엑셀표 순위 역전 3초','0:19',7600,'2026.10.11'],['월요일 출근 리액션','0:51',6400,'2026.10.08']].map((a,i)=>({id:i,title:a[0],len:a[1],v:a[2],date:a[3]}));
 const vs=n=>n>=10000?(n/10000).toFixed(1)+'만':fmt(n);
 const shBg=i=>`linear-gradient(165deg,hsl(${(i*53+210)%360} 52% 36%),hsl(${(i*53+250)%360} 48% 14%))`;
-/* 쇼츠 썸네일 샘플 — SOOP Catch 세로 썸네일(9:16) 12장, assets/v2/station/shorts (2026-11-13, 시안용 샘플) */
+/* 쇼츠 썸네일 샘플 — SOOP Catch 세로 영상 썸네일(9:16, 단일 컷) 12장, assets/v2/station/shorts (2026-11-13, 시안용 샘플) */
 const shImg=i=>`assets/v2/station/shorts/short-${String(((i%12)+12)%12+1).padStart(2,'0')}.webp`;
 const shCard=s=>`<button class="shc" data-act="short" data-arg="${s.id}"><div class="sht" style="background:center/cover no-repeat url('${shImg(s.id)}'),${shBg(s.id)}"><span class="shbd">SHORTS</span><span class="shv">${ic('play',12)} ${vs(s.v)}</span><span class="shl">${s.len}</span></div><b>${esc(s.title)}</b><small>조회 ${vs(s.v)}회 · ${s.date.slice(5)}</small></button>`;
 function shortsView(){
@@ -3452,7 +3452,8 @@ CH.crewRank=function(el){const d=S.admin.draft&&S.admin.draft.v,m=d&&d.list&&d.l
 const TTK={black:'gp',dia:'nb',gold:'gs',dirt:'ds'};const FOLT=(()=>{const o={};FANS.forEach(f=>{o[f.n]=TTK[f.t]||'ds'});return o})();
 const TTL={ds:['흙수저','#663a00','#ffffff'],gs:['금수저','#ffa938','#361e00'],nb:['노블레스','#6541f2','#ffffff'],gp:['골드프라임','#ffa938','#361e00']};
 const STARI='<svg class="ttst" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2l2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 17l-6.1 3.4 1.5-6.8L2.2 9l6.9-.7z" fill="currentColor"/></svg>';
-const ttBadge=(n,force)=>{const k=FOLT[n]||(force?'ds':null);if(!k)return '';const t=TTL[k];return `<span class="ttl t-${k}" style="background:${t[1]};color:${t[2]}" data-qa="FOL-title">${k==='gp'?STARI:''}${t[0]}</span>`};
+/* 닉네임 옆 등급 — 글자 라벨(골드프라임 등) 대신 20단계 등급 아이콘(2026-11-13) */
+const ttBadge=(n,force)=>{if(!FOLT[n]&&!force)return '';const g=gradeOf(n);return `<img class="ttic" src="${GIMG}grade-${pad(g)}-s.webp" width="20" height="20" alt="${GRADEN[g]} 등급" title="${GRADEN[g]} 등급" data-qa="FOL-title">`};
 const rkBadge=n=>{const f=fanOf(n);return f&&f.rank<=20?`<span class="rkb" data-qa="FOL-ranker">랭커 ${f.rank}위</span>`:''};
 const FOLLOWERS=FANS.map(f=>{const h=String(f.n).split('').reduce((a,c)=>a+c.charCodeAt(0),0),d=1+h%27,y=+f.since.slice(0,4),m=+f.since.slice(5,7);let mo=(2026*12+11)-(y*12+m)-(5<d?1:0);return {n:f.n,mo:Math.max(1,mo),start:f.since+'.'+pad(d)}});
 subView=function(){
@@ -3463,7 +3464,7 @@ subView=function(){
   l=l.sort((a,b)=>u.subSort==='dur'?(a.start<b.start?-1:1):(a.start<b.start?1:-1));
   return `<div data-qa="L-02"><div class="vh"><h2>팔로워 ${fmt(S.favCount)}</h2><p>방송국을 즐겨찾기한 유저예요 · 최근 ${FOLLOWERS.length}명만 보여요</p></div>
    <div class="s-chips"><button class="chip${u.subSort==='dur'?' act':''}" data-act="ssort" data-arg="dur">즐겨찾기 오래된순</button><button class="chip${u.subSort==='rec'?' act':''}" data-act="ssort" data-arg="rec">최근 즐겨찾기순</button><span class="sepv"></span>${flt.map(t=>`<button class="chip${u.subTier===t?' act':''}" data-act="stier" data-arg="${t}">${t}</button>`).join('')}</div>
-   ${l.length?`<div class="sgrid">${l.map(s=>`<button class="sfan" data-act="fan" data-arg="${s.n}">${av(s.n,40)}<span><span class="nm">${esc(s.n)}${ttBadge(s.n)}${rkBadge(s.n)}</span><small>즐겨찾기 ${s.mo}개월 · ${s.start}</small></span></button>`).join('')}</div>`:'<div class="empty">해당하는 팔로워가 없어요</div>'}</div>`;
+   ${l.length?`<div class="sgrid">${l.map(s=>`<button class="sfan" data-act="fan" data-arg="${s.n}">${av(s.n,40)}<span><span class="nm">${ttBadge(s.n)}${esc(s.n)}${rkBadge(s.n)}</span><small>즐겨찾기 ${s.mo}개월 · ${s.start}</small></span></button>`).join('')}</div>`:'<div class="empty">해당하는 팔로워가 없어요</div>'}</div>`;
 };
 
 /* ---- R-13: 후원 창 시그니처 (가격대 필터 + 이미지형 카드) ---- */

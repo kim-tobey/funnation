@@ -1940,8 +1940,7 @@ body.wire .stn .banner.def,body.wire .stn .rbi.def,body.wire .stn .mban.def .mb-
 .stn .gside hr{border-top:1px solid var(--line-soft);margin:8px 0}
 
 /* 시안 캡처 모드 (station.js capMode) */
-/* 플로팅 로그인/로그아웃(app.js 데모 토글) — 방송국에서는 숨김(2026-11-13). 요소는 남겨 둠: app.js 로그아웃이 #auth-btn 을 클릭해 상태를 바꿈 */
-.fab-auth{display:none!important}
+.is-cap .fab-auth{display:none!important}
 .is-cap-fix,.is-cap-fix body{height:900px;overflow:hidden}
 .is-cap-fix .stn .ov-back{position:absolute;height:900px}
 @media (max-width:767px){.is-cap-fix,.is-cap-fix body{height:812px}.is-cap-fix .stn .ov-back{height:812px}}
@@ -1980,3 +1979,16 @@ body.wire .stn .banner.def,body.wire .stn .rbi.def,body.wire .stn .mban.def .mb-
 /* 관리 > 시그니처 썸네일도 배너 비율 720×390 */
 .stn .sgimgc{width:132px;height:auto;aspect-ratio:720/390;border-radius:8px;align-self:flex-start}
 @media (max-width:767px){.stn .sgimgc{width:96px}}
+
+/* 프로필 사진: 배경이 투명한 이미지도 동그라미가 보이도록 바탕색 유지 (Border 400) */
+.stn .av.pf{background:#31354f}
+/* 닉네임 옆 등급 아이콘 */
+.stn .ttic{width:20px;height:20px;margin-left:4px;vertical-align:middle;flex:none;object-fit:contain}
+
+/* 팔로워 이름 줄: 등급 아이콘 → 닉네임 → 랭커 태그 (2026-11-13) */
+.stn .sfan .nm{display:flex;align-items:center;flex-wrap:wrap;gap:5px}
+.stn .sfan .nm .ttic{margin-left:0}
+/* 랭커 태그 — design.md 16장 Tag: 높이 20 · 안쪽 2px 8px · radius 20 · 바탕 #31354F, 글자 Filter/Meta(Pretendard 12 Medium · 16) Text Normal */
+.stn .rkb{display:inline-flex;align-items:center;height:20px;padding:2px 8px;border-radius:20px;border:0;background:#31354f;color:#dfe5ed;font-size:12px;font-weight:500;line-height:16px;margin-left:0;white-space:nowrap;box-sizing:border-box}
+/* 로그인 · 회원가입 화면(#login · #signup, app.js)일 때는 방송국 본문을 숨겨 로그인 페이지로 보이게 — 본문 아래에 폼이 붙던 문제 (2026-11-13) */
+[data-view="login"] .stn-body,[data-view="signup"] .stn-body{display:none!important}
