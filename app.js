@@ -3164,3 +3164,70 @@ document.addEventListener("click", function (e) {
     location.href = "station.html";
   }, true);
 })();
+
+/* ============================================================
+   이벤트 (events.html · Figma 66606:178434) — 진행 중 / 종료 탭(#ongoing · #ended), 카드 목록, 빈 화면.
+   서버 연동 전 샘플: 진행 중 9개(시안 그대로) · 종료 0개(→ 빈 화면 66606:181952).
+   카드 · 자세히 보기는 상세 페이지 준비 전이라 "준비 중" 알림
+   ============================================================ */
+(function () {
+  var page = document.querySelector(".page--events");
+  if (!page) return;
+
+  var ONGOING = [
+    ["card-01", "12.01 ~ 12.25", "크리스마스 홀리데이 라이브", "따뜻한 연말 밤, 크리에이터와 함께 라이브를 즐겨보세요."],
+    ["card-02", "11.20 ~ 12.25", "크리스마스 트리 꾸미기", "후원 하트를 모아 우리만의 크리스마스 트리를 완성해보세요."],
+    ["card-03", "11.10 ~ 12.10", "나의 새로운 최애 찾기", "취향 맞춤 추천으로 새로운 크리에이터를 만나보세요."],
+    ["card-04", "12.05 ~ 12.31", "윈터 시티 라이브 페스타", "도심 대형 스크린에서 펼쳐지는 겨울 라이브 축제에 참여하세요."],
+    ["card-05", "11.25 ~ 12.20", "눈사람 노래자랑", "크리에이터의 무대에 투표하고 특별한 선물을 받아가세요."],
+    ["card-06", "11.02 ~ 12.25", "연말 선물상자 대잔치", "미션 완료하고 매일 열리는 선물상자 혜택을 받아보세요."],
+    ["card-07", "12.10 ~ 12.24", "산타 게이머 챌린지", "게임 크리에이터와 함께하는 크리스마스 챌린지에 도전하세요."],
+    ["card-08", "12.01 ~ 12.31", "겨울 출석체크 이벤트", "매일 출석하고 스탬프를 모아 따뜻한 보상을 받아가세요."],
+    ["card-09", "12.26 ~ 12.31", "카운트다운 라이브 페스티벌", "크리에이터들과 함께 2027년 새해를 맞이해보세요."]
+  ];
+  var ENDED = [];
+  var TABS = {
+    ongoing: { title: "진행 중인 이벤트", empty: "진행 중인 이벤트가 없습니다.", list: ONGOING, status: "진행중", hero: true },
+    ended: { title: "종료된 이벤트", empty: "종료된 이벤트가 없습니다.", list: ENDED, status: "종료", hero: false }
+  };
+
+  var hero = document.getElementById("event-hero");
+  var grid = document.getElementById("event-grid");
+  var empty = document.getElementById("event-empty");
+  var emptyText = document.getElementById("event-empty-text");
+  var title = document.getElementById("event-list-title");
+  var tabs = page.querySelectorAll("[data-event-tab]");
+
+  function esc(s) {
+    return String(s).replace(/[&<>"]/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
+    });
+  }
+
+  function render() {
+    var key = location.hash.replace("#", "");
+    if (!TABS[key]) key = "ongoing";
+    var t = TABS[key];
+    tabs.forEach(function (a) {
+      var on = a.getAttribute("data-event-tab") === key;
+      a.classList.toggle("subnav__tab--active", on);
+      if (on) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
+    });
+    title.textContent = t.title;
+    hero.hidden = !(t.hero && t.list.length);
+    grid.innerHTML = t.list.map(function (e) {
+      return '<a class="event-card" href="#" data-coming-soon>' +
+        '<span class="event-card__thumb"><img src="assets/v2/event/' + e[0] + '.webp" width="1792" height="768" alt="" loading="lazy"></span>' +
+        '<span class="event-card__body">' +
+          '<span class="event-card__meta"><span class="event-card__status">' + t.status + '</span><span class="event-card__date">' + esc(e[1]) + '</span></span>' +
+          '<span class="event-card__text"><strong class="event-card__title">' + esc(e[2]) + '</strong><span class="event-card__desc">' + esc(e[3]) + '</span></span>' +
+        '</span></a>';
+    }).join("");
+    grid.hidden = !t.list.length;
+    empty.hidden = !!t.list.length;
+    emptyText.textContent = t.empty;
+  }
+
+  window.addEventListener("hashchange", render);
+  render();
+})();

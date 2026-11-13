@@ -13302,3 +13302,296 @@ button.subnav__tab {
 
 /* 개인 방송국 진입 — 방송인 사진 · 이름은 누를 수 있음 (app.js 끝 "개인 방송국 진입") */
 .card__avatar, .card__channel, .winfo__name, .wbar__pic, .fav-card__avatar, .fav-card__channel { cursor: pointer; }
+
+/* ============================================================
+   이벤트 (events.html · Figma 66606:178434) — 추천 배너 · 진행 중 / 종료 탭 · 3열 카드 · 빈 화면.
+   시안은 PC(1920) 만 있음 — 폭은 공통 본문 규칙(최대 1480)을 따르고 카드 · 배너 그림은 비율로 줄어듦.
+   radius 는 design.md 7장 규칙: 배너 18 → 20 · CTA 9 → 8
+   ============================================================ */
+/* 2뎁스 메뉴 아래 32 · 아래 64 (66606:180186), 배너 → 목록 64 */
+.main__inner.events {
+  gap: 64px;
+  padding-top: 32px;
+  padding-bottom: 64px;
+}
+
+/* 추천 이벤트 (66606:180188) — 그림은 오른쪽 기준, 왼쪽 · 오른쪽 끝을 BG100 그라데이션으로 덮음.
+   배너 그림이라 테마와 무관하게 어두운 색 고정 */
+.event-hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 452px;
+  overflow: hidden;
+  border: 1px solid #262838;              /* Border 200 */
+  border-radius: 20px;
+  background: #0e0e14;                    /* BG 100 */
+  isolation: isolate;
+}
+/* 시안: 1734×1002 그림을 왼쪽 -131 · 위 -218 에 둠(1604 폭 기준) → 오른쪽 끝 맞춤 */
+.event-hero[hidden] { display: none; }
+.event-hero__img {
+  position: absolute;
+  top: -218px;
+  right: 0;
+  z-index: -2;
+  width: 1734px;
+  max-width: none;
+  height: 1002px;
+  object-fit: cover;
+}
+.event-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(90deg, #0e0e14 42.2%, rgba(14, 14, 20, 0.916) 46.4%, rgba(14, 14, 20, 0.847) 48.6%, rgba(14, 14, 20, 0.548) 52.3%, rgba(14, 14, 20, 0) 60%),
+    linear-gradient(270deg, #0e0e14 83px, rgba(14, 14, 20, 0.916) 157px, rgba(14, 14, 20, 0.847) 194px, rgba(14, 14, 20, 0.548) 260px, rgba(14, 14, 20, 0) 394px);
+}
+.event-hero__body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  max-width: 660px;
+  padding-left: 88px;
+}
+.event-hero__eyebrow,
+.event-hero__date {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #dfe5ed;
+}
+/* Display/D1 */
+.event-hero__title {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 0;
+  font-family: var(--font-hero);
+  font-size: 40px;
+  font-weight: 400;
+  line-height: 0.8;
+  letter-spacing: -0.01em;
+  color: #fff;
+}
+/* Display/D4 */
+.event-hero__desc {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 19px;
+  letter-spacing: -0.01em;
+  color: #dfe5ed;
+}
+/* 버튼 - 3XL (66606:180199) 220×52 · Bold 18 */
+.event-hero__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 220px;
+  height: 52px;
+  border-radius: 8px;
+  background: var(--btn-primary-bg);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 20px;
+  color: #fff;
+}
+.event-hero__cta:hover {
+  background: var(--btn-primary-bg-hover);
+}
+
+/* 이벤트 목록 (66606:180200) — 제목 → 카드 32, 카드 → 페이지 버튼 48 */
+.event-list {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+.event-list__head {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+/* Headline/H6 */
+.event-list__title {
+  margin: 0;
+  font-family: var(--font-score);
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: var(--color-text-strong);
+}
+/* Subtitle/S3 · Depth 500 */
+.event-list__desc {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.6;
+  letter-spacing: -0.01em;
+  color: #515e71;
+}
+/* 3열 · 사이 20 · 줄 36 */
+.event-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 36px 20px;
+}
+.event-grid[hidden] { display: none; }
+/* 이벤트 카드 (66533:109770) — 그림 521×244 비율 · radius 16 → 본문 22 */
+.event-card {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  min-width: 0;
+  color: inherit;
+}
+.event-card__thumb {
+  width: 100%;
+  aspect-ratio: 521.33 / 244;
+  overflow: hidden;
+  border-radius: 16px;
+  background: var(--color-bg-300);
+}
+.event-card__thumb img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.25s ease;
+}
+.event-card:hover .event-card__thumb img {
+  transform: scale(1.03);
+}
+.event-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.event-card__meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+/* 상태 칩 — BG Cancel 바탕 · Primary 글자 14 Regular */
+.event-card__status {
+  padding: 2px 8px;
+  border-radius: 20px;
+  background: var(--color-bg-cancel);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--color-brand-primary);
+}
+/* 기간 — Label/L1 (Bold 14 / 14) */
+.event-card__date {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 14px;
+  color: var(--color-brand-primary);
+}
+.event-card__text {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.event-card__title {
+  margin: 0;
+  font-family: var(--font-score);
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: var(--color-text-strong);
+}
+.event-card__desc {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--color-text-depth-300);
+}
+
+/* 빈 화면 (66606:182087) — 높이 606 · 달력 64 → 글자 11 */
+.event-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 11px;
+  height: 606px;
+  padding-top: 210px;
+}
+.event-empty[hidden] { display: none; }
+.event-empty img {
+  width: 64px;
+  height: 64px;
+}
+/* Subtitle/S2 · Depth 400 */
+.event-empty p {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: var(--color-text-depth-400);
+}
+/* 빈 화면은 목록 높이 안에 들어 있어 제목 → 빈 화면 28 (시안 75 - 47) */
+.event-list:has(.event-empty:not([hidden])) {
+  gap: 28px;
+}
+.event-list:has(.event-empty:not([hidden])) .events-pager {
+  margin-top: 20px;
+}
+
+/* 페이지 버튼 묶음 82 (66606:180218) — 위 48 에 더해 칸 가운데 정렬 */
+.events-pager {
+  height: 82px;
+  margin-top: 16px;
+  padding: 0 16px;
+}
+
+/* [구현 제안] 좁은 본문 — 시안 없음. 본문 폭 기준으로 배너 글자 · 카드 열 수를 줄임 */
+@container (max-width: 1000px) {
+  .event-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .event-hero__body { padding-left: 48px; }
+}
+/* [구현 제안] 모바일 시안 없음 — 배너는 그림 위에 글자를 아래로 모으고, 카드는 1열 */
+@media (max-width: 767px) {
+  .main__inner.events {
+    gap: 40px;
+    padding-top: 16px;
+    padding-bottom: 40px;
+  }
+  .event-hero {
+    align-items: flex-end;
+    height: 360px;
+    border-radius: 12px;
+  }
+  /* 캐릭터가 있는 오른쪽 끝을 맞춤 (그림 왼쪽엔 원본 배너 글자, 위쪽엔 로고가 있어 PC 처럼 위를 잘라냄) */
+  .event-hero__img {
+    top: -40%;
+    right: -12%;
+    width: auto;
+    height: 165%;
+  }
+  .event-hero::before {
+    background: linear-gradient(0deg, #0e0e14 30%, rgba(14, 14, 20, 0.6) 60%, rgba(14, 14, 20, 0) 85%);
+  }
+  .event-hero__body {
+    gap: 12px;
+    padding: 0 20px 24px;
+  }
+  .event-hero__eyebrow,
+  .event-hero__date { font-size: 12px; }
+  /* 두 줄이 다시 줄바꿈될 수 있어 행간 0.8 대신 1.2 */
+  .event-hero__title { gap: 6px; font-size: 26px; line-height: 1.2; }
+  .event-hero__desc { font-size: 14px; line-height: 17px; }
+  .event-hero__cta { width: auto; height: 44px; padding: 0 20px; font-size: 15px; }
+  .event-grid { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  .event-card { gap: 14px; }
+  .event-card__body { gap: 12px; }
+  .event-card__title { font-size: 17px; }
+  .event-empty { height: 320px; padding-top: 110px; }
+  .events-pager { height: 60px; margin-top: 0; }
+}
