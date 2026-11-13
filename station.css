@@ -1107,7 +1107,7 @@ body.admm .stn #toasts{bottom:76px}
 }
 /* ===== 쇼츠 슬라이드 ===== */
 .stn .shs{position:relative;container:shs/inline-size}
-.stn .shvp{overflow:hidden;touch-action:pan-y}
+.stn .shvp{overflow:hidden;touch-action:pan-y;padding:2px 2px 0;margin:-2px -2px 0}/* hover 링(2px, accent-glow)이 잘리지 않게 — 여유만큼 바깥 여백을 빼 위치는 그대로 */
 .stn .shtrack{--g:12px;--n:2;--i:0;display:flex;gap:var(--g);transform:translateX(calc(var(--i)*(100% + var(--g))/var(--n)*-1));transition:transform .4s cubic-bezier(.3,.7,.2,1)}
 .stn .shtrack .shc{flex:0 0 calc((100% - (var(--n) - 1)*var(--g))/var(--n));min-width:0}
 .stn .shtrack .sht{font-size:30px}
@@ -1967,3 +1967,15 @@ body.wire .stn .banner.def,body.wire .stn .rbi.def,body.wire .stn .mban.def .mb-
 /* 등급 이름 배지 (20단계) — 바탕 BG Cancel · 글자 Normal, 등급 아이콘 16 */
 .stn .tb.tg{display:inline-flex;align-items:center;gap:4px;height:20px;padding:0 8px 0 4px;border-radius:20px;background:var(--surface-2);color:var(--text);font-size:12px;font-weight:500;line-height:16px;white-space:nowrap}
 .stn .tb.tg img{flex:none;width:16px;height:16px}
+
+/* 2026-11-13 — 쇼츠 카드: 영상 썸네일 위 글자 가독성(아래 그라데이션) */
+.stn .sht::after{content:'';position:absolute;inset:auto 0 0 0;height:40%;background:linear-gradient(transparent,rgba(0,0,0,.6));pointer-events:none}
+.stn .sht .shbd,.stn .sht .shv,.stn .sht .shl{z-index:1}
+/* 시그니처: 실서비스 배너 비율 720×390 그대로 (정사각 크롭 X) */
+.stn .sgc .sq{aspect-ratio:720/390;border-radius:8px}
+/* 시그니처 카드 금액: 배너 글자를 가리지 않게 왼쪽 아래 작은 어두운 배지 (실서비스 시그니처 목록과 같은 자리 감각) — 후원 금액 버튼(.amt) 기본 스타일 상속 끊음 */
+.stn .sgc .sq .amt{top:auto;bottom:8px;left:8px;height:auto;min-height:0;border:0;border-radius:4px;background:rgba(0,0,0,.65);font-size:12px;font-weight:700;line-height:20px;padding:0 6px;text-align:left}
+.stn .sgc .sq .hot{line-height:18px;font-size:11px}
+/* 관리 > 시그니처 썸네일도 배너 비율 720×390 */
+.stn .sgimgc{width:132px;height:auto;aspect-ratio:720/390;border-radius:8px;align-self:flex-start}
+@media (max-width:767px){.stn .sgimgc{width:96px}}
