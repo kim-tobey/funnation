@@ -2029,3 +2029,7 @@ body.wire .stn .banner.def,body.wire .stn .rbi.def,body.wire .stn .mban.def .mb-
 }
 /* 모바일은 방송국 칩이 터치용 44 높이라 정렬 칩도 같은 높이로 (위 기본값보다 뒤에 둬야 함) */
 @media (max-width:767px){.stn .sort-bar .sort__btn{height:44px;padding:0 16px 0 14px}.stn .sort-bar .sort__pop{top:48px;left:0}}
+/* 게시판 검색은 오른쪽 끝 (2026-11-13) — 탭(전체 · 인기글) 왼쪽, 검색 오른쪽. 모바일은 한 줄 전체 */
+.stn .bbar{justify-content:space-between}
+.stn .bbar .fsearch{flex:0 1 320px;margin-left:auto}
+@media (max-width:767px){.stn .bbar .fsearch{flex:1 1 100%;max-width:none}}
