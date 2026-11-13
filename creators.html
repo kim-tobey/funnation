@@ -394,7 +394,7 @@
               <button type="button">최신순</button>
             </div>
             <!-- 검색바 2 (65393:41253) -->
-            <form class="creators-search" role="search" onsubmit="return false">
+            <form class="creators-search" role="search" id="creators-search" onsubmit="return false">
               <input type="search" name="q" placeholder="크리에이터 검색" aria-label="크리에이터 검색" autocomplete="off">
               <button type="submit" aria-label="검색"><img src="assets/v2/creator/search.svg" width="16" height="16" alt=""></button>
             </form>
@@ -756,6 +756,12 @@
                 </ul>
               </div>
             </article>
+        </div>
+
+        <!-- 검색 결과 없음 (66606:182395) — 검색어와 이름이 맞는 카드가 없을 때 (app.js 크리에이터 검색) -->
+        <div class="creators-empty" id="creators-empty" data-node-id="66606:182395" hidden>
+          <img src="assets/v2/creator/search-empty.svg" width="64" height="64" alt="">
+          <p>검색결과가 없습니다.</p>
         </div>
 
         <!-- 페이지 버튼 (65450:32185) — 지갑과 같은 컴포넌트. 페이지 이동은 서버 연동 전 -->

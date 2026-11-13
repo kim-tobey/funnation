@@ -7297,11 +7297,28 @@ ul {
   text-decoration: underline;
 }
 /* 건수 (65468:109152) — 37px 줄 오른쪽, Label/C3 */
+/* 페이지 버튼 줄 (65571:45277) — 82px, 가운데 40px 줄에 페이지 버튼 · 오른쪽 끝 건수. 아래 56 → 이용 안내 28 */
+.wallet-pager {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 82px;
+  margin-bottom: 84px;
+}
+.wallet-pager .pager {
+  height: 40px;
+  padding: 0 16px;
+}
 .wallet-count {
+  position: absolute;
+  top: 22px;
+  right: 0;
   display: flex;
   align-items: center;
   justify-content: flex-end;
   height: 37px;
+  margin: 0;
   font-size: 12px;
   line-height: 1.6;
   letter-spacing: -0.01em;
@@ -13594,4 +13611,207 @@ button.subnav__tab {
   .event-card__title { font-size: 17px; }
   .event-empty { height: 320px; padding-top: 110px; }
   .events-pager { height: 60px; margin-top: 0; }
+}
+
+/* ------------------------------------------------------------
+   지갑 — 빈 줄 · 내역 없음 · 펀캐시 이용 안내 (2026-11 시안 65571:45287 · 65571:45179)
+   ------------------------------------------------------------ */
+/* 1건 등 7줄보다 적으면 나머지는 선만 있는 빈 줄 */
+.wallet-table tr.wallet-table__blank td {
+  height: 72px;
+}
+/* 내역 없음 — 머리글 아래 504 영역 가운데, Subtitle/S1 Bold 16 · Depth 500 */
+.wallet-table tr.wallet-table__empty td {
+  height: 504px;
+  border-bottom: 0;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 20px;
+  color: var(--wl-muted);
+}
+/* 펀캐시 이용 안내 (65571:45283) — 왼쪽 11 들여 · 제목 → 목록 4 · Body/B4 12 / 1.5 */
+.wallet-guide {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0 7px 0 11px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.wallet-guide__title {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--color-text-normal);
+}
+.wallet-guide__list {
+  margin: 0;
+  padding-left: 18px;
+  list-style: disc;
+  color: var(--color-text-depth-400);
+}
+.wallet-guide__list a {
+  color: inherit;
+  text-decoration: underline;
+}
+@media (max-width: 767px) {
+  .wallet-pager { height: auto; flex-direction: column; gap: 8px; margin-bottom: 40px; padding-top: 24px; }
+  .wallet-count { position: static; height: auto; }
+  .wallet-table tr.wallet-table__empty td { height: 240px; }
+  .wallet-guide { padding: 0; }
+}
+
+/* 크리에이터 찾기 — 검색 결과 없음 (66606:182395). 높이 606 · 돋보기 64(위 186) → 11 → Subtitle/S2 Depth 400 */
+.creators-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 11px;
+  height: 606px;
+  padding-top: 186px;
+}
+.creators-empty[hidden],
+.creator-card[hidden],
+.creator-grid[hidden] { display: none; }
+.creators-empty img {
+  width: 64px;
+  height: 64px;
+}
+.creators-empty p {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: var(--color-text-depth-400);
+}
+@media (max-width: 767px) {
+  .creators-empty { height: 320px; padding-top: 96px; }
+}
+
+
+/* ============================================================
+   404 (404.html · Figma 66606:181678) — 시안은 PC(1920) 만 있음.
+   본문 위에서 227 아래 큰 404(557×223) · 그 위에 "404 Page not" + FUN 로고 · 40 아래 안내 313 폭 → 31 → 버튼 146×50.
+   안내 묶음이 본문 가운데이고 큰 404 는 19.5 왼쪽으로 치우침(시안 그대로)
+   ============================================================ */
+.main__inner.not-found {
+  align-items: center;
+  padding-top: 227px;
+  padding-bottom: 160px;
+}
+.not-found__box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 40px;
+  width: 557px;
+  transform: translateX(-19.5px);
+}
+.not-found__art {
+  position: relative;
+  width: 557px;
+  height: 224px;
+}
+.not-found__digits {
+  display: block;
+  width: 557px;
+  height: 223px;
+}
+.not-found__brand {
+  margin: 0;
+}
+/* "404 Page not" — Sandoll Mapssi 25 / 1.6 · 흰색 (시안 글자 틀 670.97, 가운데 430.28) */
+.not-found__brand span {
+  position: absolute;
+  top: 183px;
+  left: 139px;
+  width: 186px;
+  font-family: var(--font-hero);
+  font-size: 25px;
+  line-height: 40px;
+  letter-spacing: -0.01em;
+  text-align: center;
+  white-space: nowrap;
+  color: #fff;
+}
+/* 로고 틀 117.8×49.6 (867.49, 401) 안쪽 여백 1.67% · 0.46% · 2.9% · 1.64% */
+.not-found__brand img {
+  position: absolute;
+  top: 175px;
+  left: 337px;
+  width: 115px;
+  height: 47px;
+}
+.not-found__body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 31px;
+  width: 313px;
+  margin-left: 141px;
+  text-align: center;
+}
+/* Headline/H1 */
+.not-found__title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 28px;
+  color: var(--color-text-normal);
+  white-space: nowrap;
+}
+/* Body/B1 · Depth 300 — 제목 → 12 */
+.not-found__desc {
+  margin: -19px 0 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--color-text-depth-300);
+  white-space: nowrap;
+}
+/* 버튼 - XXL — BG Cancel · radius 10 · Medium 16 */
+.not-found__home {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 146px;
+  height: 50px;
+  border-radius: 10px;
+  background: var(--color-bg-cancel);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: var(--color-text-normal);
+}
+.not-found__home:hover {
+  background: var(--color-border-400);
+}
+/* 라이트 테마 — 큰 404 · 로고 글자는 흰색이라 어둡게 (라이트 시안 없음) */
+[data-theme="light"] .not-found__brand span { color: #202938; }
+[data-theme="light"] .not-found__brand img { filter: invert(1) brightness(0.3); }
+/* [구현 제안] 모바일 시안 없음 — 그림을 0.6 배로 줄이고 가운데 정렬 */
+@media (max-width: 767px) {
+  .main__inner.not-found {
+    padding-top: 72px;
+    padding-bottom: 96px;
+  }
+  .not-found__box {
+    align-items: center;
+    gap: 24px;
+    width: 100%;
+    transform: none;
+  }
+  .not-found__art {
+    flex: none;
+    margin: -45px 0;
+    transform: scale(0.6);
+  }
+  .not-found__body {
+    width: 100%;
+    margin-left: 0;
+  }
+  .not-found__title { font-size: 19px; }
+  .not-found__desc { white-space: normal; word-break: keep-all; }
 }

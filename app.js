@@ -3231,3 +3231,90 @@ document.addEventListener("click", function (e) {
   window.addEventListener("hashchange", render);
   render();
 })();
+
+/* ============================================================
+   지갑 충전내역 — 건수에 따른 표 상태 (2026-11 시안).
+   7줄보다 적으면 빈 줄(선만)로 채우고(65571:45287), 0건이면 "내역이 없습니다."(65571:45179) · 페이지 1 · "0건".
+   서버 연동 전이라 미리보기용: wallet.html#one(1건) · #empty(0건). 그 외는 샘플 7줄 그대로
+   ============================================================ */
+(function () {
+  var page = document.querySelector(".page--wallet");
+  if (!page) return;
+  var tbody = page.querySelector(".wallet-table tbody");
+  var count = page.querySelector(".wallet-count");
+  var pager = page.querySelector(".wallet-pager .pager");
+  if (!tbody || !count || !pager) return;
+  var ROWS = 7;
+  var original = Array.prototype.slice.call(tbody.rows);
+  var pagerHTML = pager.innerHTML;
+  var countText = count.textContent;
+
+  function blankRow() {
+    var tr = document.createElement("tr");
+    tr.className = "wallet-table__blank";
+    tr.setAttribute("aria-hidden", "true");
+    for (var i = 0; i < 8; i++) tr.appendChild(document.createElement("td"));
+    return tr;
+  }
+
+  function onePage() {
+    pager.innerHTML = pagerHTML;
+    pager.querySelectorAll(".pager__num").forEach(function (b, i) { if (i) b.remove(); });
+    pager.querySelectorAll(".pager__arrow").forEach(function (b) { b.disabled = true; });
+  }
+
+  function render() {
+    var mode = location.hash.replace("#", "");
+    var rows = mode === "empty" ? [] : mode === "one" ? original.slice(0, 1) : original;
+    tbody.innerHTML = "";
+    if (!rows.length) {
+      tbody.innerHTML = '<tr class="wallet-table__empty"><td colspan="8">내역이 없습니다.</td></tr>';
+      count.textContent = "0건";
+      onePage();
+      return;
+    }
+    rows.forEach(function (r) { tbody.appendChild(r); });
+    for (var i = rows.length; i < ROWS; i++) tbody.appendChild(blankRow());
+    if (rows.length === original.length) {
+      count.textContent = countText;
+      pager.innerHTML = pagerHTML;
+    } else {
+      count.textContent = rows.length + "건";
+      onePage();
+    }
+  }
+
+  window.addEventListener("hashchange", function () {
+    if (/^#(one|empty)?$/.test(location.hash)) render();
+  });
+  render();
+})();
+
+/* ============================================================
+   크리에이터 찾기 — 검색 (creators.html). 서버 연동 전이라 화면의 카드 이름으로 거름.
+   맞는 카드가 없으면 "검색결과가 없습니다." (66606:182395). 검색어를 지우면 전체로 돌아감
+   ============================================================ */
+(function () {
+  var form = document.getElementById("creators-search");
+  var empty = document.getElementById("creators-empty");
+  var grid = document.querySelector(".creator-grid");
+  if (!form || !empty || !grid) return;
+  var input = form.querySelector("input");
+  var cards = Array.prototype.slice.call(grid.querySelectorAll(".creator-card"));
+
+  function run() {
+    var q = input.value.trim().toLowerCase().replace(/\s+/g, "");
+    var shown = 0;
+    cards.forEach(function (c) {
+      var name = (c.querySelector(".creator-card__name") || {}).textContent || "";
+      var hit = !q || name.toLowerCase().replace(/\s+/g, "").indexOf(q) > -1;
+      c.hidden = !hit;
+      if (hit) shown++;
+    });
+    grid.hidden = !shown;
+    empty.hidden = !!shown;
+  }
+  form.addEventListener("submit", function (e) { e.preventDefault(); run(); });
+  /* 지우기(×) · 빈 값이면 바로 전체 복귀 */
+  input.addEventListener("input", function () { if (!input.value.trim()) run(); });
+})();

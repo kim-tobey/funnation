@@ -411,7 +411,8 @@
             </div>
           </div>
 
-          <!-- 충전내역 표 (65468:108998) — 8열 -->
+          <!-- 충전내역 표 (65468:108998) — 8열. 본문은 늘 7줄 높이(504): 1건이면 나머지는 선만 있는 빈 줄 (65571:45287),
+               0건이면 "내역이 없습니다." (65571:45179). 미리보기는 wallet.html#one · #empty (app.js 지갑 블록) -->
           <div class="wallet-table-wrap">
             <table class="wallet-table">
               <colgroup>
@@ -504,20 +505,38 @@
               </tbody>
             </table>
           </div>
-          <p class="wallet-count">132건 중 1–20건</p>
+          <!-- 페이지 버튼 줄 (65571:45277) — 82px 가운데 페이지 버튼, 오른쪽 끝에 건수 (2026-11 시안: 건수가 표 아래 줄 → 이 줄로 이동).
+               1페이지라 처음 · 이전은 비활성. 페이지 이동은 서버 연동 전 -->
+          <div class="wallet-pager">
+            <nav class="pager" aria-label="페이지">
+              <button class="pager__arrow pager__arrow--back" type="button" aria-label="처음 페이지" disabled><img src="assets/v2/wallet/page-first.svg" width="28" height="28" alt=""></button>
+              <button class="pager__arrow pager__arrow--back" type="button" aria-label="이전 페이지" disabled><img src="assets/v2/wallet/page-prev.svg" width="28" height="28" alt=""></button>
+              <button class="pager__num is-active" type="button" aria-current="page">1</button>
+              <button class="pager__num" type="button">2</button>
+              <button class="pager__num" type="button">3</button>
+              <button class="pager__num" type="button">4</button>
+              <button class="pager__num" type="button">5</button>
+              <button class="pager__arrow" type="button" aria-label="다음 페이지"><img src="assets/v2/wallet/page-next.svg" width="28" height="28" alt=""></button>
+              <button class="pager__arrow" type="button" aria-label="마지막 페이지"><img src="assets/v2/wallet/page-last.svg" width="28" height="28" alt=""></button>
+            </nav>
+            <p class="wallet-count">132건 중 1–20건</p>
+          </div>
 
-          <!-- 페이지 버튼 (65468:109155) — 1페이지라 처음 · 이전은 비활성. 페이지 이동은 서버 연동 전 -->
-          <nav class="pager" aria-label="페이지">
-            <button class="pager__arrow pager__arrow--back" type="button" aria-label="처음 페이지" disabled><img src="assets/v2/wallet/page-first.svg" width="28" height="28" alt=""></button>
-            <button class="pager__arrow pager__arrow--back" type="button" aria-label="이전 페이지" disabled><img src="assets/v2/wallet/page-prev.svg" width="28" height="28" alt=""></button>
-            <button class="pager__num is-active" type="button" aria-current="page">1</button>
-            <button class="pager__num" type="button">2</button>
-            <button class="pager__num" type="button">3</button>
-            <button class="pager__num" type="button">4</button>
-            <button class="pager__num" type="button">5</button>
-            <button class="pager__arrow" type="button" aria-label="다음 페이지"><img src="assets/v2/wallet/page-next.svg" width="28" height="28" alt=""></button>
-            <button class="pager__arrow" type="button" aria-label="마지막 페이지"><img src="assets/v2/wallet/page-last.svg" width="28" height="28" alt=""></button>
-          </nav>
+          <!-- 펀캐시 이용 안내 (65571:45282) — Body/B4 12, 제목 Normal · 항목 Depth 400. 시안 틀은 105px 로 잘려 있으나 문구 전체를 보여줌 -->
+          <div class="wallet-guide" data-node-id="65571:45283">
+            <h3 class="wallet-guide__title">펀캐시 이용 안내</h3>
+            <ul class="wallet-guide__list">
+              <li>방송 후원은 이용자가 실시간 방송 서비스에서 회사가 제공하는 기능을 통해 스트리머에게 후원금을 전달하는 기능입니다.</li>
+              <li>방송 후원은 이용자의 자발적인 의사에 따라 즉시 효력이 발생하는 유료 서비스로서, 청약철회 또는 환불의 대상이 되지 않습니다. 단, 법정대리인이 동의하지 않은 방송 후원은 미성년자 본인 또는 법정대리인이 계약을 취소할 수 있습니다.</li>
+              <li>방송 후원은 이용자가 스트리머에게 비대가성으로 후원금을 지급하는 것으로, 후원 과정에서 어떠한 강제성이나 의무가 발생하지 않습니다.</li>
+              <li>방송 후원의 사용 과정이나 결과에 대한 책임은 오직 이용자와 스트리머에게 있습니다. 회사는 이에 대해 관여하지 않으며, 관련 법령에 따른 책임이 인정되는 경우를 제외하고는 어떠한 의무도 부담하지 않습니다.</li>
+              <li>회사는 방송 후원의 종류, 사용 방식, 운영 정책 등을 운영상 필요에 따라 변경할 수 있으며, 이를 이용자가 확인할 수 있게 게시합니다.</li>
+              <li>펀캐시는 충전 내역 단위로 결제일로부터 7일 이내에 환불할 수 있습니다. 단, 충전한 캐시 중 일부를 사용한 경우 환불할 수 없습니다.</li>
+              <li>구매한 펀캐시의 유효기간은 구매일로부터 5년이며, 유효기간이 지나면 소멸되어 환불이 불가능합니다.</li>
+              <li>펀캐시 구매 시 10%의 부가가치세가 부과됩니다.</li>
+              <li>결제 및 환불(청약철회)에 관한 내용은 <a href="https://www.funnation.co.kr/terms/paid-service" target="_blank" rel="noopener">이용약관</a>에서 자세하게 확인할 수 있습니다.</li>
+            </ul>
+          </div>
         </section>
 
       </div>
