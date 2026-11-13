@@ -1992,3 +1992,23 @@ body.wire .stn .banner.def,body.wire .stn .rbi.def,body.wire .stn .mban.def .mb-
 .stn .rkb{display:inline-flex;align-items:center;height:20px;padding:2px 8px;border-radius:20px;border:0;background:#31354f;color:#dfe5ed;font-size:12px;font-weight:500;line-height:16px;margin-left:0;white-space:nowrap;box-sizing:border-box}
 /* 로그인 · 회원가입 화면(#login · #signup, app.js)일 때는 방송국 본문을 숨겨 로그인 페이지로 보이게 — 본문 아래에 폼이 붙던 문제 (2026-11-13) */
 [data-view="login"] .stn-body,[data-view="signup"] .stn-body{display:none!important}
+
+/* ---- 2026-11-13: 게시판 공지 줄 · 팔로워 정렬 칩 ----
+   공지 줄(.brow.notice)이 홈 공지 배너(.notice)의 위 20 · 아래 36 여백 · 둥근 모서리를 같이 받던 문제 —
+   SOOP 방송국 게시판처럼 공지도 일반 글과 같은 높이 줄로 붙이고 "공지" 배지 · 옅은 바탕으로만 구분 */
+.stn .brow.notice{margin:0;width:auto;border-radius:0}
+/* 팔로워 정렬 — 홈 · 영상 목록의 정렬 칩 + 구분선 + 필터 칩 (styles.css .sort · .chip-bar__divider), 사이 8 */
+.stn .fol-bar{align-items:center;flex-wrap:wrap;gap:8px}
+.stn .fol-bar .sort__pop{min-width:max-content}
+/* .stn 초기화(.stn * · .stn button)가 styles.css 정렬 칩 값을 지우므로 같은 값을 방송국 범위로 다시 줌 */
+.stn .fol-bar .sort__btn{display:flex;align-items:center;gap:0;height:28px;padding:6px 12px 6px 10px;border-radius:24px;background:var(--color-brand-primary);font-size:12px;font-weight:700;line-height:16px;color:#fff;white-space:nowrap}
+.stn .fol-bar .chip-bar__divider{flex:none;width:1px;height:20px;background:var(--color-bg-cancel)}
+.stn .fol-bar .sort__pop{display:flex;flex-direction:column;align-items:flex-start;gap:8px;padding:14px 18px 18px;border:1px solid var(--lp-line);border-radius:19px;background:var(--lp-bg)}
+.stn .fol-bar .sort__pop[hidden]{display:none}
+.stn .fol-bar .sort__item{display:flex;align-items:center;height:24px;padding:0;font-size:16px;font-weight:600;line-height:1;letter-spacing:-0.01em;color:var(--lp-text);white-space:nowrap}
+.stn .fol-bar .sort__item:hover,.stn .fol-bar .sort__item[aria-checked="true"]{color:var(--color-brand-primary)}
+/* 모바일 공지 줄 — "공지" 배지를 제목 왼쪽 칸에 두어 일반 글과 높이 차이를 줄임 (SOOP 모바일처럼 배지 + 제목 한 줄) */
+@media (max-width:767px){
+.stn .brow.notice{grid-template-columns:auto minmax(0,1fr);column-gap:8px;align-items:start}
+.stn .brow.notice .c-num{padding-top:1px}
+}

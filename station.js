@@ -3456,6 +3456,18 @@ const STARI='<svg class="ttst" viewBox="0 0 24 24" aria-hidden="true" focusable=
 const ttBadge=(n,force)=>{if(!FOLT[n]&&!force)return '';const g=gradeOf(n);return `<img class="ttic" src="${GIMG}grade-${pad(g)}-s.webp" width="20" height="20" alt="${GRADEN[g]} 등급" title="${GRADEN[g]} 등급" data-qa="FOL-title">`};
 const rkBadge=n=>{const f=fanOf(n);return f&&f.rank<=20?`<span class="rkb" data-qa="FOL-ranker">랭커 ${f.rank}위</span>`:''};
 const FOLLOWERS=FANS.map(f=>{const h=String(f.n).split('').reduce((a,c)=>a+c.charCodeAt(0),0),d=1+h%27,y=+f.since.slice(0,4),m=+f.since.slice(5,7);let mo=(2026*12+11)-(y*12+m)-(5<d?1:0);return {n:f.n,mo:Math.max(1,mo),start:f.since+'.'+pad(d)}});
+/* 팔로워 정렬 — 홈 · 영상 목록과 같은 정렬 칩(65771:60928) + 정렬 메뉴(65771:60849) + 구분선(65771:56827) + 필터 칩.
+   styles.css 의 .sort · .chip-bar__divider 를 그대로 씀 */
+const FOL_SORT=[['rec','최근 즐겨찾기순'],['dur','즐겨찾기 오래된순']];
+function folSortBar(u,flt){
+  const cur=FOL_SORT.find(x=>x[0]===u.subSort)||FOL_SORT[0];
+  return `<div class="s-chips fol-bar"><div class="sort"><button class="sort__btn" type="button" aria-haspopup="menu" aria-expanded="false" data-act="folSortPop"><img src="assets/v2/sort-ascending.svg" width="16" height="16" alt=""><span>${cur[1]}</span></button>
+   <div class="sort__pop" role="menu" aria-label="정렬" hidden>${FOL_SORT.map(x=>`<button class="sort__item" type="button" role="menuitemradio" aria-checked="${x[0]===cur[0]}" data-act="ssort" data-arg="${x[0]}">${x[1]}</button>`).join('')}</div></div>
+   <span class="chip-bar__divider" aria-hidden="true"></span>${flt.map(t=>`<button class="chip${u.subTier===t?' act':''}" data-act="stier" data-arg="${t}">${t}</button>`).join('')}</div>`;
+}
+A.folSortPop=el=>{const p=el.nextElementSibling;p.hidden=!p.hidden;el.setAttribute('aria-expanded',String(!p.hidden))};
+document.addEventListener('click',e=>{document.querySelectorAll('.stn .fol-bar .sort__pop:not([hidden])').forEach(p=>{if(!p.parentNode.contains(e.target)){p.hidden=true;p.previousElementSibling.setAttribute('aria-expanded','false')}})});
+document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;document.querySelectorAll('.stn .fol-bar .sort__pop:not([hidden])').forEach(p=>{p.hidden=true;p.previousElementSibling.setAttribute('aria-expanded','false');p.previousElementSibling.focus()})});
 subView=function(){
   const u=S.ui;let l=FOLLOWERS.slice();
   const flt=['전체','골드프라임','노블레스','금수저','흙수저'];
@@ -3463,7 +3475,7 @@ subView=function(){
   if(u.subTier!=='전체')l=l.filter(s=>TTL[FOLT[s.n]][0]===u.subTier);
   l=l.sort((a,b)=>u.subSort==='dur'?(a.start<b.start?-1:1):(a.start<b.start?1:-1));
   return `<div data-qa="L-02"><div class="vh"><h2>팔로워 ${fmt(S.favCount)}</h2><p>방송국을 즐겨찾기한 유저예요 · 최근 ${FOLLOWERS.length}명만 보여요</p></div>
-   <div class="s-chips"><button class="chip${u.subSort==='dur'?' act':''}" data-act="ssort" data-arg="dur">즐겨찾기 오래된순</button><button class="chip${u.subSort==='rec'?' act':''}" data-act="ssort" data-arg="rec">최근 즐겨찾기순</button><span class="sepv"></span>${flt.map(t=>`<button class="chip${u.subTier===t?' act':''}" data-act="stier" data-arg="${t}">${t}</button>`).join('')}</div>
+   ${folSortBar(u,flt)}
    ${l.length?`<div class="sgrid">${l.map(s=>`<button class="sfan" data-act="fan" data-arg="${s.n}">${av(s.n,40)}<span><span class="nm">${ttBadge(s.n)}${esc(s.n)}${rkBadge(s.n)}</span><small>즐겨찾기 ${s.mo}개월 · ${s.start}</small></span></button>`).join('')}</div>`:'<div class="empty">해당하는 팔로워가 없어요</div>'}</div>`;
 };
 
