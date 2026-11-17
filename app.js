@@ -3358,7 +3358,7 @@ document.addEventListener("click", function (e) {
 
 /* 서비스 소개 히어로 배경 — Tunnel Square Cross (Originkit) 를 바닐라 WebGL2 로 옮김.
    네온 패널이 붙은 사각 터널을 앞으로 달려가는 효과. 원본 기본값 그대로:
-   바탕 #030205 · 기본 #12CCEE · 강조 #FF3CE0 · 속도 25(원본 50 의 절반, 콘텐츠 집중용) · 크기 100 · 밀도 30 · 빛 40 + 고급값(ADV).
+   바탕 #030205 · 기본 #12CCEE · 강조 #FF3CE0 · 속도 9(원본 50 에서 낮춤, 콘텐츠 집중용) · 크기 100 · 밀도 30 · 빛 40 + 고급값(ADV).
    마우스를 올리면 소실점이 살짝 따라감. WebGL2 가 없거나 셰이더가 실패하면 캔버스만 숨기고 기존 그라데이션 그대로 */
 (function () {
   var hero = document.querySelector(".about-hero");
@@ -3370,7 +3370,7 @@ document.addEventListener("click", function (e) {
     h = h.replace("#", "");
     return [parseInt(h.slice(0, 2), 16) / 255, parseInt(h.slice(2, 4), 16) / 255, parseInt(h.slice(4, 6), 16) / 255];
   }
-  var P = { bg: hex("#030205"), base: hex("#12CCEE"), accent: hex("#FF3CE0"), speed: 25 / 50, scale: 100 / 100, density: 30 / 100, glow: 40 / 100 };
+  var P = { bg: hex("#030205"), base: hex("#12CCEE"), accent: hex("#FF3CE0"), speed: 9 / 50, scale: 100 / 100, density: 30 / 100, glow: 40 / 100 };
   var ADV = {
     flySpeed: 320, periodMs: 5100, focal: 100, tunnelAspect: 100, centerX: 500, centerY: 500,
     relief: 18, cellLength: 220, sliceCells: 8, paneLine: 6, stripChance: 30, panelBright: 130, whiteCore: 30,
