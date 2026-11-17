@@ -3356,23 +3356,31 @@ document.addEventListener("click", function (e) {
   input.addEventListener("input", function () { if (!input.value.trim()) run(); });
 })();
 
-/* 서비스 소개 히어로 배경 — Thermal Field (Originkit "Flare Arc" 프리셋) 를 바닐라 WebGL 로 옮김.
-   프리셋: 바탕 #000 · 기본 #2C4576 · 강조 #02001B · 속도 100 · 호버 42 · scale 120 · threshold 52 · edge 400.
+/* 서비스 소개 히어로 배경 — Matrix Junction (Originkit) 을 바닐라 WebGL 로 옮김.
+   프리셋: 바탕 #000 · 기본 #0048FF · 강조 #005FFF · 속도 50 · 호버 100 · 빔 19개(세기 105 · 펄스 100)
+   · 교차점 가운데(50 · 50, 빛 100) · 번개(흔들림 97 · 굵기 90). 마우스를 올리면 가까운 빔에서 커서로 번개.
    WebGL 이 없거나 셰이더가 실패하면 캔버스만 숨기고 기존 방사형 그라데이션 그대로 */
 (function () {
   var hero = document.querySelector(".about-hero");
   var canvas = hero && hero.querySelector(".about-hero__fx");
   if (!canvas) return;
   var MAX_DPR = 2;
+  var ACTIVE_RATE = 9.75; // 원본: 60fps 에서 프레임당 0.15 보간
+  var CLOCK_WRAP = 31410; // 10 의 배수 — fract() 펄스가 끊김 없이 돎
   var P = {
     bg: [0, 0, 0],
-    base: [0x2c / 255, 0x45 / 255, 0x76 / 255],
-    accent: [0x02 / 255, 0x00 / 255, 0x1b / 255],
-    speed: 100 / 50,
-    hover: 42 / 100,
-    scale: 120 / 100,
-    threshold: 52 / 100,
-    edge: 400 / 100
+    base: [0x00 / 255, 0x48 / 255, 0xff / 255],
+    accent: [0x00 / 255, 0x5f / 255, 0xff / 255],
+    speed: 50 / 50,
+    hover: 100 / 100,
+    intensity: 105 / 100,
+    pulse: 100 / 100,
+    count: 19,
+    centerX: 50 / 100,
+    centerY: 50 / 100,
+    nodeGlow: 100 / 100,
+    jitter: 97 / 100,
+    arcWidth: 90 / 100
   };
   var VERT = "attribute vec2 a_pos;void main(){gl_Position=vec4(a_pos,0.0,1.0);}";
   var FRAG = [
@@ -3381,39 +3389,95 @@ document.addEventListener("click", function (e) {
     "#else",
     "precision mediump float;",
     "#endif",
-    "uniform vec2 uRes;uniform float uTime;uniform vec2 uMouse;uniform float uHover;",
-    "uniform vec3 uBg;uniform vec3 uBase;uniform vec3 uAccent;",
-    "uniform float uScale;uniform float uThreshold;uniform float uEdge;",
-    "float sat(float x){return clamp(x,0.0,1.0);}",
-    "float h21(vec2 p){p=fract(p*vec2(123.34,456.21));p+=dot(p,p+34.56);return fract(p.x*p.y);}",
-    "float vnoise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.0-2.0*f);",
-    "  float a=h21(i),b=h21(i+vec2(1.0,0.0));float c=h21(i+vec2(0.0,1.0)),d=h21(i+vec2(1.0,1.0));",
-    "  return mix(mix(a,b,f.x),mix(c,d,f.x),f.y);}",
-    "float fbm5(vec2 p){float s=0.0,a=0.5;for(int i=0;i<5;i++){s+=a*vnoise(p);p=p*2.03+vec2(1.7,9.2);a*=0.5;}return s;}",
-    "float fbm3(vec2 p){float s=0.0,a=0.5;for(int i=0;i<3;i++){s+=a*vnoise(p);p=p*2.07+vec2(4.1,2.3);a*=0.5;}return s;}",
+    "uniform vec2 uRes, uMouse;",
+    "uniform float uTime, uActive, uHover, uDpr;",
+    "uniform float uIntensity, uPulse, uNodeGlow, uJitter, uArcWidth;",
+    "uniform int uBeamCount;",
+    "uniform vec2 uCenter;",
+    "uniform vec3 uBg, uBase, uAccent;",
+    "float hash(float n){ return fract(sin(n) * 753.5453123); }",
+    "float noise(float x){ float i=floor(x); float f=fract(x); f=f*f*(3.0-2.0*f); return mix(hash(i),hash(i+1.0),f); }",
+    "vec2 sdLine(vec2 p, vec2 a, vec2 b){ vec2 pa=p-a, ba=b-a; float h=clamp(dot(pa,ba)/max(dot(ba,ba),1e-6),0.0,1.0); return vec2(length(pa-ba*h),h); }",
+    "float lightning(vec2 uv, vec2 a, vec2 b, float t){",
+    "  vec2 ab=b-a; float len=length(ab); if(len<0.01) return 0.0;",
+    "  vec2 dir=ab/len; vec2 pa=uv-a;",
+    "  float h=clamp(dot(pa,dir)/len,0.0,1.0);",
+    "  float dist=length(pa-dir*(h*len));",
+    "  float env=sin(h*3.1415);",
+    "  float offset=(noise(h*25.0-t*35.0)-0.5)*0.08*uJitter*env;",
+    "  offset+=(noise(h*70.0+t*50.0)-0.5)*0.02*uJitter*env;",
+    "  float d=abs(dist+offset);",
+    "  float k=3.0*uArcWidth*uDpr/uRes.y;",
+    "  return (k/(d+k)+(k*0.05)/(d*d+k*0.05))*env;",
+    "}",
+    "vec2 beamDir(int i){",
+    "  if(i==0) return normalize(vec2(0.15,1.0));",
+    "  if(i==1) return normalize(vec2(1.0,-0.25));",
+    "  if(i==2) return normalize(vec2(-0.8,-0.6));",
+    "  if(i==3) return normalize(vec2(-1.0,0.35));",
+    "  if(i==4) return normalize(vec2(0.55,0.85));",
+    "  if(i==5) return normalize(vec2(0.1,-1.0));",
+    "  if(i==6) return normalize(vec2(-0.5,0.9));",
+    "  if(i==7) return normalize(vec2(0.75,-0.7));",
+    "  float fi=float(i);",
+    "  float a=fi*2.399963229728653+hash(fi*0.7192)*6.2831853;",
+    "  return vec2(cos(a),sin(a));",
+    "}",
+    "float beamWeight(int i){",
+    "  if(i==0) return 1.0; if(i==1) return 1.0; if(i==2) return 0.4; if(i==3) return 0.7;",
+    "  if(i==4) return 0.55; if(i==5) return 0.45; if(i==6) return 0.4; if(i==7) return 0.35;",
+    "  return 0.25+0.35*hash(float(i)*3.417+1.0);",
+    "}",
+    "float beamPulseSpeed(int i){",
+    "  if(i==0) return 0.4; if(i==1) return 0.5; if(i==2) return 0.3; if(i==3) return 0.45;",
+    "  if(i==4) return 0.55; if(i==5) return 0.35; if(i==6) return 0.6; if(i==7) return 0.25;",
+    "  return 0.25+0.35*hash(float(i)*5.113+2.0);",
+    "}",
+    "float beamPulseOffset(int i){",
+    "  if(i==0) return 0.0; if(i==1) return 0.3; if(i==2) return 0.7; if(i==3) return 0.15;",
+    "  if(i==4) return 0.55; if(i==5) return 0.85; if(i==6) return 0.4; if(i==7) return 0.1;",
+    "  return hash(float(i)*6.917+3.0);",
+    "}",
+    "float beamPulseWeight(int i){",
+    "  if(i==0) return 1.0; if(i==1) return 1.0; if(i==2) return 0.5; if(i==3) return 0.8;",
+    "  if(i==4) return 0.65; if(i==5) return 0.6; if(i==6) return 0.55; if(i==7) return 0.5;",
+    "  return 0.4+0.35*hash(float(i)*8.311+4.0);",
+    "}",
     "void main(){",
-    "  float ar=uRes.x/max(uRes.y,1.0);",
-    "  vec2 uv=gl_FragCoord.xy/uRes;",
-    "  vec2 p=(uv-0.5)*vec2(ar,1.0);",
-    "  float t=uTime*0.07;",
-    "  vec2 w=vec2(fbm3(p*1.1+vec2(t,0.0)),fbm3(p*1.1+vec2(4.3,2.1)-t*0.8));",
-    "  float v=fbm5(p*uScale+w*0.85+vec2(0.0,t*0.4));",
-    "  vec2 md=(uv-uMouse)*vec2(ar,1.0);",
-    "  v+=uHover*0.30*exp(-dot(md,md)/0.020);",
-    "  v=sat(v*1.35-0.10);",
-    "  float iso=exp(-pow((v-uThreshold)/(0.095*uEdge),2.0));",
-    "  float halo=exp(-pow((v-uThreshold)/(0.260*uEdge),2.0));",
-    "  vec3 col=mix(uBg,uBase,smoothstep(uThreshold-0.02,uThreshold+0.30,v));",
-    "  col=mix(col,mix(uBase,vec3(1.0),0.35),smoothstep(uThreshold+0.16,uThreshold+0.42,v));",
-    "  col+=uAccent*iso*1.10+uAccent*halo*0.16;",
-    "  col*=1.0-0.85*smoothstep(uThreshold-0.22,uThreshold-0.52,v);",
-    "  gl_FragColor=vec4(clamp(col,0.0,1.0),1.0);",
+    "  vec2 uv=gl_FragCoord.xy/uRes; uv=uv*2.0-1.0;",
+    "  float aspect=uRes.x/max(uRes.y,1.0); uv.x*=aspect;",
+    "  vec2 mouseUV=uMouse*2.0-1.0; mouseUV.x*=aspect;",
+    "  vec2 center=uCenter;",
+    "  center.x+=sin(uTime*0.4)*0.03; center.y+=cos(uTime*0.3)*0.03;",
+    "  float k=0.006*uIntensity; float pw=0.03*uPulse; float act=uActive*uHover;",
+    "  float glow=0.0; float arc=0.0;",
+    "  for(int i=0;i<100;i++){",
+    "    if(i>=uBeamCount) continue;",
+    "    vec2 dir=beamDir(i);",
+    "    vec2 l=sdLine(uv,center,center+dir*5.0);",
+    "    glow+=(k*beamWeight(i))/(l.x+0.001);",
+    "    glow+=(1.0-smoothstep(0.0,0.1,abs(l.y-fract(uTime*beamPulseSpeed(i)+beamPulseOffset(i)))))*(pw*beamPulseWeight(i))/(l.x+0.001);",
+    "    if(act>0.001){",
+    "      vec2 p=center+dir*clamp(dot(mouseUV-center,dir),0.0,5.0);",
+    "      arc+=lightning(uv,p,mouseUV,uTime+float(i)*10.0)*(1.0-smoothstep(0.0,2.0,length(mouseUV-p)));",
+    "    }",
+    "  }",
+    "  glow+=(0.04*uNodeGlow)/(length(uv-center)+0.01);",
+    "  vec3 col=uBase*glow;",
+    "  if(act>0.001){",
+    "    float flicker=step(0.1,noise(uTime*60.0))*(noise(uTime*150.0)*0.8+0.2);",
+    "    col+=uAccent*arc*act*flicker;",
+    "  }",
+    "  col*=0.85+0.15*sin(uTime*2.0-length(uv-center)*8.0);",
+    "  col*=1.0-smoothstep(0.4,2.0,length(uv));",
+    "  col+=fract(sin(dot(gl_FragCoord.xy,vec2(12.9898,78.233)))*43758.5453)*0.02;",
+    "  gl_FragColor=vec4(uBg+col,1.0);",
     "}"
   ].join("\n");
 
   var gl = canvas.getContext("webgl", { alpha: false, antialias: false, depth: false });
   function fail(msg, log) {
-    if (msg) console.error("ThermalField " + msg, log || "");
+    if (msg) console.error("MatrixJunction " + msg, log || "");
     canvas.hidden = true;
   }
   if (!gl) return fail();
@@ -3449,37 +3513,38 @@ document.addEventListener("click", function (e) {
   gl.uniform3fv(u("uBg"), P.bg);
   gl.uniform3fv(u("uBase"), P.base);
   gl.uniform3fv(u("uAccent"), P.accent);
-  gl.uniform1f(u("uScale"), P.scale);
-  gl.uniform1f(u("uThreshold"), P.threshold);
-  gl.uniform1f(u("uEdge"), P.edge);
+  gl.uniform1f(u("uHover"), P.hover);
+  gl.uniform1f(u("uIntensity"), P.intensity);
+  gl.uniform1f(u("uPulse"), P.pulse);
+  gl.uniform1f(u("uNodeGlow"), P.nodeGlow);
+  gl.uniform1f(u("uJitter"), P.jitter);
+  gl.uniform1f(u("uArcWidth"), P.arcWidth);
+  gl.uniform1i(u("uBeamCount"), P.count);
   hero.classList.add("about-hero--fx");
 
-  // 포인터 — 캔버스는 글자 · 버튼 뒤에 있어 히어로 전체에서 받음
-  var ptr = { x: 0.5, y: 0.5, tx: 0.5, ty: 0.5, on: 0, onTarget: 0 };
+  // 포인터 — 캔버스는 글자 · 버튼 뒤에 있어 히어로 전체에서 받음 (y 는 셰이더처럼 아래 기준)
+  var ptr = { x: 0.5, y: 0.5, on: 0 };
   function track(e) {
     var r = canvas.getBoundingClientRect();
     if (r.width <= 0 || r.height <= 0) return;
-    ptr.tx = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width));
-    ptr.ty = Math.min(1, Math.max(0, (e.clientY - r.top) / r.height));
-    ptr.onTarget = 1;
+    ptr.x = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width));
+    ptr.y = Math.min(1, Math.max(0, 1 - (e.clientY - r.top) / r.height));
+    ptr.on = 1;
   }
-  function leave() { ptr.onTarget = 0; }
+  function leave() { ptr.on = 0; }
   hero.addEventListener("pointermove", track);
   hero.addEventListener("pointerenter", track);
   hero.addEventListener("pointerleave", leave);
   hero.addEventListener("pointercancel", leave);
 
   var reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var raf = 0, last = performance.now(), clock = 0, visible = true;
+  var raf = 0, last = performance.now(), clock = 0, active = 0, visible = true;
 
   function frame(now) {
     var dt = Math.min(0.05, (now - last) / 1000);
     last = now;
-    clock = (clock + dt * P.speed) % 3600;
-    var k = 1 - Math.exp(-6 * dt);
-    ptr.on += (ptr.onTarget - ptr.on) * k;
-    ptr.x += ((ptr.onTarget > 0 ? ptr.tx : 0.5) - ptr.x) * k;
-    ptr.y += ((ptr.onTarget > 0 ? ptr.ty : 0.5) - ptr.y) * k;
+    clock = (clock + dt * P.speed) % CLOCK_WRAP;
+    active += (ptr.on - active) * (1 - Math.exp(-dt * ACTIVE_RATE));
 
     var dpr = Math.min(window.devicePixelRatio || 1, MAX_DPR);
     var bw = Math.max(1, Math.round(canvas.clientWidth * dpr));
@@ -3490,9 +3555,12 @@ document.addEventListener("click", function (e) {
     }
     gl.viewport(0, 0, bw, bh);
     gl.uniform2f(u("uRes"), bw, bh);
+    gl.uniform2f(u("uMouse"), ptr.x, ptr.y);
     gl.uniform1f(u("uTime"), clock);
-    gl.uniform2f(u("uMouse"), ptr.x, 1 - ptr.y);
-    gl.uniform1f(u("uHover"), Math.min(1, ptr.on) * P.hover);
+    gl.uniform1f(u("uActive"), active);
+    gl.uniform1f(u("uDpr"), dpr);
+    // 퍼센트 → 셰이더의 [-1, 1] 좌표 (x 는 화면 비율만큼)
+    gl.uniform2f(u("uCenter"), (P.centerX * 2 - 1) * (bw / Math.max(bh, 1)), 1 - P.centerY * 2);
     gl.drawArrays(gl.TRIANGLES, 0, 3);
     raf = visible && !reduced && !document.hidden ? requestAnimationFrame(frame) : 0;
   }
