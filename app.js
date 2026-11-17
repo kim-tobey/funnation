@@ -1175,6 +1175,8 @@
   var mobile = matchMedia("(max-width: 767px)");
   var search = modal.querySelector("[data-fav-search]");
   var empty = modal.querySelector("[data-fav-empty]");
+  var moTitle = document.getElementById("mo-title");
+  var moTitleMain = moTitle ? moTitle.textContent : "";
 
   function setModal(on) {
     modal.hidden = !on;
@@ -1185,6 +1187,8 @@
     var on = location.hash === "#manage" && mobile.matches;
     root.setAttribute("data-fav-view", on ? "manage" : "main");
     view.hidden = !on;
+    // 모바일 앱바 제목 — 목록 화면은 "목록 관리" (66390:73956)
+    if (moTitle) moTitle.textContent = on ? "목록 관리" : moTitleMain;
     if (on) window.scrollTo(0, 0);
   }
   function filter(q) {
