@@ -10682,6 +10682,13 @@ ul {
   background: rgba(0, 0, 0, 0.7);
   pointer-events: none;
 }
+/* 효과 위에서 CTA · 라이브 화면이 떠 보이게 어두운 그림자 (시안의 남색 그림자 대신) */
+.about-hero--fx .about-hero__cta .about-btn {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+.about-hero--fx .about-hero__shot {
+  box-shadow: 0 24px 56px rgba(0, 0, 0, 0.75), 0 6px 16px rgba(0, 0, 0, 0.55);
+}
 .about-head--hero {
   gap: 20px;
 }
