@@ -3355,3 +3355,171 @@ document.addEventListener("click", function (e) {
   /* 지우기(×) · 빈 값이면 바로 전체 복귀 */
   input.addEventListener("input", function () { if (!input.value.trim()) run(); });
 })();
+
+/* 서비스 소개 히어로 배경 — Thermal Field (Originkit "Flare Arc" 프리셋) 를 바닐라 WebGL 로 옮김.
+   프리셋: 바탕 #000 · 기본 #2C4576 · 강조 #02001B · 속도 100 · 호버 42 · scale 120 · threshold 52 · edge 400.
+   WebGL 이 없거나 셰이더가 실패하면 캔버스만 숨기고 기존 방사형 그라데이션 그대로 */
+(function () {
+  var hero = document.querySelector(".about-hero");
+  var canvas = hero && hero.querySelector(".about-hero__fx");
+  if (!canvas) return;
+  var MAX_DPR = 2;
+  var P = {
+    bg: [0, 0, 0],
+    base: [0x2c / 255, 0x45 / 255, 0x76 / 255],
+    accent: [0x02 / 255, 0x00 / 255, 0x1b / 255],
+    speed: 100 / 50,
+    hover: 42 / 100,
+    scale: 120 / 100,
+    threshold: 52 / 100,
+    edge: 400 / 100
+  };
+  var VERT = "attribute vec2 a_pos;void main(){gl_Position=vec4(a_pos,0.0,1.0);}";
+  var FRAG = [
+    "#ifdef GL_FRAGMENT_PRECISION_HIGH",
+    "precision highp float;",
+    "#else",
+    "precision mediump float;",
+    "#endif",
+    "uniform vec2 uRes;uniform float uTime;uniform vec2 uMouse;uniform float uHover;",
+    "uniform vec3 uBg;uniform vec3 uBase;uniform vec3 uAccent;",
+    "uniform float uScale;uniform float uThreshold;uniform float uEdge;",
+    "float sat(float x){return clamp(x,0.0,1.0);}",
+    "float h21(vec2 p){p=fract(p*vec2(123.34,456.21));p+=dot(p,p+34.56);return fract(p.x*p.y);}",
+    "float vnoise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.0-2.0*f);",
+    "  float a=h21(i),b=h21(i+vec2(1.0,0.0));float c=h21(i+vec2(0.0,1.0)),d=h21(i+vec2(1.0,1.0));",
+    "  return mix(mix(a,b,f.x),mix(c,d,f.x),f.y);}",
+    "float fbm5(vec2 p){float s=0.0,a=0.5;for(int i=0;i<5;i++){s+=a*vnoise(p);p=p*2.03+vec2(1.7,9.2);a*=0.5;}return s;}",
+    "float fbm3(vec2 p){float s=0.0,a=0.5;for(int i=0;i<3;i++){s+=a*vnoise(p);p=p*2.07+vec2(4.1,2.3);a*=0.5;}return s;}",
+    "void main(){",
+    "  float ar=uRes.x/max(uRes.y,1.0);",
+    "  vec2 uv=gl_FragCoord.xy/uRes;",
+    "  vec2 p=(uv-0.5)*vec2(ar,1.0);",
+    "  float t=uTime*0.07;",
+    "  vec2 w=vec2(fbm3(p*1.1+vec2(t,0.0)),fbm3(p*1.1+vec2(4.3,2.1)-t*0.8));",
+    "  float v=fbm5(p*uScale+w*0.85+vec2(0.0,t*0.4));",
+    "  vec2 md=(uv-uMouse)*vec2(ar,1.0);",
+    "  v+=uHover*0.30*exp(-dot(md,md)/0.020);",
+    "  v=sat(v*1.35-0.10);",
+    "  float iso=exp(-pow((v-uThreshold)/(0.095*uEdge),2.0));",
+    "  float halo=exp(-pow((v-uThreshold)/(0.260*uEdge),2.0));",
+    "  vec3 col=mix(uBg,uBase,smoothstep(uThreshold-0.02,uThreshold+0.30,v));",
+    "  col=mix(col,mix(uBase,vec3(1.0),0.35),smoothstep(uThreshold+0.16,uThreshold+0.42,v));",
+    "  col+=uAccent*iso*1.10+uAccent*halo*0.16;",
+    "  col*=1.0-0.85*smoothstep(uThreshold-0.22,uThreshold-0.52,v);",
+    "  gl_FragColor=vec4(clamp(col,0.0,1.0),1.0);",
+    "}"
+  ].join("\n");
+
+  var gl = canvas.getContext("webgl", { alpha: false, antialias: false, depth: false });
+  function fail(msg, log) {
+    if (msg) console.error("ThermalField " + msg, log || "");
+    canvas.hidden = true;
+  }
+  if (!gl) return fail();
+  function compile(type, src) {
+    var sh = gl.createShader(type);
+    gl.shaderSource(sh, src);
+    gl.compileShader(sh);
+    if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) {
+      fail("shader:", gl.getShaderInfoLog(sh));
+      return null;
+    }
+    return sh;
+  }
+  var vs = compile(gl.VERTEX_SHADER, VERT);
+  var fs = compile(gl.FRAGMENT_SHADER, FRAG);
+  if (!vs || !fs) return;
+  var prog = gl.createProgram();
+  gl.attachShader(prog, vs);
+  gl.attachShader(prog, fs);
+  gl.linkProgram(prog);
+  if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) return fail("link:", gl.getProgramInfoLog(prog));
+  gl.useProgram(prog);
+  gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+  var aPos = gl.getAttribLocation(prog, "a_pos");
+  gl.enableVertexAttribArray(aPos);
+  gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
+  var locs = {};
+  function u(name) {
+    if (!(name in locs)) locs[name] = gl.getUniformLocation(prog, name);
+    return locs[name];
+  }
+  gl.uniform3fv(u("uBg"), P.bg);
+  gl.uniform3fv(u("uBase"), P.base);
+  gl.uniform3fv(u("uAccent"), P.accent);
+  gl.uniform1f(u("uScale"), P.scale);
+  gl.uniform1f(u("uThreshold"), P.threshold);
+  gl.uniform1f(u("uEdge"), P.edge);
+  hero.classList.add("about-hero--fx");
+
+  // 포인터 — 캔버스는 글자 · 버튼 뒤에 있어 히어로 전체에서 받음
+  var ptr = { x: 0.5, y: 0.5, tx: 0.5, ty: 0.5, on: 0, onTarget: 0 };
+  function track(e) {
+    var r = canvas.getBoundingClientRect();
+    if (r.width <= 0 || r.height <= 0) return;
+    ptr.tx = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width));
+    ptr.ty = Math.min(1, Math.max(0, (e.clientY - r.top) / r.height));
+    ptr.onTarget = 1;
+  }
+  function leave() { ptr.onTarget = 0; }
+  hero.addEventListener("pointermove", track);
+  hero.addEventListener("pointerenter", track);
+  hero.addEventListener("pointerleave", leave);
+  hero.addEventListener("pointercancel", leave);
+
+  var reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var raf = 0, last = performance.now(), clock = 0, visible = true;
+
+  function frame(now) {
+    var dt = Math.min(0.05, (now - last) / 1000);
+    last = now;
+    clock = (clock + dt * P.speed) % 3600;
+    var k = 1 - Math.exp(-6 * dt);
+    ptr.on += (ptr.onTarget - ptr.on) * k;
+    ptr.x += ((ptr.onTarget > 0 ? ptr.tx : 0.5) - ptr.x) * k;
+    ptr.y += ((ptr.onTarget > 0 ? ptr.ty : 0.5) - ptr.y) * k;
+
+    var dpr = Math.min(window.devicePixelRatio || 1, MAX_DPR);
+    var bw = Math.max(1, Math.round(canvas.clientWidth * dpr));
+    var bh = Math.max(1, Math.round(canvas.clientHeight * dpr));
+    if (canvas.width !== bw || canvas.height !== bh) {
+      canvas.width = bw;
+      canvas.height = bh;
+    }
+    gl.viewport(0, 0, bw, bh);
+    gl.uniform2f(u("uRes"), bw, bh);
+    gl.uniform1f(u("uTime"), clock);
+    gl.uniform2f(u("uMouse"), ptr.x, 1 - ptr.y);
+    gl.uniform1f(u("uHover"), Math.min(1, ptr.on) * P.hover);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+    raf = visible && !reduced && !document.hidden ? requestAnimationFrame(frame) : 0;
+  }
+  // 화면 밖이거나 탭이 숨겨지면 멈춤
+  function resume() {
+    if (raf || !visible || reduced || document.hidden) return;
+    last = performance.now();
+    raf = requestAnimationFrame(frame);
+  }
+  function pause() {
+    cancelAnimationFrame(raf);
+    raf = 0;
+  }
+  if ("IntersectionObserver" in window) {
+    new IntersectionObserver(function (entries) {
+      visible = entries[0].isIntersecting;
+      visible ? resume() : pause();
+    }).observe(hero);
+  }
+  document.addEventListener("visibilitychange", function () {
+    document.hidden ? pause() : resume();
+  });
+  // 움직임 줄이기 설정이면 정지된 한 프레임만
+  if (reduced) {
+    frame(performance.now());
+    window.addEventListener("resize", function () { frame(performance.now()); });
+  } else {
+    resume();
+  }
+})();
