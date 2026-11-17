@@ -13815,3 +13815,53 @@ button.subnav__tab {
   .not-found__title { font-size: 19px; }
   .not-found__desc { white-space: normal; word-break: keep-all; }
 }
+
+/* ============================================================
+   [테스트용] 상태바 · 홈 인디케이터 켜기/끄기 플로팅 버튼 (시안 외 추가 요소, 모바일만)
+   로그아웃 플로팅 버튼(높이 40) 바로 위 8px. 끄면 html[data-device-chrome="off"]
+   ============================================================ */
+.fab-chrome {
+  display: none;
+}
+[data-device-chrome="off"] .chrome-on,
+:root:not([data-device-chrome="off"]) .chrome-off {
+  display: none;
+}
+@media (max-width: 767px) {
+  .fab-chrome {
+    display: flex;
+    bottom: calc(var(--bottom-nav-h) + 16px + 48px);
+  }
+  [data-page="watch"] .fab-chrome {
+    right: 16px;
+    bottom: 144px;
+  }
+  [data-page="fun-watch"] .fab-chrome {
+    top: auto;
+    right: 16px;
+    bottom: 196px;
+  }
+
+  /* 끈 상태 — 상태바(44) · 홈 인디케이터(20) 자리까지 없앰 */
+  :root[data-device-chrome="off"] {
+    --mo-statusbar-h: 0px;
+    --bottom-nav-h: 64px;
+  }
+  [data-device-chrome="off"] .mo-statusbar,
+  [data-device-chrome="off"] .bottom-nav__indicator {
+    display: none;
+  }
+  /* 영상 상세 — 하단 내비가 인디케이터 줄(20)뿐이라 통째로 숨기고 화면을 아래 끝까지 */
+  [data-device-chrome="off"][data-page="watch"] .bottom-nav,
+  [data-device-chrome="off"][data-page="fun-watch"] .bottom-nav {
+    display: none;
+  }
+  [data-device-chrome="off"] .watch,
+  [data-device-chrome="off"] .fwatch {
+    height: 100dvh;
+  }
+  [data-device-chrome="off"][data-page="watch"] .fab-auth { bottom: 76px; }
+  [data-device-chrome="off"][data-page="watch"] .fab-chrome { bottom: 124px; }
+  [data-device-chrome="off"][data-page="fun-watch"] .fab-auth { bottom: 128px; }
+  [data-device-chrome="off"][data-page="fun-watch"] .fab-chrome { bottom: 176px; }
+}

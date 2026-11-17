@@ -308,6 +308,39 @@
   if (!view.hidden) window.scrollTo(0, 0);
 })();
 
+/* [테스트용] 모바일 기기 표시(상태바 · 홈 인디케이터) 켜기/끄기 — 로그아웃 플로팅 버튼 위 */
+(function () {
+  var KEY = "funnation-device-chrome";
+  var root = document.documentElement;
+  var auth = document.getElementById("auth-btn");
+  if (!auth) return;
+
+  var btn = document.createElement("button");
+  btn.type = "button";
+  btn.className = "fab-auth fab-chrome";
+  btn.id = "chrome-btn";
+  btn.innerHTML =
+    '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+    '<rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M10 5.5h4"/><path d="M10 18.5h4"/></svg>' +
+    '<span class="chrome-on">상태바 숨기기</span><span class="chrome-off">상태바 보이기</span>';
+  auth.parentNode.insertBefore(btn, auth);
+
+  function apply(state) {
+    if (state === "off") root.setAttribute("data-device-chrome", "off");
+    else root.removeAttribute("data-device-chrome");
+    btn.setAttribute("aria-pressed", state === "off" ? "true" : "false");
+  }
+  var saved = null;
+  try { saved = localStorage.getItem(KEY); } catch (e) {}
+  apply(saved === "off" ? "off" : "on");
+
+  btn.addEventListener("click", function () {
+    var next = root.getAttribute("data-device-chrome") === "off" ? "on" : "off";
+    apply(next);
+    try { localStorage.setItem(KEY, next); } catch (e) {}
+  });
+})();
+
 /* 검색(64162:201098)·알림(64162:200698) 화면 — 모바일 시안. 로그인 화면처럼 주소 #search · #notice 로 열고
    앱바 왼쪽 뒤로(검색)·닫기(알림) 버튼이나 브라우저 뒤로 가기로 닫는다 */
 (function () {
