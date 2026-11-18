@@ -13941,3 +13941,73 @@ button.subnav__tab {
 [data-theme="light"] .ch-pop__btn img { filter: invert(1) brightness(0.35); }
 /* 이름은 누를 수 있는 곳 */
 .creator-card__name, .winfo__name, .card:not(.card--ad) .card__channel, .fav-card__channel { cursor: pointer; }
+
+/* ============================================================
+   영상 상세(YouTube) 색 — Figma "영상 상세" 보드 66179:140681 (2026-11-18)
+   시안이 디자인 시스템 색 변수로 다시 칠해져서 watch.html 만 맞춘다.
+   .donate · .switch · .wchat 은 펀네이션 라이브 상세(fun-watch)와 같이 쓰므로 data-page="watch" 로 범위를 좁힘.
+   라이트 테마는 시안이 없어 그대로 둠
+   ============================================================ */
+:root[data-page="watch"]:not([data-theme="light"]) {
+  --w-head-border: var(--color-border-200, #262838); /* 탭 아래 · 채팅 왼쪽 선 Border 200 */
+  --w-tabs-bg: var(--color-bg-300);                  /* 탭 · 후원 종류 바탕 BG 300 (142461 · 142470) */
+  --w-tab-off: var(--color-text-depth-400);          /* 꺼진 탭 Depth 400 */
+  --w-sheet-bg: var(--color-bg-300);                 /* 후원 · 설정 시트 BG 300 (143868 · 146206) */
+  --w-text: var(--color-text-normal);                /* 시트 글자 — 시안 #E7E7E7 · #E0E0E0 → Normal */
+  --w-sub: var(--color-text-depth-400);              /* 보조 글자 — 시안 #7B7B7B → Depth 400 */
+  --w-line: var(--color-border-200, #262838);        /* 시트 안 구분선 Border 200 (143905) */
+  --w-field-bg: var(--color-bg-400);                 /* 시그니처 선택 칸 BG 400 */
+  --w-box: var(--color-bg-300);                      /* 응원 메시지 입력 BG 300 */
+  --w-box-line: var(--color-border-100);             /* 〃 테두리 Border 100 */
+  --w-amount-bg: var(--color-bg-100);                /* 금액 입력 BG 100 */
+  --w-chip-bg: var(--color-border-300);              /* 금액 칩 BG Chips #2A2D3F */
+  --w-btn-border: var(--color-border-400);           /* 내 펀캐시 사이 선 — 시안 #4A4A4A → Border 400 */
+  --w-placeholder: var(--color-text-depth-400);
+  --w-tag-bg: var(--color-border-400);               /* 태그 BG Label 100 #31354F */
+  --w-tag-text: var(--color-text-normal);
+}
+:root[data-page="watch"]:not([data-theme="light"]) .donate {
+  border-color: var(--color-border-100);             /* 시트 테두리 Border 100 */
+}
+:root[data-page="watch"]:not([data-theme="light"]) .dbox {
+  border: 1px solid var(--color-border-200, #262838); /* 칭호 · 후원 금액 · 설정 카드 Border 200 */
+}
+:root[data-page="watch"]:not([data-theme="light"]) .dcash {
+  border-color: var(--color-border-400);             /* 내 펀캐시 Border 400 */
+}
+:root[data-page="watch"]:not([data-theme="light"]) .damount__box {
+  border-color: var(--color-common-black, #000);     /* 금액 입력 테두리 Common Black */
+}
+:root[data-page="watch"]:not([data-theme="light"]) .damount__chips button:hover {
+  background: var(--color-border-400);
+}
+:root[data-page="watch"]:not([data-theme="light"]) .donate__submit {
+  color: var(--color-text-normal);                   /* 시안 #E7E7E7 → Normal */
+}
+/* 토글 — DS 토글(66332:17843): Off = BG Cancel, On = Primary */
+:root[data-page="watch"]:not([data-theme="light"]) .switch {
+  background: var(--color-border-300);
+}
+:root[data-page="watch"]:not([data-theme="light"]) .switch:checked {
+  background: var(--color-brand-primary);
+}
+:root[data-page="watch"]:not([data-theme="light"]) .switch::after {
+  background: #fff;
+}
+/* 방송 정보 — 팔로우 Primary, LIVE 배지 Secondary · radius 4, 설명 글자 #B0B0B0 → Depth 300 */
+:root[data-page="watch"]:not([data-theme="light"]) .winfo .fstreamer__follow:not([aria-pressed="true"]) {
+  background: var(--color-brand-primary);
+}
+:root[data-page="watch"]:not([data-theme="light"]) .winfo__live {
+  border-radius: 4px;
+  background: var(--color-brand-secondary, #4962ff);
+}
+:root[data-page="watch"]:not([data-theme="light"]) .wdesc__body {
+  color: var(--color-text-depth-300);
+}
+/* 모바일 앱바 BG 200 (146344) */
+@media (max-width: 767px) {
+  :root[data-page="watch"]:not([data-theme="light"]) .wbar {
+    background: var(--color-bg-200);
+  }
+}
