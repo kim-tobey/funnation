@@ -2600,6 +2600,8 @@ function applyHash(){
   else if(md==='login'){S.loggedIn=false;renderAll();applyWire();openLogin()}
   else if(md==='crewsched')openCrewSched();
   else if(md==='write')openWrite(o.board||(isBoardView(S.view)?S.view:'board1'));
+  /* 방송인 팝오버(app.js)의 공지 아이콘 → 홈 상단 고정 공지 글 */
+  if(o.go==='notice')A.noticeGo();
   if(o.sec){const t={player:'#playerWrap',rank:'#rankHome',cal:'#calHome',shorts:'[data-qa=B-08]',videos:'#view .sect .grid',posts:'#view .sect:last-child'}[o.sec];
     setTimeout(()=>{const e=t&&$(t);if(e){const m=MAINS;m.scrollTop=e.getBoundingClientRect().top-m.getBoundingClientRect().top+m.scrollTop-12}},60)}
   renderDemo();tagAreas();

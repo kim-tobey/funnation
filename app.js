@@ -3192,14 +3192,132 @@ document.addEventListener("click", function (e) {
 /* 개인 방송국 진입 — 크리에이터 찾기 카드, 영상 목록 · 영상 상세의 방송인 사진 · 이름을 누르면 방송국(station.html)으로.
    카드 전체 링크(영상 재생)보다 먼저 받아서 영상으로 넘어가지 않게 캡처 단계에서 처리 */
 (function () {
-  var SEL = ".creator-card__thumb, .creator-card__name, .winfo__pic, .winfo__name, .wbar__pic, .fbar__channel img, .card__avatar, .card__channel, .fav-card__avatar, .fav-card__channel";
+  /* 사진 → 바로 방송국. 이름 → 방송인 팝오버(Figma 67446:87950): 방송국 홈 · 쪽지 · 즐겨찾기(해제) · 공지.
+     광고 카드(.card--ad)의 이름은 방송인이 아니라 팝오버 없이 예전처럼 방송국으로 */
+  var PIC = ".creator-card__thumb, .winfo__pic, .wbar__pic, .fbar__channel img, .card__avatar, .fav-card__avatar";
+  var NAME = ".creator-card__name, .winfo__name, .card__channel, .fav-card__channel";
+  var STATION = "station.html";
+  var FAV_KEY = "funnation-fav-creators";
+
+  var pop, anchor, name;
+
+  function loggedIn() { return document.documentElement.getAttribute("data-auth") !== "out"; }
+
+  function favs() {
+    try { return JSON.parse(localStorage.getItem(FAV_KEY)) || []; } catch (e) { return []; }
+  }
+  function saveFavs(l) {
+    try { localStorage.setItem(FAV_KEY, JSON.stringify(l)); } catch (e) {}
+  }
+
+  var toastTimer;
+  function toast(text) {
+    var el = document.querySelector(".st-toast");
+    if (!el) {
+      el = document.createElement("div");
+      el.className = "st-toast";
+      el.setAttribute("role", "status");
+      el.setAttribute("aria-live", "polite");
+      el.innerHTML = '<img src="assets/v2/settings/toast-check-18.svg" width="18" height="18" alt=""><span data-toast-text></span>';
+      document.body.appendChild(el);
+    }
+    el.querySelector("[data-toast-text]").textContent = text;
+    el.hidden = false;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { el.hidden = true; }, 3000);
+  }
+
+  function build() {
+    pop = document.createElement("div");
+    pop.className = "ch-pop";
+    pop.setAttribute("role", "menu");
+    pop.hidden = true;
+    pop.innerHTML =
+      '<button type="button" class="ch-pop__btn ch-pop__btn--home" role="menuitem" data-ch="home" aria-label="방송국 홈"><img src="assets/v2/popover/home.svg" width="24" height="24" alt=""></button>' +
+      '<button type="button" class="ch-pop__btn ch-pop__btn--msg" role="menuitem" data-ch="msg" aria-label="쪽지 보내기"><img src="assets/v2/popover/chat.svg" width="24" height="24" alt=""></button>' +
+      '<button type="button" class="ch-pop__btn ch-pop__btn--fav" role="menuitem" data-ch="fav" aria-pressed="false" aria-label="즐겨찾기"><img class="ch-pop__on" src="assets/v2/popover/heart.svg" width="24" height="24" alt=""><img class="ch-pop__off" src="assets/v2/popover/heart-off.svg" width="24" height="24" alt=""></button>' +
+      '<button type="button" class="ch-pop__btn ch-pop__btn--notice" role="menuitem" data-ch="notice" aria-label="방송국 공지사항"><img src="assets/v2/popover/notice.svg" width="24" height="24" alt=""></button>';
+    document.body.appendChild(pop);
+    pop.addEventListener("click", onAction);
+  }
+
+  function nameOf(el) {
+    var s = el.querySelector("span") || el;
+    return (s.textContent || "").trim();
+  }
+
+  function syncFav() {
+    var on = favs().indexOf(name) >= 0;
+    var b = pop.querySelector("[data-ch=fav]");
+    b.setAttribute("aria-pressed", on ? "true" : "false");
+    b.setAttribute("aria-label", on ? "즐겨찾기 해제" : "즐겨찾기");
+  }
+
+  /* 이름 아래 8px, 왼쪽은 이름 왼쪽에 맞춤 — 화면 밖으로 나가면 안쪽 16 으로 밀고, 아래가 모자라면 위로 [구현 제안] */
+  function place() {
+    var r = anchor.getBoundingClientRect();
+    var w = pop.offsetWidth, h = pop.offsetHeight;
+    var vw = document.documentElement.clientWidth, vh = window.innerHeight;
+    var bottomNav = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--bottom-nav-h")) || 0;
+    if (vw >= 768) bottomNav = 0;
+    var left = Math.min(Math.max(16, r.left), vw - w - 16);
+    var top = r.bottom + 8;
+    if (top + h > vh - bottomNav - 8) top = r.top - 8 - h;
+    pop.style.left = Math.round(left) + "px";
+    pop.style.top = Math.round(top) + "px";
+  }
+
+  function open(el) {
+    if (!pop) build();
+    if (anchor === el && !pop.hidden) { close(); return; }
+    anchor = el;
+    name = nameOf(el);
+    syncFav();
+    pop.hidden = false;
+    place();
+    anchor.setAttribute("aria-expanded", "true");
+  }
+
+  function close() {
+    if (!pop || pop.hidden) return;
+    pop.hidden = true;
+    if (anchor) anchor.removeAttribute("aria-expanded");
+    anchor = null;
+  }
+
+  function onAction(e) {
+    var b = e.target.closest("[data-ch]");
+    if (!b) return;
+    var act = b.getAttribute("data-ch");
+    if (act === "home") { location.href = STATION; return; }
+    if (act === "notice") { location.href = STATION + "#go=notice"; return; }
+    if (!loggedIn()) { close(); location.hash = "login"; return; }
+    if (act === "msg") { location.href = STATION + "#modal=msg-write"; return; }
+    if (act === "fav") {
+      var l = favs(), i = l.indexOf(name);
+      if (i >= 0) { l.splice(i, 1); toast("즐겨찾기를 해제했어요"); }
+      else { l.push(name); toast("즐겨찾기에 추가했어요"); }
+      saveFavs(l);
+      syncFav();
+    }
+  }
+
   document.addEventListener("click", function (e) {
-    var t = e.target.closest && e.target.closest(SEL);
-    if (!t) return;
+    if (!e.target.closest) return;
+    if (pop && pop.contains(e.target)) return;
+    var n = e.target.closest(NAME);
+    var p = !n && e.target.closest(PIC);
+    if (n && n.closest(".card--ad")) { p = n; n = null; }
+    if (!n && !p) { close(); return; }
     e.preventDefault();
     e.stopPropagation();
-    location.href = "station.html";
+    if (p) { location.href = STATION; return; }
+    open(n);
   }, true);
+
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
+  window.addEventListener("resize", close);
+  document.addEventListener("scroll", close, true);
 })();
 
 /* ============================================================

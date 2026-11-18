@@ -13899,3 +13899,45 @@ button.subnav__tab {
   [data-device-chrome="off"][data-page="fun-watch"] .fab-auth { bottom: 128px; }
   [data-device-chrome="off"][data-page="fun-watch"] .fab-chrome { bottom: 176px; }
 }
+
+/* ============================================================
+   방송인 팝오버 (Figma 컴포넌트 Popover 67446:87950 · 사용 예 67437:87219)
+   방송인 이름을 누르면 아래에 뜬다 — 방송국 홈 · 쪽지 · 즐겨찾기(해제) · 공지.
+   BG400 · Border400 1px(안쪽) · radius 12 · 안쪽 18 / 24 · 아이콘 24 · 사이 22 · 전체 210 × 60.
+   아이콘은 시안 원본 SVG(#DFE5ED · Text Normal)를 <img> 로 그대로 쓴다
+   ============================================================ */
+.ch-pop {
+  position: fixed;
+  z-index: 220;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  padding: 17px 23px; /* 시안 18 / 24 는 테두리 안쪽 기준 — 테두리 1 을 빼서 전체 210 × 60 */
+  border: 1px solid var(--color-border-400);
+  border-radius: 12px;
+  background: var(--color-bg-400);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.32);
+}
+.ch-pop[hidden] { display: none; }
+.ch-pop__btn {
+  position: relative;
+  display: block;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+.ch-pop__btn img { display: block; width: 24px; height: 24px; }
+/* 누르는 범위는 아이콘 둘레 + 8 (보이는 크기는 24 그대로) */
+.ch-pop__btn::before { content: ""; position: absolute; inset: -8px; }
+.ch-pop__btn:hover img { filter: brightness(1.15); }
+.ch-pop__btn:focus-visible { outline: 2px solid #81b3ff; outline-offset: 4px; border-radius: 4px; }
+.ch-pop__btn--fav .ch-pop__off,
+.ch-pop__btn--fav[aria-pressed="true"] .ch-pop__on { display: none; }
+.ch-pop__btn--fav[aria-pressed="true"] .ch-pop__off { display: block; }
+/* 라이트 테마 [구현 제안] — 시안 아이콘은 #DFE5ED 고정이라 어둡게 뒤집는다 */
+[data-theme="light"] .ch-pop__btn img { filter: invert(1) brightness(0.35); }
+/* 이름은 누를 수 있는 곳 */
+.creator-card__name, .winfo__name, .card:not(.card--ad) .card__channel, .fav-card__channel { cursor: pointer; }
