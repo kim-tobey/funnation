@@ -2489,7 +2489,7 @@ ul {
   white-space: nowrap;
 }
 .card__channel {
-  gap: 6px;
+  gap: 4px;
   font-weight: 700;
 }
 .card__sub {
@@ -2505,6 +2505,10 @@ ul {
 }
 .card__channel img {
   flex: none;
+}
+/* 인증 체크(assets/home/check.svg)는 14 칸 안에서 원이 왼쪽 위(가운데 6,6)로 그려져 있어 글자보다 1px 떠 보임 — 아래로 1px 내려 글자 줄 가운데에 맞춤 */
+.card__channel img[src$="check.svg"] {
+  transform: translateY(1px);
 }
 .card__dot {
   flex: none;
