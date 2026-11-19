@@ -950,10 +950,10 @@ function renderTop(){
    <div class="avw"><div class="avring">${av(D.name,90)}</div>${S.live?'<span class="livebdg">LIVE</span>':''}</div>
    <div class="pi"><h1>${D.name}${modeBadge()}</h1></div>
    <div class="btns">
-     <button class="btn out msgb" id="msgBtn" data-act="msgBtn" data-qa="MSG-01" aria-label="${S.loggedIn&&unreadN()>0?'쪽지, 안 읽은 쪽지 '+unreadN()+'개':'쪽지'}">${ic('mail',18)}쪽지${msgBadgeHTML()}</button>
-     <button class="btn pri" id="donBtn" data-act="donate" data-qa="B-05">${ic('heart',18)}후원하기${donDotHTML()}</button>
-     <button class="btn out fav${S.favorite?' on':''}" data-act="fav" data-qa="B-04" aria-pressed="${S.favorite}">${S.favorite?`<svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="#f7df4e" stroke="#f7df4e" stroke-width="1.8" stroke-linejoin="round">${P.star}</svg>즐겨찾기 중`:ic('star',18)+'즐겨찾기'}</button>
-     <button class="btn out${al[2]?' on':''}" data-act="alarm" data-qa="B-03">${ic(al[0],18)}${al[1]}</button>
+     <button class="btn out msgb" id="msgBtn" data-act="msgBtn" data-qa="MSG-01" aria-label="${S.loggedIn&&unreadN()>0?'쪽지, 안 읽은 쪽지 '+unreadN()+'개':'쪽지'}">${ic('mail',18)}<span class="bl">쪽지</span>${msgBadgeHTML()}</button>
+     <button class="btn pri" id="donBtn" data-act="donate" data-qa="B-05">${ic('heart',18)}<span class="bl">후원하기</span>${donDotHTML()}</button>
+     <button class="btn out fav${S.favorite?' on':''}" data-act="fav" data-qa="B-04" aria-pressed="${S.favorite}">${S.favorite?`<svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="#f7df4e" stroke="#f7df4e" stroke-width="1.8" stroke-linejoin="round">${P.star}</svg><span class="bl">즐겨찾기 중</span>`:ic('star',18)+'<span class="bl">즐겨찾기</span>'}</button>
+     <button class="btn out${al[2]?' on':''}" data-act="alarm" data-qa="B-03">${ic(al[0],18)}<span class="bl">${al[1]}</span></button>
      <button class="btn circ" data-act="more" aria-label="더보기">${ic('more',20)}</button>
    </div>
    <div class="intro${st.intro?'':' empty'}" data-qa="B-01">${st.intro?`<span class="t">${esc(st.intro)}</span> `:'<span class="t">아직 방송국 소개가 없어요</span> '}<button class="link" data-act="introT" aria-expanded="${!!S.ui.introOpen}" data-qa="B-01t">${S.ui.introOpen?'접기 ▴':'소개 더보기 ›'}</button>${S.ui.introOpen?`<div class="intro-full" data-qa="B-01x">${introBody({intro:st.intro,text:st.introText,rules:st.rulesText},st.links)}${canSt()?'<button class="btn sec sm" data-act="introEdit">소개 수정</button>':''}</div>`:''}</div>
