@@ -15097,3 +15097,59 @@ button.subnav__tab {
     aspect-ratio: 132 / 75;
   }
 }
+
+/* ============================================================
+   모바일 메뉴(드로어) — 로그인 상태 (2026-11-19, Figma 67590:79237)
+   관리자 모드 · 연결 계정 버튼과 등급 카드를 빼고, 프로필 아래 펀캐시 카드(코인 · 펀캐시 / 금액 원 · 충전)를 둠.
+   로그아웃 상태는 그대로. PC LNB 는 그대로.
+   시안 색 #1f232d · #2a2f3c 는 가장 가까운 DS 색 BG400 · Border300 으로 (design.md 3장)
+   ============================================================ */
+@media (max-width: 767px) {
+  [data-auth="in"] .lnb .lnb__btn-row,
+  [data-auth="in"] .lnb .grade {
+    display: none;
+  }
+  [data-auth="in"] .lnb .cash {
+    display: flex;
+    padding: 13px;
+    border: 1px solid var(--color-border-300);
+    border-radius: 10px;
+    background: var(--color-bg-400);
+  }
+  .lnb .cash__info {
+    gap: 6px;
+  }
+  .lnb .cash__label {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 15px;
+    font-weight: 900;
+    line-height: 18px;
+    color: var(--color-text-depth-300);
+  }
+  .lnb .cash__label::before {
+    content: "";
+    flex: none;
+    width: 18px;
+    height: 18px;
+    background: url("assets/watch/cash.png") center / contain no-repeat;
+  }
+  .lnb .cash__amount {
+    gap: 2px;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 18px;
+    color: var(--color-text-strong);
+  }
+  .lnb .cash__amount span {
+    color: var(--color-text-depth-300);
+  }
+  .lnb .cash__charge {
+    height: 36px;
+    padding: 9px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1;
+  }
+}

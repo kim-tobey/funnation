@@ -2127,3 +2127,8 @@ body.wire .stn .banner.def,body.wire .stn .rbi.def,body.wire .stn .mban.def .mb-
   .stn .top .s-sns .snsb img,.stn .top .s-sns .snsb svg{width:22px;height:22px}
   .stn .top .s-sns .chip.edit{height:22px;padding:0 8px;font-size:12px}
 }
+
+/* 기본 상단 배너 — PC 는 title.webp(컴포넌트 1604×480). 모바일(343×88)은 Figma 인스턴스가 그림을 위에 붙이고 아래를 흐리게 잘라
+   PC 그림을 가운데로 자르면 다르게 보여, Figma 모바일 인스턴스를 3배(1029×264)로 내보낸 title-m.webp 를 씀 (2026-11-19) */
+.stn .banner.def{--defbn:url('assets/v2/station/banner/title.webp?v=20261119')}
+@media (max-width:767px){.stn .banner.def{--defbn:url('assets/v2/station/banner/title-m.webp?v=20261119')}}

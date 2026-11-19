@@ -3581,7 +3581,7 @@ const renderBanner19=renderBanner;
 renderBanner=function(){
   renderBanner19();
   const b=$('.banner'),e=b&&b.firstElementChild;if(!b||!e)return;
-  if(!S.station.bannerImg){b.style.background="center/cover no-repeat url('"+DEFBN+"')";e.textContent='';e.style.display='none';b.classList.add('def')}else b.classList.remove('def');
+  if(!S.station.bannerImg){b.style.background="center/cover no-repeat var(--defbn,url('"+DEFBN+"'))";e.textContent='';e.style.display='none';b.classList.add('def')}else b.classList.remove('def');
 };
 renderRban=function(){
   const el=$('#rban'),cols=$('#cols');if(!el||!cols)return;
