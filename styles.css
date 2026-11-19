@@ -809,6 +809,9 @@ ul {
 }
 .nav-search__list a > span:last-child {
   overflow: hidden;
+  /* 글자 폭에 딱 맞게 줄면 끝 글자가 잘릴 수 있어 오른쪽 1px 여유 (배치는 그대로) */
+  margin-right: -1px;
+  padding-right: 1px;
   text-overflow: ellipsis;
   white-space: nowrap;
 }

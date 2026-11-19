@@ -436,6 +436,8 @@
 .stn .lt-pf .lbl{flex:1 1 auto;min-width:0}
 .stn .lt-pf b{display:block;font-size:15px;font-weight:700;color:var(--text-heading);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .stn .lt-pf .lv,.stn .lt-pf .ofb{font-size:10px;line-height:16px;display:inline-block;margin-top:2px}
+/* LNB 이름 아래 LIVE 는 이름과 왼쪽을 맞춤 — 이름 옆에 붙는 LIVE 용 공통 여백(.lv margin-left:6px)을 빼줌 (2026-11-19) */
+.stn .lt-pf .lbl .lv{margin-left:0}
 .stn .lbtn{display:flex;align-items:center;justify-content:center;gap:4px;width:100%;height:36px;border:1px solid #004261;border-radius:8px;font-size:13px;font-weight:600;margin:8px 0 6px}
 .stn .lbtn:hover{background:var(--surface)}
 .stn .gside .pg{font-size:12px;font-weight:700;color:var(--text-depth);padding:10px 10px 4px}
@@ -818,7 +820,8 @@ body.admm .stn #toasts{bottom:76px}
 .stn .h3r.h1 .av{box-shadow:0 0 0 2px #f7df4e,0 0 10px rgba(247,223,78,.7)}
 .stn .h3r.h2 .av{box-shadow:0 0 0 2px #969da8}
 .stn .h3r.h3 .av{box-shadow:0 0 0 2px #9c5800}
-.stn .h3t{display:flex;flex-direction:column;min-width:0;line-height:1.25}
+/* 이름 · 등급 칸은 남는 폭을 다 씀 — 글자 폭(69.3)에 딱 맞게 줄면 넘침 자르기에 "스텔라 코스모스" 끝이 잘렸음 (2026-11-19) */
+.stn .h3t{display:flex;flex:1 1 auto;flex-direction:column;min-width:0;line-height:1.25}
 .stn .h3t b{font-size:13px;font-weight:700;color:var(--text-heading);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .stn .h3t small{font-size:11px;color:var(--text-meta);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .stn .gside.rail .h3h,.stn .gside.rail .h3t{display:none}
@@ -2059,3 +2062,7 @@ body.wire .stn .banner.def,body.wire .stn .rbi.def,body.wire .stn .mban.def .mb-
   .stn .tabbar .tab{padding:0 4px}
   .stn .tab-ind{top:4px;bottom:4px}
 }
+
+/* 말줄임 글자가 자기 폭에 딱 맞게 줄어든 곳 — 글자 폭이 0.1~0.4px 남아 끝 글자가 잘리거나 … 가 붙을 수 있어,
+   오른쪽에 1px 여유를 두고(margin -1 로 배치는 그대로) 잘림을 막음 (2026-11-19, "스텔라 코스모스" 잘림과 같은 원인) */
+.stn .h3t b,.stn .h3t small,.stn .lt-pf b,.stn .who small,.stn .cnn-n b,.stn .gkb,.stn .tt,.stn .c-au{padding-right:1px;margin-right:-1px}
