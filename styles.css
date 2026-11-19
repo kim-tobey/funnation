@@ -30,6 +30,10 @@
   --color-text-normal: #dfe5ed;
   --color-text-depth-300: #969da8;
   --color-text-depth-400: #7c8594;
+  --color-text-depth-500: #515e71;
+  --color-border-200: #262838;
+  --color-interaction-hovered: #3569d1;
+  --color-sys-error: #cd0c0c;
 
   /* 주요 버튼 배경 — 로그인 제출 · 회원가입 다음/시작하기 (334:78939 btn_login 64283:11541, Button/Default 64493:21573).
      시안은 #4a92ff 위에 그라데이션 이미지를 덮은 것이라 픽셀 색을 뽑아 CSS 로 옮김 */
@@ -5989,6 +5993,24 @@ ul {
 .wdesc[data-expanded="false"] .wdesc__toggle {
   margin-top: 0;
 }
+/* 펀네이션 영상 상세 설명 (67427:70812) — 조회수 줄 Regular 14 · 1.5 #F3F3F3, 본문 Regular 14 · 1.5 Depth 400, 간략히 Bold 12 / 16 Normal */
+.fwatch .wdesc {
+  line-height: 1.5;
+}
+.fwatch .wdesc__meta {
+  font-weight: 400;
+  color: #f3f3f3;
+}
+.fwatch .wdesc__body {
+  font-weight: 400;
+  color: var(--color-text-depth-400);
+}
+.fwatch .wdesc__toggle {
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 16px;
+  color: var(--color-text-normal);
+}
 
 /* 이 채널의 다시보기 (66098:111904) — 위 18 · 좌우 24 · 아래 40, 제목줄과 카드 사이 20.
    카드는 210 (썸네일 210×118 · 모서리 8, 아바타 24) 한 줄 · 간격 20, 넘치면 가로 스크롤 */
@@ -8186,28 +8208,85 @@ ul {
   padding-top: 48px;
 }
 
-/* 자체 플레이어 (66132:101007) — 폭 가득 16:9, 아래 Border 200. 컨트롤은 마우스를 올렸을 때만 (66132:101822) */
+/* 자체 플레이어 (67427:70754) — 폭 가득 · 높이 최대 541(시안 1452×541), 바탕 BG 100.
+   영상(Iframe 972×541)은 16:9 로 가운데, 양옆은 BG 100. 폭이 좁아 16:9 높이가 541 보다 작으면 폭 가득
+   [구현 제안] 시안은 1920 화면 한 장뿐이라 541 을 최대 높이로 둠. 컨트롤은 마우스를 올렸을 때만 */
 .fplayer {
   position: relative;
   flex: none;
   aspect-ratio: 16 / 9;
+  max-height: 541px;
   overflow: hidden;
   border-bottom: 1px solid var(--fw-line);
-  background: #000;
+  background: var(--color-bg-100);
 }
 .fplayer__video {
   position: absolute;
-  inset: 0;
-  width: 100%;
+  top: 0;
+  left: 50%;
+  width: auto;
+  max-width: 100%;
   height: 100%;
+  aspect-ratio: 16 / 9;
   object-fit: contain;
   background: #000;
+  transform: translateX(-50%);
 }
 .fplayer.is-cover .fplayer__video {
   object-fit: cover;
 }
 .fplayer.is-audio .fplayer__video {
   visibility: hidden;
+}
+/* 방송 종료 (67427:72975) — 영상 칸(검정) 가운데: 손 48 → 18 → H5(S-Core Dream 28 · 흰색) → 7 → 설명 14 Depth 300 → 23 → 버튼(Primary · 14 24 · 모서리 8 · Bold 14) */
+.fplayer__ended {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  max-width: 100%;
+  height: 100%;
+  aspect-ratio: 16 / 9;
+  padding-bottom: 20px;
+  background: #000;
+  text-align: center;
+  transform: translateX(-50%);
+}
+.fplayer__ended[hidden] {
+  display: none;
+}
+.fplayer__ended-title {
+  margin: 18px 0 0;
+  font-family: var(--font-score);
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: #fff;
+}
+.fplayer__ended-desc {
+  margin: 7px 0 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--color-text-depth-300);
+}
+.fplayer__ended-btn {
+  margin-top: 23px;
+  padding: 14px 24px;
+  border-radius: 8px;
+  background: var(--color-brand-primary);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+}
+.fplayer.is-ended .fplayer__controls {
+  display: none;
 }
 .fplayer__audio-only {
   position: absolute;
@@ -8224,11 +8303,13 @@ ul {
   display: none;
 }
 /* 컨트롤 (65605:98422) — 아래 그라디언트(0.4 → 0), 위 24 · 좌우 · 아래 16, 버튼 40 · 사이 8 */
+/* 호버 컨트롤 (67427:74476) — 영상 칸(가운데 16:9) 폭에 맞춤. 플레이어 높이가 541 로 막히면 폭 961.8 */
 .fplayer__controls {
   position: absolute;
-  right: 0;
   bottom: 0;
-  left: 0;
+  left: 50%;
+  width: min(100%, 541px * 16 / 9);
+  transform: translateX(-50%);
   z-index: 1;
   display: flex;
   align-items: center;
@@ -8552,13 +8633,13 @@ ul {
   display: flex;
   align-items: center;
 }
-/* chevron-right 를 90° 돌려 ⌄ (20 칸 가운데). 접으면 ⌃ */
+/* chevron-right 를 90° 돌려 ⌄ (20 칸 가운데). TOP 10 으로 펼치면 ⌃ */
 .frank__count img {
   margin: 0 7.6px 0 7.6px;
   transform: rotate(90deg);
   transition: transform 0.2s ease;
 }
-.frank__head[aria-expanded="false"] .frank__count img {
+.frank__head[aria-expanded="true"] .frank__count img {
   transform: rotate(-90deg);
 }
 [data-theme="light"] .frank__count img {
@@ -8571,6 +8652,97 @@ ul {
 }
 .frank__body[hidden] {
   display: none;
+}
+/* TOP 10 (67427:74269) — 카드 · 구분선 · 4~10위 · 한방 최고 사이 16 */
+.frank.is-top10 .frank__body {
+  gap: 16px;
+}
+.frank__line,
+.frank__list {
+  display: none;
+}
+.frank.is-top10 .frank__line {
+  display: block;
+  width: 100%;
+  height: 0;
+  margin: 0;
+  border: 0;
+  border-top: 1px solid var(--color-border-300);
+}
+/* 4~10위 — 줄 36 · 좌우 10 · 사이 10, 줄끼리 4. 순위 Regular 14 Depth 300(24 칸 가운데) · 이름 SemiBold 14/1.6 · 금액 Regular 14 */
+.frank.is-top10 .frank__list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.frank__list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 36px;
+  padding: 0 10px;
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--color-text-normal);
+}
+.frank__rank {
+  flex: none;
+  width: 24px;
+  color: var(--color-text-depth-300);
+  text-align: center;
+}
+.frank__name {
+  flex: 1 1 0;
+  min-width: 0;
+  overflow: hidden;
+  padding: 0;
+  font: inherit;
+  font-weight: 600;
+  line-height: 1.6;
+  letter-spacing: -0.01em;
+  color: inherit;
+  text-align: left;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.frank__amt {
+  flex: none;
+  white-space: nowrap;
+}
+/* TOP 3 아래 줄 (67427:71340) — 한방 최고 + 4위, 각 238 · 사이 8. 채팅 오른쪽 끝에서 잘림 */
+.frank__row {
+  display: flex;
+  gap: 8px;
+  margin-right: -12px;
+  overflow: hidden;
+}
+.frank__row .frank__best {
+  flex: none;
+  width: 238px;
+}
+.frank.is-top10 .frank__row {
+  margin-right: 0;
+}
+.frank.is-top10 .frank__row .frank__best {
+  flex: 1 1 auto;
+  width: auto;
+}
+.frank.is-top10 .frank__fourth {
+  display: none;
+}
+.frank__bolt b {
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--color-text-normal);
+}
+.fname--pink {
+  background-image: linear-gradient(to right, #ea72db, #64a4fc);
 }
 /* 2 · 1 · 3위 카드 — 사이 8, 아래 맞춤. 1위만 세로로 쌓아 더 높음 */
 .frank__podium {
@@ -8733,9 +8905,6 @@ ul {
   overflow-y: auto;
   overscroll-behavior: contain;
   list-style: none;
-}
-.fchat:has(.frank__head[aria-expanded="false"]) .fchat__list {
-  padding-top: 55px;
 }
 .fmsg {
   max-width: 328px;
@@ -8969,6 +9138,58 @@ ul {
 .fdock__gear[aria-pressed="true"] {
   border-color: var(--color-brand-primary);
 }
+/* 비로그인 (67427:72843) — 입력칸 BG Cancel · 안내 글자 Depth 500, 후원 · 시그니처 칩은 BG Disabled 바탕 · Depth 500 글자 · 흐린 아이콘.
+   누르면 로그인 화면으로 (동작은 app.js) */
+[data-auth="out"] .finput__box {
+  background: var(--color-bg-cancel);
+}
+[data-auth="out"] .finput__text::placeholder {
+  color: var(--color-text-depth-500);
+}
+[data-auth="out"] .finput__btn img,
+[data-auth="out"] .fkind img,
+[data-auth="out"] .fdock__gear img {
+  opacity: 0.35;
+}
+[data-auth="out"] .fkind,
+[data-auth="out"] .fkind:hover {
+  background: var(--color-bg-300);
+  box-shadow: none;
+  color: var(--color-text-depth-500);
+}
+[data-auth="out"] .fdock__gear {
+  border-color: var(--color-border-200);
+  background: var(--color-bg-300);
+}
+/* 새 메시지 알림 (67427:72034) — BG 400 알약 36 · 그림자, ↓ 16 + SemiBold 15 "새로운 메시지" + Primary 숫자(10 넘으면 10+) */
+.fchat__jump {
+  position: absolute;
+  bottom: 155px;
+  left: 50%;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 36px;
+  padding: 0 14px 0 12px;
+  border-radius: 50px;
+  background: var(--color-bg-400);
+  filter: drop-shadow(0 4px 7px rgba(0, 0, 0, 0.25));
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--color-text-normal);
+  white-space: nowrap;
+  transform: translateX(-50%);
+}
+.fchat__jump[hidden] {
+  display: none;
+}
+.fchat__jump b {
+  margin-left: 4px;
+  font-weight: 600;
+  color: var(--color-brand-primary);
+}
 [data-theme="light"] .fdock__gear img {
   filter: brightness(0.3);
 }
@@ -9069,23 +9290,23 @@ ul {
   border: 0;
   background: var(--fw-line);
 }
-/* 작은 토글 36×20 (66132:103287) — 꺼짐 Border 200, 켜짐 Primary, 손잡이 14 흰색 */
+/* 채팅 설정 토글 (67427:75852) — DS 토글(66332:17843) 44×24, 꺼짐 BG Cancel · 켜짐 Primary, 손잡이 18 흰색 */
 .switch--s {
   flex: none;
-  width: 36px;
-  height: 20px;
-  background: var(--fw-line);
+  width: 44px;
+  height: 24px;
+  background: var(--color-bg-cancel);
 }
 .switch--s::after {
-  width: 14px;
-  height: 14px;
+  width: 18px;
+  height: 18px;
   background: #fff;
 }
 .switch--s:checked {
   background: var(--color-brand-primary);
 }
 .switch--s:checked::after {
-  transform: translateX(16px);
+  transform: translateX(20px);
 }
 
 /* 유저 찾기 (66132:107275) — 메뉴 아래 채팅 폭 가득, BG 300 · 아래 Border 200 · 그림자. 위 16 · 좌우 16 · 아래 12 · 사이 16 */
@@ -9277,7 +9498,7 @@ ul {
   padding: 20px;
   border: 1px solid var(--fw-line);
   border-radius: 16px;
-  background: var(--color-bg-200);
+  background: var(--color-bg-300); /* 67427:76653 — BG 300 (이전 시안 BG 200) */
   filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.35));
   animation: fpop-in 0.18s ease-out;
 }
@@ -9326,8 +9547,55 @@ ul {
 .fchat .fpop .donate__foot {
   padding: 0;
 }
+/* 후원하기 (67427:77456 · 67427:78325) — 켜짐 Primary · 흰 글자, 꺼짐(금액 부족 · 잔액 부족) BG Cancel · Depth 500. Medium 16 */
 .fpop .donate__submit {
+  background: var(--color-brand-primary);
+  font-weight: 500;
   letter-spacing: -0.01em;
+  color: #fff;
+}
+.fpop .donate__submit:hover {
+  background: var(--color-interaction-hovered);
+}
+.fpop .donate__submit.is-off,
+.fpop .donate__submit.is-off:hover {
+  background: var(--color-bg-cancel);
+  color: var(--color-text-depth-500);
+}
+/* 금액 안내 줄 — 경고 글자 대신 (최소 금액 · 잔액 부족). 왼쪽 Medium 11 Depth 500, 오른쪽 충전하기(Primary 알약 · Bold 12) */
+.fpop .damount > .dwarn {
+  display: none;
+}
+.dhint {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+  min-height: 16px;
+}
+.dhint[hidden] {
+  display: none;
+}
+.dhint p {
+  flex: 1 1 0;
+  margin: 0;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--color-text-depth-500);
+}
+.dhint__charge {
+  flex: none;
+  padding: 6px 12px;
+  border-radius: 24px;
+  background: var(--color-brand-primary);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 16px;
+  color: #fff;
+}
+.dhint__charge[hidden] {
+  display: none;
 }
 .fpop .dform {
   gap: 16px;
@@ -9501,7 +9769,14 @@ ul {
   border-color: var(--color-brand-primary);
 }
 .fpop .damount__box.is-warn {
-  border-color: var(--w-warn);
+  border-color: var(--color-sys-error);
+}
+/* 잔액 부족이어도 지우기 아이콘은 파란 그대로 (67427:78305) */
+.fpop .is-warn .damount__clear img:nth-child(2) {
+  display: block;
+}
+.fpop .is-warn .damount__clear img:nth-child(3) {
+  display: none;
 }
 .fpop .damount__input {
   color: var(--color-brand-primary);
@@ -9587,12 +9862,17 @@ ul {
   padding-top: 6px;
   border-top: 1px solid var(--color-border-100);
 }
+/* 줄 (67427:79873) — 위아래 6 · 좌우 8 · 모서리 12, 라디오와 이름 사이 10. 미리 듣기는 줄 오른쪽 */
+.fvoice__list li {
+  position: relative;
+}
 .fvoice__item {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 10px;
   width: 100%;
-  padding: 12px 8px;
+  min-height: 40px;
+  padding: 6px 118px 6px 8px;
   border-radius: 12px;
   font-size: 14px;
   font-weight: 600;
@@ -9602,19 +9882,49 @@ ul {
   text-align: left;
 }
 .fvoice__item:hover {
-  background: var(--fw-sheet-bg);
+  background: var(--color-bg-400);
 }
-/* 고른 목소리 — 재생 아이콘 Primary (시안 마지막 줄) */
-.fvoice__item img:last-child,
-.fvoice__item[aria-pressed="true"] img:nth-of-type(1) {
-  display: none;
+/* 라디오 (66512:80568) — 20 칸 안 16, 끔 Border 400 1.5, 켬 Primary 바탕 + 흰 점 */
+.fvoice__radio {
+  flex: none;
+  box-sizing: border-box;
+  width: 16px;
+  height: 16px;
+  margin: 2px;
+  border: 1.5px solid var(--color-border-400);
+  border-radius: 9999px;
 }
-.fvoice__item[aria-pressed="true"] img:last-child {
-  display: block;
+.fvoice__item[aria-pressed="true"] .fvoice__radio {
+  border-color: var(--color-brand-primary);
+  background: radial-gradient(circle, #fff 0 3px, var(--color-brand-primary) 3.5px);
+}
+/* 미리 듣기 (67427:79878) — BG 400 · Border 400 · 모서리 24 · 위아래 6 · 왼 12 · 오른 10, Medium 12 / 16 + 재생 16 */
+.fvoice__preview {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 10px 6px 12px;
+  border: 1px solid var(--color-border-400);
+  border-radius: 24px;
+  background: var(--color-bg-400);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  color: var(--color-text-normal);
+  transform: translateY(-50%);
+}
+.fvoice__list li + li .fvoice__preview {
+  margin-top: 3px;
+}
+.fvoice__preview:hover,
+.fvoice__preview.is-playing {
+  border-color: var(--color-brand-primary);
 }
 
-/* 유저 팝업 (66132:107341) — 349, 채팅 왼쪽 11. BG 400 · Border 400 · 모서리 12, 위아래 20 · 좌우 16.
-   사진 74×70 · 왕관 30 + 이름 H6 19, 팔로우 날짜 B1 Depth 300, 선, 신고하기 S2 16 */
+/* 유저 정보 (67427:86236) — 349, 채팅 왼쪽 11 · 누른 줄 높이. BG 300 · Border 300 · 모서리 12 · 안 16 · 사이 16 */
 .fuser {
   position: absolute;
   top: 0;
@@ -9622,85 +9932,137 @@ ul {
   z-index: 6;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 9px;
+  gap: 16px;
   width: 349px;
-  padding: 20px 16px;
-  border: 1px solid var(--color-border-400);
+  padding: 16px;
+  border: 1px solid var(--color-border-300);
   border-radius: 12px;
-  background: var(--color-bg-400);
+  background: var(--color-bg-300);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
 }
 .fuser[hidden] {
   display: none;
 }
-.fuser__close {
-  position: absolute;
-  top: 20px;
-  right: 17px;
-  display: flex;
-  padding: 0;
-}
-[data-theme="light"] .fuser__close img,
-[data-theme="light"] .fuser__since img,
-[data-theme="light"] .fuser__report img {
-  filter: brightness(0.25);
-}
-.fuser__id {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 7px;
-  margin-bottom: 11px;
-}
-.fuser__pic {
-  width: 74px;
-  height: 70px;
-  border-radius: 35px;
-  object-fit: cover;
-}
-.fuser__name {
+.fuser__head {
   display: flex;
   align-items: center;
-  gap: 5px;
+  justify-content: space-between;
+  height: 24px;
+}
+.fuser__head h3 {
   margin: 0;
-}
-.fuser__name strong {
   font-family: var(--font-score);
   font-size: 19px;
   font-weight: 700;
   line-height: 1;
   letter-spacing: -0.01em;
-  color: var(--color-text-strong);
+  color: var(--color-text-normal);
 }
+.fuser__close {
+  display: flex;
+  padding: 0;
+}
+/* 카드 — BG 400 · 모서리 8 · 위아래 12 · 좌우 10 · 사이 20 */
+.fuser__card {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 12px 10px;
+  border-radius: 8px;
+  background: var(--color-bg-400);
+}
+.fuser__id {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.fuser__pic {
+  flex: none;
+  width: 74px;
+  height: 70px;
+  border-radius: 9999px;
+  object-fit: cover;
+}
+.fuser__who {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+/* 이름 H6 #FEFEFE + › 20 — 누르면 그 사람 방송국 */
+.fuser__name {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+}
+.fuser__name strong {
+  overflow: hidden;
+  font-family: var(--font-score);
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: #fefefe;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.fuser__grade {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin: 0;
+}
+.fuser__grade img {
+  flex: none;
+  object-fit: contain;
+}
+/* 팔로우 날짜 — 하트 14 + Regular 14 · 1.5 Depth 300 */
 .fuser__since {
   display: flex;
-  align-self: stretch;
   align-items: center;
-  gap: 10px;
+  gap: 6px;
   margin: 0;
   font-size: 14px;
   line-height: 1.5;
   color: var(--color-text-depth-300);
 }
-.fuser__line {
-  align-self: stretch;
-  height: 1px;
-  margin: 8.5px 0;
-  border: 0;
-  background: var(--color-border-400);
-}
-.fuser__report {
+/* 메뉴 — 줄 안 4 · 아이콘 20 + SemiBold 14 · 1.6, 줄 사이 6. 쪽지 아래 구분선(위아래 8.5) */
+.fuser__menu {
   display: flex;
-  align-self: stretch;
-  align-items: center;
-  gap: 5px;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
   padding: 0;
-  font-size: 16px;
+  list-style: none;
+}
+.fuser__act {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 4px;
+  border-radius: 6px;
+  font-size: 14px;
   font-weight: 600;
-  line-height: 1;
+  line-height: 1.6;
   letter-spacing: -0.01em;
   color: var(--color-text-normal);
+  text-align: left;
+}
+.fuser__act:hover {
+  background: var(--color-bg-400);
+}
+.fuser__act[aria-pressed="true"] {
+  color: var(--color-brand-primary);
+}
+.fuser__sep {
+  height: 0;
+  margin: 8.5px 0;
+  border-top: 1px solid var(--color-border-300);
+}
+.fmsg[hidden] {
+  display: none;
 }
 /* 이름을 누른 줄 · 랭킹 표시 */
 .fmsg__name.is-on {
@@ -10074,8 +10436,81 @@ ul {
   .frank__body[hidden] {
     display: none;
   }
+  /* 펼침 (67427:93435) — 채팅 칸을 모두 덮는 TOP 10 패널. 줄 대신 제목 "이번 방송 후원 랭킹 · TOP 10 ⌃"(누르면 접힘),
+     카드(사이 4 · 좌우 6) → 20 → 선 → 12 → 한방 최고 → 12 → 4~10위(줄 28 · 좌우 6, 순위 20 칸 BG Chips) */
+  .frank.is-mo-open {
+    bottom: 0;
+    gap: 8px;
+    padding: 6px 12px 8px;
+    overflow-y: auto;
+    scrollbar-width: none;
+  }
+  .frank.is-mo-open .frank__head {
+    display: flex;
+  }
+  .frank.is-mo-open .frank__strip {
+    display: none;
+  }
   .frank.is-mo-open .frank__body {
     display: flex;
+    gap: 12px;
+  }
+  .frank.is-mo-open .frank__podium {
+    gap: 4px;
+  }
+  .frank.is-mo-open .frank__card {
+    padding-right: 6px;
+    padding-left: 6px;
+  }
+  .frank.is-mo-open .frank__line {
+    display: block;
+    width: 100%;
+    height: 0;
+    margin: 8px 0 0;
+    border: 0;
+    border-top: 1px solid var(--color-border-300);
+  }
+  .frank.is-mo-open .frank__row {
+    order: 3;
+    margin-right: 0;
+  }
+  .frank.is-mo-open .frank__row .frank__best {
+    flex: 1 1 auto;
+    width: auto;
+  }
+  .frank.is-mo-open .frank__fourth {
+    display: none;
+  }
+  .frank.is-mo-open .frank__list {
+    order: 4;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .frank.is-mo-open .frank__list li {
+    height: 28px;
+    padding: 0 6px;
+    font-size: 12px;
+    color: var(--color-text-depth-300);
+  }
+  .frank.is-mo-open .frank__rank {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    background: var(--color-bg-cancel);
+    font-size: 12px;
+    line-height: 1.6;
+    letter-spacing: -0.01em;
+  }
+  .frank.is-mo-open .frank__name {
+    font-size: 13px;
+    color: var(--color-text-normal);
   }
   .frank__strip {
     position: relative;
@@ -10167,7 +10602,12 @@ ul {
     padding: 49px 24px 121px;
   }
   .fchat:has(.frank.is-mo-open) .fchat__list {
-    padding-top: 250px;
+    padding-top: 49px; /* 펼친 랭킹이 채팅 칸을 모두 덮음 (67427:93435) */
+  }
+  /* 펼친 랭킹은 입력칸 · 후원 버튼까지 덮음 (시안 랭킹 높이 494 = 채팅 칸 전체) */
+  .fchat:has(.frank.is-mo-open) .fdock,
+  .fchat:has(.frank.is-mo-open) .fchat__jump {
+    display: none;
   }
   .fmsg {
     max-width: none;
@@ -10523,15 +10963,20 @@ ul {
   }
 
   /* [구현 제안] 유저 팝업 — 모바일 시안은 "작업중" 이라 PC 카드를 화면 가운데에 띄우고 뒤를 어둡게 */
+  /* 유저 정보 (67427:88598) — 아래 시트. 화면은 Overlay Black 65 로 덮고, 위 모서리 12 · 안 위 16 · 좌우 20 */
   .fuser {
     position: fixed;
-    top: 50% !important;
-    right: 16px;
-    left: 16px;
+    top: auto !important;
+    right: 0;
+    bottom: 20px;
+    left: 0;
     z-index: 60;
     width: auto;
-    transform: translateY(-50%);
-    box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.5);
+    padding: 16px 20px 20px;
+    border-width: 1px 0 0;
+    border-radius: 12px 12px 0 0;
+    box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.65);
+    animation: fsheet-up 0.18s ease-out;
   }
 }
 
@@ -14013,5 +14458,608 @@ button.subnav__tab {
 @media (max-width: 767px) {
   :root[data-page="watch"]:not([data-theme="light"]) .wbar {
     background: var(--color-bg-200);
+  }
+}
+
+/* ============================================================
+   펀네이션 영상 상세 — 선택한 시그니처 · 시그니처 전체보기 (67427:80726 · 67427:81516 · 67427:82312)
+   ============================================================ */
+/* 선택한 시그니처 — 제목 S-Core Dream 14 · 28 줄, 아래 10 → 칸 96 · 모서리 10 · 안 8, BG 400.
+   비었으면 Primary 점선 + 안내(Regular 12 Depth 400) · 시그니처 선택(Primary 알약 · Bold 12), 고르면 Primary 실선 + 그림 140×80 · 사이 14 */
+.dpick {
+  gap: 10px;
+}
+.dpick .dsec__head {
+  height: 28px;
+}
+.dpick__box {
+  display: flex;
+  align-items: center;
+  height: 96px;
+  padding: 8px;
+  border: 1px dashed var(--color-brand-primary);
+  border-radius: 10px;
+  background: var(--color-bg-400);
+}
+.dpick__box.is-picked {
+  border-style: solid;
+}
+.dpick__empty {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 64px;
+}
+.dpick__empty[hidden],
+.dpick__sel[hidden] {
+  display: none;
+}
+.dpick__empty p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--color-text-depth-400);
+}
+.dpick__open {
+  padding: 6px 12px;
+  border-radius: 24px;
+  background: var(--color-brand-primary);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 16px;
+  color: #fff;
+}
+.dpick__sel {
+  display: flex;
+  flex: 1 1 0;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+  padding: 0;
+  text-align: left;
+}
+.dpick__sel img {
+  flex: none;
+  width: 140px;
+  height: 80px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+.dpick__info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 20px;
+}
+.dpick__info b {
+  font-weight: 700;
+  color: var(--color-text-normal);
+}
+.dpick__info strong {
+  color: var(--color-brand-primary);
+}
+
+/* 시그니처 전체보기 — 시그니처 팝오버(398) 왼쪽 4 · 아래 맞춤. 500×560, BG 300 · Border 200, 모서리 16(오른쪽 아래만 0) · 안 20 · 사이 20 */
+.fsigall {
+  position: absolute;
+  right: calc(100% + 12px + 398px + 4px);
+  bottom: 12px;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 500px;
+  height: 560px;
+  max-height: calc(100% - 24px);
+  padding: 20px;
+  border: 1px solid var(--fw-line);
+  border-radius: 16px 16px 0 16px;
+  background: var(--color-bg-300);
+  filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.35));
+  animation: fpop-in 0.18s ease-out;
+}
+.fsigall[hidden] {
+  display: none;
+}
+/* 머리 — H6 + 개수(Regular 12 · 1.6 Depth 400), 28 줄. 아래 20 */
+.fsigall__head {
+  display: flex;
+  flex: none;
+  align-items: center;
+  height: 28px;
+  margin-bottom: 10px;
+}
+.fsigall__head h3 {
+  flex: 1 1 0;
+  margin: 0;
+  font-family: var(--font-score);
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: var(--color-text-normal);
+}
+.fsigall__head span {
+  font-size: 12px;
+  line-height: 1.6;
+  letter-spacing: -0.01em;
+  color: var(--color-text-depth-400);
+}
+/* 검색 — 40 · BG 400 · 모서리 8 · 좌우 16, Medium 14 / 22 · 0.25 */
+.fsigall__search {
+  position: relative;
+  display: flex;
+  flex: none;
+  align-items: center;
+  height: 40px;
+  padding: 0 40px 0 16px;
+  border-radius: 8px;
+  background: var(--color-bg-400);
+}
+.fsigall__search:focus-within {
+  box-shadow: inset 0 0 0 1px var(--color-brand-primary);
+}
+.fsigall__search input {
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 22px;
+  letter-spacing: 0.25px;
+  color: var(--color-text-normal);
+  outline: none;
+}
+.fsigall__search input::placeholder {
+  color: var(--color-text-depth-400);
+}
+.fsigall__search input::-webkit-search-cancel-button {
+  display: none;
+}
+.fsigall__search img {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+}
+/* 필터 칩 — 28 · 모서리 24 · 좌우 12, Medium 12 / 16. 선택은 Primary · Bold 흰 글자, 나머지 BG Cancel · Depth 300. 아래 16 */
+.fsigall__filters {
+  display: flex;
+  flex: none;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.fsigall__chip {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 28px;
+  padding: 0 12px;
+  border-radius: 24px;
+  background: var(--color-bg-cancel);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  color: var(--color-text-depth-300);
+}
+.fsigall__chip[aria-pressed="true"] {
+  background: var(--color-brand-primary);
+  font-weight: 700;
+  color: #fff;
+}
+.fsigall__chip--menu {
+  padding-right: 7px;
+}
+.fsigall__chip--menu[aria-expanded="true"],
+.fsigall__chip--menu.is-on {
+  box-shadow: inset 0 0 0 1px var(--color-brand-primary);
+  color: var(--color-text-normal);
+}
+.fsigall__chip--menu[aria-expanded="true"] img {
+  transform: rotate(180deg);
+}
+.fsigall__range {
+  position: relative;
+}
+/* 금액 필터 (67427:85453) — 282 · BG 400 · Border 400 · 모서리 12 · 안 8 · 줄 32(모서리 6 · 좌우 6) 사이 2. 선택은 Bold Primary + ✓ */
+.fsigall__menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 282px;
+  max-height: 298px;
+  margin: 0;
+  padding: 8px;
+  overflow-y: auto;
+  border: 1px solid var(--color-border-400);
+  border-radius: 12px;
+  background: var(--color-bg-400);
+  list-style: none;
+  filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.35));
+}
+.fsigall__menu[hidden] {
+  display: none;
+}
+.fsigall__menu {
+  scrollbar-width: none;
+}
+.fsigall__menu::-webkit-scrollbar {
+  display: none;
+}
+.fsigall__menu button {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 32px;
+  padding: 0 6px;
+  border-radius: 6px;
+  font-size: 12px;
+  line-height: 1.6;
+  letter-spacing: -0.01em;
+  color: var(--color-text-normal);
+  text-align: left;
+}
+.fsigall__menu button:hover {
+  background: var(--color-bg-cancel);
+}
+.fsigall__menu button[aria-checked="true"] {
+  justify-content: space-between;
+  font-weight: 700;
+  line-height: 16px;
+  letter-spacing: 0;
+  color: var(--color-brand-primary);
+}
+.fsigall__menu button[aria-checked="true"]::after {
+  content: "✓";
+}
+/* 목록 — 세로 스크롤(남는 높이 · 시안 344), 3열 140 · 사이 12 · 줄 10 */
+.fsigall__scroll {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+.fsigall__scroll::-webkit-scrollbar {
+  display: none;
+}
+.fsigall__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 140px);
+  gap: 10px 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.fsigall__grid li[hidden] {
+  display: none;
+}
+/* 항목 — 140×112 · 안 4 · 모서리 8, 그림 132×75 · 모서리 6, 사이 5, 이름 Medium 11 · 1.5. 선택은 Primary 바탕 · 흰 글자 · ✓ */
+.fsigall .dsig__item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 140px;
+  height: 112px;
+  padding: 4px;
+  overflow: hidden;
+  border-radius: 8px;
+  outline: none;
+  text-align: left;
+}
+.fsigall .dsig__item:hover {
+  background: var(--color-bg-400);
+}
+.fsigall .dsig__item:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--color-brand-primary);
+}
+.fsigall .dsig__item img {
+  flex: none;
+  width: 132px;
+  height: 75px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+.fsigall .dsig__item span {
+  overflow: hidden;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--color-text-normal);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.fsigall .dsig__item[aria-pressed="true"] {
+  outline: none;
+  background: var(--color-brand-primary);
+}
+.fsigall .dsig__item[aria-pressed="true"] span {
+  color: #fff;
+}
+.fsigall .dsig__item[aria-pressed="true"] span::before {
+  content: "✓ ";
+}
+/* 빈 화면 (67427:83367) — 아이콘 44(위 111) → 16 → S-Core Dream 16 Depth 400 */
+.fsigall__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding-top: 111px;
+}
+.fsigall__empty[hidden] {
+  display: none;
+}
+.fsigall__empty p {
+  margin: 0;
+  font-family: var(--font-score);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: var(--color-text-depth-400);
+}
+/* 안내 — Medium 11 · 1.5 Depth 400 */
+.fsigall__note {
+  flex: none;
+  margin: 0;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--color-text-depth-400);
+}
+
+/* 모바일 칭호 칩 · 보유 글자 — PC 에서는 숨김 (PC 는 칭호 칸 · "내 펀캐시 | 금액" 칩) */
+.dmsg__grade,
+.dcash__own {
+  display: none;
+}
+
+/* ============================================================
+   펀네이션 영상 상세 — 모바일 후원 시트 (67427:88956 · 시안 2026-11)
+   금액이 맨 위(칸 48 · 아래 오른쪽 "ⓕ 100,000 보유" · 칩 3열) → 20 → 메시지 카드(이름 S-Core Dream 14 + 칭호 칩 · 익명,
+   한 줄 입력 40 안에 | 🔊 야옹이). 칭호 칸 · 선은 칩으로 대신해 숨김. 머리 위아래 16 · S-Core Dream 16, 후원하기 위 20
+   ============================================================ */
+@media (max-width: 767px) {
+  .fchat .fpop {
+    padding-top: 16px;
+  }
+  .fchat .fpop .donate__head {
+    padding-bottom: 16px;
+  }
+  .fchat .fpop .donate__head h3 {
+    font-family: var(--font-score);
+    font-size: 16px;
+    line-height: 20px;
+    letter-spacing: 0;
+  }
+  .fchat .fpop .donate__foot {
+    padding-top: 20px;
+  }
+  .fpop .dform {
+    gap: 20px;
+  }
+  .fpop .damount {
+    order: -1;
+    row-gap: 4px;
+  }
+  .fpop .dtitle,
+  .fpop .dform__line {
+    display: none;
+  }
+  /* 금액 칸 48 · BG 200 · Border 200 · 모서리 10 · 좌우 12, 원 Regular 14 Depth 400 */
+  .fpop .damount__box {
+    height: 48px;
+    padding: 0 12px;
+  }
+  .fpop .damount__unit {
+    color: var(--color-text-depth-400);
+  }
+  /* 보유 줄 — 칸 아래 오른쪽, 캐시 14 + Bold 12 Primary 금액 · 보유 */
+  .fpop .dcash {
+    grid-row: 2;
+    grid-column: 1 / -1;
+    justify-self: end;
+    gap: 2px;
+    height: auto;
+    margin: 0;
+    padding: 0;
+    background: none;
+  }
+  .fpop .dcash img {
+    margin: 3px;
+  }
+  .fpop .dcash b,
+  .fpop .dcash__own {
+    display: inline;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 16px;
+    letter-spacing: 0;
+    color: var(--color-brand-primary);
+  }
+  .fpop .dcash__own {
+    margin-left: 2px;
+  }
+  .fpop .damount .dhint {
+    grid-column: 1 / -1;
+  }
+  .fpop .damount__chips {
+    margin-top: 4px;
+  }
+  /* 메시지 카드 — BG 400 · Border 200 · 모서리 10 · 안 12 · 사이 12 */
+  .fpop .dmsg__name {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+  }
+  .fpop .dmsg__name strong {
+    font-family: var(--font-score);
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.01em;
+    color: #fff;
+  }
+  /* 칭호 칩 (67427:89006) — BG Label 100 · 모서리 4 · 위아래 2 · 왼 4, 왕관 18 + Bold 12 칭호 + › 16 */
+  .fpop .dmsg__grade {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    margin-left: 4px;
+    padding: 2px 0 2px 4px;
+    border-radius: 4px;
+    background: var(--color-border-400);
+  }
+  .fpop .dmsg__grade .fname {
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: 0;
+  }
+  /* 한 줄 입력 — 안내 Medium 12 Depth 500, 오른쪽 | (14) · 🔊 15 + 목소리 이름 Medium 12 흰색. 글자 수는 숨김 */
+  .fpop .dmsg__box {
+    padding: 0 12px;
+  }
+  .fpop .dmsg__input::placeholder {
+    color: var(--color-text-depth-500);
+  }
+  .fpop .dmsg__count {
+    display: none;
+  }
+  .fpop .dmsg__tts {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    width: auto;
+    height: auto;
+    padding: 0 0 0 6px;
+    border-left: 1px solid var(--color-border-300);
+    border-radius: 0;
+    background: none;
+  }
+  .fpop .dmsg__tts span {
+    display: inline;
+    order: 2;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 16px;
+    color: #fff;
+  }
+  .fpop .dmsg__speaker {
+    width: 15px;
+    height: 15px;
+  }
+}
+
+/* 시그니처 선택 — PC 는 뒤로 · 확인 없음 */
+.fsigall__back,
+.fsigall__ok {
+  display: none;
+}
+/* 모바일 시그니처 선택 시트 (67427:89835) — 후원 시트 자리에 겹침. ← 시그니처 선택(S-Core Dream 16) + 개수, 검색 · 필터 · 3열 목록 · 확인 */
+@media (max-width: 767px) {
+  .fsigall {
+    position: fixed;
+    top: auto;
+    right: 0;
+    bottom: 20px;
+    left: 0;
+    z-index: 51;
+    width: auto;
+    height: calc(100dvh - var(--fw-top) - 20px);
+    max-height: none;
+    padding: 16px 20px 16px;
+    border: 0;
+    border-radius: 20px 20px 0 0;
+    background: var(--fw-sheet-bg);
+    filter: none;
+    box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.4);
+    animation-name: fsheet-up;
+  }
+  .fsigall__head {
+    gap: 8px;
+  }
+  .fsigall__back {
+    display: flex;
+    padding: 2px;
+  }
+  .fsigall__head h3 {
+    font-size: 16px;
+    line-height: 20px;
+    letter-spacing: 0;
+  }
+  .fsigall__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px 8px;
+  }
+  .fsigall .dsig__item {
+    width: 100%;
+    height: auto;
+  }
+  .fsigall .dsig__item img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 132 / 75;
+  }
+  .fsigall__note {
+    display: none;
+  }
+  .fsigall__ok {
+    display: flex;
+    flex: none;
+    margin-top: 10px;
+    background: var(--color-brand-primary);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: #fff;
+  }
+  .fsigall__ok.is-off {
+    background: var(--color-bg-cancel);
+    color: var(--color-text-depth-500);
+  }
+  .fsigall__menu {
+    width: min(282px, calc(100vw - 40px));
+  }
+}
+
+/* [구현 제안 · 시안 없음] PC 폭이 좁아(1400 미만) 후원 팝오버 왼쪽에 500 칸이 없으면, 시그니처 선택을 후원 팝오버 자리에 겹쳐 열고 ← 로 돌아감 */
+@media (min-width: 768px) and (max-width: 1399px) {
+  .fsigall {
+    right: calc(100% + 12px);
+    z-index: 6;
+    width: 398px;
+    border-radius: 16px;
+  }
+  .fsigall__back {
+    display: flex;
+    margin-right: 8px;
+    padding: 2px;
+  }
+  .fsigall__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px 8px;
+  }
+  .fsigall .dsig__item {
+    width: 100%;
+    height: auto;
+  }
+  .fsigall .dsig__item img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 132 / 75;
   }
 }

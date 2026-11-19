@@ -1891,7 +1891,7 @@ window.FunFav = (function () {
       var add = chip.getAttribute("data-add");
       setAmount(input, add === "all" ? BALANCE : Math.min(amountOf(input) + +add, 99999999));
     }
-    var sig = input.closest(".donate").querySelector('.dsig__item[aria-pressed="true"]');
+    var sig = sigOf(input.closest(".donate")).querySelector('.dsig__item[aria-pressed="true"]');
     if (sig) sig.setAttribute("aria-pressed", "false");
     check(input.closest(".donate"));
   });
@@ -1902,18 +1902,22 @@ window.FunFav = (function () {
 
   // 시그니처 — 고르면 그 금액이 들어감, 오른쪽 화살표로 다음 묶음. 항목이 없으면 "등록된 시그니처 없음"
   var sigs = watch.querySelectorAll(".dsig__item");
+  // 펀네이션은 시그니처 목록이 후원 팝오버 밖(시그니처 전체보기 #fsigall)에 있음 — 목록 ↔ 팝오버를 서로 찾아 줌
+  function sigOf(panel) { return (panel && panel.id === "donate-signature" && document.getElementById("fsigall")) || panel; }
+  function panelOf(item) { return item.closest(".donate") || document.getElementById("donate-signature"); }
   for (var g = 0; g < sigs.length; g++) sigs[g].addEventListener("click", function () {
     for (var i = 0; i < sigs.length; i++) sigs[i].setAttribute("aria-pressed", sigs[i] === this ? "true" : "false");
-    setAmount(this.closest(".donate").querySelector("[data-donate-amount]"), +this.getAttribute("data-price"));
-    check(this.closest(".donate"));
+    setAmount(panelOf(this).querySelector("[data-donate-amount]"), +this.getAttribute("data-price"));
+    check(panelOf(this));
   });
   var grid = watch.querySelector("[data-sig-grid]");
-  watch.querySelector("[data-sig-next]").addEventListener("click", function () {
+  var sigNext = watch.querySelector("[data-sig-next]"); // 펀네이션 영상 상세는 화살표 대신 시그니처 전체보기 팝오버
+  if (sigNext) sigNext.addEventListener("click", function () {
     var end = grid.scrollLeft + grid.clientWidth >= grid.scrollWidth - 2;
     grid.scrollLeft = end ? 0 : grid.scrollLeft + 188;
   });
-  if (!sigs.length) {
-    grid.parentNode.hidden = true;
+  if (!sigs.length && grid) {
+    (grid.closest(".dsig") || grid).hidden = true;
     watch.querySelector("[data-sig-empty]").hidden = false;
   }
 
@@ -1952,14 +1956,28 @@ window.FunFav = (function () {
 
     var amount = panel.querySelector("[data-donate-amount]");
     var won = amountOf(amount);
-    var min = panel.getAttribute("data-donate-panel") === "video" ? 10000 : 1000;
+    // 펀네이션 영상 상세 일반 후원은 최소 1만원 (67427:77456 "최소 후원금액은 1만원입니다")
+    var fun = !!panel.closest(".fchat");
+    var min = panel.getAttribute("data-donate-panel") === "video" || (fun && panel.getAttribute("data-donate-panel") === "general") ? 10000 : 1000;
     ok = warn(amount.closest(".damount").querySelector("[data-warn]"),
       won > BALANCE ? "보유캐시가 부족합니다" : (won || all) && won < min ? "최소 " + fmt(min) + "원 이상" : "",
       [amount.closest(".damount__box")]) && ok;
+    /* 펀네이션 (67427:77456 · 67427:78259) — 경고 대신 금액 칸 아래 안내 줄. 잔액 부족만 빨간 테두리 + 충전하기,
+       최소 금액 미만 · 잔액 부족이면 후원하기를 흐리게 (누르면 안내만) */
+    var hint = amount.closest(".damount").querySelector("[data-donate-hint]");
+    if (hint) {
+      var lack = won > BALANCE, low = won < min && (won > 0 || all);
+      hint.hidden = !(lack || low);
+      hint.querySelector("[data-donate-hint-text]").textContent = lack ? "보유 펀캐시가 부족합니다"
+        : "최소 후원금액은 " + (min >= 10000 ? min / 10000 + "만원" : fmt(min) + "원") + "입니다";
+      hint.querySelector("[data-donate-charge]").hidden = !lack;
+      amount.closest(".damount__box").classList.toggle("is-warn", lack);
+      panel.querySelector("[data-donate-submit]").classList.toggle("is-off", lack || won < min);
+    }
 
     var key = panel.getAttribute("data-donate-panel");
     if (key === "signature") {
-      var picked = panel.querySelector('.dsig__item[aria-pressed="true"]');
+      var picked = sigOf(panel).querySelector('.dsig__item[aria-pressed="true"]');
       ok = warn(panel.querySelector("[data-warn-sig]"),
         picked && picked.hasAttribute("data-unavailable") ? "선택한 시그니처를 사용할 수 없습니다. 다른 항목을 선택해주세요"
           : all && !picked && sigs.length ? "후원할 시그니처를 선택해주세요" : "") && ok;
@@ -2012,8 +2030,11 @@ window.FunFav = (function () {
       fields[i].value = "";
       fields[i].dispatchEvent(new Event("input", { bubbles: true }));
     }
-    setAmount(panel.querySelector("[data-donate-amount]"), 5000);
-    var picked = panel.querySelector('.dsig__item[aria-pressed="true"]');
+    // 펀네이션 시그니처 후원은 금액 칩 없이 고른 시그니처 금액만 (67427:80721 — 처음 0)
+    // 펀네이션: 시그니처는 0, 일반 후원은 최소 금액 1만원 (모바일 시안 67427:88972 의 처음 값)
+    var funKey = panel.closest(".fchat") && panel.getAttribute("data-donate-panel");
+    setAmount(panel.querySelector("[data-donate-amount]"), funKey === "signature" ? 0 : funKey === "general" ? 10000 : 5000);
+    var picked = sigOf(panel).querySelector('.dsig__item[aria-pressed="true"]');
     if (picked) picked.setAttribute("aria-pressed", "false");
     check(panel);
   }
@@ -2304,12 +2325,17 @@ window.FunFav = (function () {
   var infoDonate = fw.querySelector("[data-watch-donate]");
   if (infoDonate) infoDonate.addEventListener("click", function () { fold(false); });
 
-  // 후원 랭킹 펼치기 · 접기 — [구현 제안] 시안은 펼친 상태만 있어, 6명 ⌄ 를 누르면 카드 줄을 접음
+  // 후원 랭킹 TOP 3 ⌄ ↔ TOP 10 ⌃ (67427:71296 · 67427:74259) — 펼치면 4~10위 목록이 채팅 위로 겹침
   var rankBtn = fw.querySelector("[data-frank-toggle]");
   rankBtn.addEventListener("click", function () {
+    // 모바일 — 펼친 패널의 제목(TOP 10 ⌃)을 누르면 접음 (67427:93435)
+    var rk = this.closest(".frank");
+    if (rk.classList.contains("is-mo-open")) { fw.querySelector("[data-frank-more]").click(); return; }
     var open = this.getAttribute("aria-expanded") !== "true";
     this.setAttribute("aria-expanded", open ? "true" : "false");
-    document.getElementById("frank-body").hidden = !open;
+    this.setAttribute("aria-label", open ? "후원 랭킹 TOP 3 로 접기" : "후원 랭킹 TOP 10 펼치기");
+    this.querySelector("[data-frank-label]").textContent = open ? "TOP 10" : "TOP 3";
+    this.closest(".frank").classList.toggle("is-top10", open);
   });
   // 모바일 랭킹 줄 ⌄ — [구현 제안] 펼치면 PC 와 같은 2 · 1 · 3위 카드 + 한방 최고를 줄 아래로
   var rank = fw.querySelector(".frank");
@@ -2317,6 +2343,10 @@ window.FunFav = (function () {
   rankMore.addEventListener("click", function () {
     var open = !rank.classList.contains("is-mo-open");
     rank.classList.toggle("is-mo-open", open);
+    // 펼친 패널 제목은 TOP 10 ⌃
+    rankBtn.setAttribute("aria-expanded", open ? "true" : "false");
+    rankBtn.querySelector("[data-frank-label]").textContent = open ? "TOP 10" : "TOP 3";
+    rank.classList.remove("is-top10");
     this.setAttribute("aria-expanded", open ? "true" : "false");
     this.setAttribute("aria-label", open ? "후원 랭킹 접기" : "후원 랭킹 펼치기");
   });
@@ -2421,12 +2451,29 @@ window.FunFav = (function () {
       queue.push(li);
       return;
     }
-    var follow = atBottom();
+    // 작업표 14 (11/06) — 유저 카드가 열린 동안은 자동 스크롤을 멈춤 (닫은 뒤 새 메시지 알림으로 내려감)
+    var follow = atBottom() && document.getElementById("fuser").hidden;
     list.appendChild(li);
     trim();
     if (follow) list.scrollTop = list.scrollHeight;
+    else unread(1);
   }
   list.scrollTop = list.scrollHeight;
+
+  /* 새 메시지 알림 (67427:72034) — 위로 올려 읽는 동안 쌓인 수(10 넘으면 10+). 누르거나 맨 아래로 내리면 사라짐 */
+  var jump = fw.querySelector("[data-fchat-jump]");
+  var jumpCount = fw.querySelector("[data-fchat-jump-count]");
+  var unreadN = 0;
+  function unread(n) {
+    unreadN = n ? unreadN + n : 0;
+    jumpCount.textContent = unreadN > 10 ? "10+" : unreadN;
+    jump.hidden = !unreadN;
+  }
+  jump.addEventListener("click", function () {
+    list.scrollTop = list.scrollHeight;
+    unread(0);
+  });
+  list.addEventListener("scroll", function () { if (unreadN && atBottom()) unread(0); });
   // 데모 새 메시지 — 모바일 시안(66132:100189)의 메시지
   var DEMO = [
     { name: "커피", text: "송피아 도하나 맛나게 먹어라" },
@@ -2460,6 +2507,39 @@ window.FunFav = (function () {
     input.value = "";
     input.dispatchEvent(new Event("input"));
   });
+  /* 비로그인 (67427:72843) — 입력칸 안내 "로그인 후 채팅에 참여할 수 있어요", 입력칸을 누르면 로그인 화면으로 */
+  function authInput() {
+    var out = root.getAttribute("data-auth") === "out";
+    input.placeholder = out ? "로그인 후 채팅에 참여할 수 있어요" : "메시지 입력";
+    input.readOnly = out;
+  }
+  input.addEventListener("click", function () {
+    if (root.getAttribute("data-auth") === "out") location.hash = "login";
+  });
+  authInput();
+  new MutationObserver(authInput).observe(root, { attributes: true, attributeFilter: ["data-auth"] });
+
+  /* 방송 종료 (67427:72975) — 서버 연동 전 미리보기는 #ended. 다시보기로 이동 → 아래 "이 채널의 다시보기" */
+  var ended = fw.querySelector("[data-fplayer-ended]");
+  function syncEnded() {
+    var on = location.hash === "#ended";
+    ended.hidden = !on;
+    box.classList.toggle("is-ended", on);
+    if (on && video && !video.paused) video.pause();
+  }
+  fw.querySelector("[data-fplayer-replay]").addEventListener("click", function (e) {
+    e.preventDefault();
+    var t = document.getElementById("wmore-title");
+    if (t) t.scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+  window.addEventListener("hashchange", syncEnded);
+  syncEnded();
+
+  // 작업표 14 (11/17) — 모바일에서 입력칸 밖을 누르면 키보드를 닫고 화면이 원래대로 돌아옴
+  document.addEventListener("touchstart", function (e) {
+    if (document.activeElement === input && !form.contains(e.target)) input.blur();
+  }, { passive: true });
+
   // 모바일 — 글이 있으면 입력칸 오른쪽 보내기 버튼을 보여줌 (66132:110337)
   input.addEventListener("input", function () {
     form.classList.toggle("has-text", !!this.value.trim());
@@ -2498,6 +2578,16 @@ window.FunFav = (function () {
     for (var i = 0; i < voiceItems.length; i++) voiceItems[i].setAttribute("aria-pressed", voiceItems[i] === this ? "true" : "false");
     for (var j = 0; j < voiceBtns.length; j++) voiceBtns[j].querySelector("span").textContent = name;
     voiceBack(true);
+  });
+
+  // 미리 듣기 (67427:79878) — [구현 제안] 목소리 파일 연동 전이라 2초 동안 재생 중 표시만
+  var previews = voice.querySelectorAll("[data-fvoice-preview]");
+  for (var pv = 0; pv < previews.length; pv++) previews[pv].addEventListener("click", function () {
+    var btn = this;
+    for (var i = 0; i < previews.length; i++) previews[i].classList.remove("is-playing");
+    btn.classList.add("is-playing");
+    clearTimeout(btn._t);
+    btn._t = setTimeout(function () { btn.classList.remove("is-playing"); }, 2000);
   });
 
   /* 유저 찾기 (66132:107275) — 참여자 수 버튼으로 열고 X · ESC 로 닫음. 검색어가 들어간 이름만 보여줌 */
@@ -3985,4 +4075,161 @@ void main() {
   } else {
     resume();
   }
+})();
+
+/* 펀네이션 영상 상세 — 시그니처 전체보기 (67427:82312) · 선택한 시그니처 (67427:80726 · 67427:81516).
+   고르는 동작(금액 자동 입력 · 확인)은 위 후원 코드의 .dsig__item 처리를 그대로 씀. 여기서는 팝오버 열고 닫기 · 미리보기 · 검색 · 필터.
+   [구현 제안] 최근사용은 이 브라우저에서 고른 순서(최대 12개), 조건에 맞는 것이 없을 때 문구, 빈 화면 미리보기는 #nosig */
+(function () {
+  var pop = document.getElementById("fsigall");
+  var panel = document.getElementById("donate-signature");
+  if (!pop || !panel) return;
+  var opens = panel.querySelectorAll("[data-sig-open]");
+  var box = panel.querySelector("[data-sig-pick]");
+  var empty = box.querySelector(".dpick__empty");
+  var sel = box.querySelector(".dpick__sel");
+  var grid = pop.querySelector("[data-sig-grid]");
+  var search = pop.querySelector("[data-sig-search]");
+  var tabs = pop.querySelectorAll("[data-sig-tab]");
+  var rangeBtn = pop.querySelector("[data-sig-range-btn]");
+  var menu = pop.querySelector("#fsig-range");
+  var noneBox = pop.querySelector("[data-sig-empty]");
+  var noneText = pop.querySelector("[data-sig-empty-text]");
+  var KEY = "funnation-sig-recent";
+  var state = { q: "", tab: "all", min: 0, max: Infinity };
+
+  if (location.hash === "#nosig") grid.textContent = "";
+  var items = pop.querySelectorAll(".dsig__item");
+  pop.querySelector("[data-sig-count]").textContent = items.length + "개";
+  for (var i = 0; i < items.length; i++) items[i].setAttribute("data-sig-i", i);
+
+  function recent() {
+    try { return JSON.parse(localStorage.getItem(KEY)) || []; } catch (e) { return []; }
+  }
+  function fmt(n) { return n.toLocaleString("ko-KR"); }
+
+  function apply() {
+    var r = recent(), shown = 0, q = state.q.trim().toLowerCase();
+    for (var i = 0; i < items.length; i++) {
+      var it = items[i], price = +it.getAttribute("data-price");
+      var ok = (!q || it.getAttribute("data-sig-name").toLowerCase().indexOf(q) > -1) &&
+        (state.tab !== "recent" || r.indexOf(i) > -1) && price >= state.min && price <= state.max;
+      it.parentNode.hidden = !ok;
+      if (ok) shown++;
+    }
+    noneBox.hidden = shown > 0;
+    noneText.textContent = !items.length ? "스트리머가 등록한 시그니처가 없어요"
+      : state.tab === "recent" && !r.length ? "최근 사용한 시그니처가 없어요" : "조건에 맞는 시그니처가 없어요";
+  }
+
+  function setMenu(on) {
+    menu.hidden = !on;
+    rangeBtn.setAttribute("aria-expanded", on ? "true" : "false");
+  }
+  function setOpen(on) {
+    pop.hidden = !on;
+    for (var i = 0; i < opens.length; i++) opens[i].setAttribute("aria-expanded", on ? "true" : "false");
+    if (!on) setMenu(false);
+    else { apply(); search.focus(); }
+  }
+  for (var o = 0; o < opens.length; o++) opens[o].addEventListener("click", function () { setOpen(pop.hidden); });
+
+  // 미리보기 — 고른 시그니처(aria-pressed)가 바뀔 때마다. 금액 칩 · 지우기로 선택이 풀려도 따라감
+  function sync() {
+    var it = pop.querySelector('.dsig__item[aria-pressed="true"]');
+    box.classList.toggle("is-picked", !!it);
+    empty.hidden = !!it;
+    sel.hidden = !it;
+    if (!it) return;
+    box.querySelector("[data-sig-pick-img]").src = it.querySelector("img").getAttribute("src");
+    box.querySelector("[data-sig-pick-name]").textContent = it.getAttribute("data-sig-name");
+    box.querySelector("[data-sig-pick-price]").textContent = fmt(+it.getAttribute("data-price")) + "원";
+  }
+  new MutationObserver(sync).observe(grid, { subtree: true, attributes: true, attributeFilter: ["aria-pressed"] });
+  sync();
+
+  // 고르면 최근사용에 넣고 닫음. 모바일 시트(67427:89835)는 확인을 눌러 닫음
+  var mobile = matchMedia("(max-width: 767px)");
+  var ok = pop.querySelector("[data-sig-ok]");
+  grid.addEventListener("click", function (e) {
+    var it = e.target.closest(".dsig__item");
+    if (!it) return;
+    var i = +it.getAttribute("data-sig-i"), r = recent().filter(function (x) { return x !== i; });
+    r.unshift(i);
+    try { localStorage.setItem(KEY, JSON.stringify(r.slice(0, 12))); } catch (err) {}
+    if (mobile.matches) ok.classList.remove("is-off");
+    else setTimeout(function () { setOpen(false); }, 120);
+  });
+  ok.addEventListener("click", function () { if (!this.classList.contains("is-off")) setOpen(false); });
+  pop.querySelector("[data-sig-back]").addEventListener("click", function () { setOpen(false); });
+  new MutationObserver(function () {
+    if (!pop.hidden) ok.classList.toggle("is-off", !pop.querySelector('.dsig__item[aria-pressed="true"]'));
+  }).observe(pop, { attributes: true, attributeFilter: ["hidden"] });
+
+  search.addEventListener("input", function () { state.q = this.value; apply(); });
+  for (var t = 0; t < tabs.length; t++) tabs[t].addEventListener("click", function () {
+    state.tab = this.getAttribute("data-sig-tab");
+    for (var j = 0; j < tabs.length; j++) tabs[j].setAttribute("aria-pressed", tabs[j] === this ? "true" : "false");
+    apply();
+  });
+  rangeBtn.addEventListener("click", function () { setMenu(menu.hidden); });
+  var opts = menu.querySelectorAll("[data-sig-range]");
+  for (var m = 0; m < opts.length; m++) opts[m].addEventListener("click", function () {
+    var v = this.getAttribute("data-sig-range");
+    for (var j = 0; j < opts.length; j++) opts[j].setAttribute("aria-checked", opts[j] === this ? "true" : "false");
+    state.min = v ? +v.split("-")[0] : 0;
+    state.max = v ? +v.split("-")[1] : Infinity;
+    pop.querySelector("[data-sig-range-label]").textContent = v ? this.textContent : "금액 전체";
+    rangeBtn.classList.toggle("is-on", !!v);
+    setMenu(false);
+    apply();
+  });
+
+  // 바깥을 누르거나 ESC · 시그니처 팝오버가 닫히면 함께 닫음 (금액 메뉴만 열려 있으면 메뉴 먼저)
+  document.addEventListener("click", function (e) {
+    if (pop.hidden) return;
+    if (!menu.hidden && !e.target.closest(".fsigall__range")) setMenu(false);
+    if (pop.contains(e.target) || e.target.closest("[data-sig-open]")) return;
+    setOpen(false);
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key !== "Escape" || pop.hidden) return;
+    e.stopImmediatePropagation();
+    if (!menu.hidden) setMenu(false);
+    else { setOpen(false); opens[box.classList.contains("is-picked") ? 1 : 0].focus(); }
+  }, true);
+  new MutationObserver(function () { if (panel.hidden) setOpen(false); }).observe(panel, { attributes: true, attributeFilter: ["hidden"] });
+})();
+
+/* 유저 정보 (67427:86236) — 채팅 안보기: 그 사람 메시지를 채팅에서 숨김, 다시 누르면 보임.
+   [구현 제안] 서버 연동 전이라 이 화면에서만 기억. 사용자 차단 · 신고는 준비 중 알림 */
+(function () {
+  var pop = document.getElementById("fuser");
+  var list = document.querySelector("[data-fchat-list]");
+  var btn = pop && pop.querySelector("[data-fuser-mute]");
+  if (!btn || !list) return;
+  var muted = {};
+  function who() { return pop.querySelector("[data-fuser-name]").textContent.trim(); }
+  function apply() {
+    var rows = list.querySelectorAll(".fmsg");
+    for (var i = 0; i < rows.length; i++) {
+      var n = rows[i].querySelector(".fmsg__name");
+      rows[i].hidden = !!(n && muted[n.textContent.trim()]);
+    }
+  }
+  function sync() {
+    var on = !!muted[who()];
+    btn.setAttribute("aria-pressed", on ? "true" : "false");
+    btn.querySelector("span").textContent = on ? "채팅 다시 보기" : "채팅 안보기";
+  }
+  btn.addEventListener("click", function () {
+    var n = who();
+    muted[n] = !muted[n];
+    sync();
+    apply();
+  });
+  // 팝업을 열 때 · 다른 사람 이름으로 바뀔 때만 (버튼 글자 변경은 보지 않음)
+  new MutationObserver(sync).observe(pop, { attributes: true, attributeFilter: ["hidden"] });
+  new MutationObserver(sync).observe(pop.querySelector("[data-fuser-name]"), { childList: true, characterData: true, subtree: true });
+  new MutationObserver(apply).observe(list, { childList: true });
 })();

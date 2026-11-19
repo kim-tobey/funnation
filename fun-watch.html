@@ -402,6 +402,13 @@
             <div class="fplayer" data-node-id="66132:101007" data-stream-src="">
               <video class="fplayer__video" poster="assets/fun-watch/stream.jpg" playsinline data-fplayer-video></video>
               <p class="fplayer__audio-only" data-fplayer-audio-note hidden>소리만 듣는 중이에요</p>
+              <!-- 방송 종료 (67427:72975) — 손 흔들기 48 · 제목 H5 · 설명 · 다시보기로 이동. 미리보기 fun-watch.html#ended [구현 제안] -->
+              <div class="fplayer__ended" data-fplayer-ended data-node-id="67427:72975" hidden>
+                <img src="assets/fun-watch/v3/hand-waving.svg" width="48" height="48" alt="">
+                <p class="fplayer__ended-title">방송이 종료되었습니다</p>
+                <p class="fplayer__ended-desc">종료된 방송은 다시보기를 통해 시청할 수 있습니다</p>
+                <a class="fplayer__ended-btn" href="#wmore-title" data-fplayer-replay>다시보기로 이동</a>
+              </div>
 
               <!-- 컨트롤 (66132:101824) — 아래 그라디언트 위 40px 원형 버튼 -->
               <div class="fplayer__controls" data-node-id="66132:101824">
@@ -666,11 +673,12 @@
               <button class="fchat__people" type="button" aria-label="채팅 참여자 2,051명 — 유저 찾기" aria-expanded="false" aria-controls="fusers" data-fusers-btn><img src="assets/fun-watch/v2/users.svg" width="14" height="14" alt=""><span>2,051명</span></button>
             </div>
 
-            <!-- 이번 방송 후원 랭킹 (66132:101552) — 채팅 위에 겹친 2 · 1 · 3위 카드 + 한방 최고. 6명 ⌄ 로 접고 펼침 -->
-            <div class="frank" data-node-id="66132:101552">
-              <button class="frank__head" type="button" aria-expanded="true" aria-controls="frank-body" data-frank-toggle>
+            <!-- 이번 방송 후원 랭킹 (67427:71296 · 펼침 67427:74259) — 채팅 위에 겹친 2 · 1 · 3위 카드.
+                 기본 TOP 3 ⌄: 아래 줄에 한방 최고 + 4위(오른쪽은 잘림). TOP 10 ⌃: 4~10위 목록 + 한방 최고 -->
+            <div class="frank" data-node-id="67427:71296">
+              <button class="frank__head" type="button" aria-expanded="false" aria-controls="frank-body" aria-label="후원 랭킹 TOP 10 펼치기" data-frank-toggle>
                 <span>이번 방송 후원 랭킹</span>
-                <span class="frank__count">6명<img src="assets/fun-watch/v2/chevron-down.svg" width="4.83337" height="8.16663" alt=""></span>
+                <span class="frank__count"><span data-frank-label>TOP 3</span><img src="assets/fun-watch/v2/chevron-down.svg" width="4.83337" height="8.16663" alt=""></span>
               </button>
               <!-- 모바일 랭킹 줄 (66132:100259) — 1 · 2 · 3위를 가로로, 오른쪽 ⌄ 로 PC 와 같은 카드를 펼침 -->
               <div class="frank__strip">
@@ -705,12 +713,31 @@
                     </span>
                   </li>
                 </ol>
-                <p class="frank__best" data-node-id="66132:101596">
-                  <span class="frank__bolt"><img src="assets/fun-watch/v2/high-voltage.svg" width="16" height="16" alt=""></span>
-                  <strong>한방 최고</strong>
-                  <button class="frank__who" type="button" data-fuser><img src="assets/fun-watch/v2/crown-1.png" width="20" height="20" alt=""><b class="fname fname--gold">백마토끼</b></button>
-                  <span class="frank__won">1,227,000원</span>
-                </p>
+                <!-- TOP 10 — 구분선 + 4~10위 (67427:74305). 줄 36 · 사이 4 -->
+                <hr class="frank__line">
+                <ol class="frank__list" start="4" aria-label="후원 4~10위">
+                  <li><span class="frank__rank">4</span><button class="frank__name" type="button" data-fuser>초사단_미카엘</button><span class="frank__amt">980,000원</span></li>
+                  <li><span class="frank__rank">5</span><button class="frank__name" type="button" data-fuser>은버들</button><span class="frank__amt">750,000원</span></li>
+                  <li><span class="frank__rank">6</span><button class="frank__name" type="button" data-fuser>청림호수</button><span class="frank__amt">520,000원</span></li>
+                  <li><span class="frank__rank">7</span><button class="frank__name" type="button" data-fuser>더유니크이예또팬</button><span class="frank__amt">350,000원</span></li>
+                  <li><span class="frank__rank">8</span><button class="frank__name" type="button" data-fuser>불법충</button><span class="frank__amt">210,000원</span></li>
+                  <li><span class="frank__rank">9</span><button class="frank__name" type="button" data-fuser>노도</button><span class="frank__amt">120,000원</span></li>
+                  <li><span class="frank__rank">10</span><button class="frank__name" type="button" data-fuser>별빛하늘</button><span class="frank__amt">80,000원</span></li>
+                </ol>
+                <div class="frank__row" data-node-id="67427:71340">
+                  <p class="frank__best" data-node-id="67427:71341">
+                    <span class="frank__bolt"><img src="assets/fun-watch/v2/high-voltage.svg" width="16" height="16" alt=""></span>
+                    <strong>한방 최고</strong>
+                    <button class="frank__who" type="button" data-fuser><img src="assets/fun-watch/v2/crown-1.png" width="20" height="20" alt=""><b class="fname fname--gold">백마토끼</b></button>
+                    <span class="frank__won">1,227,000원</span>
+                  </p>
+                  <!-- 4위 (67427:71352) — TOP 3 일 때만. 오른쪽 끝은 채팅 폭에서 잘림(시안) -->
+                  <p class="frank__best frank__fourth" data-node-id="67427:71352">
+                    <span class="frank__bolt"><b>4</b></span>
+                    <button class="frank__who" type="button" data-fuser><img src="assets/fun-watch/v2/crown-1.png" width="20" height="20" alt=""><b class="fname fname--pink">초사단_미카엘</b></button>
+                    <span class="frank__won">980,000원</span>
+                  </p>
+                </div>
               </div>
             </div>
 
@@ -807,6 +834,9 @@
             </section>
 
             <!-- 아래 고정 (66132:101607) — 채팅 입력 + 후원 · 시그니처 · 설정 -->
+            <!-- 새 메시지 알림 (67427:72034) — 위로 올려 읽는 동안 새 메시지가 오면 입력칸 위에. 누르면 맨 아래로 -->
+            <button class="fchat__jump" type="button" data-fchat-jump data-node-id="67427:72034" hidden><img src="assets/fun-watch/v3/arrow-down-lg.svg" width="16" height="16" alt="">새로운 메시지 <b data-fchat-jump-count>1</b></button>
+
             <div class="fdock" data-node-id="66132:101607">
               <form class="finput" data-fchat-form data-node-id="66132:101608">
                 <div class="finput__box">
@@ -836,7 +866,7 @@
                 <div class="dform">
                   <div class="dmsg">
                     <div class="dmsg__top">
-                      <p class="dmsg__name"><strong data-donate-nick>토비라마</strong><span>님</span></p>
+                      <p class="dmsg__name"><strong data-donate-nick>토비라마</strong><span>님</span><!-- 모바일 칭호 칩 (67427:89006) — PC 는 아래 칭호 칸 --><button class="dmsg__grade" type="button" data-coming-soon><img src="assets/v2/station/grade/grade-15-s.webp" width="18" height="18" alt=""><b class="fname fname--gold">골드 다이아</b><img src="assets/watch/chevron-right.svg" width="16" height="16" alt=""></button></p>
                       <label class="dmsg__anon">익명<input class="switch" type="checkbox" role="switch" data-donate-anon></label>
                     </div>
                     <div class="dmsg__box">
@@ -853,21 +883,23 @@
                     <p class="dwarn" id="d-general-msg-warn" data-warn hidden></p>
                   </div>
                   <button class="dbox dtitle" type="button" data-coming-soon>
-                    <span class="dbox__head"><strong>🎖️칭호</strong><img src="assets/watch/chevron-right.svg" width="20" height="20" alt=""></span>
+                    <span class="dbox__head"><strong>칭호</strong><img src="assets/watch/chevron-right.svg" width="20" height="20" alt=""></span>
                     <span class="dtitle__value">표시 안 함</span>
                   </button>
                   <hr class="dform__line">
                   <div class="dbox damount">
                     <div class="dbox__head">
-                      <label for="d-general-amount"><strong>💰후원 금액</strong></label>
-                      <span class="dcash"><img src="assets/watch/cash.png" width="14" height="14" alt=""><span class="dcash__label">내 펀캐시</span><i aria-hidden="true"></i><b data-donate-balance>100,000</b></span>
+                      <label for="d-general-amount"><strong>후원 금액</strong></label>
+                      <span class="dcash"><img src="assets/watch/cash.png" width="14" height="14" alt=""><span class="dcash__label">내 펀캐시</span><i aria-hidden="true"></i><b data-donate-balance>100,000</b><b class="dcash__own">보유</b></span>
                     </div>
                     <div class="damount__box">
-                      <input class="damount__input" id="d-general-amount" type="text" inputmode="numeric" value="5,000" autocomplete="off" aria-describedby="d-general-amount-warn" data-donate-amount>
+                      <input class="damount__input" id="d-general-amount" type="text" inputmode="numeric" value="10,000" autocomplete="off" aria-describedby="d-general-amount-warn" data-donate-amount>
                       <span class="damount__unit">원</span>
                       <button class="damount__clear" type="button" aria-label="금액 지우기" data-donate-clear><img src="assets/watch/close-circle.svg" width="24" height="24" alt=""><img src="assets/watch/close-circle-active.svg" width="20" height="20" alt=""><img src="assets/watch/close-circle-warn.svg" width="20" height="20" alt=""></button>
                     </div>
                     <p class="dwarn" id="d-general-amount-warn" data-warn hidden></p>
+                    <!-- 금액 안내 (67427:77456 · 67427:78308) — 최소 금액 · 잔액 부족(+ 충전하기). Depth 500 11 -->
+                    <div class="dhint" data-donate-hint hidden><p data-donate-hint-text></p><a class="dhint__charge" href="wallet.html" data-donate-charge hidden>충전하기</a></div>
                     <div class="damount__chips">
                       <button type="button" data-add="1000">+1천</button>
                       <button type="button" data-add="10000">+1만</button>
@@ -892,36 +924,25 @@
                 <button class="donate__close" type="button" aria-label="시그니처 닫기" data-donate-close><img class="only-pc" src="assets/watch/close-sm.svg" width="24" height="24" alt=""><img class="only-mo" src="assets/fun-watch/v2/close-md-sheet.svg" width="24" height="24" alt=""></button>
               </header>
               <div class="donate__body">
-                <div class="dsec">
-                  <div class="dsec__head">
-                    <h4>시그니처 선택</h4>
-                    <button class="dsig__all" type="button" data-coming-soon>전체보기<b>68</b></button>
-                  </div>
-                  <p class="dsec__desc">이미지를 선택하시면 후원 금액이 자동으로 입력됩니다.</p>
-                  <div class="dsig">
-                    <ul class="dsig__grid" data-sig-grid>
-                      <li><button class="dsig__item" type="button" aria-pressed="false" data-price="1000"><img src="assets/watch/signature/sig-1.png" width="84" height="48" alt="이쁜이 1,000원"></button></li>
-                      <li><button class="dsig__item" type="button" aria-pressed="false" data-price="1500"><img src="assets/watch/signature/sig-2.png" width="84" height="48" alt="오짝승 1,500원"></button></li>
-                      <li><button class="dsig__item" type="button" aria-pressed="false" data-price="1700"><img src="assets/watch/signature/sig-3.png" width="84" height="48" alt="키세스 1,700원"></button></li>
-                      <li><button class="dsig__item" type="button" aria-pressed="false" data-price="1700"><img src="assets/watch/signature/sig-3.png" width="84" height="48" alt="키세스 1,700원"></button></li>
-                      <li><button class="dsig__item" type="button" aria-pressed="false" data-price="2300"><img src="assets/watch/signature/sig-5.png" width="84" height="48" alt="GG EZ 2,300원"></button></li>
-                      <li><button class="dsig__item" type="button" aria-pressed="false" data-price="2500"><img src="assets/watch/signature/sig-6.png" width="84" height="48" alt="토카토카 2,500원"></button></li>
-                      <li><button class="dsig__item" type="button" aria-pressed="false" data-price="2700"><img src="assets/watch/signature/sig-7.png" width="84" height="48" alt="외모췍 2,700원"></button></li>
-                      <li><button class="dsig__item" type="button" aria-pressed="false" data-price="2700" data-unavailable><img src="assets/watch/signature/sig-7.png" width="84" height="48" alt="외모췍 2,700원"></button></li>
-                    </ul>
-                    <button class="dsig__next" type="button" aria-label="시그니처 더 보기" data-sig-next><img src="assets/watch/sig-arrow.svg" width="24" height="24" alt=""></button>
-                  </div>
-                  <!-- 등록된 시그니처 없음 (64624:82168) — 그리드에 항목이 없으면 대신 표시 -->
-                  <div class="dsig-empty" data-sig-empty hidden>
-                    <img src="assets/watch/circle-warning.svg" width="24" height="24" alt="">
-                    <p>등록된 시그니처가 없습니다.<br>일반 후원을 이용해주세요.</p>
+                <!-- 선택한 시그니처 (67427:80726 · 선택 후 67427:81516) — 없으면 점선 칸 + 시그니처 선택, 고르면 그림 140×80 + 이름 · 금액(Bold 16) -->
+                <div class="dsec dpick" data-node-id="67427:80726">
+                  <div class="dsec__head"><h4>선택한 시그니처</h4></div>
+                  <div class="dpick__box" data-sig-pick>
+                    <div class="dpick__empty">
+                      <p>선택한 시그니처가 없어요. 시그니처를 선택해주세요</p>
+                      <button class="dpick__open" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="fsigall" data-sig-open>시그니처 선택</button>
+                    </div>
+                    <button class="dpick__sel" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="fsigall" aria-label="시그니처 다시 고르기" data-sig-open hidden>
+                      <img src="assets/watch/signature/sig-1.png" width="140" height="80" alt="" data-sig-pick-img>
+                      <span class="dpick__info"><b data-sig-pick-name>이쁜이</b><strong data-sig-pick-price>1,000원</strong></span>
+                    </button>
                   </div>
                   <p class="dwarn" data-warn-sig hidden></p>
                 </div>
                 <div class="dform">
                   <div class="dmsg">
                     <div class="dmsg__top">
-                      <p class="dmsg__name"><strong data-donate-nick>토비라마</strong><span>님</span></p>
+                      <p class="dmsg__name"><strong data-donate-nick>토비라마</strong><span>님</span><!-- 모바일 칭호 칩 (67427:89006) — PC 는 아래 칭호 칸 --><button class="dmsg__grade" type="button" data-coming-soon><img src="assets/v2/station/grade/grade-15-s.webp" width="18" height="18" alt=""><b class="fname fname--gold">골드 다이아</b><img src="assets/watch/chevron-right.svg" width="16" height="16" alt=""></button></p>
                       <label class="dmsg__anon">익명<input class="switch" type="checkbox" role="switch" data-donate-anon></label>
                     </div>
                     <div class="dmsg__box">
@@ -938,29 +959,23 @@
                     <p class="dwarn" id="d-signature-msg-warn" data-warn hidden></p>
                   </div>
                   <button class="dbox dtitle" type="button" data-coming-soon>
-                    <span class="dbox__head"><strong>🎖️칭호</strong><img src="assets/watch/chevron-right.svg" width="20" height="20" alt=""></span>
+                    <span class="dbox__head"><strong>칭호</strong><img src="assets/watch/chevron-right.svg" width="20" height="20" alt=""></span>
                     <span class="dtitle__value">표시 안 함</span>
                   </button>
                   <hr class="dform__line">
                   <div class="dbox damount">
                     <div class="dbox__head">
-                      <label for="d-signature-amount"><strong>💰후원 금액</strong></label>
-                      <span class="dcash"><img src="assets/watch/cash.png" width="14" height="14" alt=""><span class="dcash__label">내 펀캐시</span><i aria-hidden="true"></i><b data-donate-balance>100,000</b></span>
+                      <label for="d-signature-amount"><strong>후원 금액</strong></label>
+                      <span class="dcash"><img src="assets/watch/cash.png" width="14" height="14" alt=""><span class="dcash__label">내 펀캐시</span><i aria-hidden="true"></i><b data-donate-balance>100,000</b><b class="dcash__own">보유</b></span>
                     </div>
                     <div class="damount__box">
-                      <input class="damount__input" id="d-signature-amount" type="text" inputmode="numeric" value="5,000" autocomplete="off" aria-describedby="d-signature-amount-warn" data-donate-amount>
+                      <input class="damount__input" id="d-signature-amount" type="text" inputmode="numeric" value="0" autocomplete="off" aria-describedby="d-signature-amount-warn" data-donate-amount>
                       <span class="damount__unit">원</span>
                       <button class="damount__clear" type="button" aria-label="금액 지우기" data-donate-clear><img src="assets/watch/close-circle.svg" width="24" height="24" alt=""><img src="assets/watch/close-circle-active.svg" width="20" height="20" alt=""><img src="assets/watch/close-circle-warn.svg" width="20" height="20" alt=""></button>
                     </div>
                     <p class="dwarn" id="d-signature-amount-warn" data-warn hidden></p>
-                    <div class="damount__chips">
-                      <button type="button" data-add="1000">+1천</button>
-                      <button type="button" data-add="10000">+1만</button>
-                      <button type="button" data-add="100000">+10만</button>
-                      <button type="button" data-add="300000">+30만</button>
-                      <button type="button" data-add="500000">+50만</button>
-                      <button type="button" data-add="all">전액</button>
-                    </div>
+                    <!-- 금액 안내 (67427:77456 · 67427:78308) — 최소 금액 · 잔액 부족(+ 충전하기). Depth 500 11 -->
+                    <div class="dhint" data-donate-hint hidden><p data-donate-hint-text></p><a class="dhint__charge" href="wallet.html" data-donate-charge hidden>충전하기</a></div>
                   </div>
                 </div>
               </div>
@@ -970,31 +985,152 @@
               </footer>
             </section>
 
+            <!-- 시그니처 전체보기 (67427:82312) — 시그니처 팝오버 왼쪽 4 · 아래 맞춤, 500×560. 검색 · 전체/최근사용 · 금액 필터(67427:85453),
+                 3열 목록(140 · 사이 12 · 줄 10, 세로 스크롤 344), 고르면 선택(Primary 바탕 · ✓ 67427:84184) 후 닫힘. 없으면 빈 화면(67427:83367) -->
+            <section class="fsigall" id="fsigall" role="dialog" aria-labelledby="fsigall-title" data-node-id="67427:82312" hidden>
+              <header class="fsigall__head"><button class="fsigall__back" type="button" aria-label="시그니처 후원으로 돌아가기" data-sig-back><img src="assets/fun-watch/v2/arrow-left-md.svg" width="20" height="20" alt=""></button><h3 id="fsigall-title"><span class="only-pc">시그니처 전체보기</span><span class="only-mo">시그니처 선택</span></h3><span data-sig-count>68개</span></header>
+              <label class="fsigall__search"><input type="search" placeholder="시그니처 이름 검색" aria-label="시그니처 이름 검색" autocomplete="off" data-sig-search><img src="assets/fun-watch/v3/search.svg" width="16" height="16" alt=""></label>
+              <div class="fsigall__filters">
+                <button class="fsigall__chip" type="button" aria-pressed="true" data-sig-tab="all">전체</button>
+                <button class="fsigall__chip" type="button" aria-pressed="false" data-sig-tab="recent">최근사용</button>
+                <div class="fsigall__range">
+                  <button class="fsigall__chip fsigall__chip--menu" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="fsig-range" data-sig-range-btn><span data-sig-range-label>금액 전체</span><img src="assets/fun-watch/v3/caret-down-sm.svg" width="16" height="16" alt=""></button>
+                  <ul class="fsigall__menu" id="fsig-range" role="menu" aria-label="금액 필터" data-node-id="67427:85453" hidden>
+                  <li><button type="button" role="menuitemradio" aria-checked="true" data-sig-range="">전체 금액</button></li>
+                  <li><button type="button" role="menuitemradio" aria-checked="false" data-sig-range="100-999">100원 이상 ~ 1천원 미만</button></li>
+                  <li><button type="button" role="menuitemradio" aria-checked="false" data-sig-range="1000-4999">1천원 이상 ~ 5천원 미만</button></li>
+                  <li><button type="button" role="menuitemradio" aria-checked="false" data-sig-range="5000-9999">5천원 이상 ~ 1만원 미만</button></li>
+                  <li><button type="button" role="menuitemradio" aria-checked="false" data-sig-range="10000-49999">1만원 이상 ~ 5만원 미만</button></li>
+                  <li><button type="button" role="menuitemradio" aria-checked="false" data-sig-range="50000-99999">5만원 이상 ~ 10만원 미만</button></li>
+                  <li><button type="button" role="menuitemradio" aria-checked="false" data-sig-range="100000-499999">10만원 이상 ~ 50만원 미만</button></li>
+                  <li><button type="button" role="menuitemradio" aria-checked="false" data-sig-range="500000-999999">50만원 이상 ~ 100만원 미만</button></li>
+                  <li><button type="button" role="menuitemradio" aria-checked="false" data-sig-range="1000000-2000000">100만원 이상 ~ 200만원 이하</button></li>
+                  </ul>
+                </div>
+              </div>
+              <div class="fsigall__scroll">
+                <ul class="fsigall__grid" data-sig-grid>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="1000" data-sig-name="이쁜이"><img src="assets/watch/signature/sig-1.png" width="132" height="75" alt="" loading="lazy"><span>이쁜이 1,000원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="1500" data-sig-name="오짝승"><img src="assets/watch/signature/sig-2.png" width="132" height="75" alt="" loading="lazy"><span>오짝승 1,500원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="1700" data-sig-name="키세스"><img src="assets/watch/signature/sig-3.png" width="132" height="75" alt="" loading="lazy"><span>키세스 1,700원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="1700" data-sig-name="키세스"><img src="assets/watch/signature/sig-3.png" width="132" height="75" alt="" loading="lazy"><span>키세스 1,700원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="2300" data-sig-name="GG EZ"><img src="assets/watch/signature/sig-5.png" width="132" height="75" alt="" loading="lazy"><span>GG EZ 2,300원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="2500" data-sig-name="토카토카"><img src="assets/watch/signature/sig-6.png" width="132" height="75" alt="" loading="lazy"><span>토카토카 2,500원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="2700" data-sig-name="외모췍"><img src="assets/watch/signature/sig-7.png" width="132" height="75" alt="" loading="lazy"><span>외모췍 2,700원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="2700" data-sig-name="외모췍"><img src="assets/watch/signature/sig-7.png" width="132" height="75" alt="" loading="lazy"><span>외모췍 2,700원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="1000" data-sig-name="이쁜이"><img src="assets/watch/signature/sig-1.png" width="132" height="75" alt="" loading="lazy"><span>이쁜이 1,000원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="1500" data-sig-name="오짝승"><img src="assets/watch/signature/sig-2.png" width="132" height="75" alt="" loading="lazy"><span>오짝승 1,500원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="1700" data-sig-name="키세스"><img src="assets/watch/signature/sig-3.png" width="132" height="75" alt="" loading="lazy"><span>키세스 1,700원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="1700" data-sig-name="키세스"><img src="assets/watch/signature/sig-3.png" width="132" height="75" alt="" loading="lazy"><span>키세스 1,700원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="2300" data-sig-name="GG EZ"><img src="assets/watch/signature/sig-5.png" width="132" height="75" alt="" loading="lazy"><span>GG EZ 2,300원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="2500" data-sig-name="토카토카"><img src="assets/watch/signature/sig-6.png" width="132" height="75" alt="" loading="lazy"><span>토카토카 2,500원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="2700" data-sig-name="외모췍"><img src="assets/watch/signature/sig-7.png" width="132" height="75" alt="" loading="lazy"><span>외모췍 2,700원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="2700" data-sig-name="외모췍"><img src="assets/watch/signature/sig-7.png" width="132" height="75" alt="" loading="lazy"><span>외모췍 2,700원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="1000" data-sig-name="이쁜이"><img src="assets/watch/signature/sig-1.png" width="132" height="75" alt="" loading="lazy"><span>이쁜이 1,000원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="1500" data-sig-name="오짝승"><img src="assets/watch/signature/sig-2.png" width="132" height="75" alt="" loading="lazy"><span>오짝승 1,500원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="1700" data-sig-name="키세스"><img src="assets/watch/signature/sig-3.png" width="132" height="75" alt="" loading="lazy"><span>키세스 1,700원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="1700" data-sig-name="키세스"><img src="assets/watch/signature/sig-3.png" width="132" height="75" alt="" loading="lazy"><span>키세스 1,700원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="2300" data-sig-name="GG EZ"><img src="assets/watch/signature/sig-5.png" width="132" height="75" alt="" loading="lazy"><span>GG EZ 2,300원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="2500" data-sig-name="토카토카"><img src="assets/watch/signature/sig-6.png" width="132" height="75" alt="" loading="lazy"><span>토카토카 2,500원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="2700" data-sig-name="외모췍"><img src="assets/watch/signature/sig-7.png" width="132" height="75" alt="" loading="lazy"><span>외모췍 2,700원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="2700" data-sig-name="외모췍"><img src="assets/watch/signature/sig-7.png" width="132" height="75" alt="" loading="lazy"><span>외모췍 2,700원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="1000" data-sig-name="이쁜이"><img src="assets/watch/signature/sig-1.png" width="132" height="75" alt="" loading="lazy"><span>이쁜이 1,000원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="1500" data-sig-name="오짝승"><img src="assets/watch/signature/sig-2.png" width="132" height="75" alt="" loading="lazy"><span>오짝승 1,500원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="1700" data-sig-name="키세스"><img src="assets/watch/signature/sig-3.png" width="132" height="75" alt="" loading="lazy"><span>키세스 1,700원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="1700" data-sig-name="키세스"><img src="assets/watch/signature/sig-3.png" width="132" height="75" alt="" loading="lazy"><span>키세스 1,700원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="2300" data-sig-name="GG EZ"><img src="assets/watch/signature/sig-5.png" width="132" height="75" alt="" loading="lazy"><span>GG EZ 2,300원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="2500" data-sig-name="토카토카"><img src="assets/watch/signature/sig-6.png" width="132" height="75" alt="" loading="lazy"><span>토카토카 2,500원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="2700" data-sig-name="외모췍"><img src="assets/watch/signature/sig-7.png" width="132" height="75" alt="" loading="lazy"><span>외모췍 2,700원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="2700" data-sig-name="외모췍"><img src="assets/watch/signature/sig-7.png" width="132" height="75" alt="" loading="lazy"><span>외모췍 2,700원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="1000" data-sig-name="이쁜이"><img src="assets/watch/signature/sig-1.png" width="132" height="75" alt="" loading="lazy"><span>이쁜이 1,000원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="1500" data-sig-name="오짝승"><img src="assets/watch/signature/sig-2.png" width="132" height="75" alt="" loading="lazy"><span>오짝승 1,500원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="1700" data-sig-name="키세스"><img src="assets/watch/signature/sig-3.png" width="132" height="75" alt="" loading="lazy"><span>키세스 1,700원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="1700" data-sig-name="키세스"><img src="assets/watch/signature/sig-3.png" width="132" height="75" alt="" loading="lazy"><span>키세스 1,700원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="2300" data-sig-name="GG EZ"><img src="assets/watch/signature/sig-5.png" width="132" height="75" alt="" loading="lazy"><span>GG EZ 2,300원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="2500" data-sig-name="토카토카"><img src="assets/watch/signature/sig-6.png" width="132" height="75" alt="" loading="lazy"><span>토카토카 2,500원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="2700" data-sig-name="외모췍"><img src="assets/watch/signature/sig-7.png" width="132" height="75" alt="" loading="lazy"><span>외모췍 2,700원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="2700" data-sig-name="외모췍"><img src="assets/watch/signature/sig-7.png" width="132" height="75" alt="" loading="lazy"><span>외모췍 2,700원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="1000" data-sig-name="이쁜이"><img src="assets/watch/signature/sig-1.png" width="132" height="75" alt="" loading="lazy"><span>이쁜이 1,000원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="1500" data-sig-name="오짝승"><img src="assets/watch/signature/sig-2.png" width="132" height="75" alt="" loading="lazy"><span>오짝승 1,500원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="1700" data-sig-name="키세스"><img src="assets/watch/signature/sig-3.png" width="132" height="75" alt="" loading="lazy"><span>키세스 1,700원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="1700" data-sig-name="키세스"><img src="assets/watch/signature/sig-3.png" width="132" height="75" alt="" loading="lazy"><span>키세스 1,700원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="2300" data-sig-name="GG EZ"><img src="assets/watch/signature/sig-5.png" width="132" height="75" alt="" loading="lazy"><span>GG EZ 2,300원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="2500" data-sig-name="토카토카"><img src="assets/watch/signature/sig-6.png" width="132" height="75" alt="" loading="lazy"><span>토카토카 2,500원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="2700" data-sig-name="외모췍"><img src="assets/watch/signature/sig-7.png" width="132" height="75" alt="" loading="lazy"><span>외모췍 2,700원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="2700" data-sig-name="외모췍"><img src="assets/watch/signature/sig-7.png" width="132" height="75" alt="" loading="lazy"><span>외모췍 2,700원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="1000" data-sig-name="이쁜이"><img src="assets/watch/signature/sig-1.png" width="132" height="75" alt="" loading="lazy"><span>이쁜이 1,000원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="1500" data-sig-name="오짝승"><img src="assets/watch/signature/sig-2.png" width="132" height="75" alt="" loading="lazy"><span>오짝승 1,500원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="1700" data-sig-name="키세스"><img src="assets/watch/signature/sig-3.png" width="132" height="75" alt="" loading="lazy"><span>키세스 1,700원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="1700" data-sig-name="키세스"><img src="assets/watch/signature/sig-3.png" width="132" height="75" alt="" loading="lazy"><span>키세스 1,700원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="2300" data-sig-name="GG EZ"><img src="assets/watch/signature/sig-5.png" width="132" height="75" alt="" loading="lazy"><span>GG EZ 2,300원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="2500" data-sig-name="토카토카"><img src="assets/watch/signature/sig-6.png" width="132" height="75" alt="" loading="lazy"><span>토카토카 2,500원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="2700" data-sig-name="외모췍"><img src="assets/watch/signature/sig-7.png" width="132" height="75" alt="" loading="lazy"><span>외모췍 2,700원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="2700" data-sig-name="외모췍"><img src="assets/watch/signature/sig-7.png" width="132" height="75" alt="" loading="lazy"><span>외모췍 2,700원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="1000" data-sig-name="이쁜이"><img src="assets/watch/signature/sig-1.png" width="132" height="75" alt="" loading="lazy"><span>이쁜이 1,000원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="1500" data-sig-name="오짝승"><img src="assets/watch/signature/sig-2.png" width="132" height="75" alt="" loading="lazy"><span>오짝승 1,500원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="1700" data-sig-name="키세스"><img src="assets/watch/signature/sig-3.png" width="132" height="75" alt="" loading="lazy"><span>키세스 1,700원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="1700" data-sig-name="키세스"><img src="assets/watch/signature/sig-3.png" width="132" height="75" alt="" loading="lazy"><span>키세스 1,700원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="2300" data-sig-name="GG EZ"><img src="assets/watch/signature/sig-5.png" width="132" height="75" alt="" loading="lazy"><span>GG EZ 2,300원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="2500" data-sig-name="토카토카"><img src="assets/watch/signature/sig-6.png" width="132" height="75" alt="" loading="lazy"><span>토카토카 2,500원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="2700" data-sig-name="외모췍"><img src="assets/watch/signature/sig-7.png" width="132" height="75" alt="" loading="lazy"><span>외모췍 2,700원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="2700" data-sig-name="외모췍"><img src="assets/watch/signature/sig-7.png" width="132" height="75" alt="" loading="lazy"><span>외모췍 2,700원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="1000" data-sig-name="이쁜이"><img src="assets/watch/signature/sig-1.png" width="132" height="75" alt="" loading="lazy"><span>이쁜이 1,000원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="1500" data-sig-name="오짝승"><img src="assets/watch/signature/sig-2.png" width="132" height="75" alt="" loading="lazy"><span>오짝승 1,500원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="1700" data-sig-name="키세스"><img src="assets/watch/signature/sig-3.png" width="132" height="75" alt="" loading="lazy"><span>키세스 1,700원</span></button></li>
+                  <li><button class="dsig__item" type="button" aria-pressed="false" data-price="1700" data-sig-name="키세스"><img src="assets/watch/signature/sig-3.png" width="132" height="75" alt="" loading="lazy"><span>키세스 1,700원</span></button></li>
+                </ul>
+                <div class="fsigall__empty" data-sig-empty hidden>
+                  <img src="assets/fun-watch/v3/empty-state.svg" width="44" height="44" alt="">
+                  <p data-sig-empty-text>스트리머가 등록한 시그니처가 없어요</p>
+                </div>
+              </div>
+              <p class="fsigall__note">목록만 스크롤돼요. 작성 중인 후원 내용은 유지됩니다.</p>
+              <!-- 모바일 시그니처 선택 시트 (67427:89835) — 고른 뒤 확인으로 닫음 -->
+              <button class="fsigall__ok donate__submit is-off" type="button" data-sig-ok>확인</button>
+            </section>
+
             <!-- 채팅 보이스 (66132:105659) — 후원 팝오버의 목소리(야옹이 ›)를 누르면 같은 자리에. ← 로 돌아감.
                  [구현 제안] 줄을 누르면 그 목소리로 바꾸고 돌아감, 고른 목소리는 재생 아이콘이 파랑(시안 마지막 줄) -->
-            <section class="fpop fvoice" id="fvoice" aria-labelledby="fvoice-title" data-node-id="66132:105659" hidden>
+            <section class="fpop fvoice" id="fvoice" aria-labelledby="fvoice-title" data-node-id="67427:79866" hidden>
               <header class="fvoice__head">
                 <button class="fvoice__back" type="button" aria-label="후원으로 돌아가기" data-fvoice-back><img src="assets/fun-watch/v2/arrow-left-md.svg" width="20" height="20" alt=""></button>
                 <h3 id="fvoice-title">채팅 보이스</h3>
               </header>
+              <!-- 목소리 (67427:79871) — 라디오 16 + 이름 SemiBold 14, 오른쪽 미리 듣기(BG 400 · Border 400 알약). 줄 위아래 6 · 좌우 8, 사이 선 Border 100 -->
               <ul class="fvoice__list">
-                <li><button class="fvoice__item" type="button" aria-pressed="true" data-fvoice="야옹이"><span>야옹이</span><img src="assets/fun-watch/v2/play.svg" width="20" height="20" alt=""><img src="assets/fun-watch/v2/play-on.svg" width="20" height="20" alt=""></button></li>
-                <li><button class="fvoice__item" type="button" aria-pressed="false" data-fvoice="다은이"><span>다은이</span><img src="assets/fun-watch/v2/play.svg" width="20" height="20" alt=""><img src="assets/fun-watch/v2/play-on.svg" width="20" height="20" alt=""></button></li>
-                <li><button class="fvoice__item" type="button" aria-pressed="false" data-fvoice="최무비"><span>최무비</span><img src="assets/fun-watch/v2/play.svg" width="20" height="20" alt=""><img src="assets/fun-watch/v2/play-on.svg" width="20" height="20" alt=""></button></li>
-                <li><button class="fvoice__item" type="button" aria-pressed="false" data-fvoice="박리뷰"><span>박리뷰</span><img src="assets/fun-watch/v2/play.svg" width="20" height="20" alt=""><img src="assets/fun-watch/v2/play-on.svg" width="20" height="20" alt=""></button></li>
+                <li><button class="fvoice__item" type="button" aria-pressed="true" data-fvoice="야옹이"><i class="fvoice__radio" aria-hidden="true"></i><span>야옹이</span></button><button class="fvoice__preview" type="button" aria-label="야옹이 미리 듣기" data-fvoice-preview>미리 듣기<img src="assets/fun-watch/v3/play-circle.svg" width="16" height="16" alt=""></button></li>
+                <li><button class="fvoice__item" type="button" aria-pressed="false" data-fvoice="다은이"><i class="fvoice__radio" aria-hidden="true"></i><span>다은이</span></button><button class="fvoice__preview" type="button" aria-label="다은이 미리 듣기" data-fvoice-preview>미리 듣기<img src="assets/fun-watch/v3/play-circle.svg" width="16" height="16" alt=""></button></li>
+                <li><button class="fvoice__item" type="button" aria-pressed="false" data-fvoice="최무비"><i class="fvoice__radio" aria-hidden="true"></i><span>최무비</span></button><button class="fvoice__preview" type="button" aria-label="최무비 미리 듣기" data-fvoice-preview>미리 듣기<img src="assets/fun-watch/v3/play-circle.svg" width="16" height="16" alt=""></button></li>
+                <li><button class="fvoice__item" type="button" aria-pressed="false" data-fvoice="박리뷰"><i class="fvoice__radio" aria-hidden="true"></i><span>박리뷰</span></button><button class="fvoice__preview" type="button" aria-label="박리뷰 미리 듣기" data-fvoice-preview>미리 듣기<img src="assets/fun-watch/v3/play-circle.svg" width="16" height="16" alt=""></button></li>
               </ul>
             </section>
 
             <!-- 유저 팝업 (66132:107341) — 채팅 이름 · 랭킹 · 유저 찾기 줄을 누르면 채팅 왼쪽에 뜸 -->
-            <div class="fuser" id="fuser" role="dialog" aria-labelledby="fuser-name" data-node-id="66132:107341" hidden>
-              <button class="fuser__close" type="button" aria-label="닫기" data-fuser-close><img src="assets/fun-watch/v2/close-md.svg" width="24" height="24" alt=""></button>
-              <div class="fuser__id">
-                <img class="fuser__pic" src="assets/fun-watch/v2/user-avatar.png" width="74" height="70" alt="">
-                <p class="fuser__name"><img src="assets/fun-watch/v2/crown-1.png" width="30" height="30" alt=""><strong id="fuser-name" data-fuser-name>백마토끼</strong></p>
+            <div class="fuser" id="fuser" role="dialog" aria-labelledby="fuser-title" data-node-id="67427:86236" hidden>
+              <!-- 유저 정보 (67427:86236) — 349 · BG 300 · Border 300 · 모서리 12 · 안 16 · 사이 16.
+                   H6 제목 + X, 카드(BG 400 · 모서리 8 · 위아래 12 · 좌우 10): 사진 74×70 · 이름 H6 › · 등급 왕관 23 + 칭호, 팔로우 날짜. 아래 쪽지 · 선 · 차단 · 채팅 안보기 · 신고 -->
+              <header class="fuser__head">
+                <h3 id="fuser-title">유저 정보</h3>
+                <button class="fuser__close" type="button" aria-label="닫기" data-fuser-close><img src="assets/watch/close-sm.svg" width="24" height="24" alt=""></button>
+              </header>
+              <div class="fuser__card">
+                <div class="fuser__id">
+                  <img class="fuser__pic" src="assets/fun-watch/v3/user-cat.png" width="74" height="70" alt="">
+                  <div class="fuser__who">
+                    <a class="fuser__name" href="station.html"><strong data-fuser-name>백마토끼</strong><img src="assets/watch/chevron-right.svg" width="20" height="20" alt=""></a>
+                    <p class="fuser__grade"><img src="assets/v2/station/grade/grade-15-s.webp" width="23" height="23" alt=""><b class="fname fname--gold">골드 다이아</b></p>
+                  </div>
+                </div>
+                <p class="fuser__since"><img src="assets/fun-watch/v2/heart-14.svg" width="14" height="14" alt="">2026년 10월 28일부터 팔로우</p>
               </div>
-              <p class="fuser__since"><img src="assets/fun-watch/v2/heart-14.svg" width="14" height="14" alt="">2026년 10월 28일부터 팔로우</p>
-              <hr class="fuser__line">
-              <button class="fuser__report" type="button" data-coming-soon><img src="assets/fun-watch/v2/warning.svg" width="24" height="24" alt="">신고하기</button>
+              <ul class="fuser__menu">
+                <!-- 작업표 12 (11/06) — 쪽지 보내기 → TALK. 대화방 화면이 아직 없어 준비 중 알림 [구현 제안] -->
+                <li><button class="fuser__act" type="button" data-coming-soon><img src="assets/fun-watch/v3/mail.svg" width="20" height="20" alt="">TALK</button></li>
+                <li class="fuser__sep" role="separator"></li>
+                <li><button class="fuser__act" type="button" data-coming-soon><img src="assets/fun-watch/v3/user-close.svg" width="20" height="20" alt="">사용자 차단</button></li>
+                <li><button class="fuser__act" type="button" aria-pressed="false" data-fuser-mute><img src="assets/fun-watch/v3/chat-close.svg" width="20" height="20" alt=""><span>채팅 안보기</span></button></li>
+                <li><button class="fuser__act" type="button" data-coming-soon><img src="assets/fun-watch/v3/shield-warning.svg" width="20" height="20" alt="">신고하기</button></li>
+              </ul>
             </div>
 
             <div class="dfail" id="donate-fail" hidden>
