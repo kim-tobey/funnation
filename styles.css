@@ -9143,10 +9143,7 @@ ul {
 .fkind[aria-pressed="true"] .fkind__on {
   display: block;
 }
-/* 시그니처 아이콘 (Interface / Signiture) — 20 칸 안 15.5 */
-.fkind__sig {
-  margin: 2.25px;
-}
+/* 시그니처 아이콘 — 2026-11-19 Figma 67427:75916 에서 크루원 카드 "시그"와 같은 VIP 다이아몬드(VIP-1-core-regular, 20)로 바뀜 */
 [data-theme="light"] .fkind img {
   filter: brightness(0.3);
 }
@@ -15151,5 +15148,217 @@ button.subnav__tab {
     font-size: 13px;
     font-weight: 600;
     line-height: 1;
+  }
+}
+
+/* ============================================================
+   크루원 · 크리에이터 카드 (2026-11-19 새 시안 — 크리에이터 찾기 67583:70584 · 개인 방송국 크루원 67148:64234)
+   위 BG300(모서리 위 12) — 안쪽 위아래 20 · 사이 12: 사진 96(테두리 110) + LIVE 16 → 8 → 이름 S-Core Dream 16.
+   오른쪽 위 15 · 14 에 SNS 16(사이 6). 아래 32 BG400(모서리 아래 12) — 프로필 · 공약 · 시그(각 60, 사이 Border300 1px 선)
+   ============================================================ */
+.crew-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 24px 20px;
+}
+.crew-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border: 0;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.crew-card__top {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 0;
+  background: var(--color-bg-300);
+}
+/* 사진 96 칸 — 그림 92(왼 2 · 위 1), 테두리 110(왼 -7 · 위 -8). 라이브 아니면 LIVE 자리(16)까지 비워 높이 112 */
+.crew-card__av {
+  position: relative;
+  display: block;
+  flex: none;
+  width: 96px;
+  height: 96px;
+  margin-bottom: 16px;
+}
+.crew-card__av::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  left: -7px;
+  width: 110px;
+  height: 110px;
+  background: url("assets/v2/creator/ring-gold.svg") center / 100% 100% no-repeat;
+  pointer-events: none;
+}
+.crew-card.is-live .crew-card__av::before {
+  background-image: url("assets/v2/creator/ring-live.svg");
+}
+.crew-card__av img,
+.crew-card__av .av {
+  position: absolute;
+  top: 1px;
+  left: 2px;
+  width: 92px !important;
+  height: 92px !important;
+  border-radius: 9999px;
+  object-fit: cover;
+  overflow: hidden;
+}
+.crew-card__av .av img {
+  position: static;
+  width: 100% !important;
+  height: 100% !important;
+}
+.crew-card.is-live .crew-card__av {
+  margin-bottom: 0;
+}
+/* LIVE — Live 바탕 · 높이 16 · 안쪽 2 4 · 모서리 4 · Medium 12 / 16 */
+.crew-card__live {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  height: 16px;
+  padding: 2px 4px;
+  border-radius: 4px;
+  background: #ff4242;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  color: #fff;
+}
+.crew-card__name {
+  max-width: calc(100% - 24px);
+  margin-top: 8px;
+  overflow: hidden;
+  font-family: var(--font-score);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: #fff;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.crew-card__sns {
+  position: absolute;
+  top: 15px;
+  right: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.crew-card__sns img,
+.crew-card__sns button,
+.crew-card__sns a {
+  display: block;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  border: 0;
+  background: none;
+}
+.crew-card__sns svg,
+.crew-card__sns button img,
+.crew-card__sns a img {
+  display: block;
+  width: 16px;
+  height: 16px;
+}
+/* 아래 줄 — 32 · BG400 · 좌우 8, 버튼 60(아이콘 14 · 16 + 2 + Medium 12 Depth300) */
+.crew-card__bar {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  height: 32px;
+  padding: 0 8px;
+  background: var(--color-bg-400);
+}
+.crew-card__bar > a,
+.crew-card__bar > button {
+  position: relative;
+  display: flex;
+  flex: 0 1 60px;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-width: 0;
+  padding: 0 6px;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  color: var(--color-text-depth-300);
+  white-space: nowrap;
+  cursor: pointer;
+}
+/* 버튼 사이 선 — 높이 32 · Border300 1px */
+.crew-card__bar > i {
+  flex: none;
+  width: 1px;
+  background: var(--color-border-300);
+}
+.crew-card__bar img {
+  flex: none;
+}
+.crew-card__bar > a:hover,
+.crew-card__bar > button:hover {
+  color: var(--color-text-normal);
+}
+/* 모바일 (Figma 67583:76949 크리에이터 찾기 모바일) — 2열 164 · 가로 · 세로 16.
+   위 안쪽 16 · 사이 12: 사진(그림 58 · 테두리 70) + LIVE 16 → 8 → 이름 16 → 12 → SNS 가로(사이 6) 가운데. 아래 줄은 아이콘만(글자는 화면 읽기용) */
+@media (max-width: 767px) {
+  .crew-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .crew-card .crew-card__top {
+    padding: 16px 0;
+  }
+  .crew-card .crew-card__av {
+    width: 58px;
+    height: 58px;
+    margin: 6px 0 16px;
+  }
+  .crew-card.is-live .crew-card__av {
+    margin-bottom: 0;
+  }
+  .crew-card .crew-card__av::before {
+    top: -6px;
+    left: -6px;
+    width: 70px;
+    height: 70px;
+  }
+  .crew-card .crew-card__av img,
+  .crew-card .crew-card__av .av {
+    top: 0;
+    left: 0;
+    width: 58px !important;
+    height: 58px !important;
+  }
+  .crew-card .crew-card__sns {
+    position: static;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 12px;
+  }
+  .crew-card .crew-card__bar {
+    padding: 0 8px;
+  }
+  .crew-card .crew-card__bar > a,
+  .crew-card .crew-card__bar > button {
+    flex: 1 1 0;
+    padding: 0 6px;
+    font-size: 0;
+    gap: 0;
   }
 }

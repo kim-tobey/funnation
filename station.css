@@ -2132,3 +2132,18 @@ body.wire .stn .banner.def,body.wire .stn .rbi.def,body.wire .stn .mban.def .mb-
    PC 그림을 가운데로 자르면 다르게 보여, Figma 모바일 인스턴스를 3배(1029×264)로 내보낸 title-m.webp 를 씀 (2026-11-19) */
 .stn .banner.def{--defbn:url('assets/v2/station/banner/title.webp?v=20261119')}
 @media (max-width:767px){.stn .banner.def{--defbn:url('assets/v2/station/banner/title-m.webp?v=20261119')}}
+
+/* 크루원 카드 (2026-11-19 새 시안 67148:64234) — 모양은 styles.css .crew-card. 방송국 PC 는 4열 · 가로 · 세로 20, 칩 → 카드 14.
+   .stn 초기화(여백 0 · 글꼴 상속)가 덮어쓰는 값만 다시 줌 */
+.stn .crew-grid.stn-crew{grid-template-columns:repeat(4,minmax(0,1fr));gap:20px;margin-top:14px}
+.stn .crew-card .crew-card__top{padding:20px 0}
+.stn .crew-card .crew-card__av{margin:0 0 16px;padding:0;border:0;background:none;border-radius:0;cursor:pointer}
+.stn .crew-card.is-live .crew-card__av{margin-bottom:0}
+.stn .crew-card .crew-card__live{padding:2px 4px;font-size:12px;line-height:16px}
+.stn .crew-card .crew-card__name{margin:8px 0 0;padding:0;border:0;background:none;font-family:var(--font-score);font-size:16px;font-weight:700;line-height:1;letter-spacing:-.01em;color:#fff;cursor:pointer}
+.stn .crew-card .crew-card__sns{gap:6px}
+.stn .crew-card .crew-card__sns button{padding:0;border:0;background:none;cursor:pointer}
+.stn .crew-card .crew-card__bar{padding:0 8px}
+.stn .crew-card .crew-card__bar>button{padding:0 6px;gap:2px;font-family:inherit;font-size:12px;font-weight:500;line-height:16px;color:var(--color-text-depth-300,#969da8);height:auto;min-height:0;cursor:pointer}
+.stn .crew-card .crew-card__bar>button:hover{color:var(--color-text-normal,#dfe5ed)}
+@media (max-width:767px){.stn .crew-grid.stn-crew{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.stn .crew-card .crew-card__top{padding:16px 0}.stn .crew-card .crew-card__av{margin:6px 0 16px}.stn .crew-card.is-live .crew-card__av{margin-bottom:0}.stn .crew-card .crew-card__sns{margin-top:12px}.stn .crew-card .crew-card__bar{padding:0 8px}.stn .crew-card .crew-card__bar>button{padding:0 6px;font-size:0;gap:0}}

@@ -3428,14 +3428,17 @@ const crewRankOf=c=>c.live===2?'대표':(c.rank||'인턴');
 const rkIdx=c=>{const i=['대표'].concat(RKS.slice().reverse()).indexOf(crewRankOf(c));return i<0?99:i};
 const CREWX={'펀상사':[1,1,1],'새벽결재':[1,1,1],'야근요정하루':[1,0,1],'탕비실지킴이':[0,1,1],'칼퇴희망':[1,1,0],'복사기고장':[1,0,1],'신입은말해요':[0,1,1],'수습의여왕':[1,1,1]};
 const SOOPI='<svg class="soopi" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="11" fill="currentColor" opacity=".18"/><text x="12" y="16.5" text-anchor="middle" font-size="12" font-weight="800" fill="currentColor">S</text></svg>';
+/* 2026-11-19 새 시안(Figma 67148:64234) — 크리에이터 찾기와 같은 카드(styles.css .crew-card). 직책 배지 · 방송국 바로가기 버튼은 없앰:
+   사진 · 이름을 누르면 방송국으로, 아래 줄은 프로필 · 공약 · 시그 팝업. SNS 는 등록된 것만 유튜브 · SOOP · 인스타그램 순 */
+const CSNI={'유튜브':'youtube','SOOP':'soop','인스타그램':'instagram'};
 function crewCardHTML(c){
-  const on=c.live===1||(c.live===2&&S.live),cap=c.live===2,here=(S.sw?S.sw===c.n:cap),x=CREWX[c.n]||[0,0,0];
-  const sn=(ok,svg,lb)=>`<button type="button" class="csn${ok?'':' off'}" ${ok?`data-act="csn" data-arg="${lb}"`:'disabled'} aria-label="${lb}${ok?'':' (등록 안 됨)'}">${svg}</button>`;
-  return `<div class="cc${on?' on':''}${here?' here':''}" data-qa="CREW-card"><div class="cav">${av(c.n,88)}${on?'<span class="clv">LIVE</span>':''}</div>
-   <div class="cnr"><span class="cbd${cap?' cap':''}">${esc(crewRankOf(c))}</span><b>${esc(c.n)}</b></div>
-   <div class="csns" role="group" aria-label="SNS">${sn(x[0],ic('youtube',16),'유튜브')}${sn(x[1],ic('instagram',16),'인스타그램')}${sn(x[2],SOOPI,'SOOP')}</div>
-   <div class="cbt" role="group" aria-label="크루원 정보"><button type="button" data-act="cmod" data-arg="profile|${esc(c.n)}"><i class="d1"></i>프로필</button><button type="button" data-act="cmod" data-arg="pledge|${esc(c.n)}"><i class="d2"></i>공약</button><button type="button" data-act="cmod" data-arg="sig|${esc(c.n)}"><i class="d3"></i>시그</button></div>
-   ${here?'<button class="btn sec sm cgo" disabled>보는 중인 방송국</button>':`<button class="btn pri sm cgo" data-act="crewGo" data-arg="${esc(c.n)}" data-qa="CREW-go">방송국 바로가기</button>`}</div>`;
+  const on=c.live===1||(c.live===2&&S.live),x=CREWX[c.n]||[0,0,0],n=esc(c.n);
+  const sn=[[x[0],'유튜브'],[x[2],'SOOP'],[x[1],'인스타그램']].filter(a=>a[0]).map(a=>`<button type="button" data-act="csn" data-arg="${a[1]}" aria-label="${a[1]}"><img src="assets/v2/creator/${CSNI[a[1]]}.svg" width="16" height="16" alt=""></button>`).join('');
+  return `<div class="crew-card${on?' is-live':''}" data-qa="CREW-card"><div class="crew-card__top">
+   <button type="button" class="crew-card__av" data-act="crewGo" data-arg="${n}" aria-label="${n} 방송국">${av(c.n,92)}</button>${on?'<span class="crew-card__live">LIVE</span>':''}
+   <button type="button" class="crew-card__name" data-act="crewGo" data-arg="${n}" data-qa="CREW-go">${n}</button>
+   ${sn?`<div class="crew-card__sns" role="group" aria-label="SNS">${sn}</div>`:''}</div>
+   <div class="crew-card__bar" role="group" aria-label="크루원 정보"><button type="button" data-act="cmod" data-arg="profile|${n}"><img src="assets/v2/creator/ic-profile.svg" width="14" height="14" alt="">프로필</button><i></i><button type="button" data-act="cmod" data-arg="pledge|${n}"><img src="assets/v2/creator/ic-pledge.svg" width="16" height="16" alt="">공약</button><i></i><button type="button" data-act="cmod" data-arg="sig|${n}"><img src="assets/v2/creator/ic-sig.svg" width="14" height="14" alt="">시그</button></div></div>`;
 }
 crewView=function(){
   const f=S.ui.crewF;
@@ -3443,7 +3446,7 @@ crewView=function(){
   const list=all.filter(c=>f==='all'||c.live===1||(c.live===2&&S.live)),lc=liveCount();
   return `<div data-qa="T-02"><div class="vh"><h2>크루원 ${CRW().length}</h2><p>${esc(S.station.crew.name)} · 크루원 카드에서 프로필·공약·시그를 보고 방송국으로 이동해요</p></div>
    <div class="s-chips crf"><button class="chip${f==='all'?' act':''}" data-act="crewF" data-arg="all">전체 ${CRW().length}</button><button class="chip${f==='live'?' act':''}" data-act="crewF" data-arg="live">방송 중 ${lc}</button>${isStreamer()?`<button class="chip mine${f==='mine'?' act':''}" data-act="crewF" data-arg="mine" data-qa="CREW-mine">${ic('lock',14)}내가 속한 크루 ${mineList().length}</button>`:''}</div>
-   ${f==='mine'&&isStreamer()?mineHTML():list.length?`<div class="mgrid cgrid" data-qa="CREW-grid">${list.map(crewCardHTML).join('')}</div>`:`<div class="empty">${ic('moon',32)}지금 방송 중인 크루원이 없어요</div>`}</div>`;
+   ${f==='mine'&&isStreamer()?mineHTML():list.length?`<div class="crew-grid stn-crew" data-qa="CREW-grid">${list.map(crewCardHTML).join('')}</div>`:`<div class="empty">${ic('moon',32)}지금 방송 중인 크루원이 없어요</div>`}</div>`;
 };
 function cimg(label,cls){return `<figure class="cfig ${cls||''}"><div class="cimg" role="img" aria-label="${esc(label)} 이미지 자리">${ic('image',30)}<small>이미지가 들어갈 자리</small></div>${label?`<figcaption>${esc(label)}</figcaption>`:''}</figure>`}
 Object.assign(A,{
