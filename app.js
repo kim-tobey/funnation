@@ -2198,6 +2198,8 @@ window.FunFav = (function () {
   var box = fw.querySelector(".fplayer");
   var video = fw.querySelector("[data-fplayer-video]");
   var src = box.getAttribute("data-stream-src");
+  // 정지 이미지는 영상 주소가 없을 때만 — 주소가 있으면 검은 화면에서 바로 영상이 이어짐 (시안 이미지가 먼저 보이지 않게)
+  if (!src && video.getAttribute("data-poster")) video.poster = video.getAttribute("data-poster");
   if (src) {
     video.src = src;
     video.play().catch(function () {

@@ -400,9 +400,9 @@
             <!-- 자체 플레이어 (66132:101007) — 송출 주소(HLS .m3u8)는 data-stream-src. 서버 연동 전이라 비어 있고 시안 화면을 포스터로 씀.
                  컨트롤은 마우스를 올렸을 때만 (66132:101822) -->
             <!-- 테스트 영상 (2026-11-19 사용자 요청) — Big Buck Bunny 720p, (c) Blender Foundation · CC BY 3.0, Wikimedia Commons.
-                 실제 방송 주소가 생기면 data-stream-src 만 바꾸면 됨. 비우면 예전처럼 정지 화면(poster) -->
+                 실제 방송 주소가 생기면 data-stream-src 만 바꾸면 됨. 주소가 있으면 정지 이미지 없이 검은 화면 → 영상, 비우면 정지 화면(data-poster) -->
             <div class="fplayer" data-node-id="66132:101007" data-stream-src="https://upload.wikimedia.org/wikipedia/commons/transcoded/c/c0/Big_Buck_Bunny_4K.webm/Big_Buck_Bunny_4K.webm.720p.vp9.webm">
-              <video class="fplayer__video" poster="assets/fun-watch/stream.jpg" playsinline loop preload="metadata" data-fplayer-video></video>
+              <video class="fplayer__video" playsinline loop preload="auto" data-poster="assets/fun-watch/stream.jpg" data-fplayer-video></video>
               <p class="fplayer__audio-only" data-fplayer-audio-note hidden>소리만 듣는 중이에요</p>
               <!-- 방송 종료 (67427:72975) — 손 흔들기 48 · 제목 H5 · 설명 · 다시보기로 이동. 미리보기 fun-watch.html#ended [구현 제안] -->
               <div class="fplayer__ended" data-fplayer-ended data-node-id="67427:72975" hidden>
