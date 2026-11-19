@@ -192,7 +192,7 @@ function initStation(){
   return {
     bannerImg:null,
     intro:D.intro,introText:D.introLong.join('\n\n'),rulesText:D.rules.join('\n'),
-    links:[{type:'youtube',url:'https://youtube.com/@funsangsa-demo'},{type:'instagram',url:'https://instagram.com/funsangsa.demo'},{type:'tiktok',url:'https://tiktok.com/@funsangsa.demo'},{type:'home',url:'https://cafe.naver.com/funsangsademo'}],
+    links:[{type:'youtube',url:'https://youtube.com/@funsangsa-demo'},{type:'instagram',url:'https://instagram.com/funsangsa.demo'},{type:'tiktok',url:'https://tiktok.com/@funsangsa.demo'}],
     rightBanners:[],
     midBanners:[],
     seq:100,
@@ -398,12 +398,20 @@ function moveTabInd(from){
   ind.style.transition='';
   ind.style.left=to.l;ind.style.width=to.w;
 }
-addEventListener('resize',()=>moveTabInd(null));
+/* 모바일(<768)은 탭을 앱바 바로 아래 2뎁스 탭으로 — #tabsw 를 본문 맨 위로 옮김. PC 는 방송국 머리(#top) 아래 그대로 (2026-11-19) */
+const MO_Q=matchMedia('(max-width:767px)');
+function placeTabs(){
+  const tw=$('#tabsw'),st=$('.stn .st'),top=$('#top');if(!tw||!st||!top)return;
+  if(MO_Q.matches){if(st.firstElementChild!==tw)st.prepend(tw)}
+  else if(top.nextElementSibling!==tw)top.after(tw);
+}
+addEventListener('resize',()=>{placeTabs();moveTabInd(null)});
 function renderNav(){
   const ob=$('#chipbar'),sl=ob?ob.scrollLeft:0;
   // 탭 메뉴 (Figma 67582:43631 · 2026-11-19) — 선택 칸(Primary)이 탭 사이를 미끄러져 이동. 다시 그리기 전 위치에서 새 위치로
   const oldInd=$('#tabsw .tab-ind'),from=oldInd?{l:oldInd.style.left,w:oldInd.style.width}:null;
   $('#tabsw').innerHTML=`<div class="tabs tabbar" role="tablist"><span class="tab-ind" aria-hidden="true"></span>${tabsNow().map(t=>`<button class="tab" role="tab" aria-selected="${S.view===t[0]}" data-act="tab" data-arg="${t[0]}">${t[1]}</button>`).join('')}</div>`;
+  placeTabs();
   moveTabInd(from);
   renderSide();
   const nb=$('#chipbar');

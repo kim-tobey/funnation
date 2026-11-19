@@ -2103,3 +2103,27 @@ body.wire .stn .banner.def,body.wire .stn .rbi.def,body.wire .stn .mban.def .mb-
   .stn .top .btns .btn:not(.circ){gap:0;padding:0}
   .stn .top .btns .bl{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 }
+
+/* 모바일 2뎁스 탭 — 홈 · 크루원 · 시그니처 · 랭커를 앱바 바로 아래에 (2026-11-19 사용자 요청).
+   다른 모바일 2뎁스(설정 · 크리에이터 찾기 .subnav)와 같은 모양: 48 · 균등 · 16 SemiBold, 선택 Primary + 2px 밑줄, 아래 Border100 1px.
+   밑줄은 PC 선택 칸(.tab-ind)을 2px 막대로 바꿔 탭 사이를 미끄러지게 */
+@media (max-width:767px){
+  .stn .st > .tabsw{position:sticky;top:var(--mo-top,56px);z-index:20;margin:-16px -16px 16px;background:var(--bg-mo-appbar,#0e0e14)}
+  .stn .tabs.tabbar{gap:0;height:48px;padding:0;border:0;border-bottom:1px solid var(--color-border-100,#1f212e);border-radius:0;background:var(--bg-mo-appbar,#0e0e14)}
+  .stn .tabbar .tab{padding:0;border-radius:0;font-size:16px;font-weight:600;line-height:19px;letter-spacing:0;color:var(--mo-tab,#dfe2ea)}
+  .stn .tabbar .tab[aria-selected="true"]{font-weight:600;color:var(--mo-tab-active,#4a92ff)}
+  .stn .tab-ind{top:auto;bottom:-1px;height:2px;border-radius:0}
+}
+
+/* 모바일 방송국 머리 — 유튜브 · 인스타그램 · 틱톡을 이름 옆으로, 이름 글자(22)에 맞춰 22 로 줄임 (2026-11-19 사용자 요청).
+   이름 · 아이콘 한 줄 → 소개. 사진은 위 네 줄에 걸쳐 위 맞춤, 버튼 줄은 맨 아래. ⋮(44) 자리 52 는 아이콘 줄 · 소개 줄 오른쪽에서 비움 */
+@media (max-width:767px){
+  .stn .top{grid-template-columns:auto minmax(0,max-content) 1fr;grid-template-rows:1fr auto auto 1fr auto;grid-template-areas:"av . ." "av pi sns" "av intro intro" "av . ." "btns btns btns"}
+  .stn .top .avw{grid-row:1 / span 4}
+  .stn .top .btns{grid-row:5}
+  .stn .top .pi{padding-right:0}
+  .stn .top .s-sns{margin:0 0 0 -6px;padding:0 52px 0 0;gap:4px;align-self:center;flex-wrap:nowrap;min-width:0}
+  .stn .top .s-sns .snsb{width:22px;height:22px;background:none;border-radius:0}
+  .stn .top .s-sns .snsb img,.stn .top .s-sns .snsb svg{width:22px;height:22px}
+  .stn .top .s-sns .chip.edit{height:22px;padding:0 8px;font-size:12px}
+}
