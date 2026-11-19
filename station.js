@@ -144,7 +144,7 @@ function buildPosts(){
 }
 const IMGSVG=(w,h,c1,c2,t1,t2,f1,f2)=>'data:image/svg+xml;utf8,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/></linearGradient></defs><rect width="${w}" height="${h}" fill="url(#g)"/><text x="50%" y="${t2?'46%':'55%'}" fill="#ffffff" font-size="${f1}" font-weight="800" text-anchor="middle" font-family="sans-serif">${t1}</text>${t2?`<text x="50%" y="72%" fill="#dfe5ed" font-size="${f2}" text-anchor="middle" font-family="sans-serif">${t2}</text>`:''}</svg>`);
 const IMGOBJ=(w,h,c1,c2,t1,t2,f1,f2,name)=>({data:IMGSVG(w,h,c1,c2,t1,t2,f1,f2),name:name,w:w,h:h,size:1400});
-const SLOT={title:{rw:1920,rh:336,mb:5,label:'타이틀 이미지'},rbanner:{rw:300,rh:600,mb:3,label:'우측 배너'},mbanner:{rw:1600,rh:200,mb:5,label:'중간 배너'}};
+const SLOT={title:{rw:1920,rh:530,mb:5,label:'타이틀 이미지'},rbanner:{rw:300,rh:600,mb:3,label:'우측 배너'},mbanner:{rw:1600,rh:200,mb:5,label:'중간 배너'}};
 const SAMPLE_COL=[['#1a2a4a','#4a92ff','파랑'],['#290247','#a81690','보라'],['#004854','#48d481','초록']];
 function sampleImg(slot,n){
   const s=SLOT[slot],c=SAMPLE_COL[n];
@@ -385,9 +385,26 @@ function renderBnav(){
 function alarmLabel(){const l=S.alarm.level;return l==='all'?['bellRing','전체 알림',1]:l==='live'?['bell','알림 켜짐',1]:['bellOff','알림',0]}
 /* ---------- nav ---------- */
 const isTab=v=>TABS.some(t=>t[0]===v);
+/* 탭 선택 칸 — 고른 탭 자리로. from 이 있으면 거기서 시작해 이동(트랜지션), 고른 탭이 없으면(게시판 등) 숨김 */
+function moveTabInd(from){
+  const bar=$('#tabsw .tabbar'),ind=bar&&$('.tab-ind',bar);if(!ind)return;
+  const a=$('.tab[aria-selected="true"]',bar);
+  if(!a){ind.style.opacity='0';return}
+  const to={l:a.offsetLeft+'px',w:a.offsetWidth+'px'};
+  ind.style.transition='none';
+  if(from&&from.w){ind.style.left=from.l;ind.style.width=from.w;ind.style.opacity='1'}
+  else{ind.style.left=to.l;ind.style.width=to.w;ind.style.opacity='1';return}
+  void ind.offsetWidth;
+  ind.style.transition='';
+  ind.style.left=to.l;ind.style.width=to.w;
+}
+addEventListener('resize',()=>moveTabInd(null));
 function renderNav(){
   const ob=$('#chipbar'),sl=ob?ob.scrollLeft:0;
-  $('#tabsw').innerHTML=`<div class="tabs" role="tablist">${tabsNow().map(t=>`<button class="tab" role="tab" aria-selected="${S.view===t[0]}" data-act="tab" data-arg="${t[0]}">${t[1]}</button>`).join('')}</div>`;
+  // 탭 메뉴 (Figma 67582:43631 · 2026-11-19) — 선택 칸(Primary)이 탭 사이를 미끄러져 이동. 다시 그리기 전 위치에서 새 위치로
+  const oldInd=$('#tabsw .tab-ind'),from=oldInd?{l:oldInd.style.left,w:oldInd.style.width}:null;
+  $('#tabsw').innerHTML=`<div class="tabs tabbar" role="tablist"><span class="tab-ind" aria-hidden="true"></span>${tabsNow().map(t=>`<button class="tab" role="tab" aria-selected="${S.view===t[0]}" data-act="tab" data-arg="${t[0]}">${t[1]}</button>`).join('')}</div>`;
+  moveTabInd(from);
   renderSide();
   const nb=$('#chipbar');
   if(nb){nb.scrollLeft=sl;const a=$('.mchip.act',nb);if(a&&a.scrollIntoView)a.scrollIntoView({inline:'nearest',block:'nearest'})}
@@ -797,9 +814,12 @@ const CH={
 document.addEventListener('change',e=>{const k=e.target.dataset&&e.target.dataset.ch;if(k&&CH[k])CH[k](e.target)});
 window.addEventListener('resize',()=>{closePop();if(innerWidth>=960)sb.open=false;layoutSB();renderSide();layoutSB()});
 const LTYPE={youtube:['유튜브','youtube','youtube.com|youtu.be'],instagram:['인스타그램','instagram','instagram.com'],facebook:['페이스북','facebook','facebook.com|fb.com'],tiktok:['틱톡','tiktok','tiktok.com'],home:['홈페이지','globe','']};
+/* 외부 링크 아이콘 — 브랜드 색 벡터 로고(면 형태, 2026-11-19). 유튜브 · 인스타그램 · 페이스북 · 틱톡 · 홈페이지 */
+const SNSLOGO={youtube:'youtube',instagram:'instagram',facebook:'facebook',tiktok:'tiktok',home:'web'};
+const snsImg=(t,sz)=>`<img src="assets/v2/station/sns/${SNSLOGO[t]||'web'}.svg" width="${sz}" height="${sz}" alt="">`;
 function snsRow(){
   const ls=S.station.links;
-  const b=ls.map(s=>`<button class="snsb" data-act="sns" data-arg="${esc(s.url)}" data-tip="${LTYPE[s.type][0]}" aria-label="${LTYPE[s.type][0]}">${ic(LTYPE[s.type][1],16)}</button>`).join('');
+  const b=ls.map(s=>`<button class="snsb" data-act="sns" data-arg="${esc(s.url)}" data-tip="${LTYPE[s.type][0]}" aria-label="${LTYPE[s.type][0]}">${snsImg(s.type,20)}</button>`).join('');
   return b+(canSt()?'<button class="chip edit" data-act="snsEdit">+ 편집</button>':'');
 }
 function introBody(src,links){
@@ -807,7 +827,7 @@ function introBody(src,links){
   const body=paras.length?paras.map(p=>`<p>${esc(p).replace(/\n/g,'<br>')}</p>`).join(''):(src.intro?`<p>${esc(src.intro)}</p>`:'');
   const rules=String(src.rules||'').split('\n').map(s=>s.trim()).filter(Boolean);
   const info=D.info.map((r,i)=>i===0?['방송 시간',schTxt(src.sch||S.station.schedule)]:r);
-  const sns=(links||[]).map(s=>`<span class="snsb" data-tip="${LTYPE[s.type][0]}">${ic(LTYPE[s.type][1],16)}</span>`).join('');
+  const sns=(links||[]).map(s=>`<span class="snsb" data-tip="${LTYPE[s.type][0]}">${snsImg(s.type,20)}</span>`).join('');
   return `${body}<h3>방송 정보</h3><table class="kv">${info.map(r=>`<tr><th>${r[0]}</th><td>${esc(r[1])}</td></tr>`).join('')}</table>${rules.length?`<h3>방송 규칙</h3><table class="kv">${rules.map(r=>`<tr><td>${esc(r)}</td></tr>`).join('')}</table>`:''}${sns?`<div class="s-sns" style="margin-top:14px">${sns}</div>`:''}`;
 }
 function openIntro(){
@@ -1147,7 +1167,7 @@ const errEl=p=>`<div class="errm" data-err="${p}"></div>`;
 const finp=(p,val,o)=>{o=o||{};return `<input class="inp" data-p="${p}" data-in="dbind" value="${esc(val)}" ${o.max?`maxlength="${o.max}"`:''} ${o.ph?`placeholder="${o.ph}"`:''} ${o.num?'data-num="1" inputmode="numeric"':''}>`};
 const tgl=(p,on,dis)=>`<input type="checkbox" class="sw" data-p="${p}" data-ch="dbind" ${on?'checked':''} ${dis?'disabled':''}>`;
 const cntEl=p=>`<span class="cnt" data-cnt="${p}"></span>`;
-const IMGNOTE={title:'권장 1920×336px(약 6:1), 최대 5MB, JPG·PNG·GIF·WEBP. PC 높이 168px·모바일 88px에 맞춰 가운데 기준으로 잘려요. 프로토타입에서는 새로고침하면 사라져요.',rbanner:'권장 300×600px(1:2), 최대 3MB. PC 화면(1240px 이상)의 오른쪽에 폭 200px로 보여요.',mbanner:'권장 1600×200px(8:1), 최대 5MB. 홈 탭 중간에 본문 폭에 맞춰 보이고, 모바일에서도 같은 비율로 줄어들어요.'};
+const IMGNOTE={title:'권장 1920×530px(약 3.6:1), 최대 5MB, JPG·PNG·GIF·WEBP. PC 높이 310px·모바일 88px에 맞춰 가운데 기준으로 잘려요. 프로토타입에서는 새로고침하면 사라져요.',rbanner:'권장 300×600px(1:2), 최대 3MB. PC 화면(1240px 이상)의 오른쪽에 폭 200px로 보여요.',mbanner:'권장 1600×200px(8:1), 최대 5MB. 홈 탭 중간에 본문 폭에 맞춰 보이고, 모바일에서도 같은 비율로 줄어들어요.'};
 const FILEHINT='파일 선택 창이 열리지 않으면 [샘플 이미지 선택]을 사용해 주세요.';
 const ADMBODY={};
 ADMBODY.title=function(){
@@ -1642,7 +1662,7 @@ const SVT=(h)=>h;
 const SAVEDV={
  title(){const im=S.station.bannerImg;return `<div class="tpv sv" style="${im?`background:center/cover no-repeat url('${im.data}')`:''}">${im?'':'<span>펀상사, 오늘도 출근합니다</span>'}</div><div class="fanl" style="margin-top:6px">${im?esc(im.name)+' · '+im.w+'×'+im.h+' · '+fmtSize(im.size):'기본 이미지 사용 중'}</div>`},
  intro(){const s=S.station;return `<div class="sv-one">${s.intro?esc(s.intro):'<span class="emptyt">한 줄 소개가 없어요</span>'}</div><div class="ipv">${introBody({intro:s.intro,text:s.introText,rules:s.rulesText},s.links)}</div>`},
- links(){const l=S.station.links;return l.length?`<div class="ttab">${l.map(x=>`<div class="trow"><span class="tn">${ic(LTYPE[x.type][1],18)}<b>${LTYPE[x.type][0]}</b></span><span class="tm" style="flex:1">${esc(x.url)}</span></div>`).join('')}</div>`:'<div class="emptyb">등록된 외부 링크가 없어요</div>'},
+ links(){const l=S.station.links;return l.length?`<div class="ttab">${l.map(x=>`<div class="trow"><span class="tn">${snsImg(x.type,18)}<b>${LTYPE[x.type][0]}</b></span><span class="tm" style="flex:1">${esc(x.url)}</span></div>`).join('')}</div>`:'<div class="emptyb">등록된 외부 링크가 없어요</div>'},
  rbanner(){return bnSaved(S.station.rightBanners,'r')},
  mbanner(){return bnSaved(S.station.midBanners,'m')},
  boards(){return `<div class="ttab">${S.station.boardList.map(b=>b.type==='divider'?`<div class="trow"><span class="tm">┄ ${esc(b.label||'구분선')} ┄</span></div>`:`<div class="trow"><span class="tn">${ic(RICON[b.read],16)}<b>${esc(b.name)}</b></span><span class="chip sm">공개 ${rwS(b.read,b,RL)}</span><span class="chip sm">글쓰기 ${rwS(b.write,b,WL)}</span><span class="tm" style="flex:1">${esc(b.desc||'')}</span></div>`).join('')}</div>`},
@@ -3547,7 +3567,8 @@ IN.dsq=function(el){don.sq=el.value;don.sgp=0;sigPickRefresh()};
 /* ---- 기본 배너 이미지(글자 없음) ---- */
 const defSVG=(w,h,v)=>{const c=[['#1a2a4a','#4a92ff'],['#1a2a4a','#7d5ef7'],['#004854','#48d481']][v%3];return 'data:image/svg+xml;utf8,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${c[0]}"/><stop offset="1" stop-color="${c[1]}"/></linearGradient></defs><rect width="${w}" height="${h}" fill="url(#g)"/><circle cx="${w*.15}" cy="${h*.2}" r="${Math.min(w,h)*.55}" fill="#ffffff" opacity=".06"/><circle cx="${w*.85}" cy="${h*.9}" r="${Math.min(w,h)*.45}" fill="#ffffff" opacity=".07"/><path d="M0 ${h*.75} C ${w*.3} ${h*.55}, ${w*.6} ${h*.95}, ${w} ${h*.7} L${w} ${h} L0 ${h} Z" fill="#ffffff" opacity=".05"/></svg>`)};
 /* 기본 배너는 비트맵(Figma AI 생성, 2026-11-12) — 상단 6:1 · 우측 1:2 · 중간 8:1 */
-const DEFBN='assets/v2/station/banner/title.webp',DEFRB='assets/v2/station/banner/right.webp',DEFMB='assets/v2/station/banner/mid.webp';
+// ?v= — 같은 파일 이름으로 그림을 바꿔서 브라우저에 남은 예전 그림이 보이지 않게 (2026-11-19 펀상사 픽셀 배너)
+const DEFBN='assets/v2/station/banner/title.webp?v=20261119',DEFRB='assets/v2/station/banner/right.webp?v=20261119';
 const renderBanner19=renderBanner;
 renderBanner=function(){
   renderBanner19();
@@ -3564,7 +3585,8 @@ renderRban=function(){
 const midBanner19=midBannerHTML;
 midBannerHTML=function(){
   const list=S.station.midBanners.filter(b=>b.on);
-  if(!list.length)return `<div class="sect mban def" data-qa="M-08d"><div class="mb-view"><div class="mb-slide"><img src="${DEFMB}" alt="" role="presentation"></div></div></div>`;
+  // 기본 중간 배너는 없앰 (2026-11-19 Figma 배너 컴포넌트에서 삭제) — 등록한 배너가 없으면 홈 탭에서 이 자리가 사라짐
+  if(!list.length)return '';
   return midBanner19();
 };
 

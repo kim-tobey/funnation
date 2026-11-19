@@ -69,7 +69,8 @@
 .stn .gside.rail .sep{margin:8px 0}
 .stn .s-main{flex:1;min-width:0;overflow-y:auto;position:relative;background:var(--bg-page-grad),var(--bg)}
 .stn .st{max-width:1600px;margin:0 auto;padding:24px 24px 40px}
-.stn .banner{height:168px;border-radius:10px;background:linear-gradient(120deg,#1a2a4a,#133a73 45%,#4a92ff);display:flex;align-items:center;justify-content:flex-end;padding:0 32px;overflow:hidden;position:relative}
+/* 상단 타이틀 배너 — PC 1124×310 (2026-11-19 Figma v2 최종, 이전 168), 모바일 88 */
+.stn .banner{height:310px;border-radius:10px;background:linear-gradient(120deg,#1a2a4a,#133a73 45%,#4a92ff);display:flex;align-items:center;justify-content:flex-end;padding:0 32px;overflow:hidden;position:relative}
 .stn .banner span{font-size:32px;font-weight:700;color:rgba(255,255,255,.7);text-align:right}
 .stn .banner::before{content:"";position:absolute;left:-40px;top:-60px;width:260px;height:260px;border-radius:50%;background:rgba(255,255,255,.07)}
 /* top info */
@@ -431,6 +432,8 @@
 .stn .proto{margin-top:8px;font-size:11px;color:var(--accent);font-weight:700;text-align:center}
 .stn .lnbtop{padding:2px 0 4px}
 .stn .lt-pf{display:flex;align-items:center;gap:10px;padding:6px 8px;min-width:0}
+/* 이름 칸은 남는 폭을 다 씀 — 글자 폭(39.2)에 딱 맞게 줄어들면 넘침 자르기에 "사"의 오른쪽 획이 잘려 "시"처럼 보였음 (2026-11-19) */
+.stn .lt-pf .lbl{flex:1 1 auto;min-width:0}
 .stn .lt-pf b{display:block;font-size:15px;font-weight:700;color:var(--text-heading);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .stn .lt-pf .lv,.stn .lt-pf .ofb{font-size:10px;line-height:16px;display:inline-block;margin-top:2px}
 .stn .lbtn{display:flex;align-items:center;justify-content:center;gap:4px;width:100%;height:36px;border:1px solid #004261;border-radius:8px;font-size:13px;font-weight:600;margin:8px 0 6px}
@@ -2034,3 +2037,25 @@ body.wire .stn .banner.def,body.wire .stn .rbi.def,body.wire .stn .mban.def .mb-
 .stn .bbar{justify-content:space-between}
 .stn .bbar .fsearch{flex:0 1 320px;margin-left:auto}
 @media (max-width:767px){.stn .bbar .fsearch{flex:1 1 100%;max-width:none}}
+
+/* ============================================================
+   탭 메뉴 (Figma 67582:43631 · 2026-11-19) — 홈 · 크루원 · 시그니처 · 랭커
+   BG 100 · Border 100 · 모서리 6 · 안 6 · 사이 12, 높이 54(탭 42). 탭은 같은 폭.
+   선택: Primary 칸(모서리 6) + SemiBold 14 흰색, 나머지 Medium 14 Depth 300. 선택 칸은 탭 사이를 미끄러져 이동
+   ============================================================ */
+.stn .tabsw{margin-top:34px}
+.stn .tabs.tabbar{position:relative;display:flex;gap:12px;height:54px;padding:6px;border:1px solid var(--color-border-100,#1f212e);border-radius:6px;background:var(--color-bg-100,#0e0e14);flex-wrap:nowrap;align-items:stretch}
+.stn .tabbar .tab{position:relative;z-index:1;flex:1 1 0;min-width:0;height:auto;padding:0 16px;border:0;border-radius:6px;background:none;font-size:14px;font-weight:500;line-height:1;letter-spacing:-.01em;color:var(--color-text-depth-300,#969da8);justify-content:center;white-space:nowrap;transition:color .25s ease}
+.stn .tabbar .tab::after{display:none}
+.stn .tabbar .tab:hover{color:var(--color-text-normal,#dfe5ed)}
+.stn .tabbar .tab[aria-selected="true"]{font-weight:600;color:#fff}
+.stn .tabbar .tab:focus-visible{outline:2px solid var(--color-brand-primary,#4a92ff);outline-offset:-2px}
+.stn .tab-ind{position:absolute;top:6px;bottom:6px;left:6px;width:0;border-radius:6px;background:var(--color-brand-primary,#4a92ff);transition:left .3s cubic-bezier(.4,0,.2,1),width .3s cubic-bezier(.4,0,.2,1);pointer-events:none}
+@media (prefers-reduced-motion:reduce){.stn .tab-ind,.stn .tabbar .tab{transition:none}}
+/* [구현 제안] 모바일 — 같은 모양, 높이 48 · 안 4 · 사이 4 · 글자 14 (Figma 모바일 방송국 화면과 같음) */
+@media (max-width:767px){
+  .stn .tabsw{margin-top:20px}
+  .stn .tabs.tabbar{gap:4px;height:48px;padding:4px}
+  .stn .tabbar .tab{padding:0 4px}
+  .stn .tab-ind{top:4px;bottom:4px}
+}
