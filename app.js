@@ -1163,9 +1163,133 @@
   }
 })();
 
+/* 즐겨찾기 목록 — 방송인 팝오버 · 즐겨찾기 페이지(크리에이터 줄 · 관리 목록)가 함께 쓰는 브라우저 저장 (서버 연동 전).
+   저장이 없으면 시안의 10명(favorites.html)으로 시작. 항목 { n: 이름, p: 사진 주소(시안 10명은 없음 — 페이지 원래 그림 사용) } */
+window.FunFav = (function () {
+  var KEY = "funnation-fav-creators";
+  var DEFAULT = ["채이", "김예슬", "한량왕자", "조유정", "큰별TV", "송피아", "부아앙", "차수아", "쎄랑", "장군이TV"];
+  var subs = [];
+
+  function list() {
+    var raw = null;
+    try { raw = localStorage.getItem(KEY); } catch (e) {}
+    if (raw === null) return DEFAULT.map(function (n) { return { n: n }; });
+    var l;
+    try { l = JSON.parse(raw); } catch (e) { l = null; }
+    if (!Array.isArray(l)) return DEFAULT.map(function (n) { return { n: n }; });
+    // 11-18 판은 이름 문자열만 저장했음 → 시안 10명 + 그때 추가한 이름으로 옮김
+    if (l.length && typeof l[0] === "string") {
+      var out = DEFAULT.map(function (n) { return { n: n }; });
+      l.forEach(function (n) { if (DEFAULT.indexOf(n) < 0) out.push({ n: n }); });
+      return out;
+    }
+    return l.filter(function (x) { return x && typeof x.n === "string"; });
+  }
+  function save(l) {
+    try { localStorage.setItem(KEY, JSON.stringify(l)); } catch (e) {}
+    subs.forEach(function (f) { f(); });
+  }
+  function indexOf(l, name) {
+    for (var i = 0; i < l.length; i++) if (l[i].n === name) return i;
+    return -1;
+  }
+  function has(name) { return indexOf(list(), name) >= 0; }
+  /* at: 다시 추가할 때 원래 자리(관리 목록에서 해제 → 다시 추가) */
+  function add(name, pic, at) {
+    var l = list();
+    if (indexOf(l, name) >= 0) return;
+    var item = { n: name };
+    if (pic) item.p = pic;
+    if (typeof at === "number" && at >= 0 && at <= l.length) l.splice(at, 0, item);
+    else l.push(item);
+    save(l);
+  }
+  function remove(name) {
+    var l = list(), i = indexOf(l, name);
+    if (i < 0) return -1;
+    l.splice(i, 1);
+    save(l);
+    return i;
+  }
+  function onChange(f) { subs.push(f); }
+  // 다른 탭에서 바꾼 것도 반영
+  window.addEventListener("storage", function (e) {
+    if (e.key === KEY || e.key === null) subs.forEach(function (f) { f(); });
+  });
+  return { list: list, has: has, add: add, remove: remove, onChange: onChange };
+})();
+
+/* 즐겨찾기 페이지 — 크리에이터 줄 · 숫자 · 관리 목록(PC 팝업 · 모바일)을 저장된 목록으로 그림.
+   시안 10명은 HTML 의 원래 줄(방송 중 테두리 · LIVE 포함)을 그대로 쓰고, 팝오버로 새로 추가한 사람은 누른 카드의 사진으로 · 방송 중 아님 */
+(function () {
+  var people = document.querySelector(".fav-people");
+  if (!people || !window.FunFav) return;
+  var manageLists = document.querySelectorAll(".fav-manage-list");
+  var counts = [document.querySelector("[data-fav-count]"), document.querySelector("#fav-manage-mo-title span")];
+
+  function nameIn(li, sel) { var el = li.querySelector(sel); return el ? el.textContent.trim() : ""; }
+  function templates(ul, sel) {
+    var map = {}, lis = ul.querySelectorAll(":scope > li");
+    for (var i = 0; i < lis.length; i++) map[nameIn(lis[i], sel)] = lis[i];
+    return map;
+  }
+  var peopleTpl = templates(people, ".fav-person__name");
+  var manageTpl = [];
+  for (var m = 0; m < manageLists.length; m++) manageTpl.push(templates(manageLists[m], ".fav-manage__name"));
+
+  function img(cls, src, size) {
+    var el = document.createElement("img");
+    el.className = cls;
+    el.src = src || "assets/v2/favorites/avatar-base.png";
+    el.width = size; el.height = size; el.alt = "";
+    return el;
+  }
+  function newPerson(item) {
+    var li = document.createElement("li");
+    li.innerHTML = '<a class="fav-person" href="station.html"><span class="fav-person__pic"></span><span class="fav-person__name"></span></a>';
+    li.querySelector(".fav-person__pic").appendChild(img("fav-person__img", item.p, 96));
+    li.querySelector(".fav-person__name").textContent = item.n;
+    return li;
+  }
+  function newManage(item) {
+    var li = document.createElement("li");
+    li.className = "fav-manage";
+    li.innerHTML = '<span class="fav-manage__pic"></span><span class="fav-manage__name"></span><button class="fav-manage__heart" type="button" aria-pressed="true" data-fav-heart><img src="assets/v2/favorites/fav2-heart-24.svg" width="24" height="24" alt=""></button>';
+    li.querySelector(".fav-manage__pic").appendChild(img("fav-manage__img", item.p, 48));
+    li.querySelector(".fav-manage__name").textContent = item.n;
+    li.querySelector("[data-fav-heart]").setAttribute("aria-label", item.n + " 즐겨찾기 해제");
+    return li;
+  }
+  function fill(ul, items, tpl, make) {
+    ul.textContent = "";
+    items.forEach(function (it) {
+      var li = tpl[it.n] ? tpl[it.n].cloneNode(true) : make(it);
+      var heart = li.querySelector("[data-fav-heart]");
+      if (heart) { heart.setAttribute("aria-pressed", "true"); heart.setAttribute("aria-label", it.n + " 즐겨찾기 해제"); }
+      ul.appendChild(li);
+    });
+  }
+
+  /* 크리에이터 줄 · 숫자는 바로 바꾸고, 관리 목록은 열 때마다 새로 그림 —
+     열려 있는 동안 해제한 사람은 빈 하트로 남겨 다시 누를 수 있게 (66390:73855) */
+  function renderPeople() {
+    var l = FunFav.list();
+    fill(people, l, peopleTpl, newPerson);
+    counts.forEach(function (c) { if (c) c.textContent = l.length; });
+  }
+  function renderManage() {
+    var l = FunFav.list();
+    for (var i = 0; i < manageLists.length; i++) fill(manageLists[i], l, manageTpl[i], newManage);
+  }
+  window.FunFavPage = { renderManage: renderManage };
+  FunFav.onChange(renderPeople);
+  renderPeople();
+  renderManage();
+})();
+
 /* 즐겨찾기 관리 (PC 팝업 66465:76167 · 모바일 목록 화면 66390:73796) — 제목 줄 "즐겨찾기 관리"로 엶.
    PC: 팝업(X · 바깥 · ESC 로 닫힘, 이름 검색). 모바일: 본문 대신 목록 화면(#manage), 앱바 뒤로 가기로 복귀.
-   하트를 누르면 즐겨찾기 해제 표시만 바꿈 (서버 연동 전) */
+   하트를 누르면 즐겨찾기 목록(FunFav)에서 빼고 빈 하트로, 다시 누르면 원래 자리로 (서버 연동 전) */
 (function () {
   var open = document.querySelector("[data-fav-manage]");
   var root = document.querySelector("[data-fav-view]");
@@ -1179,12 +1303,14 @@
   var moTitleMain = moTitle ? moTitle.textContent : "";
 
   function setModal(on) {
+    if (on && window.FunFavPage) FunFavPage.renderManage();
     modal.hidden = !on;
     if (on) { search.value = ""; filter(""); search.focus(); }
     else open.focus();
   }
   function setView() {
     var on = location.hash === "#manage" && mobile.matches;
+    if (on && view.hidden && window.FunFavPage) FunFavPage.renderManage();
     root.setAttribute("data-fav-view", on ? "manage" : "main");
     view.hidden = !on;
     // 모바일 앱바 제목 — 목록 화면은 "목록 관리" (66390:73956)
@@ -1218,8 +1344,16 @@
     if (!heart) return;
     var on = heart.getAttribute("aria-pressed") !== "true";
     heart.setAttribute("aria-pressed", on ? "true" : "false");
-    var name = heart.closest(".fav-manage").querySelector(".fav-manage__name").textContent;
+    var name = heart.closest(".fav-manage").querySelector(".fav-manage__name").textContent.trim();
     heart.setAttribute("aria-label", name + (on ? " 즐겨찾기 해제" : " 즐겨찾기 다시 추가"));
+    if (!window.FunFav) return;
+    if (on) {
+      var img = heart.closest(".fav-manage").querySelector(".fav-manage__img");
+      var at = heart.hasAttribute("data-fav-at") ? +heart.getAttribute("data-fav-at") : undefined;
+      FunFav.add(name, img && img.getAttribute("src").indexOf("assets/v2/favorites/fav2-") !== 0 ? img.getAttribute("src") : null, at);
+    } else {
+      heart.setAttribute("data-fav-at", FunFav.remove(name));
+    }
   });
   // 모바일 목록 화면에서 앱바 뒤로 가기 → 즐겨찾기 본문으로
   document.addEventListener("click", function (e) {
@@ -3197,17 +3331,19 @@ document.addEventListener("click", function (e) {
   var PIC = ".creator-card__thumb, .winfo__pic, .wbar__pic, .fbar__channel img, .card__avatar, .fav-card__avatar";
   var NAME = ".creator-card__name, .winfo__name, .card__channel, .fav-card__channel";
   var STATION = "station.html";
-  var FAV_KEY = "funnation-fav-creators";
+  /* 추가할 때 즐겨찾기 페이지에 보일 사진 — 이름이 있는 카드 · 정보 줄의 방송인 사진 */
+  var BOX = ".creator-card, .card, .fav-card, .winfo, .wbar, article, li";
 
   var pop, anchor, name;
 
   function loggedIn() { return document.documentElement.getAttribute("data-auth") !== "out"; }
 
-  function favs() {
-    try { return JSON.parse(localStorage.getItem(FAV_KEY)) || []; } catch (e) { return []; }
-  }
-  function saveFavs(l) {
-    try { localStorage.setItem(FAV_KEY, JSON.stringify(l)); } catch (e) {}
+  function picOf(el) {
+    var box = el.closest(BOX);
+    var p = box && box.querySelector(PIC);
+    if (!p) return null;
+    if (p.tagName !== "IMG") { var imgs = p.querySelectorAll("img"); p = imgs[imgs.length - 1]; }
+    return p ? p.getAttribute("src") : null;
   }
 
   var toastTimer;
@@ -3247,13 +3383,13 @@ document.addEventListener("click", function (e) {
   }
 
   function syncFav() {
-    var on = favs().indexOf(name) >= 0;
+    var on = FunFav.has(name);
     var b = pop.querySelector("[data-ch=fav]");
     b.setAttribute("aria-pressed", on ? "true" : "false");
     b.setAttribute("aria-label", on ? "즐겨찾기 해제" : "즐겨찾기");
   }
 
-  /* 이름 아래 8px, 왼쪽은 이름 왼쪽에 맞춤 — 화면 밖으로 나가면 안쪽 16 으로 밀고, 아래가 모자라면 위로 [구현 제안] */
+  /* 이름 아래 8px, 왼쪽은 이름 왼쪽에 맞춤 — 화면 밖으로 나가면 안쪽 16 으로 밀고, 아래가 모자라면 위로 (2026-11-19 확정) */
   function place() {
     var r = anchor.getBoundingClientRect();
     var w = pop.offsetWidth, h = pop.offsetHeight;
@@ -3294,10 +3430,8 @@ document.addEventListener("click", function (e) {
     if (!loggedIn()) { close(); location.hash = "login"; return; }
     if (act === "msg") { location.href = STATION + "#modal=msg-write"; return; }
     if (act === "fav") {
-      var l = favs(), i = l.indexOf(name);
-      if (i >= 0) { l.splice(i, 1); toast("즐겨찾기를 해제했어요"); }
-      else { l.push(name); toast("즐겨찾기에 추가했어요"); }
-      saveFavs(l);
+      if (FunFav.has(name)) { FunFav.remove(name); toast("즐겨찾기를 해제했어요"); }
+      else { FunFav.add(name, picOf(anchor)); toast("즐겨찾기에 추가했어요"); }
       syncFav();
     }
   }
