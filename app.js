@@ -2543,8 +2543,11 @@ window.FunFav = (function () {
   }, { passive: true });
 
   // 모바일 — 글이 있으면 입력칸 오른쪽 보내기 버튼을 보여줌 (66132:110337)
+  var go = fw.querySelector("[data-fchat-go]");
   input.addEventListener("input", function () {
-    form.classList.toggle("has-text", !!this.value.trim());
+    var has = !!this.value.trim();
+    form.classList.toggle("has-text", has);
+    if (go) go.setAttribute("aria-disabled", has ? "false" : "true");
   });
   input.addEventListener("keydown", function (e) {
     if (e.key === "Enter" && !e.shiftKey && !e.isComposing) {

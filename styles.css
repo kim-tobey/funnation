@@ -9077,6 +9077,20 @@ ul {
 [data-theme="light"] .finput__btn img {
   filter: brightness(0.4);
 }
+/* PC 보내기 — 글이 없으면 회색 아이콘, 입력하면 Primary 아이콘 */
+.finput__go-on,
+.finput.has-text .finput__go-off {
+  display: none;
+}
+.finput.has-text .finput__go-on {
+  display: block;
+}
+.finput__go[aria-disabled="true"] {
+  cursor: default;
+}
+[data-theme="light"] .finput.has-text .finput__go img {
+  filter: none;
+}
 /* 후원 · 시그니처 · 설정 (66132:101629) — 48 줄 + 아래 20, 좌우 Border 300 */
 .fdock__tabs {
   box-sizing: content-box;
@@ -9112,11 +9126,19 @@ ul {
   color: var(--color-text-normal);
   white-space: nowrap;
 }
-/* [구현 제안] 호버 · 열린 상태 — 시안 없음 */
-.fkind:hover,
-.fkind[aria-pressed="true"] {
+/* 열린 상태 (67427:75915 · 67427:79983) — 바탕은 그대로, 글자 · 아이콘만 Primary. [구현 제안] 호버는 바탕만 BG Cancel */
+.fkind:hover {
   background: var(--color-bg-cancel);
-  box-shadow: inset 0 0 0 1px var(--color-brand-primary);
+}
+.fkind[aria-pressed="true"] {
+  color: var(--color-brand-primary);
+}
+.fkind__on,
+.fkind[aria-pressed="true"] .fkind__off {
+  display: none;
+}
+.fkind[aria-pressed="true"] .fkind__on {
+  display: block;
 }
 /* 시그니처 아이콘 (Interface / Signiture) — 20 칸 안 15.5 */
 .fkind__sig {
@@ -9124,6 +9146,9 @@ ul {
 }
 [data-theme="light"] .fkind img {
   filter: brightness(0.3);
+}
+[data-theme="light"] .fkind[aria-pressed="true"] img {
+  filter: none;
 }
 .fdock__gear {
   display: flex;
