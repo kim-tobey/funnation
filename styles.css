@@ -2450,10 +2450,11 @@ ul {
 .card--rich .card__viewers {
   background: rgba(18, 18, 18, 0.7);
 }
+/* 프로필 ↔ 제목 묶음 사이 — 5 → 8 (2026-11-19 사용자 결정, Content Card / Live) */
 .card__info {
   display: flex;
   align-items: flex-start;
-  gap: 5px;
+  gap: 8px;
   min-width: 0;
 }
 .card__avatar {
@@ -10149,7 +10150,9 @@ ul {
     display: block;
   }
   /* 시트가 시작하는 높이 — 상태바 + 앱바 48 + 플레이어(폭의 9/16). 재생화면 탭은 앱바가 없음 */
+  /* --fw-ind: 아래 시트 밑 홈 인디케이터 자리(20). 상태바를 숨기면 0 — 시트가 화면 아래 끝까지 */
   .fwatch {
+    --fw-ind: 20px;
     --fw-top: calc(var(--mo-statusbar-h) + 48px + 56.25vw);
     position: relative;
     flex-direction: column;
@@ -10698,11 +10701,11 @@ ul {
   .fchat .fpop {
     position: fixed;
     right: 0;
-    bottom: 20px;
+    bottom: var(--fw-ind);
     left: 0;
     gap: 0;
     width: auto;
-    max-height: calc(100dvh - var(--fw-top) - 20px);
+    max-height: calc(100dvh - var(--fw-top) - var(--fw-ind));
     padding: 20px 20px 16px;
     border: 0;
     border-radius: 20px 20px 0 0;
@@ -10925,7 +10928,7 @@ ul {
   .fopt {
     position: fixed;
     right: 0;
-    bottom: 20px;
+    bottom: var(--fw-ind);
     left: 0;
     z-index: 50;
     width: auto;
@@ -10948,7 +10951,7 @@ ul {
   .fusers {
     position: fixed;
     top: var(--fw-top);
-    bottom: 20px;
+    bottom: var(--fw-ind);
     z-index: 45;
     max-height: none;
     padding: 16px 20px 12px;
@@ -10968,7 +10971,7 @@ ul {
     position: fixed;
     top: auto !important;
     right: 0;
-    bottom: 20px;
+    bottom: var(--fw-ind);
     left: 0;
     z-index: 60;
     width: auto;
@@ -13062,7 +13065,7 @@ button.subnav__tab {
 .fav-card__body {
   display: flex;
   align-items: flex-start;
-  gap: 5px;
+  gap: 8px; /* 5 → 8 (2026-11-19, Content Card / Live 와 같이) */
 }
 .fav-card__avatar {
   position: relative;
@@ -14343,6 +14346,9 @@ button.subnav__tab {
   [data-device-chrome="off"] .fwatch {
     height: 100dvh;
   }
+  [data-device-chrome="off"] .fwatch {
+    --fw-ind: 0px;
+  }
   [data-device-chrome="off"][data-page="watch"] .fab-auth { bottom: 76px; }
   [data-device-chrome="off"][data-page="watch"] .fab-chrome { bottom: 124px; }
   [data-device-chrome="off"][data-page="fun-watch"] .fab-auth { bottom: 128px; }
@@ -14976,11 +14982,11 @@ button.subnav__tab {
     position: fixed;
     top: auto;
     right: 0;
-    bottom: 20px;
+    bottom: var(--fw-ind);
     left: 0;
     z-index: 51;
     width: auto;
-    height: calc(100dvh - var(--fw-top) - 20px);
+    height: calc(100dvh - var(--fw-top) - var(--fw-ind));
     max-height: none;
     padding: 16px 20px 16px;
     border: 0;
