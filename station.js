@@ -78,6 +78,8 @@ const PROFILE='assets/v2/station/profile.jpg';
 const AVPOOL=['assets/v2/creator/photo1.png','assets/home/avatar/vtuber-blue.png','assets/logout/avatar3.png','assets/watch/v3/avatar/chaeyoung.png','assets/home/avatar/bear.jpg','assets/v2/notice/avatar1.png','assets/v2/creator/photo4.png','assets/home/avatar/vtuber-green.png','assets/logout/avatar4.png','assets/watch/v3/avatar/joker.png','assets/home/avatar/chim.png','assets/v2/creator/photo2.png','assets/home/avatar/vtuber-purple.png','assets/logout/avatar5.png','assets/watch/v3/avatar/eurat.png','assets/logout/avatar1.png','assets/v2/notice/avatar2.png','assets/v2/creator/photo5.png','assets/home/avatar/pixel.png','assets/watch/v3/avatar/frokynn.png','assets/logout/avatar6.png','assets/home/avatar/vtuber-white.png','assets/watch/v3/avatar/trangam.png','assets/logout/avatar2.png','assets/watch/v3/avatar/ippeun.png','assets/v2/creator/photo3.png','assets/watch/v3/avatar/ym.png','assets/watch/v3/avatar/love.png','assets/watch/v4/avatar-ymss.jpg','assets/watch/v3/avatar/nightbot.png'];
 const AVMAP=new Map();
 function avSrc(n){n=String(n);if(AVMAP.has(n))return AVMAP.get(n);const N=AVPOOL.length;let i=(hue(n)>>>0)%N;const used=new Set(AVMAP.values());if(AVMAP.size<N){while(used.has(AVPOOL[i]))i=(i+1)%N}const src=AVPOOL[i];AVMAP.set(n,src);return src}
+/* LNB 방송국 프로필 — 펀네이션 LNB 로그인 프로필(텔레토비 57)과 같은 모양: 금색 테두리 3 · 어두운 띠 3 · 사진 (2026-11-19) */
+const pfRing=n=>`<span class="pfring">${av(n,57)}</span>`;
 const av=(n,s=40)=>`<span class="av pf" style="width:${s}px;height:${s}px"><img src="${n==='\ud380\uc0c1\uc0ac'?PROFILE:avSrc(n)}" alt="" loading="lazy" decoding="async"></span>`;
 const TIERN={none:'후원 없음',dirt:'흙수저',gold:'금수저',dia:'노블레스',black:'골드프라임'};
 const TIERO={none:-1,dirt:0,gold:1,dia:2,black:3};
@@ -985,7 +987,7 @@ function renderSide(){
   const el=$('#gside');
   if(S.admin.on&&canAdmin()){el.innerHTML=admSideHTML();return}
   if(S.shell==='fn'){el.innerHTML=fnSideHTML();return}
-  el.innerHTML=`<div class="lnbtop"><div class="lt-pf ring${S.live?' on':''}">${av(D.name,40)}<span class="lbl"><b>${D.name}</b>${S.live?'<span class="lv">LIVE</span>':'<span class="ofb">OFFLINE</span>'}</span></div><button class="lbtn" data-act="oos" title="펀네이션 홈으로">${ic('chevL',14)}<span class="lbl">펀네이션 홈으로</span></button></div>${!S.loggedIn&&innerWidth<768?'<button class="loginbtn" style="width:100%;margin-bottom:10px" data-act="login">로그인</button>':''}<hr>${canAdmin()?`<button class="admbtn" data-qa="M-01" data-act="admEnter" title="방송국 관리">${ic('settings',18)}<span class="lbl">방송국 관리</span><span class="lbl chev">›</span></button>`:''}${panelHTML()}`;
+  el.innerHTML=`<div class="lnbtop"><div class="lt-pf">${pfRing(D.name)}<span class="lbl"><b>${D.name}</b>${S.live?'<span class="lv">LIVE</span>':'<span class="ofb">OFFLINE</span>'}</span></div><button class="lbtn" data-act="oos" title="펀네이션 홈으로">${ic('chevL',14)}<span class="lbl">펀네이션 홈으로</span></button></div>${!S.loggedIn&&innerWidth<768?'<button class="loginbtn" style="width:100%;margin-bottom:10px" data-act="login">로그인</button>':''}<hr>${canAdmin()?`<button class="admbtn" data-qa="M-01" data-act="admEnter" title="방송국 관리">${ic('settings',18)}<span class="lbl">방송국 관리</span><span class="lbl chev">›</span></button>`:''}${panelHTML()}`;
 }
 function renderHeader(){
   const nm=actorName(),role=S.mode==='streamer'?'스트리머':S.mode==='manager'?'매니저':'';
@@ -1154,7 +1156,7 @@ function refreshStation(){renderBanner();renderTop();renderNav();renderView();re
 /* admin render */
 function admSideHTML(){
   const a=S.admin;
-  let h=`<div class="lnbtop"><div class="lt-pf ring${S.live?' on':''}">${av(D.name,40)}<span class="lbl"><b>${D.name}</b><span class="admbdg" style="margin:2px 0 0;display:inline-block">관리 모드</span></span></div><button class="lbtn" data-act="admBack" title="방송국으로 돌아가기">${ic('chevL',14)}<span class="lbl">방송국으로 돌아가기</span></button></div><hr>`;
+  let h=`<div class="lnbtop"><div class="lt-pf">${pfRing(D.name)}<span class="lbl"><b>${D.name}</b><span class="admbdg" style="margin:2px 0 0;display:inline-block">관리 모드</span></span></div><button class="lbtn" data-act="admBack" title="방송국으로 돌아가기">${ic('chevL',14)}<span class="lbl">방송국으로 돌아가기</span></button></div><hr>`;
   let g='';
   AVIEWS.forEach(v=>{if(!v.ok())return;if(v.grp!==g){g=v.grp;h+=`<div class="pg">${g}</div>`}
     h+=`<div class="mi${a.view===v.id?' act':''}" role="button" tabindex="0" data-act="admMenu" data-arg="${v.id}" data-qa-nav="${v.qa}" title="${v.label}">${ic(v.ic,20)}<span class="nm">${v.label}</span><span class="rt">${a.dirty&&a.view===v.id?'<i class="dot"></i>':''}</span></div>`});
@@ -3581,7 +3583,7 @@ IN.dsq=function(el){don.sq=el.value;don.sgp=0;sigPickRefresh()};
 const defSVG=(w,h,v)=>{const c=[['#1a2a4a','#4a92ff'],['#1a2a4a','#7d5ef7'],['#004854','#48d481']][v%3];return 'data:image/svg+xml;utf8,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${c[0]}"/><stop offset="1" stop-color="${c[1]}"/></linearGradient></defs><rect width="${w}" height="${h}" fill="url(#g)"/><circle cx="${w*.15}" cy="${h*.2}" r="${Math.min(w,h)*.55}" fill="#ffffff" opacity=".06"/><circle cx="${w*.85}" cy="${h*.9}" r="${Math.min(w,h)*.45}" fill="#ffffff" opacity=".07"/><path d="M0 ${h*.75} C ${w*.3} ${h*.55}, ${w*.6} ${h*.95}, ${w} ${h*.7} L${w} ${h} L0 ${h} Z" fill="#ffffff" opacity=".05"/></svg>`)};
 /* 기본 배너는 비트맵(Figma AI 생성, 2026-11-12) — 상단 6:1 · 우측 1:2 · 중간 8:1 */
 // ?v= — 같은 파일 이름으로 그림을 바꿔서 브라우저에 남은 예전 그림이 보이지 않게 (2026-11-19 펀상사 픽셀 배너)
-const DEFBN='assets/v2/station/banner/title.webp?v=20261119',DEFRB='assets/v2/station/banner/right.webp?v=20261119';
+const DEFBN='assets/v2/station/banner/title.webp?v=20261119',DEFRB='assets/v2/station/banner/right.webp?v=20261119b';
 const renderBanner19=renderBanner;
 renderBanner=function(){
   renderBanner19();
