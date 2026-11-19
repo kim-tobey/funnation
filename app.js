@@ -3423,8 +3423,8 @@ document.addEventListener("click", function (e) {
 (function () {
   /* 사진 → 바로 방송국. 이름 → 방송인 팝오버(Figma 67446:87950): 방송국 홈 · 쪽지 · 즐겨찾기(해제) · 공지.
      광고 카드(.card--ad)의 이름은 방송인이 아니라 팝오버 없이 예전처럼 방송국으로 */
-  var PIC = ".creator-card__thumb, .crew-card__av, .winfo__pic, .wbar__pic, .fbar__channel img, .card__avatar, .fav-card__avatar";
-  var NAME = ".creator-card__name, .crew-card__name, .winfo__name, .card__channel, .fav-card__channel";
+  var PIC = ".creator-card__thumb, .creator-grid .crew-card__av, .winfo__pic, .wbar__pic, .fbar__channel img, .card__avatar, .fav-card__avatar";
+  var NAME = ".creator-card__name, .creator-grid .crew-card__name, .winfo__name, .card__channel, .fav-card__channel";
   var STATION = "station.html";
   /* 추가할 때 즐겨찾기 페이지에 보일 사진 — 이름이 있는 카드 · 정보 줄의 방송인 사진 */
   var BOX = ".creator-card, .card, .fav-card, .winfo, .wbar, article, li";

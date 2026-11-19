@@ -955,7 +955,7 @@ function renderTop(){
   else if(sn&&S.mode==='viewer'&&sn.type==='chat')strip='채팅이 제한된 상태예요 (만료 '+(sn.exp||'영구')+')';
   $('#restrict').innerHTML=strip?`<div class="restrict">${esc(strip)}</div>`:'';
   $('#top').innerHTML=`
-   <div class="avw"><div class="avring">${av(D.name,90)}</div>${S.live?'<span class="livebdg">LIVE</span>':''}</div>
+   <div class="avw"><div class="avring${S.live?' on':''}">${av(D.name,90)}</div>${S.live?'<span class="livebdg">LIVE</span>':''}</div>
    <div class="pi"><h1>${D.name}${modeBadge()}</h1></div>
    <div class="btns">
      <button class="btn out msgb" id="msgBtn" data-act="msgBtn" data-qa="MSG-01" aria-label="${S.loggedIn&&unreadN()>0?'쪽지, 안 읽은 쪽지 '+unreadN()+'개':'쪽지'}">${ic('mail',18)}<span class="bl">쪽지</span>${msgBadgeHTML()}</button>
@@ -985,7 +985,7 @@ function renderSide(){
   const el=$('#gside');
   if(S.admin.on&&canAdmin()){el.innerHTML=admSideHTML();return}
   if(S.shell==='fn'){el.innerHTML=fnSideHTML();return}
-  el.innerHTML=`<div class="lnbtop"><div class="lt-pf">${av(D.name,40)}<span class="lbl"><b>${D.name}</b>${S.live?'<span class="lv">LIVE</span>':'<span class="ofb">OFFLINE</span>'}</span></div><button class="lbtn" data-act="oos" title="펀네이션 홈으로">${ic('chevL',14)}<span class="lbl">펀네이션 홈으로</span></button></div>${!S.loggedIn&&innerWidth<768?'<button class="loginbtn" style="width:100%;margin-bottom:10px" data-act="login">로그인</button>':''}<hr>${canAdmin()?`<button class="admbtn" data-qa="M-01" data-act="admEnter" title="방송국 관리">${ic('settings',18)}<span class="lbl">방송국 관리</span><span class="lbl chev">›</span></button>`:''}${panelHTML()}`;
+  el.innerHTML=`<div class="lnbtop"><div class="lt-pf ring${S.live?' on':''}">${av(D.name,40)}<span class="lbl"><b>${D.name}</b>${S.live?'<span class="lv">LIVE</span>':'<span class="ofb">OFFLINE</span>'}</span></div><button class="lbtn" data-act="oos" title="펀네이션 홈으로">${ic('chevL',14)}<span class="lbl">펀네이션 홈으로</span></button></div>${!S.loggedIn&&innerWidth<768?'<button class="loginbtn" style="width:100%;margin-bottom:10px" data-act="login">로그인</button>':''}<hr>${canAdmin()?`<button class="admbtn" data-qa="M-01" data-act="admEnter" title="방송국 관리">${ic('settings',18)}<span class="lbl">방송국 관리</span><span class="lbl chev">›</span></button>`:''}${panelHTML()}`;
 }
 function renderHeader(){
   const nm=actorName(),role=S.mode==='streamer'?'스트리머':S.mode==='manager'?'매니저':'';
@@ -1154,7 +1154,7 @@ function refreshStation(){renderBanner();renderTop();renderNav();renderView();re
 /* admin render */
 function admSideHTML(){
   const a=S.admin;
-  let h=`<div class="lnbtop"><div class="lt-pf">${av(D.name,40)}<span class="lbl"><b>${D.name}</b><span class="admbdg" style="margin:2px 0 0;display:inline-block">관리 모드</span></span></div><button class="lbtn" data-act="admBack" title="방송국으로 돌아가기">${ic('chevL',14)}<span class="lbl">방송국으로 돌아가기</span></button></div><hr>`;
+  let h=`<div class="lnbtop"><div class="lt-pf ring${S.live?' on':''}">${av(D.name,40)}<span class="lbl"><b>${D.name}</b><span class="admbdg" style="margin:2px 0 0;display:inline-block">관리 모드</span></span></div><button class="lbtn" data-act="admBack" title="방송국으로 돌아가기">${ic('chevL',14)}<span class="lbl">방송국으로 돌아가기</span></button></div><hr>`;
   let g='';
   AVIEWS.forEach(v=>{if(!v.ok())return;if(v.grp!==g){g=v.grp;h+=`<div class="pg">${g}</div>`}
     h+=`<div class="mi${a.view===v.id?' act':''}" role="button" tabindex="0" data-act="admMenu" data-arg="${v.id}" data-qa-nav="${v.qa}" title="${v.label}">${ic(v.ic,20)}<span class="nm">${v.label}</span><span class="rt">${a.dirty&&a.view===v.id?'<i class="dot"></i>':''}</span></div>`});
@@ -3442,10 +3442,12 @@ function crewCardHTML(c){
 }
 crewView=function(){
   const f=S.ui.crewF;
-  const all=CRW().slice().sort((a,b)=>rkIdx(a)-rkIdx(b));
-  const list=all.filter(c=>f==='all'||c.live===1||(c.live===2&&S.live)),lc=liveCount();
-  return `<div data-qa="T-02"><div class="vh"><h2>크루원 ${CRW().length}</h2><p>${esc(S.station.crew.name)} · 크루원 카드에서 프로필·공약·시그를 보고 방송국으로 이동해요</p></div>
-   <div class="s-chips crf"><button class="chip${f==='all'?' act':''}" data-act="crewF" data-arg="all">전체 ${CRW().length}</button><button class="chip${f==='live'?' act':''}" data-act="crewF" data-arg="live">방송 중 ${lc}</button>${isStreamer()?`<button class="chip mine${f==='mine'?' act':''}" data-act="crewF" data-arg="mine" data-qa="CREW-mine">${ic('lock',14)}내가 속한 크루 ${mineList().length}</button>`:''}</div>
+  /* 지금 보고 있는 방송국 본인 카드는 빼고 다른 크루원만 (2026-11-19 사용자 요청) — 다른 크루원 방송국으로 옮겨 가면 그 사람 카드가 빠지고 펀상사 카드가 보임 */
+  const isMe=c=>S.sw?c.n===S.sw:c.live===2,isOn=c=>c.live===1||(c.live===2&&S.live);
+  const all=CRW().filter(c=>!isMe(c)).sort((a,b)=>rkIdx(a)-rkIdx(b));
+  const list=all.filter(c=>f==='all'||isOn(c)),lc=all.filter(isOn).length;
+  return `<div data-qa="T-02"><div class="vh"><h2>크루원 ${all.length}</h2><p>${esc(S.station.crew.name)} · 크루원 카드에서 프로필·공약·시그를 보고 방송국으로 이동해요</p></div>
+   <div class="s-chips crf"><button class="chip${f==='all'?' act':''}" data-act="crewF" data-arg="all">전체 ${all.length}</button><button class="chip${f==='live'?' act':''}" data-act="crewF" data-arg="live">방송 중 ${lc}</button>${isStreamer()?`<button class="chip mine${f==='mine'?' act':''}" data-act="crewF" data-arg="mine" data-qa="CREW-mine">${ic('lock',14)}내가 속한 크루 ${mineList().length}</button>`:''}</div>
    ${f==='mine'&&isStreamer()?mineHTML():list.length?`<div class="crew-grid stn-crew" data-qa="CREW-grid">${list.map(crewCardHTML).join('')}</div>`:`<div class="empty">${ic('moon',32)}지금 방송 중인 크루원이 없어요</div>`}</div>`;
 };
 function cimg(label,cls){return `<figure class="cfig ${cls||''}"><div class="cimg" role="img" aria-label="${esc(label)} 이미지 자리">${ic('image',30)}<small>이미지가 들어갈 자리</small></div>${label?`<figcaption>${esc(label)}</figcaption>`:''}</figure>`}
