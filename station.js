@@ -987,7 +987,7 @@ function renderSide(){
   const el=$('#gside');
   if(S.admin.on&&canAdmin()){el.innerHTML=admSideHTML();return}
   if(S.shell==='fn'){el.innerHTML=fnSideHTML();return}
-  el.innerHTML=`<div class="lnbtop"><div class="lt-pf">${pfRing(D.name)}<span class="lbl"><b>${D.name}</b>${S.live?'<span class="lv">LIVE</span>':'<span class="ofb">OFFLINE</span>'}</span></div><button class="lbtn" data-act="oos" title="펀네이션 홈으로">${ic('chevL',14)}<span class="lbl">펀네이션 홈으로</span></button></div>${!S.loggedIn&&innerWidth<768?'<button class="loginbtn" style="width:100%;margin-bottom:10px" data-act="login">로그인</button>':''}<hr>${canAdmin()?`<button class="admbtn" data-qa="M-01" data-act="admEnter" title="방송국 관리">${ic('settings',18)}<span class="lbl">방송국 관리</span><span class="lbl chev">›</span></button>`:''}${panelHTML()}`;
+  el.innerHTML=`<div class="lnbtop"><div class="lt-pf">${pfRing(D.name)}<span class="lbl"><b>${D.name}</b>${S.live?'<span class="lv">LIVE</span>':'<span class="ofb">OFFLINE</span>'}</span></div><div class="lbtns"><button class="lbtn" data-act="oos" title="펀네이션 홈으로">${ic('chevL',14)}<span class="lbl">홈으로</span></button><button class="lbtn lbtn--deco" data-act="decoEnter" title="방송국 꾸미기"><span class="lbl">방송국 꾸미기</span></button></div></div>${!S.loggedIn&&innerWidth<768?'<button class="loginbtn" style="width:100%;margin-bottom:10px" data-act="login">로그인</button>':''}<hr>${canAdmin()?`<button class="admbtn" data-qa="M-01" data-act="admEnter" title="방송국 관리">${ic('settings',18)}<span class="lbl">방송국 관리</span><span class="lbl chev">›</span></button>`:''}${panelHTML()}`;
 }
 function renderHeader(){
   const nm=actorName(),role=S.mode==='streamer'?'스트리머':S.mode==='manager'?'매니저':'';
@@ -1443,6 +1443,7 @@ const USERS0=[['funsangsa','펀상사'],['harukeeper','사옥청소부'],['wolyo
 function mgrPermLog(m,k,on){logAdd('권한','매니저',m.n+': '+PL[k]+' 권한 '+(on?'부여':'해제'))}
 Object.assign(A,{
  admEnter(){adminEnter()},
+ decoEnter(){if(!canSt()){toast('방송국 꾸미기는 스트리머 · 관리 권한이 있는 매니저만 할 수 있어요');return}adminEnter('title')},
  admBack(){admExit()},
  admMenu(el,a){admGo(a)},
  admPv(el,a){S.admin.pv=a;admBodyRefresh()},
@@ -3583,12 +3584,12 @@ IN.dsq=function(el){don.sq=el.value;don.sgp=0;sigPickRefresh()};
 const defSVG=(w,h,v)=>{const c=[['#1a2a4a','#4a92ff'],['#1a2a4a','#7d5ef7'],['#004854','#48d481']][v%3];return 'data:image/svg+xml;utf8,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${c[0]}"/><stop offset="1" stop-color="${c[1]}"/></linearGradient></defs><rect width="${w}" height="${h}" fill="url(#g)"/><circle cx="${w*.15}" cy="${h*.2}" r="${Math.min(w,h)*.55}" fill="#ffffff" opacity=".06"/><circle cx="${w*.85}" cy="${h*.9}" r="${Math.min(w,h)*.45}" fill="#ffffff" opacity=".07"/><path d="M0 ${h*.75} C ${w*.3} ${h*.55}, ${w*.6} ${h*.95}, ${w} ${h*.7} L${w} ${h} L0 ${h} Z" fill="#ffffff" opacity=".05"/></svg>`)};
 /* 기본 배너는 비트맵(Figma AI 생성, 2026-11-12) — 상단 6:1 · 우측 1:2 · 중간 8:1 */
 // ?v= — 같은 파일 이름으로 그림을 바꿔서 브라우저에 남은 예전 그림이 보이지 않게 (2026-11-19 펀상사 픽셀 배너)
-const DEFBN='assets/v2/station/banner/title.webp?v=20261119',DEFRB='assets/v2/station/banner/right.webp?v=20261119b';
+const DEFBN='assets/v2/station/banner/title.webp?v=20261120g',DEFRB='assets/v2/station/banner/right.webp?v=20261120';
 const renderBanner19=renderBanner;
 renderBanner=function(){
   renderBanner19();
   const b=$('.banner'),e=b&&b.firstElementChild;if(!b||!e)return;
-  if(!S.station.bannerImg){b.style.background="center/cover no-repeat var(--defbn,url('"+DEFBN+"'))";e.textContent='';e.style.display='none';b.classList.add('def')}else b.classList.remove('def');
+  if(!S.station.bannerImg){b.style.background="var(--defbn-pos,50% 50%)/var(--defbn-size,cover) no-repeat var(--defbn,url('"+DEFBN+"'))";e.textContent='';e.style.display='none';b.classList.add('def')}else b.classList.remove('def');
 };
 renderRban=function(){
   const el=$('#rban'),cols=$('#cols');if(!el||!cols)return;
@@ -3796,7 +3797,7 @@ S.loggedIn=ROOT.getAttribute('data-auth')!=='out';
 const __ahShell=applyHash;
 applyHash=function(){__ahShell();if(location.hash.length>1)pushAuth()};
 /* "펀네이션 홈으로" → 실제 홈 */
-document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('#gside .lbtn');if(b){e.preventDefault();e.stopPropagation();location.href='index.html'}},true);
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('#gside .lbtn[data-act="oos"]');if(b){e.preventDefault();e.stopPropagation();location.href='index.html'}},true);
 
 /* 시안 캡처용 — #...&cap=1 : 데모 설정 · 플로팅 로그인 버튼 숨김, &fix=1 : 화면 높이로 잘라 모달을 가운데에 */
 function capMode(){const h=location.hash;ROOT.classList.toggle('is-cap',/(^#|&)cap=1(&|$)/.test(h));ROOT.classList.toggle('is-cap-fix',/(^#|&)fix=1(&|$)/.test(h))}

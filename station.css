@@ -434,7 +434,7 @@
 .stn .lt-pf{display:flex;align-items:center;gap:10px;padding:6px 8px;min-width:0}
 /* 이름 칸은 남는 폭을 다 씀 — 글자 폭(39.2)에 딱 맞게 줄어들면 넘침 자르기에 "사"의 오른쪽 획이 잘려 "시"처럼 보였음 (2026-11-19) */
 .stn .lt-pf .lbl{flex:1 1 auto;min-width:0}
-.stn .lt-pf b{display:block;font-size:15px;font-weight:700;color:var(--text-heading);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stn .lt-pf b{display:block;font-family:var(--font-score);font-size:16px;font-weight:700;line-height:19px;letter-spacing:-0.01em;color:var(--text-heading);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .stn .lt-pf .lv,.stn .lt-pf .ofb{font-size:10px;line-height:16px;display:inline-block;margin-top:2px}
 /* LNB 이름 아래 LIVE 는 이름과 왼쪽을 맞춤 — 이름 옆에 붙는 LIVE 용 공통 여백(.lv margin-left:6px)을 빼줌 (2026-11-19) */
 .stn .lt-pf .lbl .lv{margin-left:0}
@@ -2128,10 +2128,12 @@ body.wire .stn .banner.def,body.wire .stn .rbi.def,body.wire .stn .mban.def .mb-
   .stn .top .s-sns .chip.edit{height:22px;padding:0 8px;font-size:12px}
 }
 
-/* 기본 상단 배너 — PC 는 title.webp(컴포넌트 1604×480). 모바일(343×88)은 Figma 인스턴스가 그림을 위에 붙이고 아래를 흐리게 잘라
-   PC 그림을 가운데로 자르면 다르게 보여, Figma 모바일 인스턴스를 3배(1029×264)로 내보낸 title-m.webp 를 씀 (2026-11-19) */
-.stn .banner.def{--defbn:url('assets/v2/station/banner/title.webp?v=20261119')}
-@media (max-width:767px){.stn .banner.def{--defbn:url('assets/v2/station/banner/title-m.webp?v=20261119')}}
+/* 2026-11-20 기본 상단 배너 = 컴포넌트 66866:13305 의 모습 그대로(1480×386, 맨 위 그림 '999고해상도' 원본 2172×724 가운데 — 원본 해상도로 2172×566 내보냄). 시안 인스턴스(1124×310 · 343×88)는
+   그림이 원래 크기로 고정돼 로고 · 장면이 잘려, 컴포넌트 전체를 배너에 꽉 채우고(cover · 가운데) 아래 15.3%(59/386)에 #07070D 그라데이션.
+   그림 파일은 그라데이션 없이. PC · 모바일 같은 파일(예전 모바일 전용 title-m.webp 는 삭제). 꾸밈 원(::before)은 기본 배너에선 숨김 */
+.stn .banner.def{--defbn:url('assets/v2/station/banner/title.webp?v=20261120g');--defbn-pos:50% 42%} /* 2026-11-20 사용자 원본 '고해상도2.png'(2185×720, 장면을 가운데로 작게 다시 그림) 전체를 씀 — 배너가 더 길쭉해 위아래가 잘림. 로고(위) ~ 동물(아래)이 남도록 42% */
+.stn .banner.def::before{display:none}
+.stn .banner.def::after{content:"";position:absolute;left:0;right:0;bottom:0;height:15.3%;pointer-events:none;background:linear-gradient(180deg,rgba(7,7,13,0) 0%,rgba(7,7,13,.71) 65.9%,rgba(7,7,13,.866) 79.5%,rgba(7,7,13,.951) 89.8%,#07070d 100%)}
 
 /* 크루원 카드 (2026-11-19 새 시안 67148:64234) — 모양은 styles.css .crew-card. 방송국 PC 는 4열 · 가로 · 세로 20, 칩 → 카드 14.
    .stn 초기화(여백 0 · 글꼴 상속)가 덮어쓰는 값만 다시 줌 */
@@ -2156,3 +2158,14 @@ body.wire .stn .banner.def,body.wire .stn .rbi.def,body.wire .stn .mban.def .mb-
 .stn .pfring .av img{width:100%;height:100%;object-fit:cover;border-radius:50%}
 .stn .gside.rail .pfring{width:48px;height:48px}
 .stn .avring.on{background:#ff4242}
+
+/* 2026-11-20 LNB 프로필 아래 버튼 줄 — 왼쪽 "< 홈으로" · 오른쪽 "방송국 꾸미기"(관리 > 타이틀 이미지로). 2026-11-20 사용자 결정: 누구에게나 보이고, 권한 없으면 누를 때 안내 토스트 */
+.stn .lbtns{display:flex;gap:6px;margin:8px 0 6px}
+.stn .lbtns .lbtn{flex:1 1 0;min-width:0;margin:0;white-space:nowrap}
+.stn .gside.rail .lbtns{display:block;margin:0}
+.stn .gside.rail .lbtns .lbtn{margin:8px auto}
+.stn .gside.rail .lbtn--deco{display:none}
+
+/* 2026-11-20 모바일 기본 상단 배너 — 그림(2185×720)이 88 높이에선 위아래 19% 가 잘려, 기본 배너일 때만 높이를 그림 비율로 (375 화면 328×108, 767 화면 720×237).
+   [구현 제안] Figma 모바일 시안은 343×88. 스트리머가 올린 배너는 그대로 88 */
+@media (max-width:767px){.stn .banner.def{height:auto;aspect-ratio:2185/720}}
