@@ -1,13 +1,40 @@
 /* FUNNATION 공용 스크립트 — index.html(홈) · live.html(라이브 방송) 에서 함께 사용 */
-/* 고르기 모드(작업용) — ?pick=1 일 때만 pick.js 를 불러옴 */
+/* 고르기 모드(작업용) — ?pick=1 이거나 같은 탭에서 켜 둔 경우에만 pick.js 를 불러옴.
+   단축키 Shift 두 번(입력칸 밖) 또는 Option(Alt) + Shift + P 로 어느 페이지에서든 켜기 / 끄기 */
 (function () {
-  var q = location.search + location.hash, on = false;
+  var KEY = "funnation-pick", q = location.search + location.hash, on = false;
+  function load() {
+    if (document.querySelector('script[src^="pick.js"]')) return;
+    var s = document.createElement("script"); s.src = "pick.js?v=20261120b"; document.head.appendChild(s);
+  }
   try {
-    if (/[?&#]pick=0\b/.test(q)) sessionStorage.removeItem("funnation-pick");
-    else on = /[?&#]pick(=1)?\b/.test(q) || sessionStorage.getItem("funnation-pick") === "1";
+    if (/[?&#]pick=0\b/.test(q)) sessionStorage.removeItem(KEY);
+    else on = /[?&#]pick(=1)?\b/.test(q) || sessionStorage.getItem(KEY) === "1";
   } catch (e) { on = /[?&#]pick(=1)?\b/.test(q); }
-  if (!on) return;
-  var s = document.createElement("script"); s.src = "pick.js?v=20261120"; document.head.appendChild(s);
+  if (on) load();
+  function toggle() {
+    if (document.getElementById("pk-bar")) {
+      try { sessionStorage.removeItem(KEY); } catch (er) {}
+      var u = location.href.replace(/([?&])pick(=1)?(&|$)/, "$1").replace(/[?&](#|$)/, "$1").replace(/#pick(=1)?$/, "");
+      if (u === location.href) location.reload(); else location.href = u;
+    } else {
+      try { sessionStorage.setItem(KEY, "1"); } catch (er) {}
+      load();
+    }
+  }
+  function typing(t) { return t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)); }
+  /* Shift 를 0.4초 안에 두 번 (다른 키를 섞지 않고) — 입력칸에 커서가 있으면 무시 */
+  var lastShift = 0, clean = false;
+  document.addEventListener("keydown", function (e) {
+    if (e.altKey && e.shiftKey && e.code === "KeyP") { e.preventDefault(); toggle(); return; }
+    if (e.key === "Shift") { if (!e.repeat) clean = true; return; }
+    clean = false; lastShift = 0;
+  }, true);
+  document.addEventListener("keyup", function (e) {
+    if (e.key !== "Shift" || !clean || typing(e.target)) return;
+    var now = Date.now();
+    if (now - lastShift < 400) { lastShift = 0; toggle(); } else lastShift = now;
+  }, true);
 })();
 (function () {
   var KEY = "funnation-theme";

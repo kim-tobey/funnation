@@ -1,5 +1,5 @@
 /* 고르기 모드 — 화면에서 고칠 곳을 눌러 "위치 이름"을 복사하는 작업용 도구.
-   켜기: 주소 끝에 ?pick=1 (또는 #pick) · 끄기: 아래 막대의 "끄기" 또는 ?pick=0
+   켜기 · 끄기: Shift 두 번 또는 Option(Alt) + Shift + P (app.js) · 주소 끝 ?pick=1 / ?pick=0 · 아래 막대의 "끄기"
    켜 두면 같은 탭에서 다른 페이지로 가도 계속 켜져 있음(sessionStorage).
    일반 사용자 화면에는 아무것도 보이지 않는다. */
 (function () {
@@ -47,7 +47,7 @@
     '<button type="button" data-pk="up" title="키보드 ↑">넓게</button>' +
     '<button type="button" data-pk="down" title="키보드 ↓">좁게</button>' +
     '<button type="button" data-pk="pause" aria-pressed="false" title="잠깐 멈추고 평소처럼 누르기">멈춤</button>' +
-    '<button type="button" data-pk="off">끄기</button>';
+    '<button type="button" data-pk="off" title="Shift 두 번 또는 Option + Shift + P">끄기</button>';
   function mount() { document.body.append(box, tip, bar); hide(); }
   if (document.body) mount(); else document.addEventListener("DOMContentLoaded", mount);
 
