@@ -2172,3 +2172,8 @@ body.wire .stn .banner.def,body.wire .stn .rbi.def,body.wire .stn .mban.def .mb-
 
 /* 2026-11-20 PC 상단 배너 모서리 — Figma 컴포넌트 66866:13305 대로 위 24 · 아래 0 (사용자 확인). 모바일은 네 모서리 10 그대로 */
 @media (min-width:768px){.stn .banner{border-radius:24px 24px 0 0}}
+
+/* 2026-11-20 LNB "< 홈으로 | 방송국 꾸미기" — 메인 LNB 버튼(.btn-outline)과 같은 테두리 반짝이(도는 그라데이션, styles.css btn-border-spin) */
+.stn .gside .lbtn,body.fnshell .stn .gside .lbtn{--btn-angle:0deg;--btn-face:var(--btn-outline-bg);border:1px solid transparent;background:linear-gradient(var(--btn-face),var(--btn-face)) padding-box,conic-gradient(from var(--btn-angle),var(--btn-spin)) border-box;animation:btn-border-spin 4s linear infinite;color:var(--text-secondary)}
+.stn .gside .lbtn:hover{--btn-face:var(--surface)}
+@media (prefers-reduced-motion:reduce){.stn .gside .lbtn{animation:none}}
