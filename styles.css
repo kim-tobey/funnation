@@ -10479,8 +10479,18 @@ ul {
     overflow-y: auto;
     scrollbar-width: none;
   }
+  /* 2026-11-20: 펼친 패널을 스크롤해도 제목 줄(TOP 10 ⌃)은 맨 위에 붙어 있음 — 패널 안쪽 위 6 · 좌우 12 만큼 넓혀 바탕으로 덮음 */
   .frank.is-mo-open .frank__head {
+    position: sticky;
+    top: -6px;
+    z-index: 2;
     display: flex;
+    flex: none;
+    box-sizing: content-box;
+    width: auto;
+    margin: -6px -12px 0;
+    padding: 6px 12px 0;
+    background: var(--fw-sheet-bg);
   }
   .frank.is-mo-open .frank__strip {
     display: none;
