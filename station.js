@@ -966,7 +966,7 @@ function renderTop(){
      <button class="btn out${al[2]?' on':''}" data-act="alarm" data-qa="B-03">${ic(al[0],18)}<span class="bl">${al[1]}</span></button>
      <button class="btn circ" data-act="more" aria-label="더보기">${ic('more',20)}</button>
    </div>
-   <div class="intro${st.intro?'':' empty'}" data-qa="B-01">${st.intro?`<span class="t">${esc(st.intro)}</span> `:'<span class="t">아직 방송국 소개가 없어요</span> '}<button class="link" data-act="introT" aria-expanded="${!!S.ui.introOpen}" data-qa="B-01t">${S.ui.introOpen?'접기 ▴':'소개 더보기 ›'}</button>${S.ui.introOpen?`<div class="intro-full" data-qa="B-01x">${introBody({intro:st.intro,text:st.introText,rules:st.rulesText},st.links)}${canSt()?'<button class="btn sec sm" data-act="introEdit">소개 수정</button>':''}</div>`:''}</div>
+   <div class="intro${st.intro?'':' empty'}" data-qa="B-01">${st.intro?`<span class="t">${esc(st.intro)}</span> `:'<span class="t">아직 방송국 소개가 없어요</span> '}<button class="link" data-act="introT" aria-expanded="${!!S.ui.introOpen}" data-qa="B-01t">${S.ui.introOpen?'접기 ▴':'소개 더보기 ›'}</button>${S.ui.introOpen?`<div class="intro-full" data-qa="B-01x">${introBody({intro:st.intro,text:st.introText,rules:st.rulesText},[])}${canSt()?'<button class="btn sec sm" data-act="introEdit">소개 수정</button>':''}</div>`:''}</div>
    ${st.links.length||canSt()?`<div class="s-sns" data-qa="B-06">${snsRow()}</div>`:''}`;
 }
 function hasNew(id){return !!S.posts[id]&&!isLocked(id)&&S.posts[id].some(p=>p.isNew)}
