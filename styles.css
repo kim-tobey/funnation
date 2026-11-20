@@ -999,7 +999,7 @@ ul {
   color: var(--text-secondary);
   white-space: nowrap;
 }
-/* 테두리는 관리자 모드와 동일 — 아이콘 자리만큼 패딩/간격만 다름 */
+/* 테두리는 내 방송국 버튼과 동일 — 아이콘 자리만큼 패딩/간격만 다름 */
 .btn-outline--accent {
   padding: 10px 11px 10px 17px;
   gap: 4px;

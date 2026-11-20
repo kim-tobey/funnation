@@ -1,4 +1,14 @@
 /* FUNNATION 공용 스크립트 — index.html(홈) · live.html(라이브 방송) 에서 함께 사용 */
+/* 고르기 모드(작업용) — ?pick=1 일 때만 pick.js 를 불러옴 */
+(function () {
+  var q = location.search + location.hash, on = false;
+  try {
+    if (/[?&#]pick=0\b/.test(q)) sessionStorage.removeItem("funnation-pick");
+    else on = /[?&#]pick(=1)?\b/.test(q) || sessionStorage.getItem("funnation-pick") === "1";
+  } catch (e) { on = /[?&#]pick(=1)?\b/.test(q); }
+  if (!on) return;
+  var s = document.createElement("script"); s.src = "pick.js?v=20261120"; document.head.appendChild(s);
+})();
 (function () {
   var KEY = "funnation-theme";
   var root = document.documentElement;
