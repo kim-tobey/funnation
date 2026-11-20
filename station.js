@@ -987,7 +987,7 @@ function renderSide(){
   const el=$('#gside');
   if(S.admin.on&&canAdmin()){el.innerHTML=admSideHTML();return}
   if(S.shell==='fn'){el.innerHTML=fnSideHTML();return}
-  el.innerHTML=`<div class="lnbtop"><div class="lt-pf">${pfRing(D.name)}<span class="lbl"><b>${D.name}</b>${S.live?'<span class="lv">LIVE</span>':'<span class="ofb">OFFLINE</span>'}</span></div><div class="lbtns"><button class="lbtn" data-act="oos" title="펀네이션 홈으로">${ic('chevL',14)}<span class="lbl">홈으로</span></button><button class="lbtn lbtn--deco" data-act="decoEnter" title="방송국 꾸미기"><span class="lbl">방송국 꾸미기</span></button></div></div>${!S.loggedIn&&innerWidth<768?'<button class="loginbtn" style="width:100%;margin-bottom:10px" data-act="login">로그인</button>':''}<hr>${canAdmin()?`<button class="admbtn" data-qa="M-01" data-act="admEnter" title="방송국 관리">${ic('settings',18)}<span class="lbl">방송국 관리</span><span class="lbl chev">›</span></button>`:''}${panelHTML()}`;
+  el.innerHTML=`<div class="lnbtop"><div class="lt-pf">${pfRing(D.name)}<span class="lbl"><b>${D.name}</b>${S.live?'<span class="lv">LIVE</span>':'<span class="ofb">OFFLINE</span>'}</span></div><div class="lbtns"><button class="lbtn" data-act="oos" title="펀네이션 홈으로">${ic('chevL',14)}<span class="lbl">홈으로</span></button><button class="lbtn lbtn--deco" data-act="decoEnter" title="방송국 꾸미기"><span class="lbl">방송국 꾸미기</span></button></div></div>${!S.loggedIn&&innerWidth<768?'<button class="loginbtn" style="width:100%;margin-bottom:10px" data-act="login">로그인</button>':''}<hr>${panelHTML()}`;
 }
 function renderHeader(){
   const nm=actorName(),role=S.mode==='streamer'?'스트리머':S.mode==='manager'?'매니저':'';
@@ -1443,7 +1443,7 @@ const USERS0=[['funsangsa','펀상사'],['harukeeper','사옥청소부'],['wolyo
 function mgrPermLog(m,k,on){logAdd('권한','매니저',m.n+': '+PL[k]+' 권한 '+(on?'부여':'해제'))}
 Object.assign(A,{
  admEnter(){adminEnter()},
- decoEnter(){if(!canSt()){toast('방송국 꾸미기는 스트리머 · 관리 권한이 있는 매니저만 할 수 있어요');return}adminEnter('title')},
+ decoEnter(){if(!canAdmin()){S.loggedIn=true;S.mode='streamer';afterStateChange()}adminEnter(canSt()?'title':undefined)}, /* 2026-11-20 사용자 결정: LNB "방송국 관리" 버튼을 없애고 이 버튼 하나로 관리 화면에. 권한이 없으면(데모 시청자) 스트리머 보기로 바꿔 타이틀 이미지로, 채팅 관리만 있는 매니저는 자기 관리 화면으로 */
  admBack(){admExit()},
  admMenu(el,a){admGo(a)},
  admPv(el,a){S.admin.pv=a;admBodyRefresh()},

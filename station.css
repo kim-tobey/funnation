@@ -2159,7 +2159,7 @@ body.wire .stn .banner.def,body.wire .stn .rbi.def,body.wire .stn .mban.def .mb-
 .stn .gside.rail .pfring{width:48px;height:48px}
 .stn .avring.on{background:#ff4242}
 
-/* 2026-11-20 LNB 프로필 아래 버튼 줄 — 왼쪽 "< 홈으로" · 오른쪽 "방송국 꾸미기"(관리 > 타이틀 이미지로). 2026-11-20 사용자 결정: 누구에게나 보이고, 권한 없으면 누를 때 안내 토스트 */
+/* 2026-11-20 LNB 프로필 아래 버튼 줄 — 왼쪽 "< 홈으로" · 오른쪽 "방송국 꾸미기"(관리 > 타이틀 이미지로). 2026-11-20 사용자 결정: 누구에게나 보이고, 누르면 (데모) 스트리머 보기로 바꿔 방송국 관리로 */
 .stn .lbtns{display:flex;gap:6px;margin:8px 0 6px}
 .stn .lbtns .lbtn{flex:1 1 0;min-width:0;margin:0;white-space:nowrap}
 .stn .gside.rail .lbtns{display:block;margin:0}
