@@ -2166,6 +2166,9 @@ body.wire .stn .banner.def,body.wire .stn .rbi.def,body.wire .stn .mban.def .mb-
 .stn .gside.rail .lbtns .lbtn{margin:8px auto}
 .stn .gside.rail .lbtn--deco{display:none}
 
-/* 2026-11-20 모바일 기본 상단 배너 — 그림(2185×720)이 88 높이에선 위아래 19% 가 잘려, 기본 배너일 때만 높이를 그림 비율로 (375 화면 328×108, 767 화면 720×237).
+/* 2026-11-20 모바일 기본 상단 배너 — 기본 배너일 때만 높이를 343:120 비율로.
    [구현 제안] Figma 모바일 시안은 343×88. 스트리머가 올린 배너는 그대로 88 */
-@media (max-width:767px){.stn .banner.def{height:auto;aspect-ratio:2185/720}}
+@media (max-width:767px){.stn .banner.def{height:auto;aspect-ratio:343/120;--defbn-size:150% auto;--defbn-pos:50% 40%}} /* 2026-11-20 전체 장면이 너무 작아 PC 처럼 가운데(울타리 ~ 울타리)를 1.5배로, 양옆 풀밭은 자름. 375 화면 328×115 */
+
+/* 2026-11-20 PC 상단 배너 모서리 — Figma 컴포넌트 66866:13305 대로 위 24 · 아래 0 (사용자 확인). 모바일은 네 모서리 10 그대로 */
+@media (min-width:768px){.stn .banner{border-radius:24px 24px 0 0}}
