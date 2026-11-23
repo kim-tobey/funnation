@@ -305,13 +305,13 @@
   var follow = $("[data-follow]");
   if (follow) {
     var favName = follow.getAttribute("data-fav-name"), favPic = follow.getAttribute("data-fav-pic");
-    var fc = $("[data-followers]"), baseCount = +fc.textContent.replace(/,/g, "");
+    var fc = $("[data-followers]"), baseCount = fc ? +fc.textContent.replace(/,/g, "") : 0; /* 2026-11-23 방송 정보를 유튜브 라이브 모양으로 바꾸며 팔로워 수 줄은 없앰 */
     var favHas = function () { return favList().some(function (x) { return x.n === favName; }); };
     var favSync = function () {
       var on = favHas();
       follow.setAttribute("aria-pressed", on ? "true" : "false");
       $("span", follow).textContent = on ? "팔로잉" : "팔로우";
-      fc.textContent = won(baseCount + (on ? 1 : 0));
+      if (fc) fc.textContent = won(baseCount + (on ? 1 : 0));
     };
     follow.addEventListener("click", function () {
       if (needLogin()) return;
@@ -350,6 +350,19 @@
     });
   }
   bindMenu($("[data-more-btn]"), $("#lw-more-menu"));
+  /* 설명 더보기 · 다시보기 정렬 칩 — 유튜브 라이브 영상 상세(app.js)와 같은 동작. 정렬은 선택 표시만(서버 연동 전) */
+  var wdescBtn = $("[data-wdesc-toggle]");
+  if (wdescBtn) wdescBtn.addEventListener("click", function () {
+    var open = this.getAttribute("aria-expanded") !== "true";
+    this.setAttribute("aria-expanded", open ? "true" : "false");
+    this.textContent = open ? "간략히" : "...더보기";
+    this.closest(".wdesc").setAttribute("data-expanded", open ? "true" : "false");
+  });
+  $$("[data-wmore-sort] button").forEach(function (b, _, all) {
+    b.addEventListener("click", function () {
+      $$("[data-wmore-sort] button").forEach(function (x) { x.classList.toggle("is-active", x === b); x.setAttribute("aria-pressed", x === b ? "true" : "false"); });
+    });
+  });
   $$("[data-report]").forEach(function (b) {
     b.addEventListener("click", function () {
       if (needLogin()) return;

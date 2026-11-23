@@ -12,7 +12,7 @@
 <link rel="manifest" href="site.webmanifest">
 <!-- 토큰 · 폰트(Pretendard · S-Core Dream)는 styles.css, 이 페이지 화면은 fun-watch.css -->
 <link rel="stylesheet" href="styles.css">
-<link rel="stylesheet" href="fun-watch.css">
+<link rel="stylesheet" href="fun-watch.css?v=20261123d">
 </head>
 <!--
   펀네이션 라이브 방송 상세 — 2026-11-23 실서비스(funnation.co.kr/store/{id}/live/broadcast) 레이아웃 · 기능 기준으로 다시 만듦.
@@ -104,40 +104,187 @@
       </div>
 
       <!-- 방송 정보 — 제목 · 태그 · 시청자/방송 시간 · 방송인 · 즐겨찾기 · 후원하기 · 공유 · 더보기 -->
-      <section class="lw-info" aria-labelledby="lw-title">
-        <h1 class="lw-info__title" id="lw-title">24/7 halloween ambience 🎃 spooky lofi to get chills to</h1>
-        <div class="lw-info__meta">
-          <div class="lw-info__tags">
-            <span class="lw-tag lw-tag--beta">BETA</span>
-            <a class="lw-tag lw-tag--cat" href="fun-live.html">음악/댄스</a>
-          </div>
-          <div class="lw-info__stat">
-            <span><i class="ic ic--user" aria-hidden="true"></i><span><span data-viewers>184</span>명 시청 중</span></span>
-            <span><i class="ic ic--clock" aria-hidden="true"></i><span><time data-uptime="98451">27:20:51</time> 방송 중</span></span>
-          </div>
-        </div>
-        <div class="lw-info__row">
-          <a class="lw-streamer" href="station.html">
-            <span class="lw-streamer__pic">
-              <img src="assets/watch/v4/avatar-ymss.jpg" width="48" height="48" alt="">
-              <span class="lw-streamer__live">LIVE</span>
-            </span>
-            <span class="lw-streamer__text">
-              <span class="lw-streamer__name">YM상사</span>
-              <span class="lw-streamer__fans">팔로워 <span data-followers>16</span>명</span>
-            </span>
-          </a>
-          <div class="lw-info__actions">
-            <button class="lw-btn lw-btn--follow" type="button" aria-pressed="false" data-follow data-fav-name="YM상사" data-fav-pic="assets/watch/v4/avatar-ymss.jpg"><i class="ic ic--heart" aria-hidden="true"></i><span>팔로우</span></button>
-            <button class="lw-btn lw-btn--donate" type="button" data-open-donate><i class="ic ic--gift" aria-hidden="true"></i>후원하기</button>
-            <button class="lw-btn lw-btn--icon" type="button" aria-label="공유" data-share><i class="ic ic--share" aria-hidden="true"></i></button>
-            <div class="lw-more">
-              <button class="lw-btn lw-btn--icon" type="button" aria-label="더보기" aria-haspopup="menu" aria-expanded="false" aria-controls="lw-more-menu" data-more-btn><i class="ic ic--more" aria-hidden="true"></i></button>
-              <div class="lw-menu lw-more__menu" id="lw-more-menu" role="menu" aria-label="더보기" hidden>
-                <button type="button" role="menuitem" data-report="방송"><i class="ic ic--report" aria-hidden="true"></i>방송 신고</button>
-              </div>
+      <!-- 방송 정보 — 유튜브 라이브 영상 상세(watch.html .winfo, Figma 66098:111836)와 같은 모양 (2026-11-23 사용자 요청).
+           왼쪽 채널 사진 64 · 이름 + 인증 · 제목 · 태그 | 오른쪽 팔로우 · 후원하기 · ⋮, 아래 시청자 · 공유. 스타일은 styles.css .winfo 공용 -->
+      <section class="lw-info winfo" aria-labelledby="lw-title">
+        <div class="winfo__head">
+          <div class="winfo__channel">
+            <a class="winfo__pic" href="station.html" aria-label="YM상사 방송국">
+              <img src="assets/watch/v4/avatar-ymss.jpg" width="56" height="56" alt="">
+              <span class="winfo__live">LIVE</span>
+            </a>
+            <div class="winfo__text">
+              <p class="winfo__name"><a href="station.html"><strong>YM상사</strong></a><img src="assets/watch/v4/verified-20.svg" width="20" height="20" alt="인증"></p>
+              <h1 class="winfo__title" id="lw-title">24/7 halloween ambience 🎃 spooky lofi to get chills to</h1>
+              <ul class="tags"><li>#음악/댄스</li><li>lofi</li><li>할로윈</li></ul>
             </div>
           </div>
+          <div class="winfo__side">
+            <div class="winfo__actions">
+              <button class="fstreamer__follow" type="button" aria-pressed="false" data-follow data-fav-name="YM상사" data-fav-pic="assets/watch/v4/avatar-ymss.jpg"><img src="assets/fun-watch/heart.svg" width="16" height="16" alt=""><span>팔로우</span></button>
+              <button class="fstreamer__donate" type="button" data-open-donate>후원하기</button>
+              <div class="lw-more">
+                <button class="fstreamer__icon fstreamer__icon--more" type="button" aria-label="더보기" aria-haspopup="menu" aria-expanded="false" aria-controls="lw-more-menu" data-more-btn><img src="assets/fun-watch/more.svg" width="23" height="23" alt=""></button>
+                <div class="lw-menu lw-more__menu" id="lw-more-menu" role="menu" aria-label="더보기" hidden>
+                  <button type="button" role="menuitem" data-report="방송"><i class="ic ic--report" aria-hidden="true"></i>방송 신고</button>
+                </div>
+              </div>
+            </div>
+            <div class="winfo__stat">
+              <p><img src="assets/watch/v4/viewers.svg" width="16" height="16" alt=""><b data-viewers>184</b><span>명 시청중</span></p>
+              <button class="winfo__share" type="button" aria-label="공유하기" data-share><img src="assets/watch/v4/share.svg" width="16" height="16" alt=""></button>
+            </div>
+          </div>
+        </div>
+        <!-- 설명 (66098:111891) — 접으면 한 줄 + "...더보기", 펼치면 전체 + "간략히" -->
+        <div class="wdesc" data-expanded="false">
+          <p class="wdesc__meta">조회수 154회&nbsp;&nbsp;2일 전</p>
+          <div class="wdesc__body" id="wdesc-body">
+            <p>**후원안내**</p>
+            <p>투네이션 : https://toon.at/donate/ymss</p>
+            <p>펀네이션 : https://funn.at/ymss</p>
+            <p>계좌 : 국민 5294-3701-0196-67 ㅅㅁㅅ(ㅈㅂ컴퍼니)</p>
+            <p>점수는 만원이상부터 적용됩니다. 계좌 후원시 닉네임/스트리머 로 입력해주세요</p>
+          </div>
+          <button class="wdesc__toggle" type="button" aria-expanded="false" aria-controls="wdesc-body" data-wdesc-toggle>...더보기</button>
+        </div>
+      </section>
+
+      <!-- 이 채널의 다시보기 (66098:111904) — 정렬 칩(FilterChip M) · 210px 카드 한 줄, 넘치면 가로 스크롤 -->
+      <section class="wmore lw-more-vods" aria-labelledby="wmore-title" data-node-id="66098:111904">
+        <div class="wmore__head">
+          <div class="section-header">
+            <h2 id="wmore-title">🔥 이 채널의 다시보기</h2>
+            <a href="#">전체보기</a>
+          </div>
+          <p class="wmore__desc">크리에이터의 라이브를 만나보세요.</p>
+          <!-- 정렬 — 선택 표시만 바뀌고 목록 정렬은 서버 연동 전 -->
+          <div class="chips creators-chips" data-wmore-sort>
+            <button type="button" class="is-active" aria-pressed="true">인기순</button>
+            <button type="button" aria-pressed="false">최신순</button>
+            <button type="button" aria-pressed="false">후원순</button>
+          </div>
+        </div>
+        <div class="wmore__row">
+          <article class="card card--rich">
+            <div class="card__thumb">
+              <img src="assets/watch/v4/vod1.jpg" alt="">
+              <div class="card__status"><span class="card__viewers">671명 시청</span></div>
+            </div>
+            <div class="card__info">
+              <img class="card__avatar" src="assets/watch/v4/avatar-ymss-sm.jpg" width="24" height="24" alt="">
+              <div class="card__text">
+                <p class="card__title">YM상사 시즌7 5화 무한성 룰렛데이</p>
+                <div>
+                  <p class="card__channel"><span>YM상사</span><img src="assets/watch/v4/verified-16.svg" width="16" height="16" alt="인증"></p>
+                  <p class="card__sub"><span>구분</span><span class="card__dot" aria-hidden="true"></span><span>2023.04.30</span></p>
+                </div>
+                <ul class="tags"><li>#인디</li><li>팀플레이</li><li>서바이벌</li></ul>
+              </div>
+            </div>
+          </article>
+          <article class="card card--rich">
+            <div class="card__thumb">
+              <img src="assets/watch/v4/vod2.jpg" alt="">
+              <div class="card__status"><span class="card__viewers">671명 시청</span></div>
+            </div>
+            <div class="card__info">
+              <img class="card__avatar" src="assets/watch/v4/avatar-ymss-sm.jpg" width="24" height="24" alt="">
+              <div class="card__text">
+                <p class="card__title">YM상사 시즌7 5화 무한성 룰렛데이</p>
+                <div>
+                  <p class="card__channel"><span>YM상사</span><img src="assets/watch/v4/verified-16.svg" width="16" height="16" alt="인증"></p>
+                  <p class="card__sub"><span>구분</span><span class="card__dot" aria-hidden="true"></span><span>2023.04.30</span></p>
+                </div>
+                <ul class="tags"><li>#인디</li><li>팀플레이</li><li>서바이벌</li></ul>
+              </div>
+            </div>
+          </article>
+          <article class="card card--rich">
+            <div class="card__thumb">
+              <img src="assets/watch/v4/vod3.jpg" alt="">
+              <div class="card__status"><span class="card__viewers">671명 시청</span></div>
+            </div>
+            <div class="card__info">
+              <img class="card__avatar" src="assets/watch/v4/avatar-ymss-sm.jpg" width="24" height="24" alt="">
+              <div class="card__text">
+                <p class="card__title">YM상사 시즌7 5화 무한성 룰렛데이</p>
+                <div>
+                  <p class="card__channel"><span>YM상사</span><img src="assets/watch/v4/verified-16.svg" width="16" height="16" alt="인증"></p>
+                  <p class="card__sub"><span>구분</span><span class="card__dot" aria-hidden="true"></span><span>2023.04.30</span></p>
+                </div>
+                <ul class="tags"><li>#인디</li><li>팀플레이</li><li>서바이벌</li></ul>
+              </div>
+            </div>
+          </article>
+          <article class="card card--rich">
+            <div class="card__thumb">
+              <img src="assets/watch/v4/vod4.jpg" alt="">
+              <div class="card__status"><span class="card__viewers">671명 시청</span></div>
+            </div>
+            <div class="card__info">
+              <img class="card__avatar" src="assets/watch/v4/avatar-ymss-sm.jpg" width="24" height="24" alt="">
+              <div class="card__text">
+                <p class="card__title">YM상사 시즌7 5화 무한성 룰렛데이</p>
+                <div>
+                  <p class="card__channel"><span>YM상사</span><img src="assets/watch/v4/verified-16.svg" width="16" height="16" alt="인증"></p>
+                  <p class="card__sub"><span>구분</span><span class="card__dot" aria-hidden="true"></span><span>2023.04.30</span></p>
+                </div>
+                <ul class="tags"><li>#인디</li><li>팀플레이</li><li>서바이벌</li></ul>
+              </div>
+            </div>
+          </article>
+          <article class="card card--rich">
+            <div class="card__thumb">
+              <img src="assets/watch/v4/vod5.jpg" alt="">
+              <div class="card__status"><span class="card__viewers">671명 시청</span></div>
+            </div>
+            <div class="card__info">
+              <img class="card__avatar" src="assets/watch/v4/avatar-ymss-sm.jpg" width="24" height="24" alt="">
+              <div class="card__text">
+                <p class="card__title">YM상사 시즌7 5화 무한성 룰렛데이</p>
+                <div>
+                  <p class="card__channel"><span>YM상사</span><img src="assets/watch/v4/verified-16.svg" width="16" height="16" alt="인증"></p>
+                  <p class="card__sub"><span>구분</span><span class="card__dot" aria-hidden="true"></span><span>2023.04.30</span></p>
+                </div>
+                <ul class="tags"><li>#인디</li><li>팀플레이</li><li>서바이벌</li></ul>
+              </div>
+            </div>
+          </article>
+          <article class="card card--rich">
+            <div class="card__thumb">
+              <img src="assets/watch/v4/vod6.jpg" alt="">
+              <div class="card__status"><span class="card__viewers">671명 시청</span></div>
+            </div>
+            <div class="card__info">
+              <img class="card__avatar" src="assets/watch/v4/avatar-ymss-sm.jpg" width="24" height="24" alt="">
+              <div class="card__text">
+                <p class="card__title">YM상사 시즌7 5화 무한성 룰렛데이</p>
+                <div>
+                  <p class="card__channel"><span>YM상사</span><img src="assets/watch/v4/verified-16.svg" width="16" height="16" alt="인증"></p>
+                  <p class="card__sub"><span>구분</span><span class="card__dot" aria-hidden="true"></span><span>2023.04.30</span></p>
+                </div>
+                <ul class="tags"><li>#인디</li><li>팀플레이</li><li>서바이벌</li></ul>
+              </div>
+            </div>
+          </article>
+          <article class="card card--rich">
+            <div class="card__thumb">
+              <img src="assets/watch/v4/vod1.jpg" alt="">
+              <div class="card__status"><span class="card__viewers">671명 시청</span></div>
+            </div>
+            <div class="card__info">
+              <img class="card__avatar" src="assets/watch/v4/avatar-ymss-sm.jpg" width="24" height="24" alt="">
+              <div class="card__text">
+                <p class="card__title">YM상사 시즌7 5화 무한성 룰렛데이</p>
+                <div>
+                  <p class="card__channel"><span>YM상사</span><img src="assets/watch/v4/verified-16.svg" width="16" height="16" alt="인증"></p>
+                  <p class="card__sub"><span>구분</span><span class="card__dot" aria-hidden="true"></span><span>2023.04.30</span></p>
+                </div>
+                <ul class="tags"><li>#인디</li><li>팀플레이</li><li>서바이벌</li></ul>
+              </div>
+            </div>
+          </article>
         </div>
       </section>
     </div>
@@ -316,6 +463,6 @@
 
 <div class="lw-toast" role="status" aria-live="polite" hidden data-toast></div>
 
-<script src="fun-watch.js?v=20261123b"></script>
+<script src="fun-watch.js?v=20261123d"></script>
 </body>
 </html>

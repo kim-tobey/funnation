@@ -742,3 +742,51 @@
 @media (prefers-reduced-motion: reduce) {
   .lw *, .lw *::after { transition: none !important; }
 }
+
+/* ============================================================
+   방송 정보 = 유튜브 라이브 영상 상세와 같은 모양 (2026-11-23 사용자 요청)
+   구조 · 기본 스타일은 styles.css .winfo 공용. 여기서는 영상 상세(다크)에서 덧씌운 값만 똑같이 맞추고,
+   이 페이지의 좁은 화면(세로 배치 · 모바일)에서 오른쪽 버튼 묶음을 아래 줄로 내림 [구현 제안 — 영상 상세 모바일은 이 영역 없음]
+   ============================================================ */
+.lw .lw-info.winfo { display: flex; padding: 18px 24px 20px; }
+.lw[data-layout="stack"] .lw-info.winfo { display: none; }
+.lw[data-layout="stack"][data-chat-closed] .lw-info.winfo { display: flex; padding: 14px 16px 16px; }
+.lw .winfo__name a { color: inherit; }
+.lw .winfo__name a:hover { text-decoration: underline; text-underline-offset: 3px; }
+/* 영상 상세 다크와 같게 — 팔로우 Primary, LIVE 배지 Secondary · 모서리 4 */
+.lw .winfo .fstreamer__follow:not([aria-pressed="true"]) { background: var(--color-brand-primary); }
+.lw .winfo__live { border-radius: 4px; background: var(--color-brand-secondary, #4962ff); }
+/* 더보기 메뉴 — 버튼(40) 아래로 */
+.lw .winfo__actions .lw-more__menu { top: 48px; }
+.lw .winfo__share { color: var(--color-text-normal); }
+.lw .winfo__share:hover, .lw .fstreamer__icon--more:hover { filter: brightness(1.15); }
+
+/* 좁을 때 — 채널 줄 위, 버튼 · 시청자 줄 아래 */
+.lw[data-layout="stack"] .winfo__head { flex-direction: column; gap: 14px; min-height: 0; }
+.lw[data-layout="stack"] .winfo__side { width: 100%; flex-direction: row; align-items: center; justify-content: space-between; }
+.lw[data-layout="stack"] .winfo__title { white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; font-size: 17px; line-height: 24px; }
+@media (max-width: 1100px) {
+  .lw[data-layout="side"] .winfo__head { flex-direction: column; gap: 14px; min-height: 0; }
+  .lw[data-layout="side"] .winfo__side { width: 100%; flex-direction: row; align-items: center; justify-content: space-between; }
+}
+@media (max-width: 767px) {
+  .lw .winfo__pic, .lw .winfo__pic img { width: 52px; height: 52px; }
+  .lw .winfo__name { font-size: 17px; line-height: 22px; }
+  .lw .winfo__side, .lw[data-layout] .winfo__side { flex-direction: column; align-items: stretch; gap: 8px; }
+  .lw .winfo__stat p { white-space: nowrap; }
+  .lw .winfo__actions { width: 100%; }
+  .lw .winfo__actions .fstreamer__follow, .lw .winfo__actions .fstreamer__donate { flex: 1; width: auto; height: 42px; }
+  .lw .winfo__stat { justify-content: space-between; }
+}
+
+/* 설명(...더보기) · 이 채널의 다시보기 — 유튜브 라이브 영상 상세와 같은 부품(styles.css .wdesc · .wmore) 다시 넣음 (2026-11-23 사용자 요청).
+   본문(.lw-main)은 세로 스크롤 — 플레이어가 아래 내용 때문에 줄어들지 않게 고정, 대신 화면 높이를 넘지 않게 */
+.lw[data-layout="side"]:not([data-wide]) .lw-main > .lw-player { flex-shrink: 0; max-height: calc(100dvh - 40px - 8px); }
+.lw .wmore { flex: none; padding: 8px 24px 40px; }
+.lw[data-layout="stack"] .wmore { display: none; }
+.lw[data-layout="stack"][data-chat-closed] .wmore { display: flex; padding: 4px 16px 32px; }
+/* 넓은 화면 — 영상(위 전체) / 왼쪽 정보 · 다시보기, 오른쪽 채팅 */
+.lw[data-layout="side"][data-wide] .lw-body-row { grid-template-rows: auto auto minmax(0, 1fr); }
+.lw[data-layout="side"][data-wide] .wmore { grid-column: 1; grid-row: 3; min-width: 0; }
+.lw[data-layout="side"][data-wide] .lw-chat { grid-row: 2 / 4; }
+.lw[data-layout="side"][data-wide][data-folded] .wmore { grid-column: 1 / -1; }
