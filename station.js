@@ -2455,9 +2455,9 @@ Object.assign(A,{
     confirmM('수신거부할까요?',esc(ns.join(', '))+'님이 보내는 쪽지는 앞으로 수신거부함에만 쌓이고 알림이 가지 않아요','수신거부',()=>msgRun('block',ids),null,false)}
   else msgRun(op,ids);
  },
- /* 머리 버튼 라이브 · TALK (2026-11-23) — 라이브는 방송 화면으로, 방송 중이 아니면 안내만. TALK 은 대화방 화면 전이라 준비 중 */
+ /* 머리 버튼 라이브 · TALK (2026-11-23) — 라이브는 방송 화면으로, 방송 중이 아니면 안내만. TALK 은 채팅톡(talk.html)에서 이 방송국 대화방을 엶 */
  liveGo(){if(!S.live){toast('지금은 방송 중이 아니에요');return}location.href='fun-watch.html'},
- talk(){if(!S.loggedIn){toast('로그인 후 TALK 을 이용할 수 있어요');return}toast('TALK 대화방은 준비 중이에요')},
+ talk(){location.href='talk.html?to=funsangsa'},
  msgTo(){closePop();openMsg('in',actorId()==='funsangsa'?'':'funsangsa')},
  dmsg(el,a){msgArrive(a)},
  more(el){

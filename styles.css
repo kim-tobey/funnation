@@ -227,6 +227,7 @@
 [data-theme="light"] img[src$="v2/lnb-fun-live.svg"] { content: url("assets/light/v2/lnb-fun-live.svg"); }
 [data-theme="light"] img[src$="v2/lnb-creator.svg"] { content: url("assets/light/v2/lnb-creator.svg"); }
 [data-theme="light"] img[src$="v2/lnb-ranking.svg"] { content: url("assets/light/v2/lnb-ranking.svg"); }
+[data-theme="light"] img[src$="v2/lnb-talk.svg"] { content: url("assets/light/v2/lnb-talk.svg"); } /* 채팅톡 (2026-11-23). 선택 아이콘(흰 말풍선 + 파란 점)은 라이트도 같은 파일 */
 [data-theme="light"] img[src$="v2/lnb-external.svg"] { content: url("assets/light/v2/lnb-external.svg"); }
 [data-theme="light"] img[src$="v2/mo-search.svg"] { content: url("assets/light/v2/mo-search.svg"); }
 [data-theme="light"] img[src$="v2/mo-logo.svg"] { content: url("assets/light/v2/mo-logo.svg"); }
@@ -1557,7 +1558,7 @@ ul {
 .hero-live__avatar img {
   width: 64px;
   height: 64px;
-  border: 4px solid var(--color-brand-primary);
+  border: 4px solid #ff4242; /* 라이브 중 = 크루원 카드 LIVE 와 같은 빨강(BG Label Live), 2026-11-23 사용자 요청 (이전 Primary) */
   border-radius: 9999px;
   object-fit: cover;
 }
@@ -1568,11 +1569,11 @@ ul {
   transform: translateX(-50%);
   padding: 4px 6px;
   border-radius: 4px;
-  background: #4962ff; /* Brand Secondary */
+  background: #ff4242; /* 크루원 카드 LIVE 와 같은 빨강 (2026-11-23, 이전 Brand Secondary #4962ff) */
   font-size: 10px;
   font-weight: 700;
   line-height: 12px;
-  color: #dfe5ed; /* 영상 위라 테마와 무관하게 Normal(다크) */
+  color: #fff; /* 빨강 위 흰 글자 — 크루원 LIVE 와 같음 */
 }
 .hero-live__body {
   flex: 1 1 0;
@@ -4526,6 +4527,10 @@ ul {
   [data-theme="light"] .bottom-nav__item.is-active img[src$="nav-creator.svg"] { content: url("assets/light/mo/nav-creator-active.svg"); }
   .bottom-nav__item.is-active img[src$="nav-fav.svg"] { content: url("assets/mo/nav-fav-active.svg"); }
   [data-theme="light"] .bottom-nav__item.is-active img[src$="nav-fav.svg"] { content: url("assets/light/mo/nav-fav-active.svg"); }
+  /* 채팅톡 (2026-11-23, 시안 67727:84583 — 랭킹 자리) — 선택은 속이 찬 Primary 말풍선 */
+  .bottom-nav__item.is-active img[src$="nav-talk.svg"] { content: url("assets/mo/nav-talk-active.svg"); }
+  [data-theme="light"] .bottom-nav__item img[src$="nav-talk.svg"] { content: url("assets/light/mo/nav-talk.svg"); }
+  [data-theme="light"] .bottom-nav__item.is-active img[src$="nav-talk.svg"] { content: url("assets/light/mo/nav-talk-active.svg"); }
 }
 
 /* ============================================================
