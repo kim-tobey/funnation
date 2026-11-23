@@ -10,7 +10,7 @@
   var KEY = "funnation-pick", q = location.search + location.hash, on = false;
   function load() {
     if (document.querySelector('script[src^="pick.js"]')) return;
-    var s = document.createElement("script"); s.src = "pick.js?v=20261123a"; document.head.appendChild(s);
+    var s = document.createElement("script"); s.src = "pick.js?v=20261123b"; document.head.appendChild(s);
   }
   try {
     if (/[?&#]pick=0\b/.test(q)) sessionStorage.removeItem(KEY);
@@ -310,7 +310,7 @@
     var favSync = function () {
       var on = favHas();
       follow.setAttribute("aria-pressed", on ? "true" : "false");
-      $("span", follow).textContent = on ? "즐겨찾기 중" : "즐겨찾기";
+      $("span", follow).textContent = on ? "팔로잉" : "팔로우";
       fc.textContent = won(baseCount + (on ? 1 : 0));
     };
     follow.addEventListener("click", function () {
@@ -320,7 +320,7 @@
       else l = l.filter(function (x) { return x.n !== favName; });
       favSave(l);
       favSync();
-      toast(on ? "즐겨찾기에 추가했어요" : "즐겨찾기를 해제했어요");
+      toast(on ? "팔로우했어요" : "팔로우를 취소했어요");
     });
     window.addEventListener("storage", function (e) { if (e.key === FAV_KEY || e.key === null) favSync(); });
     favSync();

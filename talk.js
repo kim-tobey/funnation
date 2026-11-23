@@ -91,7 +91,7 @@
       notis: [
         { id: "r1", kind: "req", from: { id: "coffee_fairy", n: "커피한잔요정", av: "assets/logout/avatar3.png", role: "user" }, x: "안녕하세요! 방송 같이 보는 사이 맞죠?", t: ago(20 * MIN), read: false },
         { id: "r2", kind: "req", from: { id: "monday_blues", n: "월요병환자", av: "assets/logout/avatar4.png", role: "user" }, x: "랭킹 이벤트 질문이 있어요", t: ago(6 * HOUR), read: false },
-        { id: "s1", kind: "info", x: "채팅톡이 열렸어요. 즐겨찾기한 크리에이터와 1:1 로 이야기해 보세요.", t: ago(DAY), read: true }
+        { id: "s1", kind: "info", x: "채팅톡이 열렸어요. 팔로우한 크리에이터와 1:1 로 이야기해 보세요.", t: ago(DAY), read: true }
       ]
     };
   }
@@ -99,7 +99,7 @@
   var S;
   try { S = JSON.parse(localStorage.getItem(KEY)); } catch (e) { S = null; }
   if (!S || S.v !== 1 || !S.convs) S = seed();
-  function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} document.dispatchEvent(new Event("talk:change")); }
 
   var ui = { tab: "msg", q: "", open: null, menu: false, typing: {} };
 
@@ -166,7 +166,7 @@
 
   function renderCounts() {
     var n = 0;
-    S.convs.forEach(function (c) { if (!c.mute) n += c.unread; });
+    S.convs.forEach(function (c) { if (!c.mute && !c.blocked) n += c.unread; });
     var u = $("[data-talk-unread]", root); u.hidden = !n || !loggedIn(); u.textContent = n > 99 ? "99+" : n;
     var r = S.notis.filter(function (x) { return !x.read; }).length;
     var v = $("[data-talk-noti-n]", root); v.hidden = !r || !loggedIn(); v.textContent = r;
@@ -179,7 +179,7 @@
     $("[data-talk-search]", root).hidden = ui.tab !== "msg" || !loggedIn();
 
     if (!loggedIn()) {
-      rowsEl.innerHTML = '<li class="talk-empty">' + ic("talk", 48) + "로그인하고 채팅톡을 시작해 보세요<small>즐겨찾기한 크리에이터와 1:1 로 이야기할 수 있어요</small><a class=\"talk-btn talk-btn--pri\" href=\"#login\">로그인</a></li>";
+      rowsEl.innerHTML = '<li class="talk-empty">' + ic("talk", 48) + "로그인하고 채팅톡을 시작해 보세요<small>팔로우한 크리에이터와 1:1 로 이야기할 수 있어요</small><a class=\"talk-btn talk-btn--pri\" href=\"#login\">로그인</a></li>";
       return;
     }
     if (ui.tab === "noti") {

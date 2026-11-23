@@ -5,7 +5,7 @@
   var KEY = "funnation-pick", q = location.search + location.hash, on = false;
   function load() {
     if (document.querySelector('script[src^="pick.js"]')) return;
-    var s = document.createElement("script"); s.src = "pick.js?v=20261123a"; document.head.appendChild(s);
+    var s = document.createElement("script"); s.src = "pick.js?v=20261123b"; document.head.appendChild(s);
   }
   try {
     if (/[?&#]pick=0\b/.test(q)) sessionStorage.removeItem(KEY);
@@ -1294,7 +1294,7 @@ window.FunFav = (function () {
     li.innerHTML = '<span class="fav-manage__pic"></span><span class="fav-manage__name"></span><button class="fav-manage__heart" type="button" aria-pressed="true" data-fav-heart><img src="assets/v2/favorites/fav2-heart-24.svg" width="24" height="24" alt=""></button>';
     li.querySelector(".fav-manage__pic").appendChild(img("fav-manage__img", item.p, 48));
     li.querySelector(".fav-manage__name").textContent = item.n;
-    li.querySelector("[data-fav-heart]").setAttribute("aria-label", item.n + " 즐겨찾기 해제");
+    li.querySelector("[data-fav-heart]").setAttribute("aria-label", item.n + " 팔로우 취소");
     return li;
   }
   function fill(ul, items, tpl, make) {
@@ -1302,7 +1302,7 @@ window.FunFav = (function () {
     items.forEach(function (it) {
       var li = tpl[it.n] ? tpl[it.n].cloneNode(true) : make(it);
       var heart = li.querySelector("[data-fav-heart]");
-      if (heart) { heart.setAttribute("aria-pressed", "true"); heart.setAttribute("aria-label", it.n + " 즐겨찾기 해제"); }
+      if (heart) { heart.setAttribute("aria-pressed", "true"); heart.setAttribute("aria-label", it.n + " 팔로우 취소"); }
       ul.appendChild(li);
     });
   }
@@ -1382,7 +1382,7 @@ window.FunFav = (function () {
     var on = heart.getAttribute("aria-pressed") !== "true";
     heart.setAttribute("aria-pressed", on ? "true" : "false");
     var name = heart.closest(".fav-manage").querySelector(".fav-manage__name").textContent.trim();
-    heart.setAttribute("aria-label", name + (on ? " 즐겨찾기 해제" : " 즐겨찾기 다시 추가"));
+    heart.setAttribute("aria-label", name + (on ? " 팔로우 취소" : " 다시 팔로우"));
     if (!window.FunFav) return;
     if (on) {
       var img = heart.closest(".fav-manage").querySelector(".fav-manage__img");
@@ -2135,7 +2135,7 @@ window.FunFav = (function () {
     var on = !!(favName && window.FunFav && window.FunFav.has(favName));
     for (var k = 0; k < follows.length; k++) {
       follows[k].setAttribute("aria-pressed", on ? "true" : "false");
-      (follows[k].querySelector("span") || follows[k]).textContent = on ? "즐겨찾기 중" : "즐겨찾기";
+      (follows[k].querySelector("span") || follows[k]).textContent = on ? "팔로잉" : "팔로우";
     }
   }
   for (var f = 0; f < follows.length; f++) follows[f].addEventListener("click", function () {
@@ -3514,7 +3514,7 @@ document.addEventListener("click", function (e) {
     pop.innerHTML =
       '<button type="button" class="ch-pop__btn ch-pop__btn--home" role="menuitem" data-ch="home" aria-label="방송국 홈"><img src="assets/v2/popover/home.svg" width="24" height="24" alt=""></button>' +
       '<button type="button" class="ch-pop__btn ch-pop__btn--msg" role="menuitem" data-ch="msg" aria-label="쪽지 보내기"><img src="assets/v2/popover/chat.svg" width="24" height="24" alt=""></button>' +
-      '<button type="button" class="ch-pop__btn ch-pop__btn--fav" role="menuitem" data-ch="fav" aria-pressed="false" aria-label="즐겨찾기"><img class="ch-pop__on" src="assets/v2/popover/heart.svg" width="24" height="24" alt=""><img class="ch-pop__off" src="assets/v2/popover/heart-off.svg" width="24" height="24" alt=""></button>' +
+      '<button type="button" class="ch-pop__btn ch-pop__btn--fav" role="menuitem" data-ch="fav" aria-pressed="false" aria-label="팔로우"><img class="ch-pop__on" src="assets/v2/popover/heart.svg" width="24" height="24" alt=""><img class="ch-pop__off" src="assets/v2/popover/heart-off.svg" width="24" height="24" alt=""></button>' +
       '<button type="button" class="ch-pop__btn ch-pop__btn--notice" role="menuitem" data-ch="notice" aria-label="방송국 공지사항"><img src="assets/v2/popover/notice.svg" width="24" height="24" alt=""></button>';
     document.body.appendChild(pop);
     pop.addEventListener("click", onAction);
@@ -3529,7 +3529,7 @@ document.addEventListener("click", function (e) {
     var on = FunFav.has(name);
     var b = pop.querySelector("[data-ch=fav]");
     b.setAttribute("aria-pressed", on ? "true" : "false");
-    b.setAttribute("aria-label", on ? "즐겨찾기 해제" : "즐겨찾기");
+    b.setAttribute("aria-label", on ? "팔로우 취소" : "팔로우");
   }
 
   /* 이름 아래 8px, 왼쪽은 이름 왼쪽에 맞춤 — 화면 밖으로 나가면 안쪽 16 으로 밀고, 아래가 모자라면 위로 (2026-11-19 확정) */
@@ -3573,8 +3573,8 @@ document.addEventListener("click", function (e) {
     if (!loggedIn()) { close(); location.hash = "login"; return; }
     if (act === "msg") { location.href = STATION + "#modal=msg-write"; return; }
     if (act === "fav") {
-      if (FunFav.has(name)) { FunFav.remove(name); toast("즐겨찾기를 해제했어요"); }
-      else { FunFav.add(name, picOf(anchor)); toast("즐겨찾기에 추가했어요"); }
+      if (FunFav.has(name)) { FunFav.remove(name); toast("팔로우를 취소했어요"); }
+      else { FunFav.add(name, picOf(anchor)); toast("팔로우했어요"); }
       syncFav();
     }
   }
@@ -4285,4 +4285,45 @@ void main() {
   new MutationObserver(sync).observe(pop, { attributes: true, attributeFilter: ["hidden"] });
   new MutationObserver(sync).observe(pop.querySelector("[data-fuser-name]"), { childList: true, characterData: true, subtree: true });
   new MutationObserver(apply).observe(list, { childList: true });
+})();
+
+/* ============================================================
+   채팅톡 안 읽음 수 (2026-11-23) — GNB · 모바일 앱바 종 알림을 없애고, 숫자를 채팅톡 메뉴에 붙임.
+   숫자 = 1:1 메시지 안 읽음(알림 끈 대화 제외) + 알림 탭 안 읽음. 라이브 빨강(#FF4242).
+   PC 는 LNB "채팅톡" 오른쪽, 모바일은 하단 내비 채팅톡 아이콘 위. 로그아웃이거나 0 이면 숨김.
+   대화는 talk.js 가 localStorage funnation-talk 에 저장 — 아직 저장이 없으면 talk.js 첫 데이터와 같은 6(메시지 4 + 알림 2)
+   ============================================================ */
+(function () {
+  var html = document.documentElement;
+  var DEFAULT = 6;
+  function count() {
+    var s;
+    try { s = JSON.parse(localStorage.getItem("funnation-talk")); } catch (e) { s = null; }
+    if (!s || s.v !== 1 || !s.convs) return DEFAULT;
+    var n = 0;
+    s.convs.forEach(function (c) { if (!c.mute && !c.blocked) n += c.unread || 0; });
+    (s.notis || []).forEach(function (x) { if (!x.read) n++; });
+    return n;
+  }
+  function render() {
+    var n = html.getAttribute("data-auth") === "out" ? 0 : count();
+    var label = n > 99 ? "99+" : String(n);
+    var items = document.querySelectorAll('.lnb__item[href="talk.html"], .bottom-nav__item[href="talk.html"]');
+    for (var i = 0; i < items.length; i++) {
+      var b = items[i].querySelector(".talk-count");
+      if (!n) { if (b) b.remove(); items[i].removeAttribute("aria-label"); continue; }
+      if (!b) {
+        b = document.createElement("span");
+        b.className = "talk-count";
+        b.setAttribute("aria-hidden", "true");
+        items[i].appendChild(b);
+      }
+      b.textContent = label;
+      items[i].setAttribute("aria-label", "채팅톡, 안 읽은 메시지 " + n + "개");
+    }
+  }
+  render();
+  window.addEventListener("storage", function (e) { if (e.key === "funnation-talk") render(); });
+  document.addEventListener("talk:change", render);
+  new MutationObserver(render).observe(html, { attributes: true, attributeFilter: ["data-auth"] });
 })();

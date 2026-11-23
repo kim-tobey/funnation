@@ -14,7 +14,7 @@
 <link rel="preconnect" href="https://o6cdhdutve.execute-api.ap-northeast-2.amazonaws.com">
 <link rel="stylesheet" href="https://o6cdhdutve.execute-api.ap-northeast-2.amazonaws.com/v1/api/css/drop_fontstream_css/?sid=gAAAAABq4sdeUvN_k3MsbvmMbZ_hBQFXfvEFSB2urLi1zybsfs0w_bksF-xrdzoNI69oxk_6Hv077SoP0M2EzWJCT3KGRbt5qdq9vhMcW010SeUDh5R02FT8iGpCI5xOjMvgScgXjRxcMcwj8Jo8ZvH4AE903t3kwE6qp7f6jM47d9dtp77LGtu6LAOFROE9J4kMMclS5je4qcppj1EPJJmQq0oUEN6FFF_ggb35Gkx0vhXI1AbrJ0xF6e_eenerTiwRE-Nlu49u" charset="utf-8" referrerpolicy="origin">
 <link rel="stylesheet" href="styles.css">
-<link rel="stylesheet" href="talk.css?v=20261123e">
+<link rel="stylesheet" href="talk.css?v=20261123f">
 </head>
 <body>
 
@@ -81,10 +81,6 @@
           </button>
           <button class="nav-icon" type="button" aria-label="언어 변경" data-tooltip="언어 변경" aria-haspopup="menu" aria-expanded="false" aria-controls="lang-pop" data-lang-btn>
             <img src="assets/imgLanguage.svg" width="24" height="24" alt="">
-          </button>
-          <button class="nav-icon" type="button" aria-label="알림" data-tooltip="알림" aria-haspopup="dialog" aria-expanded="false" aria-controls="notice-pop" id="notice-btn">
-            <img src="assets/imgNotifications24DpE3E3E3Fill0Wght400Grad0Opsz241.svg" width="24" height="24" alt="">
-            <span class="nav-icon__badge">2</span>
           </button>
         </div>
 
@@ -153,10 +149,6 @@
     </div>
     <h1 class="mo-appbar__title" id="mo-title">채팅톡</h1>
     <div class="mo-appbar__side">
-      <button class="mo-appbar__btn mo-appbar__bell" type="button" aria-label="알림">
-        <img src="assets/mo/appbar-bell.svg" width="24" height="24" alt="">
-        <span class="mo-appbar__badge">2</span>
-      </button>
       <button class="mo-appbar__btn" type="button" aria-label="언어 설정" aria-haspopup="menu" aria-expanded="false" aria-controls="lang-pop" data-lang-btn>
         <img src="assets/mo/appbar-lang.svg" width="24" height="24" alt="">
       </button>
@@ -260,7 +252,7 @@
               <img src="assets/v2/lnb-ranking.svg" width="24" height="24" alt="">크리에이터 랭킹
             </a>
             <a class="lnb__item" href="favorites.html">
-              <img src="assets/imgComponent3.svg" width="24" height="24" alt="">즐겨찾기
+              <img src="assets/imgComponent3.svg" width="24" height="24" alt="">팔로우
             </a>
             <!-- 채팅톡 (2026-11-23, LNB - M 67727:84590 · 선택 67727:84584) — 화면 준비 전이라 누르면 "서비스 준비 중입니다." 알림. 선택 아이콘 assets/v2/lnb-talk-active.svg -->
             <a class="lnb__item lnb__item--active" href="talk.html" aria-current="page">
@@ -397,6 +389,280 @@
         </section>
         <section class="talk-room" data-talk-room aria-label="대화방"></section>
       </div>
+
+      <!-- 로그인 · 회원가입 · 모바일 검색 · 알림 화면 (다른 페이지와 같음, app.js 가 씀) -->
+
+      <!-- 로그인 (모바일 시안 64059:158794 — PC 도 같은 폼). 로그아웃 상태에서 #login 으로 열림 -->
+      <section class="login" id="login-view" aria-labelledby="login-title" data-node-id="64085:83981" hidden>
+        <h1 class="login__title" id="login-title">로그인</h1>
+        <form class="login__form" id="login-form" novalidate>
+          <!-- 입력칸 (64266:153550) — 포커스 때 라벨이 위 테두리에 걸리고(fieldset legend 로 테두리를 끊음) 파란 테두리,
+               값이 있으면 지우기 / 비밀번호는 보기 토글, 오류면 회색 테두리 + 빨간 아이콘·문구 -->
+          <div class="field-group" data-node-id="64316:165456">
+          <div class="field">
+            <input class="field__input" type="text" name="id" autocomplete="username" spellcheck="false"
+                   placeholder="아이디를 입력해주세요." aria-label="아이디" aria-describedby="login-id-hint">
+            <fieldset class="field__outline" aria-hidden="true"><legend><span>아이디</span></legend></fieldset>
+            <button class="field__action field__clear" type="button" aria-label="아이디 지우기" tabindex="-1">
+              <img src="assets/v2/search-clear.svg" width="20" height="20" alt="">
+            </button>
+          </div>
+          <p class="field__hint" id="login-id-hint"><img src="assets/login/check-glyph.svg" width="16" height="16" alt="">사용 가능한 아이디입니다.</p>
+          </div>
+          <div class="field-group" data-node-id="64316:166222">
+            <div class="field field--pw">
+              <input class="field__input" type="password" name="password" autocomplete="current-password"
+                     placeholder="비밀번호를 입력해주세요." aria-label="비밀번호" aria-describedby="login-pw-hint login-error">
+              <fieldset class="field__outline" aria-hidden="true"><legend><span>비밀번호</span></legend></fieldset>
+              <button class="field__action field__reveal" type="button" aria-label="비밀번호 보기" aria-pressed="false">
+                <img class="field__reveal-show" src="assets/login/pw-show.svg" width="24" height="24" alt="">
+                <img class="field__reveal-hide" src="assets/login/pw-hide.svg" width="20" height="20" alt="">
+              </button>
+              <img class="field__error-icon" src="assets/login/error-24.svg" width="24" height="24" alt="">
+            </div>
+            <p class="field__hint" id="login-pw-hint"><img src="assets/login/check-glyph.svg" width="16" height="16" alt="">비밀번호가 일치합니다.</p>
+            <p class="field__msg" id="login-error"><img src="assets/login/error-glyph.svg" width="16" height="16" alt="">비밀번호가 틀립니다.</p>
+          </div>
+          <div class="login__actions" data-node-id="64085:84005">
+            <button class="login__submit" type="submit">로그인</button>
+            <p class="login__or"><span>또는</span></p>
+            <button class="sns sns--google" type="button" data-sns>
+              <span class="sns__icon"><img src="assets/login/google.svg" width="20" height="20" alt=""></span>
+              <span class="sns__label">구글 로그인</span>
+            </button>
+            <button class="sns sns--naver" type="button" data-sns>
+              <span class="sns__icon"><img src="assets/login/naver.svg" width="18" height="18" alt=""></span>
+              <span class="sns__label">네이버 로그인</span>
+            </button>
+            <button class="sns sns--kakao" type="button" data-sns>
+              <span class="sns__icon"><img src="assets/login/kakao.svg" width="32" height="32" alt=""></span>
+              <span class="sns__label">카카오 로그인</span>
+            </button>
+          </div>
+        </form>
+        <nav class="login__help" aria-label="계정 도움말" data-node-id="64085:84025">
+          <a href="#">아이디 찾기</a>
+          <a href="#">비밀번호 찾기</a>
+          <a href="#signup" data-signup-open>회원가입</a>
+        </nav>
+      </section>
+
+      <!-- 회원가입 (모바일 시안 64454:202039 — PC 도 같은 폼). 로그아웃 상태에서 #signup 으로 열림.
+           약관동의 → 본인인증 → 정보입력 → 가입완료 4단계, 단계 이동은 주소를 바꾸지 않음 -->
+      <section class="signup" id="signup-view" aria-labelledby="signup-title" data-step="1" hidden>
+        <h1 class="signup__title" id="signup-title">회원가입</h1>
+
+        <!-- 단계 표시 (64493:83652) -->
+        <ol class="steps" aria-label="가입 단계" data-node-id="64493:83652">
+          <li class="steps__item"><span class="steps__num">1</span><span class="steps__label">약관동의</span></li>
+          <li class="steps__item"><span class="steps__num">2</span><span class="steps__label">본인인증</span></li>
+          <li class="steps__item"><span class="steps__num">3</span><span class="steps__label">정보입력</span></li>
+          <li class="steps__item"><span class="steps__num">4</span><span class="steps__label">가입완료</span></li>
+        </ol>
+
+        <!-- 1. 이용 약관 동의 (64493:21020 / 전체 동의 64493:21540) -->
+        <div class="signup__page" data-signup-step="1" data-node-id="64493:21020">
+          <div class="signup__body">
+            <h2 class="signup__head">이용 약관 동의</h2>
+            <ul class="terms">
+              <li class="terms__item terms__item--all">
+                <label class="check"><input type="checkbox" data-terms-all><span class="check__box" aria-hidden="true"></span><span>전체 동의 (선택 정보 포함)</span></label>
+              </li>
+              <li class="terms__item">
+                <label class="check"><input type="checkbox" data-terms required><span class="check__box" aria-hidden="true"></span><span>(필수) 청소년 보호정책을 확인하였습니다.</span></label>
+                <button class="terms__more" type="button" aria-label="청소년 보호정책 보기"><img src="assets/signup/chevron.svg" width="20" height="20" alt=""></button>
+              </li>
+              <li class="terms__item">
+                <label class="check"><input type="checkbox" data-terms required><span class="check__box" aria-hidden="true"></span><span>(필수) 서비스 이용약관(도네이터)</span></label>
+                <button class="terms__more" type="button" aria-label="서비스 이용약관(도네이터) 보기"><img src="assets/signup/chevron.svg" width="20" height="20" alt=""></button>
+              </li>
+              <li class="terms__item">
+                <label class="check"><input type="checkbox" data-terms required><span class="check__box" aria-hidden="true"></span><span>(필수) 서비스 이용약관(크리에이터)</span></label>
+                <button class="terms__more" type="button" aria-label="서비스 이용약관(크리에이터) 보기"><img src="assets/signup/chevron.svg" width="20" height="20" alt=""></button>
+              </li>
+              <li class="terms__item">
+                <label class="check"><input type="checkbox" data-terms required><span class="check__box" aria-hidden="true"></span><span>(필수) 개인정보 처리 방침</span></label>
+                <button class="terms__more" type="button" aria-label="개인정보 처리 방침 보기"><img src="assets/signup/chevron.svg" width="20" height="20" alt=""></button>
+              </li>
+              <li class="terms__item">
+                <label class="check"><input type="checkbox" data-terms name="marketing"><span class="check__box" aria-hidden="true"></span><span>(선택) 광고성 정보 수신 및 마케팅 활용 동의</span></label>
+                <button class="terms__more" type="button" aria-label="광고성 정보 수신 동의 보기"><img src="assets/signup/chevron.svg" width="20" height="20" alt=""></button>
+              </li>
+            </ul>
+          </div>
+          <div class="signup__actions">
+            <button class="signup__btn signup__btn--primary" type="button" data-signup-next disabled>다음</button>
+          </div>
+        </div>
+
+        <!-- 2. 본인 인증 수단 선택 (64573:105573 — 현재 휴대폰 인증만) -->
+        <div class="signup__page" data-signup-step="2" data-node-id="64573:105573" hidden>
+          <div class="signup__body">
+            <div class="signup__heading">
+              <h2 class="signup__head">본인 인증 수단 선택</h2>
+              <p class="signup__desc">안전한 서비스 이용을 위해 본인인증을 진행해주세요.</p>
+            </div>
+            <label class="method">
+              <input type="radio" name="verify" value="phone">
+              <span class="method__icon" aria-hidden="true">
+                <img class="method__phone" src="assets/signup/phone.png" width="38" height="38" alt="">
+                <img class="method__finger" src="assets/signup/fingerprint.png" width="16" height="16" alt="">
+              </span>
+              <span class="method__text">
+                <strong>휴대폰 인증</strong>
+                <span>본인 명의 휴대폰으로 인증하기</span>
+              </span>
+              <span class="method__check" aria-hidden="true"><img src="assets/signup/glyph.svg" width="16" height="16" alt=""></span>
+            </label>
+            <p class="signup__assist"><img src="assets/signup/info.svg" width="16" height="16" alt="">본인 인증은 1회만 진행됩니다.</p>
+            <!-- 서버 연동 전 데모 — 실제로는 통신사 본인인증 창에서 받아오는 값 -->
+            <p class="verified" hidden><img src="assets/signup/glyph.svg" width="16" height="16" alt=""><span>김펀네 · 010-****-1234 인증 완료</span></p>
+          </div>
+          <div class="signup__actions">
+            <button class="signup__btn" type="button" data-signup-prev>뒤로가기</button>
+            <button class="signup__btn signup__btn--primary" type="button" data-signup-next disabled>다음</button>
+          </div>
+        </div>
+
+        <!-- 3. 정보 입력 (64574:106949) — 아이디·닉네임은 입력칸에 붙은 중복 확인, 비밀번호 두 칸은 보기 아이콘 -->
+        <form class="signup__page" data-signup-step="3" id="signup-form" data-node-id="64574:106949" novalidate hidden>
+          <div class="signup__body">
+            <div class="signup__heading">
+              <h2 class="signup__head">정보 입력</h2>
+              <p class="signup__desc">펀네이션에서 사용할 계정 정보를 입력해주세요.</p>
+            </div>
+            <div class="sfields">
+              <div class="sfield">
+                <label class="sfield__label" for="su-id">아이디<em aria-hidden="true">*</em></label>
+                <div class="sfield__row">
+                  <div class="sfield__box"><input class="sfield__input" id="su-id" name="id" type="text" autocomplete="username" spellcheck="false" maxlength="16" placeholder="아이디를 입력해주세요" aria-describedby="su-id-msg" required></div>
+                  <button class="sfield__side" type="button" data-dup-check="id">중복 확인</button>
+                </div>
+                <p class="sfield__msg" id="su-id-msg">영문 소문자, 숫자 4~16자</p>
+              </div>
+              <div class="sfield">
+                <label class="sfield__label" for="su-pw">비밀번호<em aria-hidden="true">*</em></label>
+                <div class="sfield__box">
+                  <input class="sfield__input" id="su-pw" name="password" type="password" autocomplete="new-password" maxlength="20" placeholder="비밀번호를 입력해주세요." aria-describedby="su-pw-msg" required>
+                  <button class="sfield__reveal" type="button" aria-label="비밀번호 보기" aria-pressed="false">
+                    <img class="sfield__reveal-show" src="assets/login/pw-show.svg" width="24" height="24" alt="">
+                    <img class="sfield__reveal-hide" src="assets/login/pw-hide.svg" width="20" height="20" alt="">
+                  </button>
+                </div>
+                <p class="sfield__msg" id="su-pw-msg"></p>
+              </div>
+              <div class="sfield">
+                <label class="sfield__label" for="su-pw2">비밀번호 확인<em aria-hidden="true">*</em></label>
+                <div class="sfield__box">
+                  <input class="sfield__input" id="su-pw2" name="password2" type="password" autocomplete="new-password" maxlength="20" placeholder="비밀번호를 한번 더 입력해주세요." aria-describedby="su-pw2-msg" required>
+                  <button class="sfield__reveal" type="button" aria-label="비밀번호 확인 보기" aria-pressed="false">
+                    <img class="sfield__reveal-show" src="assets/login/pw-show.svg" width="24" height="24" alt="">
+                    <img class="sfield__reveal-hide" src="assets/login/pw-hide.svg" width="20" height="20" alt="">
+                  </button>
+                </div>
+                <p class="sfield__msg" id="su-pw2-msg"></p>
+              </div>
+              <div class="sfield">
+                <label class="sfield__label" for="su-nick">닉네임<em aria-hidden="true">*</em></label>
+                <div class="sfield__row">
+                  <div class="sfield__box"><input class="sfield__input" id="su-nick" name="nickname" type="text" maxlength="10" placeholder="닉네임을 입력해주세요" aria-describedby="su-nick-msg" required></div>
+                  <button class="sfield__side" type="button" data-dup-check="nickname">중복 확인</button>
+                </div>
+                <p class="sfield__msg" id="su-nick-msg">한글, 영문, 숫자 2~10자, 방송과 채팅에 표시돼요</p>
+              </div>
+              <div class="sfield">
+                <label class="sfield__label" for="su-email">이메일</label>
+                <div class="sfield__box"><input class="sfield__input" id="su-email" name="email" type="email" autocomplete="email" spellcheck="false" placeholder="example@funnation.com" aria-describedby="su-email-msg"></div>
+                <p class="sfield__msg" id="su-email-msg">아이디, 비밀번호 찾기에 사용돼요 (선택)</p>
+              </div>
+            </div>
+          </div>
+          <div class="signup__actions">
+            <button class="signup__btn" type="button" data-signup-prev>뒤로가기</button>
+            <button class="signup__btn signup__btn--primary" type="submit" data-signup-next>다음</button>
+          </div>
+        </form>
+
+        <!-- 4. 회원가입 완료 (64615:27375) -->
+        <div class="signup__page" data-signup-step="4" data-node-id="64615:27375" hidden>
+          <div class="signup__body done">
+            <span class="done__badge" aria-hidden="true"><img src="assets/signup/glyph-30.svg" width="30" height="30" alt=""></span>
+            <div class="done__text">
+              <h2 class="done__title">가입을 완료했어요!</h2>
+              <p class="done__desc">닉네임과 비밀번호는 [마이페이지]에서<br>언제든지 변경하실 수 있어요.</p>
+            </div>
+          </div>
+          <div class="signup__actions">
+            <button class="signup__btn signup__btn--primary" type="button" data-signup-finish>시작하기</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 검색 (모바일 시안 64162:201098). 앱바 검색 아이콘 → #search -->
+      <section class="subview search-view" id="search-view" aria-label="검색" data-node-id="64162:201098" hidden>
+        <form class="search-view__form" id="search-form" role="search" data-node-id="64162:204479">
+          <input class="search-view__input" type="search" name="q" placeholder="크리에이터, 동영상 검색" aria-label="크리에이터, 동영상 검색" autocomplete="off">
+          <button class="search-view__submit" type="submit" aria-label="검색">
+            <img src="assets/v2/search.svg" width="18" height="18" alt="">
+          </button>
+          <!-- 입력값이 있을 때 (64299:163076) — 돋보기는 왼쪽, 오른쪽에 지우기 -->
+          <button class="search-view__clear" type="reset" aria-label="검색어 지우기"><img src="assets/v2/search-clear.svg" width="20" height="20" alt=""></button>
+        </form>
+        <div class="search-view__recent" data-node-id="64162:204436">
+          <div class="search-view__head">
+            <h2>최근 검색어</h2>
+            <button type="button" data-recent-clear>전체삭제</button>
+          </div>
+          <ul class="search-view__list" id="recent-list">
+            <li><a href="#"><span class="search-term-icon"><img src="assets/v2/pc-recent-search.svg" width="18" height="18" alt=""></span><span>큰별TV</span></a><button type="button" aria-label="큰별TV 삭제" data-recent-remove><img src="assets/v2/recent-remove.svg" width="11.65" height="11.65" alt=""></button></li>
+            <li><a href="#"><span class="search-term-icon"><img src="assets/v2/pc-recent-search.svg" width="18" height="18" alt=""></span><span>다썰남TV</span></a><button type="button" aria-label="다썰남TV 삭제" data-recent-remove><img src="assets/v2/recent-remove.svg" width="11.65" height="11.65" alt=""></button></li>
+            <li><a href="#"><span class="search-term-icon"><img src="assets/v2/pc-recent-search.svg" width="18" height="18" alt=""></span><span>스타덤레이블</span></a><button type="button" aria-label="스타덤레이블 삭제" data-recent-remove><img src="assets/v2/recent-remove.svg" width="11.65" height="11.65" alt=""></button></li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 알림 (모바일 시안 64162:200698). 앱바 종 아이콘 → #notice -->
+      <section class="subview notice-view" id="notice-view" aria-label="알림" data-node-id="64162:200698" hidden>
+        <div class="notice-group" data-node-id="64162:204386">
+          <h2 class="notice-group__date">어제</h2>
+          <ul class="notice-group__list">
+            <li class="notice-item">
+              <img class="notice-item__avatar" src="assets/v2/notice/avatar1.png" width="34" height="34" alt="">
+              <div class="notice-item__body">
+                <p class="notice-item__text">노블레스 레이블님이 방송을 시작했어요 : 노블레스레이블 화목토 8회차! 지금 시작합니다, 대표 이경현</p>
+                <p class="notice-item__meta"><span>노블레스레이블</span><img src="assets/v2/notice/separator.svg" width="2" height="2" alt=""><time>2026.08.14 23:00</time></p>
+              </div>
+            </li>
+            <li class="notice-item">
+              <img class="notice-item__avatar" src="assets/v2/notice/avatar2.png" width="34" height="34" alt="">
+              <div class="notice-item__body">
+                <p class="notice-item__text">앙커퍼니님이 방송을 시작했어요!</p>
+                <p class="notice-item__meta"><span>노블레스레이블</span><img src="assets/v2/notice/separator.svg" width="2" height="2" alt=""><time>2026.08.14 19:48</time></p>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="notice-group" data-node-id="64162:204405">
+          <h2 class="notice-group__date">2026.08.12</h2>
+          <ul class="notice-group__list">
+            <li class="notice-item">
+              <img class="notice-item__avatar" src="assets/v2/notice/avatar1.png" width="34" height="34" alt="">
+              <div class="notice-item__body">
+                <p class="notice-item__text">노블레스 레이블님이 방송을 시작했어요 : 노블레스레이블 화목토 7회차! 지금 시작합니다, 대표 이경현</p>
+                <p class="notice-item__meta"><span>노블레스레이블</span><img src="assets/v2/notice/separator.svg" width="2" height="2" alt=""><time>2026.08.14 23:00</time></p>
+              </div>
+            </li>
+            <li class="notice-item">
+              <img class="notice-item__avatar" src="assets/v2/notice/avatar-funnation.png" width="34" height="34" alt="">
+              <div class="notice-item__body">
+                <p class="notice-item__tag">공지사항</p>
+                <p class="notice-item__text">펀네이션에 오신 여러분을 환영합니다!</p>
+                <p class="notice-item__meta"><span>Funnation</span><img src="assets/v2/notice/separator.svg" width="2" height="2" alt=""><time>2026.08.14 12:00</time></p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </section>
     </main>
 
   </div>
@@ -420,7 +686,7 @@
       <img src="assets/mo/nav-talk.svg" width="24" height="24" alt="">채팅톡
     </a>
     <a class="bottom-nav__item" href="favorites.html">
-      <img src="assets/mo/nav-fav.svg" width="24" height="24" alt="">즐겨찾기
+      <img src="assets/mo/nav-fav.svg" width="24" height="24" alt="">팔로우
     </a>
     <!-- 내 정보 (v2.0 64085:89486) — 로그아웃 상태면 로그인 화면을 연다 -->
     <a class="bottom-nav__item" href="#login" id="bn-account">

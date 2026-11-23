@@ -367,7 +367,7 @@ function need(){if(S.loggedIn)return true;openLogin();return false}
 /* 펀네이션 공용 로그인 화면(#login, app.js)으로 — 로그인하면 data-auth=in 이 방송국에도 반영됨 */
 function goLogin(){closeAllModals();closePop();const b=document.getElementById('login-btn');if(b)b.click();else location.hash='login'}
 function openLogin(){
-  openModal({title:'로그인이 필요해요',qa:'G-06',body:'<p>즐겨찾기·알림·후원·글쓰기는 로그인 후 이용할 수 있어요.</p>',
+  openModal({title:'로그인이 필요해요',qa:'G-06',body:'<p>팔로우·알림·후원·글쓰기는 로그인 후 이용할 수 있어요.</p>',
     foot:'<button class="btn sec" data-act="mclose">취소</button><button class="btn pri" data-act="loginOk">로그인</button>'});
 }
 
@@ -380,7 +380,7 @@ function layoutSB(){
   $('#sbback').hidden=!(sb.open&&w<960);
 }
 function renderBnav(){
-  const it=[['홈','home'],['라이브','antenna'],['크리에이터','user'],['즐겨찾기','star'],['커뮤니티','users'],['MY','user']];
+  const it=[['홈','home'],['라이브','antenna'],['크리에이터','user'],['팔로우','star'],['커뮤니티','users'],['MY','user']];
   $('#bnav').innerHTML=it.map(i=>`<button data-act="oos" class="${i[0]==='크리에이터'?'act':''}">${ic(i[1],22)}${i[0]}</button>`).join('');
 }
 
@@ -461,7 +461,7 @@ function crewView(){
     const on=c.live===1||(c.live===2&&S.live),me=c.live===2;
     return `<div class="mc${on?' on':''}"><div class="avl">${on&&!me?`<button data-act="crewGo" data-arg="${c.n}" aria-label="${c.n} 방송국">${av(c.n,72)}</button>`:av(c.n,72)}${on?'<span class="livebdg">LIVE</span>':''}</div>
     <b>${c.n}</b><span class="rl${c.role==='크루장'?' cap':''}">${c.role}</span>${c.rank?`<span class="rl rk">${c.rank}</span>`:''}${me?'<span class="rl here">현재 방송국</span>':''}
-    <div class="intro1">${esc(c.intro)}</div><div class="intro1">즐겨찾기 ${fmt(c.fav)}</div>${on&&c.lt?`<div class="lt">${esc(c.lt)}</div>`:on&&me?`<div class="lt">${esc(D.live.title.split(' #')[0])}</div>`:''}
+    <div class="intro1">${esc(c.intro)}</div><div class="intro1">팔로워 ${fmt(c.fav)}</div>${on&&c.lt?`<div class="lt">${esc(c.lt)}</div>`:on&&me?`<div class="lt">${esc(D.live.title.split(' #')[0])}</div>`:''}
     ${me?'<button class="btn sec sm dis" disabled>보는 중</button>':`<button class="btn sec sm" data-act="crewGo" data-arg="${c.n}">방송국 가기</button>`}</div>`;
   }).join('');
   return `<div data-qa="T-02">
@@ -578,7 +578,7 @@ function fanPop(anchor,name){
   const t=f?f.t:'dirt';
   const first=f?f.since+'.02':'2025.10.12';
   const hot=f&&f.rank<=20?`랭커 ${f.rank}위${f.title?' · '+f.title:''}`:'랭커 아님';
-  openPop(anchor,`<div class="fanp">${av(name,44)}<span><b>${esc(name)}</b>${tg(name)}</span></div><div class="fanl">이 방송국 첫 후원 ${first}</div><div class="fanl" style="margin-top:4px">${hot}${s?' · 즐겨찾기 '+s.mo+'개월':''}</div>`,{w:260});
+  openPop(anchor,`<div class="fanp">${av(name,44)}<span><b>${esc(name)}</b>${tg(name)}</span></div><div class="fanl">이 방송국 첫 후원 ${first}</div><div class="fanl" style="margin-top:4px">${hot}${s?' · 팔로우 '+s.mo+'개월':''}</div>`,{w:260});
 }
 function setRank(p){const h=$('#rankHome');if(h)h.innerHTML=rankHTML()}
 function playerBox(){return `<div class="player"><div class="pl-bg"></div><button class="pl-play" data-act="plplay" aria-label="재생">${ic('play',28)}</button><span class="pl-tag">YouTube 임베드 영역</span></div>`}
@@ -715,12 +715,12 @@ const A={
  fav(){
   if(!need())return;
   if(Date.now()-favLock<300)return;favLock=Date.now();
-  if(!S.favorite){S.favorite=true;S.favCount++;renderTop();renderSide();toast('즐겨찾기에 추가했어요','알림 켜기',()=>{S.alarm.level='live';renderTop();if(S.view==='home'&&!S.live)renderView();toast('라이브 시작 알림만 받아요')})}
+  if(!S.favorite){S.favorite=true;S.favCount++;renderTop();renderSide();toast('팔로우했어요','알림 켜기',()=>{S.alarm.level='live';renderTop();if(S.view==='home'&&!S.live)renderView();toast('라이브 시작 알림만 받아요')})}
   else{
-    openModal({title:'즐겨찾기를 해제할까요?',body:'<p>해제해도 알림 설정은 유지돼요</p>',foot:'<button class="btn sec" data-act="mclose">취소</button><button class="btn pri" data-act="favOff">해제</button>'});
+    openModal({title:'팔로우를 취소할까요?',body:'<p>해제해도 알림 설정은 유지돼요</p>',foot:'<button class="btn sec" data-act="mclose">취소</button><button class="btn pri" data-act="favOff">해제</button>'});
   }
  },
- favOff(el){S.favorite=false;S.favCount--;closeModal(el.closest('.ov-back'));renderTop();renderSide();toast('즐겨찾기를 해제했어요')},
+ favOff(el){S.favorite=false;S.favCount--;closeModal(el.closest('.ov-back'));renderTop();renderSide();toast('팔로우를 취소했어요')},
  alarm:(el)=>openAlarm(el),
  alarmSave:saveAlarm,
  donate:()=>openDonate(),
@@ -959,12 +959,12 @@ function renderTop(){
   $('#restrict').innerHTML=strip?`<div class="restrict">${esc(strip)}</div>`:'';
   $('#top').innerHTML=`
    <div class="avw"><div class="avring${S.live?' on':''}">${av(D.name,90)}</div>${S.live?'<span class="livebdg">LIVE</span>':''}</div>
-   <div class="pi"><h1>${D.name}${modeBadge()}</h1><button class="favn" data-act="nav" data-arg="subfans" data-qa="B-09" title="즐겨찾기한 유저 보기"><img src="assets/watch/v4/viewers.svg" width="16" height="16" alt=""><span>즐겨찾기 <b>${fmt(S.favCount)}</b>명</span></button></div>
+   <div class="pi"><h1>${D.name}${modeBadge()}</h1><button class="favn" data-act="nav" data-arg="subfans" data-qa="B-09" title="팔로워 보기"><img src="assets/watch/v4/viewers.svg" width="16" height="16" alt=""><span>팔로워 <b>${fmt(S.favCount)}</b>명</span></button></div>
    <div class="btns">
      <button class="btn pri" id="donBtn" data-act="donate" data-qa="B-05">${ic('heart',18)}<span class="bl">후원하기</span>${donDotHTML()}</button>
      <button class="btn out livego${S.live?' on':''}" data-act="liveGo" data-qa="B-07" aria-label="${S.live?'라이브, 지금 방송 중':'라이브, 방송 중 아님'}">${ic('antenna',18)}<span class="bl">라이브</span>${S.live?'<span class="ldot" aria-hidden="true"></span>':''}</button>
      <button class="btn out" data-act="talk" data-qa="B-08">${ic('talk',18)}<span class="bl">TALK</span></button>
-     <button class="btn out fav${S.favorite?' on':''}" data-act="fav" data-qa="B-04" aria-pressed="${S.favorite}">${S.favorite?`<svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="#f7df4e" stroke="#f7df4e" stroke-width="1.8" stroke-linejoin="round">${P.star}</svg><span class="bl">즐겨찾기 중</span>`:ic('star',18)+'<span class="bl">즐겨찾기</span>'}</button>
+     <button class="btn out fav${S.favorite?' on':''}" data-act="fav" data-qa="B-04" aria-pressed="${S.favorite}">${S.favorite?`<svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="#f7df4e" stroke="#f7df4e" stroke-width="1.8" stroke-linejoin="round">${P.star}</svg><span class="bl">팔로잉</span>`:ic('star',18)+'<span class="bl">팔로우</span>'}</button>
      <button class="btn out${al[2]?' on':''}" data-act="alarm" data-qa="B-03">${ic(al[0],18)}<span class="bl">${al[1]}</span></button>
      <button class="btn circ" data-act="more" aria-label="더보기">${ic('more',20)}</button>
    </div>
@@ -1036,7 +1036,7 @@ const AVIEWS=[
  ['notices','공지·상단 고정','pin','부가 설정','M-16',()=>has('notice')],['schedule','스케줄','calendar','부가 설정','M-17'],['sigs','시그니처 관리','sparkle','부가 설정','M-18'],['log','관리 활동 로그','history','부가 설정','M-20',()=>canAdmin()]
 ].map(a=>({id:a[0],label:a[1],ic:a[2],grp:a[3],qa:a[4],ok:a[5]||canSt}));
 const AVIEW=id=>AVIEWS.find(v=>v.id===id);
-const DESC={title:'방송국 상단에 보이는 이미지예요',intro:'방송국 소개 줄과 소개 모달에 보여요',links:'소개 아래 아이콘으로 보여요',rbanner:'PC 화면 오른쪽에 세로로 보이는 배너예요',mbanner:'홈 탭 중간에 가로로 보이는 배너예요',boards:'게시판을 추가하고 공개·글쓰기 권한과 순서를 정해요',banwords:'금칙어가 들어간 게시글·댓글은 등록되지 않아요',fans:'후원한 팬과 즐겨찾기한 유저를 확인해요',managers:'방송국 운영을 도와줄 매니저를 지정하고 권한을 나눠요',sanctions:'아이디를 검색해 제재하고 사유를 메모로 남겨요',notices:'게시판 공지를 관리하고 홈 상단에 고정해요',schedule:'방송 요일과 시간을 정하면 방송국 곳곳에 반영돼요',sigs:'특정 금액 후원 시 나오는 시그니처 리액션을 관리해요',tier:'VIP 게시판 기준 칭호와 후원 랭킹 노출을 정해요',log:'관리 화면에서 한 변경 기록이에요'};
+const DESC={title:'방송국 상단에 보이는 이미지예요',intro:'방송국 소개 줄과 소개 모달에 보여요',links:'소개 아래 아이콘으로 보여요',rbanner:'PC 화면 오른쪽에 세로로 보이는 배너예요',mbanner:'홈 탭 중간에 가로로 보이는 배너예요',boards:'게시판을 추가하고 공개·글쓰기 권한과 순서를 정해요',banwords:'금칙어가 들어간 게시글·댓글은 등록되지 않아요',fans:'후원한 팬과 팔로우한 유저를 확인해요',managers:'방송국 운영을 도와줄 매니저를 지정하고 권한을 나눠요',sanctions:'아이디를 검색해 제재하고 사유를 메모로 남겨요',notices:'게시판 공지를 관리하고 홈 상단에 고정해요',schedule:'방송 요일과 시간을 정하면 방송국 곳곳에 반영돼요',sigs:'특정 금액 후원 시 나오는 시그니처 리액션을 관리해요',tier:'VIP 게시판 기준 칭호와 후원 랭킹 노출을 정해요',log:'관리 화면에서 한 변경 기록이에요'};
 const SLICE={
  title:{get:s=>({img:s.bannerImg}),set:(s,v)=>{s.bannerImg=v.img}},
  intro:{get:s=>({intro:s.intro,text:s.introText,rules:s.rulesText}),set:(s,v)=>{s.intro=v.intro.trim();s.introText=v.text;s.rulesText=v.rules}},
@@ -1314,12 +1314,12 @@ function ubadges(u){
   if(st.managers.some(m=>m.id===u.id))h+='<span class="rb vp">매니저</span>';
   if(st.sanctions.some(s=>s.id===u.id))h+='<span class="rb" style="border-color:#ff6363;color:#ff6363">제재 중</span>';
   const f=fanOf(u.n);if(f||(u.id==='fun_viewer'&&S.myTier!=='none'))h+='<span class="rb" style="border-color:#57dff7;color:#57dff7">팬</span>';
-  if(FOL.some(x=>x[0]===u.n)||u.id==='harukeeper')h+='<span class="rb" style="border-color:var(--text-meta);color:var(--text-meta)">즐겨찾기</span>';
+  if(FOL.some(x=>x[0]===u.n)||u.id==='harukeeper')h+='<span class="rb" style="border-color:var(--text-meta);color:var(--text-meta)">팔로워</span>';
   return h;
 }
 ADMBODY.fans=function(){
   const a=S.admin;
-  return `<div class="s-chips"><button class="chip${a.fanTab==='fan'?' act':''}" data-act="fanTab" data-arg="fan">팬 ${FANS.length}</button><button class="chip${a.fanTab==='fol'?' act':''}" data-act="fanTab" data-arg="fol">즐겨찾기 ${fmt(S.favCount)}</button><button class="chip${a.fanTab==='rank'?' act':''}" data-act="fanTab" data-arg="rank">랭킹</button></div>
+  return `<div class="s-chips"><button class="chip${a.fanTab==='fan'?' act':''}" data-act="fanTab" data-arg="fan">팬 ${FANS.length}</button><button class="chip${a.fanTab==='fol'?' act':''}" data-act="fanTab" data-arg="fol">팔로워 ${fmt(S.favCount)}</button><button class="chip${a.fanTab==='rank'?' act':''}" data-act="fanTab" data-arg="rank">랭킹</button></div>
   <label class="fsearch">${ic('search',16)}<input id="fanq" data-in="fanq" placeholder="닉네임·아이디 검색" value="${esc(a.fanQ)}"></label><div id="fanlist">${fanListHTML()}</div>`;
 };
 function fanListHTML(){
@@ -1328,14 +1328,14 @@ function fanListHTML(){
   if(a.fanTab==='fan'){
     const l=FANS.filter(f=>match(f.n));
     if(!FANS.length)return '<div class="empty">아직 후원한 팬이 없어요</div>';
-    rows=l.map(f=>{const s=SUBS.find(x=>x.n===f.n);return `<div class="trow"><span class="tn">${av(f.n,32)}<span><b>${esc(f.n)}</b><small>@${uidOf(f.n)}</small></span></span>${tg(f.n)}<span class="tm">첫 후원 ${f.since}.02</span><span class="tm">랭커 ${f.rank}위${f.title?' · '+f.title:''}${s?' · 즐겨찾기':''}</span><button class="btn out xs" data-act="fanMenu" data-arg="${esc(f.n)}" aria-label="메뉴">${ic('more',16)}</button></div>`}).join('');
+    rows=l.map(f=>{const s=SUBS.find(x=>x.n===f.n);return `<div class="trow"><span class="tn">${av(f.n,32)}<span><b>${esc(f.n)}</b><small>@${uidOf(f.n)}</small></span></span>${tg(f.n)}<span class="tm">첫 후원 ${f.since}.02</span><span class="tm">랭커 ${f.rank}위${f.title?' · '+f.title:''}${s?' · 팔로워':''}</span><button class="btn out xs" data-act="fanMenu" data-arg="${esc(f.n)}" aria-label="메뉴">${ic('more',16)}</button></div>`}).join('');
     if(!l.length)return '<div class="empty">검색 결과가 없어요</div>';
   }else if(a.fanTab==='fol'){
     let l=FOL.map(x=>({n:x[0],d:x[1],al:x[2]}));
     if(S.favorite)l.unshift({n:'펀시청자',d:'방금',al:S.alarm.level!=='off'?1:0});
-    l=l.filter(x=>match(x.n));note=`<div class="fanl" style="margin-bottom:8px">방송국을 즐겨찾기한 유저예요 · 전체 ${fmt(S.favCount)}명 중 최근 ${l.length}명만 보여요</div>`;
+    l=l.filter(x=>match(x.n));note=`<div class="fanl" style="margin-bottom:8px">방송국을 팔로우한 유저예요 · 전체 ${fmt(S.favCount)}명 중 최근 ${l.length}명만 보여요</div>`;
     if(!l.length)return '<div class="empty">검색 결과가 없어요</div>';
-    rows=l.map(x=>`<div class="trow"><span class="tn">${av(x.n,32)}<span><b>${esc(x.n)}</b>${ttBadge(x.n,true)}<small>@${x.n==='펀시청자'?'fun_viewer':uidOf(x.n)}</small></span></span><span class="tm">즐겨찾기한 날 ${x.d}</span><span class="tm">알림 ${x.al?'받음':'안 받음'}</span><button class="btn out xs" data-act="fanMenu" data-arg="${esc(x.n)}" aria-label="메뉴">${ic('more',16)}</button></div>`).join('');
+    rows=l.map(x=>`<div class="trow"><span class="tn">${av(x.n,32)}<span><b>${esc(x.n)}</b>${ttBadge(x.n,true)}<small>@${x.n==='펀시청자'?'fun_viewer':uidOf(x.n)}</small></span></span><span class="tm">팔로우한 날 ${x.d}</span><span class="tm">알림 ${x.al?'받음':'안 받음'}</span><button class="btn out xs" data-act="fanMenu" data-arg="${esc(x.n)}" aria-label="메뉴">${ic('more',16)}</button></div>`).join('');
   }else{
     const p=a.fanRank,l=rankList(p).filter(f=>match(f.n));
     note=`<div class="s-chips"><button class="chip${p==='all'?' act':''}" data-act="fanRk" data-arg="all">역대</button><button class="chip${p==='month'?' act':''}" data-act="fanRk" data-arg="month">이번 달</button></div>`;
@@ -1829,7 +1829,7 @@ CH.sigSort=el=>{S.ui.sigSort=el.value;renderView()};
 /* ---------- followers / views / LNB ---------- */
 itemInfo=function(id){
   if(id==='hotfans')return {name:'랭커',cnt:'20'};
-  if(id==='subfans')return {name:'즐겨찾기',cnt:fmt(S.favCount)};
+  if(id==='subfans')return {name:'팔로워',cnt:fmt(S.favCount)};
   if(id==='replay')return {name:'다시보기',cnt:'8'};
   if(id==='shorts')return {name:'쇼츠',cnt:'12'};
   return {name:bnm(id),cnt:''};
@@ -1846,7 +1846,7 @@ panelHTML=function(){
   const mi=(id,name,icn,qa,rt,cls,pen)=>`<div class="mi${S.view===id?' act':''}${cls||''}" role="button" tabindex="0" data-act="nav" data-arg="${id}" data-qa-nav="${qa}" title="${esc(name)}">${ic(icn,20)}<span class="nm">${esc(name)}</span>${pen||''}<span class="rt">${rt||''}</span></div>`;
   const t3=FANS.slice(0,3);
   const hot=`<div class="hot3" data-qa="L-01-top3"><div class="h3h"><span class="h3t0">${ic('crown',14)}TOP 3 랭커</span><button class="h3all" data-act="nav" data-arg="ranker" data-qa-nav="L-01">전체 보기 ›</button></div>${t3.map((f,i)=>`<button class="h3r h${i+1}" data-act="fan" data-arg="${esc(f.n)}" title="${esc(f.n)}">${gkEmblem(i+1,f.n,'mini')}<span class="h3t"><b>${esc(f.n)}</b><small>${esc(f.title||GRADEN[gradeOf(f.n)])}</small></span></button>`).join('')}</div>`;
-  let h='<div class="pg">팬</div>'+hot+mi('subfans','즐겨찾기','heart','L-02',fmt(S.favCount))+'<hr><div class="pg">콘텐츠</div>'+mi('replay','다시보기','video','L-03','8')+mi('shorts','쇼츠','play','L-09','12')+'<hr><div class="pg">게시판</div>';
+  let h='<div class="pg">팬</div>'+hot+mi('subfans','팔로워','heart','L-02',fmt(S.favCount))+'<hr><div class="pg">콘텐츠</div>'+mi('replay','다시보기','video','L-03','8')+mi('shorts','쇼츠','play','L-09','12')+'<hr><div class="pg">게시판</div>';
   S.station.boardList.forEach(b=>{
     if(b.type==='divider'){h+='<hr>'+(b.label?`<div class="pg">${esc(b.label)}</div>`:'');return}
     if(b.read==='private'&&!canRead(b))return;
@@ -2194,9 +2194,9 @@ subView=function(){
   const u=S.ui;let l=SUBS.slice();
   if(u.subTier==='팬')l=l.filter(s=>fanOf(s.n));else if(u.subTier==='일반')l=l.filter(s=>!fanOf(s.n));
   l=l.sort((a,b)=>u.subSort==='dur'?b.mo-a.mo:(a.start<b.start?1:-1));
-  return `<div data-qa="L-02"><div class="vh"><h2>즐겨찾기 ${fmt(S.favCount)}</h2><p>방송국을 즐겨찾기한 유저예요 · 최근 ${SUBS.length}명만 보여요</p></div>
-   <div class="s-chips"><button class="chip${u.subSort==='dur'?' act':''}" data-act="ssort" data-arg="dur">즐겨찾기 오래된순</button><button class="chip${u.subSort==='rec'?' act':''}" data-act="ssort" data-arg="rec">최근 즐겨찾기순</button><span class="sepv"></span>${['전체','팬','일반'].map(t=>`<button class="chip${u.subTier===t?' act':''}" data-act="stier" data-arg="${t}">${t}</button>`).join('')}</div>
-   ${l.length?`<div class="sgrid">${l.map(s=>`<button class="sfan" data-act="fan" data-arg="${s.n}">${av(s.n,40)}<span><span class="nm">${esc(s.n)}${fanOf(s.n)?'<span class="tb tr1">팬</span>':''}</span><small>즐겨찾기 ${s.mo}개월 · ${s.start}</small></span></button>`).join('')}</div>`:'<div class="empty">해당하는 즐겨찾기 유저가 없어요</div>'}</div>`;
+  return `<div data-qa="L-02"><div class="vh"><h2>팔로워 ${fmt(S.favCount)}</h2><p>방송국을 팔로우한 유저예요 · 최근 ${SUBS.length}명만 보여요</p></div>
+   <div class="s-chips"><button class="chip${u.subSort==='dur'?' act':''}" data-act="ssort" data-arg="dur">팔로우 오래된순</button><button class="chip${u.subSort==='rec'?' act':''}" data-act="ssort" data-arg="rec">최근 팔로우순</button><span class="sepv"></span>${['전체','팬','일반'].map(t=>`<button class="chip${u.subTier===t?' act':''}" data-act="stier" data-arg="${t}">${t}</button>`).join('')}</div>
+   ${l.length?`<div class="sgrid">${l.map(s=>`<button class="sfan" data-act="fan" data-arg="${s.n}">${av(s.n,40)}<span><span class="nm">${esc(s.n)}${fanOf(s.n)?'<span class="tb tr1">팬</span>':''}</span><small>팔로우 ${s.mo}개월 · ${s.start}</small></span></button>`).join('')}</div>`:'<div class="empty">해당하는 팔로워가 없어요</div>'}</div>`;
 };
 
 /* ================= 11차: 쪽지 · 누적 후원 · 후원 랭커 · 스케줄 · 쇼츠 슬라이드 · 게임형 랭크 엠블럼 ================= */
@@ -2263,7 +2263,7 @@ fanPop=function(anchor,name){
   const t=f?f.t:bu?bu.t:name===actorName()?(S.myTier==='none'?'dirt':S.myTier):'dirt';
   const first=f?f.since+'.02':'2025.10.12';
   const hot=f&&f.rank<=20?`랭커 ${f.rank}위${f.title?' · '+f.title:''}`:'랭커 아님';
-  openPop(anchor,`<div class="fanp">${av(name,44)}<span><b>${esc(name)}</b>${tg(name)}</span></div><div class="fanl">이 방송국 첫 후원 ${first}</div><div class="fanl" style="margin-top:4px">${hot}${s?' · 즐겨찾기 '+s.mo+'개월':''}</div>`,{w:260});
+  openPop(anchor,`<div class="fanp">${av(name,44)}<span><b>${esc(name)}</b>${tg(name)}</span></div><div class="fanl">이 방송국 첫 후원 ${first}</div><div class="fanl" style="margin-top:4px">${hot}${s?' · 팔로우 '+s.mo+'개월':''}</div>`,{w:260});
 };
 /* ---- 랭킹 카드 / 행 ---- */
 function gkCard(r,i,tab){
@@ -2987,10 +2987,10 @@ function fnSideHTML(){
   const it=(v,icn,label)=>`<div class="mi${S.fn.view===v?' act':''}" role="button" tabindex="0" data-act="fnNav" data-arg="${v}" data-qa="FN-nav-${v}">${ic(icn,20)}<span class="nm">${label}</span></div>`;
   const favs=fnCreators().slice(0,6).map(c=>`<div class="mi" role="button" tabindex="0" data-act="fnCreator" data-arg="${c.id}">${av(c.n,24)}<span class="nm">${esc(c.n)}</span><span class="rt">${c.live?'<span class="lv">LIVE</span>':''}</span></div>`).join('');
   return `<div class="lnbtop"><div class="lt-pf"><span class="fnlogo">${ic('crown',24)}</span><span class="lbl"><b>FUNNATION</b></span></div><button class="lbtn" data-act="fnBack" data-qa="FN-back">${ic('chevL',14)}<span class="lbl">${D.name} 방송국으로 돌아가기</span></button></div>${!S.loggedIn&&innerWidth<768?'<button class="loginbtn" style="width:100%;margin-bottom:10px" data-act="login">로그인</button>':''}<hr>
-   ${it('fnhome','home','홈')}${it('fnlive','antenna','펀네이션 라이브')}${it('fnyt','youtube','유튜브 라이브')}${it('fnfind','search','크리에이터 찾기')}${it('fnfav','star','즐겨찾기')}<hr><div class="pg">즐겨찾기한 크리에이터</div>${favs}`;
+   ${it('fnhome','home','홈')}${it('fnlive','antenna','펀네이션 라이브')}${it('fnyt','youtube','유튜브 라이브')}${it('fnfind','search','크리에이터 찾기')}${it('fnfav','star','팔로우')}<hr><div class="pg">팔로우한 크리에이터</div>${favs}`;
 }
 function fnLiveCard(c,i){return `<button class="fnc" data-act="fnCreator" data-arg="${c.id}" data-qa="FN-live">${thumb(c.lt||c.n,i,`<span class="bd live">LIVE</span>`)}<div class="vt">${esc(c.lt||c.n+' 라이브')}</div><div class="vm">${esc(c.n)} · 시청 ${fmt(300+i*137)}명</div></button>`}
-function fnCreatorCard(c){return `<div class="fncr" data-qa="FN-creator">${av(c.n,56)}<div class="fncb"><b>${esc(c.n)}${c.live?'<span class="lv">LIVE</span>':''}</b><small>${esc(c.intro)}</small><small>즐겨찾기 ${fmt(c.fav)}</small></div><button class="btn sec sm" data-act="fnCreator" data-arg="${c.id}">${c.own?'방송국 가기':'채널 보기'}</button></div>`}
+function fnCreatorCard(c){return `<div class="fncr" data-qa="FN-creator">${av(c.n,56)}<div class="fncb"><b>${esc(c.n)}${c.live?'<span class="lv">LIVE</span>':''}</b><small>${esc(c.intro)}</small><small>팔로워 ${fmt(c.fav)}</small></div><button class="btn sec sm" data-act="fnCreator" data-arg="${c.id}">${c.own?'방송국 가기':'채널 보기'}</button></div>`}
 function fnVidCard(v,i){return `<button class="vcard" data-act="video" data-arg="${v.id}">${thumb(v.title,v.id,`<span class="dur">${v.len}</span>`)}<div class="vt">${esc(v.title)}</div><div class="vm">${esc(v.by)} · 조회 ${v.vs} · ${v.date}</div></button>`}
 function fnView(){
   const f=S.fn,cs=fnCreators();
@@ -3004,11 +3004,11 @@ function fnView(){
   }
   if(f.view==='creator'){
     const c=cs.find(x=>x.id===f.cid)||cs[0];
-    return `<div class="fnh" data-qa="FN-creatorpage"><button class="back" data-act="fnNav" data-arg="search">${ic('chevL',16)}검색 결과</button><div class="fncp">${av(c.n,88)}<div><h2>${esc(c.n)}${c.live?'<span class="lv">LIVE</span>':''}</h2><p>${esc(c.intro)}</p><small class="fanl">즐겨찾기 ${fmt(c.fav)}</small></div><div class="fncpb">${c.own?`<button class="btn pri" data-act="fnBack" data-qa="FN-go-station">${D.name} 방송국 가기</button>`:`<button class="btn sec" data-act="crewGo" data-arg="${c.n}">방송국 가기</button>`}<button class="btn out" data-act="oos">${ic('star',16)}즐겨찾기</button></div></div>
+    return `<div class="fnh" data-qa="FN-creatorpage"><button class="back" data-act="fnNav" data-arg="search">${ic('chevL',16)}검색 결과</button><div class="fncp">${av(c.n,88)}<div><h2>${esc(c.n)}${c.live?'<span class="lv">LIVE</span>':''}</h2><p>${esc(c.intro)}</p><small class="fanl">팔로워 ${fmt(c.fav)}</small></div><div class="fncpb">${c.own?`<button class="btn pri" data-act="fnBack" data-qa="FN-go-station">${D.name} 방송국 가기</button>`:`<button class="btn sec" data-act="crewGo" data-arg="${c.n}">방송국 가기</button>`}<button class="btn out" data-act="oos">${ic('star',16)}팔로우</button></div></div>
      ${c.live?`<section class="fnsec"><h3>지금 라이브</h3><div class="grid g3">${fnLiveCard(c,1)}</div></section>`:''}
      <section class="fnsec"><h3>최근 영상</h3><div class="grid g3">${fnVids().slice(0,3).map(fnVidCard).join('')}</div></section></div>`;
   }
-  const titles={fnhome:['펀네이션 홈','지금 인기 있는 라이브와 크리에이터예요'],fnlive:['펀네이션 라이브','펀네이션에서 방송 중인 라이브예요'],fnyt:['유튜브 라이브','유튜브로 송출 중인 라이브예요'],fnfind:['크리에이터 찾기','마음에 드는 크리에이터를 찾아보세요'],fnfav:['즐겨찾기','즐겨찾기한 크리에이터와 라이브예요']}[f.view]||['펀네이션',''];
+  const titles={fnhome:['펀네이션 홈','지금 인기 있는 라이브와 크리에이터예요'],fnlive:['펀네이션 라이브','펀네이션에서 방송 중인 라이브예요'],fnyt:['유튜브 라이브','유튜브로 송출 중인 라이브예요'],fnfind:['크리에이터 찾기','마음에 드는 크리에이터를 찾아보세요'],fnfav:['팔로우','팔로우한 크리에이터와 라이브예요']}[f.view]||['펀네이션',''];
   const lives=cs.filter(c=>c.live);
   let body;
   if(f.view==='fnfind'||f.view==='fnfav')body=`<div class="fncl">${cs.filter(c=>f.view==='fnfind'||c.own||c.fav>2000).map(fnCreatorCard).join('')}</div>`;
@@ -3500,7 +3500,7 @@ const rkBadge=n=>{const f=fanOf(n);return f&&f.rank<=20?`<span class="rkb" data-
 const FOLLOWERS=FANS.map(f=>{const h=String(f.n).split('').reduce((a,c)=>a+c.charCodeAt(0),0),d=1+h%27,y=+f.since.slice(0,4),m=+f.since.slice(5,7);let mo=(2026*12+11)-(y*12+m)-(5<d?1:0);return {n:f.n,mo:Math.max(1,mo),start:f.since+'.'+pad(d)}});
 /* 즐겨찾기 유저 정렬 — 홈 · 영상 목록과 같은 정렬 칩(65771:60928) + 정렬 메뉴(65771:60849) + 구분선(65771:56827) + 필터 칩.
    styles.css 의 .sort · .chip-bar__divider 를 그대로 씀 */
-const FOL_SORT=[['rec','최근 즐겨찾기순'],['dur','즐겨찾기 오래된순']];
+const FOL_SORT=[['rec','최근 팔로우순'],['dur','팔로우 오래된순']];
 function sortChip(items,curKey,act){
   const cur=items.find(x=>x[0]===curKey)||items[0];
   return `<div class="sort"><button class="sort__btn" type="button" aria-haspopup="menu" aria-expanded="false" data-act="sortPop"><img src="assets/v2/sort-ascending.svg" width="16" height="16" alt=""><span>${cur[1]}</span></button>
@@ -3520,9 +3520,9 @@ subView=function(){
   if(flt.indexOf(u.subTier)<0)u.subTier='전체';
   if(u.subTier!=='전체')l=l.filter(s=>TTL[FOLT[s.n]][0]===u.subTier);
   l=l.sort((a,b)=>u.subSort==='dur'?(a.start<b.start?-1:1):(a.start<b.start?1:-1));
-  return `<div data-qa="L-02"><div class="vh"><h2>즐겨찾기 ${fmt(S.favCount)}</h2><p>방송국을 즐겨찾기한 유저예요 · 최근 ${FOLLOWERS.length}명만 보여요</p></div>
+  return `<div data-qa="L-02"><div class="vh"><h2>팔로워 ${fmt(S.favCount)}</h2><p>방송국을 팔로우한 유저예요 · 최근 ${FOLLOWERS.length}명만 보여요</p></div>
    ${folSortBar(u,flt)}
-   ${l.length?`<div class="sgrid">${l.map(s=>`<button class="sfan" data-act="fan" data-arg="${s.n}">${av(s.n,40)}<span><span class="nm">${ttBadge(s.n)}${esc(s.n)}${rkBadge(s.n)}</span><small>즐겨찾기 ${s.mo}개월 · ${s.start}</small></span></button>`).join('')}</div>`:'<div class="empty">해당하는 즐겨찾기 유저가 없어요</div>'}</div>`;
+   ${l.length?`<div class="sgrid">${l.map(s=>`<button class="sfan" data-act="fan" data-arg="${s.n}">${av(s.n,40)}<span><span class="nm">${ttBadge(s.n)}${esc(s.n)}${rkBadge(s.n)}</span><small>팔로우 ${s.mo}개월 · ${s.start}</small></span></button>`).join('')}</div>`:'<div class="empty">해당하는 팔로워가 없어요</div>'}</div>`;
 };
 
 /* ---- R-13: 후원 창 시그니처 (가격대 필터 + 이미지형 카드) ---- */

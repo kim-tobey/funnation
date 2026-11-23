@@ -15386,3 +15386,46 @@ button.subnav__tab {
     gap: 0;
   }
 }
+
+/* 채팅톡 안 읽음 수 (2026-11-23) — GNB 종 알림 대신. 라이브 빨강 #FF4242 · 흰 Bold 11 · 높이 20 알약 (app.js 끝에서 붙임)
+   PC LNB: "채팅톡" 줄 오른쪽 끝 / 접힌 LNB: 아이콘 오른쪽 위 / 모바일 하단 내비: 아이콘 오른쪽 위 */
+.talk-count {
+  flex: none;
+  min-width: 20px;
+  height: 20px;
+  margin-left: auto;
+  padding: 0 6px;
+  border-radius: 9999px;
+  background: #ff4242;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 20px;
+  letter-spacing: 0;
+  color: #fff;
+  text-align: center;
+}
+.lnb__item[href="talk.html"] { position: relative; }
+[data-lnb="mini"] .lnb__item[href="talk.html"] .talk-count {
+  position: absolute;
+  top: 4px;
+  right: 2px;
+  min-width: 16px;
+  height: 16px;
+  margin: 0;
+  padding: 0 4px;
+  font-size: 10px;
+  line-height: 16px;
+}
+.bottom-nav__item[href="talk.html"] { position: relative; }
+.bottom-nav__item .talk-count {
+  position: absolute;
+  top: -4px;
+  left: calc(50% + 4px);
+  min-width: 18px;
+  height: 18px;
+  margin: 0;
+  padding: 0 5px;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 18px;
+}

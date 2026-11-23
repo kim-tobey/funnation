@@ -15,7 +15,7 @@
   var PAGE = {
     "index.html": "홈", "": "홈", "station.html": "내 방송국", "creators.html": "크리에이터 찾기",
     "fun-watch.html": "펀네이션 영상 상세", "fun-live.html": "펀네이션 라이브", "live.html": "라이브",
-    "watch.html": "영상 상세", "favorites.html": "즐겨찾기", "profile.html": "내 정보",
+    "watch.html": "영상 상세", "favorites.html": "팔로우", "profile.html": "내 정보",
     "settings.html": "설정", "wallet.html": "지갑", "events.html": "이벤트", "about.html": "소개",
     "terms.html": "약관", "404.html": "404"
   };
@@ -28,7 +28,7 @@
     pfring: "프로필 테두리", avring: "프로필 테두리", av: "사진", tabs: "탭",
     /* 펀네이션 영상 상세 (fun-watch, 2026-11-23) */
     "lw-top": "상단 바", "lw-player": "플레이어", "lw-ctl": "플레이어 컨트롤", "lw-info": "방송 정보",
-    "lw-info__title": "방송 제목", "lw-streamer": "방송인", "lw-info__actions": "즐겨찾기 · 후원 버튼 줄",
+    "lw-info__title": "방송 제목", "lw-streamer": "방송인", "lw-info__actions": "팔로우 · 후원 버튼 줄",
     "lw-chat": "채팅", "lw-chat__head": "채팅 머리", "lw-rankbar": "후원 순위 줄", "lw-rankpop": "후원 랭킹 팝업",
     "lw-pin": "고정 영역", "lw-chat__list": "채팅 목록", "lw-msg": "채팅 메시지", "lw-dono": "후원 카드",
     "lw-input": "채팅 입력칸", "lw-dock": "아래 막대", "lw-donate": "후원 패널", "lw-settings": "채팅 설정",
