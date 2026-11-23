@@ -5,7 +5,7 @@
   var KEY = "funnation-pick", q = location.search + location.hash, on = false;
   function load() {
     if (document.querySelector('script[src^="pick.js"]')) return;
-    var s = document.createElement("script"); s.src = "pick.js?v=20261120b"; document.head.appendChild(s);
+    var s = document.createElement("script"); s.src = "pick.js?v=20261123a"; document.head.appendChild(s);
   }
   try {
     if (/[?&#]pick=0\b/.test(q)) sessionStorage.removeItem(KEY);
@@ -1188,7 +1188,7 @@
   }
 })();
 
-/* 크리에이터 카드 팔로우 하트 (65415:42570) — 누를 때마다 빈 하트 ↔ 채운 하트. 서버 연동 전이라 저장하지 않음 */
+/* 크리에이터 카드 하트(옛 팔로우) (65415:42570) — 누를 때마다 빈 하트 ↔ 채운 하트. 서버 연동 전이라 저장하지 않음 */
 (function () {
   var btns = document.querySelectorAll("[data-follow]");
   for (var i = 0; i < btns.length; i++) {
@@ -2119,21 +2119,32 @@ window.FunFav = (function () {
   }, true);
 })();
 
-/* 영상 상세 방송 정보 · 다시보기 (66098:111836 · 111904) — 팔로우, 후원하기(채팅 쪽 후원 탭으로), 공유, 설명 더보기, 정렬 칩.
+/* 영상 상세 방송 정보 · 다시보기 (66098:111836 · 111904) — 즐겨찾기, 후원하기(채팅 쪽 후원 탭으로), 공유, 설명 더보기, 정렬 칩.
    펀네이션 라이브 상세(.fwatch, 66132:101009)도 같은 방송 정보 · 다시보기 틀이라 함께 씀 */
 (function () {
   var watch = document.querySelector(".watch, .fwatch");
   if (!watch) return;
   var isFun = watch.classList.contains("fwatch");
-  // 팔로우 — PC 방송 정보와 모바일 앱바 버튼이 같은 상태
+  /* 즐겨찾기 (2026-11-23 팔로우 → 즐겨찾기로 통일) — PC 방송 정보와 모바일 앱바 버튼이 같은 상태.
+     방송인 팝오버 · 즐겨찾기 페이지와 같은 목록(window.FunFav)에 넣고 빼서 어디서 바꿔도 함께 바뀜 */
   var follows = watch.querySelectorAll("[data-watch-follow]");
-  for (var f = 0; f < follows.length; f++) follows[f].addEventListener("click", function () {
-    var on = this.getAttribute("aria-pressed") !== "true";
+  var favName = (watch.querySelector(".winfo__name strong, .wbar__name") || {}).textContent || "";
+  var favImg = watch.querySelector(".winfo__pic img");
+  var favPic = favImg ? favImg.getAttribute("src") : "";
+  function favSync() {
+    var on = !!(favName && window.FunFav && window.FunFav.has(favName));
     for (var k = 0; k < follows.length; k++) {
       follows[k].setAttribute("aria-pressed", on ? "true" : "false");
-      (follows[k].querySelector("span") || follows[k]).textContent = on ? "팔로잉" : "팔로우";
+      (follows[k].querySelector("span") || follows[k]).textContent = on ? "즐겨찾기 중" : "즐겨찾기";
     }
+  }
+  for (var f = 0; f < follows.length; f++) follows[f].addEventListener("click", function () {
+    if (!window.FunFav || !favName) return;
+    if (window.FunFav.has(favName)) window.FunFav.remove(favName);
+    else window.FunFav.add(favName, favPic);
   });
+  if (window.FunFav) window.FunFav.onChange(favSync);
+  favSync();
   // 모바일 뒤로 — 같은 사이트에서 왔으면 이전 화면, 아니면 홈
   var back = watch.querySelector("[data-watch-back]");
   if (back) back.addEventListener("click", function (e) {
@@ -2671,7 +2682,7 @@ window.FunFav = (function () {
   });
 
   /* 유저 팝업 (66132:107341) — 채팅 이름 · 랭킹 · 유저 찾기 줄을 누르면 그 줄 높이에 맞춰 채팅 왼쪽에 띄움.
-     X · 바깥 클릭 · ESC 로 닫힘. 팔로우 날짜 · 프로필 사진은 서버 연동 전이라 시안 값 */
+     X · 바깥 클릭 · ESC 로 닫힘. 즐겨찾기한 날짜 · 프로필 사진은 서버 연동 전이라 시안 값 */
   var pop = document.getElementById("fuser");
   var popFrom = null;
   function closeUser(focus) {

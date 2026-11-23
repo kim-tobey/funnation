@@ -1,0 +1,744 @@
+/* ============================================================
+   펀네이션 라이브 방송 상세 (fun-watch.html) — 2026-11-23
+   실서비스(funnation.co.kr/store/{id}/live/broadcast) 레이아웃 · 기능을 그대로,
+   색은 디자인시스템 토큰(styles.css :root), 아이콘 · 이미지는 프로젝트 assets.
+   ============================================================ */
+
+.lw-body {
+  margin: 0;
+  background: var(--color-bg-100);
+  color: var(--color-text-normal);
+  font-family: "Pretendard", system-ui, sans-serif;
+  overflow: hidden;
+}
+.lw-body button,
+.lw-body input,
+.lw-body textarea { font-family: inherit; }
+.lw-sr {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
+
+/* ---------- 아이콘 — 프로젝트 SVG 를 mask 로 써서 글자색(currentColor)으로 칠함 ---------- */
+.ic {
+  display: inline-block;
+  flex: none;
+  width: 16px;
+  height: 16px;
+  background: currentColor;
+  -webkit-mask: var(--i) center / contain no-repeat;
+          mask: var(--i) center / contain no-repeat;
+}
+.ic--back     { --i: url("assets/fun-watch/v2/arrow-left-md.svg"); width: 14px; height: 14px; }
+.ic--user     { --i: url("assets/fun-watch/user-2.svg"); width: 12px; height: 12px; }
+.ic--users    { --i: url("assets/fun-watch/users.svg"); }
+.ic--clock    { --i: url("assets/v2/settings/clock-14.svg"); width: 12px; height: 12px; }
+.ic--mute     { --i: url("assets/hero-live/muted.svg"); width: 18px; height: 18px; }
+.ic--volume   { --i: url("assets/fun-watch/volume.svg"); width: 20px; height: 20px; }
+.ic--pause    { --i: url("assets/fun-watch/pause.svg"); width: 20px; height: 20px; }
+.ic--play     { --i: url("assets/fun-watch/v2/play.svg"); width: 20px; height: 20px; }
+.ic--quality  { --i: url("assets/fun-watch/quality.svg"); width: 18px; height: 18px; }
+.ic--audio    { --i: url("assets/fun-watch/audio-only.svg"); width: 20px; height: 20px; }
+.ic--pip      { --i: url("assets/fun-watch/pip.svg"); width: 20px; height: 20px; }
+.ic--wide     { --i: url("assets/fun-watch/default-view.svg"); width: 20px; height: 20px; }
+.ic--full     { --i: url("assets/fun-watch/fullscreen.svg"); width: 20px; height: 20px; }
+.ic--chat     { --i: url("assets/v2/popover/chat.svg"); width: 18px; height: 18px; }
+.ic--gift     { --i: url("assets/fun-watch/v2/gift.svg"); width: 16px; height: 16px; }
+.ic--heart    { --i: url("assets/fun-watch/heart.svg"); }
+.ic--share    { --i: url("assets/watch/v4/share.svg"); }
+.ic--more     { --i: url("assets/fun-watch/v2/more-vertical.svg"); width: 18px; height: 18px; }
+.ic--report   { --i: url("assets/watch/v4/menu/report.svg"); }
+.ic--trophy   { --i: url("assets/watch/trophy.svg"); }
+.ic--close    { --i: url("assets/v2/close.svg"); width: 18px; height: 18px; }
+.ic--fold     { --i: url("assets/fun-watch/chat-fold.svg"); width: 6px; height: 10px; }
+.ic--popout   { --i: url("assets/fun-watch/external-link.svg"); width: 14px; height: 14px; }
+.ic--gear     { --i: url("assets/fun-watch/settings.svg"); width: 17px; height: 17px; }
+.ic--caret    { --i: url("assets/fun-watch/v3/caret-down-sm.svg"); width: 12px; height: 12px; }
+.ic--chev     { --i: url("assets/watch/chevron-right.svg"); width: 14px; height: 14px; }
+.ic--emoji    { --i: url("assets/fun-watch/emoji.svg"); width: 18px; height: 18px; }
+.ic--send     { --i: url("assets/fun-watch/v2/send.svg"); width: 16px; height: 16px; }
+.ic--chatview { --i: url("assets/fun-watch/chat-view-on.svg"); }
+.ic--pin      { --i: url("assets/v2/popover/notice.svg"); width: 14px; height: 14px; }
+.ic--font     { --i: url("assets/watch/v4/menu/nickname.svg"); width: 14px; height: 14px; }
+.ic--badge    { --i: url("assets/v2/profile/award-20.svg"); width: 14px; height: 14px; }
+.ic--bolt     { --i: url("assets/fun-watch/v2/high-voltage.svg"); width: 14px; height: 14px; }
+
+/* ---------- 틀 ---------- */
+.lw {
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--color-bg-100);
+  --chat-w: 340px;
+  --chat-fs: 14px;
+}
+
+/* 상단 바 40 */
+.lw-top {
+  flex: none;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 16px;
+  background: var(--color-bg-200);
+  border-bottom: 1px solid var(--color-border-100);
+  min-width: 0;
+}
+/* 로고는 GNB 와 같은 구조(styles.css .logo, 191×30)를 실서비스 크기 166×26 으로 */
+.lw-top__logo.logo { flex: none; width: 166px; height: 26px; }
+.lw-top__ch {
+  display: flex; align-items: center; gap: 4px; min-width: 0;
+  margin-left: 4px; color: var(--color-text-depth-400);
+}
+.lw-top__ch:hover .lw-top__name { color: var(--color-text-strong); }
+.lw-top__av { width: 20px; height: 20px; border-radius: 9999px; object-fit: cover; }
+.lw-top__name {
+  font-size: 13px; font-weight: 500; color: var(--color-text-normal);
+  max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.lw-live-pill {
+  flex: none; display: inline-flex; align-items: center; gap: 3px;
+  height: 20px; padding: 0 8px; border-radius: 9999px;
+  background: rgba(255, 66, 66, 0.25); color: var(--color-text-strong);
+  font-size: 10px; font-weight: 500;
+}
+.lw-live-pill .ic--live-dot { width: 6px; height: 6px; border-radius: 9999px; background: #ff4242; -webkit-mask: none; mask: none; }
+.lw-top__viewers { display: inline-flex; align-items: center; gap: 3px; font-size: 11px; color: var(--color-text-depth-300); }
+
+/* 본문 */
+.lw-body-row { flex: 1; min-height: 0; display: flex; position: relative; }
+.lw-main {
+  flex: 1; min-width: 0; min-height: 0;
+  display: flex; flex-direction: column;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+.lw-main::-webkit-scrollbar { display: none; }
+
+/* ---------- 플레이어 ---------- */
+.lw-player {
+  position: relative;
+  flex: 0 1 auto;
+  min-height: 0;
+  aspect-ratio: 16 / 9;
+  margin: 8px 8px 0;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #000;
+  outline: none;
+}
+.lw-player__video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; background: #000; }
+.lw-player[data-audio] .lw-player__video { visibility: hidden; }
+.lw-player__audio {
+  position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+  font-size: 14px; color: var(--color-text-depth-300);
+}
+.lw-player__audio .ic { width: 40px; height: 40px; }
+.lw-player__audio[hidden] { display: none; }
+
+.lw-unmute {
+  position: absolute; left: 16px; top: 16px; z-index: 3;
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 40px; padding: 0 16px; border-radius: 9999px;
+  background: rgba(0, 0, 0, 0.5); color: #fff;
+  font-size: 13px; font-weight: 500;
+  backdrop-filter: blur(6px);
+}
+.lw-unmute[hidden] { display: none; }
+.lw-player__live {
+  position: absolute; right: 16px; top: 16px; z-index: 3;
+  height: 28px; padding: 0 8px; border-radius: 6px;
+  display: inline-flex; align-items: center;
+  background: #ff4242; color: #fff; font-size: 13px; font-weight: 700;
+  opacity: 0; transition: opacity .2s;
+}
+.lw-player[data-ui] .lw-player__live { opacity: 1; }
+
+/* 접힌 채팅 바로가기 — LIVE 아래 */
+.lw-float { position: absolute; right: 16px; top: 52px; z-index: 3; display: none; flex-direction: column; gap: 8px; }
+.lw[data-folded] .lw-float { display: flex; }
+.lw-float__btn {
+  width: 40px; height: 40px; border-radius: 9999px;
+  display: grid; place-items: center;
+  background: rgba(0, 0, 0, 0.5); color: #fff;
+}
+.lw-float__btn:hover { background: rgba(0, 0, 0, 0.7); }
+
+/* 컨트롤 */
+.lw-ctl {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 2;
+  height: 80px; padding: 0 16px 16px;
+  display: flex; align-items: flex-end; justify-content: space-between; gap: 8px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent);
+  opacity: 0; transition: opacity .2s;
+  pointer-events: none;
+}
+.lw-player[data-ui] .lw-ctl { opacity: 1; pointer-events: auto; }
+.lw-ctl__group { display: flex; align-items: center; gap: 8px; }
+.lw-ctl__btn {
+  height: 40px; min-width: 40px; border-radius: 9999px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  background: rgba(0, 0, 0, 0.5); color: #fff;
+  font-size: 13px; white-space: nowrap;
+}
+.lw-ctl__btn:hover { background: rgba(0, 0, 0, 0.7); }
+.lw-ctl__btn--pill { padding: 0 14px; }
+.lw-ctl__btn[aria-pressed="true"] { color: var(--color-brand-primary); }
+.lw-ctl__dot { width: 8px; height: 8px; border-radius: 9999px; background: #ff4242; }
+.lw-player[data-behind] .lw-ctl__dot { background: var(--color-text-depth-400); }
+.lw-vol { display: flex; align-items: center; gap: 4px; }
+.lw-vol__range { width: 0; opacity: 0; transition: width .2s, opacity .2s; accent-color: #fff; }
+.lw-vol:hover .lw-vol__range,
+.lw-vol:focus-within .lw-vol__range { width: 80px; opacity: 1; }
+
+/* 메뉴 공통 (화질 · 더보기) */
+.lw-quality, .lw-more { position: relative; }
+.lw-menu {
+  position: absolute; z-index: 10;
+  min-width: 140px; padding: 6px;
+  border-radius: 12px;
+  background: rgba(18, 19, 26, 0.92);
+  border: 1px solid var(--color-border-300);
+  backdrop-filter: blur(10px);
+  display: flex; flex-direction: column;
+}
+.lw-menu[hidden] { display: none; }
+.lw-menu button {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  height: 36px; padding: 0 10px; border-radius: 8px;
+  font-size: 13px; color: var(--color-text-normal); text-align: left;
+}
+.lw-menu button:hover { background: rgba(255, 255, 255, 0.06); }
+.lw-menu button[aria-checked="true"]:not(.lw-menu__switch) { color: var(--color-brand-primary); }
+.lw-menu hr { width: 100%; margin: 4px 0; border: 0; border-top: 1px solid var(--color-border-300); }
+.lw-quality__menu { bottom: 48px; right: 0; }
+.lw-more__menu { top: 44px; right: 0; }
+.lw-more__menu button { justify-content: flex-start; color: #ff6363; }
+
+/* ---------- 방송 정보 ---------- */
+.lw-info { flex: none; padding: 16px 12px; }
+.lw-info__title {
+  margin: 0;
+  font-size: 22px; font-weight: 700; line-height: 1.35; color: var(--color-text-strong);
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.lw-info__meta { margin-top: 8px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.lw-info__tags { display: flex; gap: 6px; }
+.lw-tag {
+  display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border-radius: 4px;
+  font-size: 12px; font-weight: 500;
+}
+.lw-tag--beta { height: 18px; padding: 0 6px; font-size: 10px; font-weight: 600; color: var(--color-text-depth-300); border: 1px solid var(--color-border-400); }
+.lw-info__tags .lw-tag--beta { height: 20px; font-size: 11px; }
+.lw-tag--cat { background: rgba(74, 146, 255, 0.15); color: var(--color-brand-primary); }
+.lw-info__stat { display: flex; gap: 12px; font-size: 13px; color: var(--color-text-depth-300); }
+.lw-info__stat > span { display: inline-flex; align-items: center; gap: 4px; }
+.lw-info__row { margin-top: 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.lw-streamer { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.lw-streamer__pic { position: relative; flex: none; width: 48px; height: 48px; }
+.lw-streamer__pic img { width: 48px; height: 48px; border-radius: 9999px; object-fit: cover; box-shadow: 0 0 0 2px #ff4242; }
+.lw-streamer__live {
+  position: absolute; left: 50%; bottom: -6px; transform: translateX(-50%);
+  height: 14px; padding: 0 4px; border-radius: 4px;
+  background: #ff4242; color: #fff; font-size: 9px; font-weight: 700; line-height: 14px;
+}
+.lw-streamer__text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.lw-streamer__name { font-size: 16px; font-weight: 600; color: var(--color-text-strong); }
+.lw-streamer__fans { font-size: 12px; color: var(--color-text-depth-400); }
+.lw-info__actions { display: flex; align-items: center; gap: 8px; }
+.lw-btn {
+  height: 36px; padding: 0 16px; border-radius: 9999px;
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 14px; font-weight: 600;
+}
+.lw-btn--follow { background: var(--color-brand-primary); color: #fff; }
+.lw-btn--follow:hover { background: var(--color-interaction-hovered); }
+.lw-btn--follow[aria-pressed="true"] { background: var(--color-bg-cancel); color: var(--color-text-normal); }
+.lw-btn--follow[aria-pressed="true"] .ic--heart { --i: url("assets/v2/creator/heart-on.svg"); background: var(--color-brand-primary); }
+.lw-btn--donate { background: #fff; color: var(--color-bg-100); }
+.lw-btn--donate:hover { background: var(--color-text-normal); }
+.lw-btn--icon { width: 36px; padding: 0; justify-content: center; background: rgba(255, 255, 255, 0.1); color: var(--color-text-normal); }
+.lw-btn--icon:hover { background: rgba(255, 255, 255, 0.16); }
+
+/* ---------- 채팅 ---------- */
+.lw-resize {
+  flex: none; width: 16px; margin: 0 -8px; z-index: 5;
+  position: relative; cursor: col-resize; display: flex; align-items: center; justify-content: center;
+}
+.lw-resize span { width: 4px; height: 40px; border-radius: 9999px; background: rgba(150, 157, 168, 0.5); opacity: 0; transition: opacity .2s; }
+.lw-resize:hover span, .lw-resize:focus-visible span, .lw[data-resizing] .lw-resize span { opacity: 1; }
+.lw[data-resizing] { cursor: col-resize; user-select: none; }
+
+.lw-chat {
+  position: relative;
+  flex: none;
+  width: var(--chat-w);
+  min-height: 0;
+  display: flex; flex-direction: column;
+  background: var(--color-bg-200);
+  border-left: 1px solid var(--color-border-100);
+}
+.lw[data-folded] .lw-chat,
+.lw[data-folded] .lw-resize { display: none; }
+
+.lw-chat__head {
+  flex: none; height: 36px; padding: 0 6px;
+  display: flex; align-items: center; gap: 4px;
+  min-width: 0;
+}
+.lw-chat__icon {
+  flex: none; width: 24px; height: 28px; border-radius: 4px;
+  display: grid; place-items: center; color: var(--color-text-depth-400);
+}
+.lw-chat__icon:hover { color: var(--color-text-strong); background: rgba(255, 255, 255, 0.06); }
+.lw-chat__title { display: inline-flex; align-items: center; gap: 4px; margin-left: 2px; font-size: 13px; font-weight: 600; color: var(--color-text-normal); white-space: nowrap; }
+.lw-people { position: relative; margin-left: 4px; }
+.lw-people__btn {
+  height: 28px; padding: 0 6px; border-radius: 4px;
+  display: inline-flex; align-items: center; gap: 4px; color: var(--color-text-depth-300); font-size: 12px;
+}
+.lw-people__btn:hover, .lw-people__btn[aria-expanded="true"] { background: rgba(255, 255, 255, 0.06); color: var(--color-text-strong); }
+.lw-people__pop {
+  position: absolute; top: 32px; left: -60px; z-index: 20;
+  width: 220px; padding: 8px; border-radius: 12px;
+  background: var(--color-bg-300); border: 1px solid var(--color-border-300);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+.lw-people__pop[hidden] { display: none; }
+.lw-people__search {
+  width: 100%; height: 32px; padding: 0 10px; border-radius: 8px;
+  background: var(--color-bg-200); border: 1px solid var(--color-border-300);
+  color: var(--color-text-normal); font-size: 13px; outline: none;
+}
+.lw-people__search:focus { border-color: var(--color-brand-primary); }
+.lw-people__list { list-style: none; margin: 6px 0 0; padding: 0; max-height: 260px; overflow-y: auto; }
+.lw-people__list button {
+  width: 100%; height: 32px; padding: 0 6px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  font-size: 13px; color: var(--color-text-normal); text-align: left;
+}
+.lw-people__list button:hover { background: rgba(255, 255, 255, 0.06); }
+.lw-people__list small { font-size: 11px; color: var(--color-text-depth-400); }
+.lw-people__list small.is-creator { color: #ff6363; }
+.lw-people__none { padding: 12px 6px; font-size: 12px; color: var(--color-text-depth-400); }
+.lw-chat__viewers { display: inline-flex; align-items: center; gap: 4px; margin-left: auto; font-size: 12px; color: var(--color-text-depth-300); white-space: nowrap; overflow: hidden; }
+.lw-chat__gear { margin-left: 2px; }
+.lw-chat__gear[aria-expanded="true"] { color: var(--color-text-strong); background: rgba(255, 255, 255, 0.06); }
+.lw-chat__setbtn {
+  flex: none; align-items: center; height: 28px; padding: 0 12px; border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.08); color: var(--color-text-normal); font-size: 12px;
+}
+
+/* 후원 순위 줄 36 */
+.lw-rankbar {
+  flex: none; height: 36px; padding: 0 4px 0 10px;
+  display: flex; align-items: center; gap: 6px;
+  border-top: 1px solid var(--color-border-100);
+  border-bottom: 1px solid var(--color-border-100);
+}
+.lw-rankbar__track { flex: 1; min-width: 0; display: flex; align-items: center; gap: 8px; overflow: hidden; white-space: nowrap; font-size: 12px; }
+.lw-rankbar__item { display: inline-flex; align-items: center; gap: 4px; min-width: 0; }
+.lw-rankbar__item img { width: 14px; height: 16px; }
+.lw-rankbar__item b { font-weight: 700; color: var(--color-text-strong); overflow: hidden; text-overflow: ellipsis; }
+.lw-rankbar__item em { font-style: normal; color: var(--color-text-depth-400); flex: none; }
+.lw-rankbar__sep { flex: none; width: 1px; height: 14px; background: var(--color-border-300); }
+.lw-hanbang {
+  flex: none; height: 16px; padding: 0 4px; border-radius: 4px;
+  display: inline-flex; align-items: center;
+  background: linear-gradient(90deg, #ff4242, #ff8a3d); color: #fff; font-size: 10px; font-weight: 800;
+}
+.lw-rankbar__more {
+  flex: none; height: 28px; padding: 0 6px; border-radius: 4px;
+  display: inline-flex; align-items: center; gap: 2px; font-size: 11px; color: var(--color-text-depth-400);
+}
+.lw-rankbar__more:hover, .lw-rankbar__more[aria-expanded="true"] { color: var(--color-text-strong); background: rgba(255, 255, 255, 0.06); }
+
+/* 랭킹 팝업 — 플레이어 오른쪽 위에 겹침 */
+.lw-rankpop {
+  position: absolute; right: 16px; top: 16px; z-index: 6;
+  width: 340px; max-height: calc(100% - 32px);
+  display: flex; flex-direction: column; gap: 8px;
+  padding: 12px; border-radius: 16px;
+  background: rgba(31, 33, 46, 0.86);
+  border: 1px solid var(--color-border-400);
+  backdrop-filter: blur(12px);
+}
+.lw-rankpop[hidden] { display: none; }
+.lw-rankpop__head { display: flex; align-items: center; gap: 6px; padding: 4px 4px 4px 6px; color: var(--color-text-depth-300); }
+.lw-rankpop__head h2 { flex: 1; margin: 0; font-size: 14px; font-weight: 500; color: var(--color-text-normal); }
+.lw-rankpop__head h2 span { color: var(--color-text-depth-400); }
+.lw-x { width: 28px; height: 28px; border-radius: 6px; display: grid; place-items: center; color: var(--color-text-depth-300); }
+.lw-x:hover { color: var(--color-text-strong); background: rgba(255, 255, 255, 0.08); }
+.lw-rankpop__best {
+  display: flex; align-items: center; gap: 6px;
+  height: 40px; padding: 0 12px; border-radius: 10px;
+  background: rgba(255, 66, 66, 0.18); border: 1px solid rgba(255, 211, 54, 0.35);
+  font-size: 14px; color: var(--color-text-strong);
+}
+.lw-rankpop__best:empty { display: none; }
+.lw-rankpop__best .lw-best__label { color: #ffd336; font-weight: 700; font-size: 13px; }
+.lw-rankpop__best b { font-weight: 600; }
+.lw-rankpop__best em { margin-left: auto; font-style: normal; font-weight: 700; }
+.lw-rankpop__list { list-style: none; margin: 0; padding: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; }
+.lw-rankpop__list li {
+  display: grid; grid-template-columns: 24px 1fr auto; align-items: center; column-gap: 10px; row-gap: 6px;
+  padding: 8px 12px; border-radius: 10px; background: rgba(255, 255, 255, 0.04);
+  font-size: 14px;
+}
+.lw-rankpop__list .lw-rk__no { font-size: 13px; font-weight: 700; color: var(--color-text-depth-300); text-align: center; }
+.lw-rankpop__list img { width: 16px; height: 18px; margin: 0 auto; }
+.lw-rankpop__list .lw-rk__name { color: var(--color-text-normal); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lw-rankpop__list .lw-rk__won { color: var(--color-text-depth-300); font-size: 13px; }
+.lw-rankpop__list .lw-rk__bar { grid-column: 2 / 4; height: 3px; border-radius: 9999px; background: rgba(255, 255, 255, 0.06); overflow: hidden; }
+.lw-rankpop__list .lw-rk__bar i { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--color-brand-primary), #4962ff); }
+.lw-rankpop__empty { padding: 16px; text-align: center; font-size: 13px; color: var(--color-text-depth-400); background: none !important; display: block !important; }
+
+/* 고정 후원 · 고정 메시지 */
+.lw-pin {
+  flex: none; margin: 6px 8px 0; padding: 8px 10px; border-radius: 10px;
+  display: flex; align-items: flex-start; gap: 8px;
+  font-size: 13px; line-height: 1.5;
+}
+.lw-pin[hidden] { display: none; }
+.lw-pin--msg { background: var(--color-bg-400); color: var(--color-text-normal); }
+.lw-pin--msg .ic--pin { margin-top: 3px; color: var(--color-brand-primary); }
+.lw-pin__text { flex: 1; min-width: 0; }
+.lw-pin__text b { color: #ff6363; margin-right: 4px; }
+.lw-pin--msg[data-folded] .lw-pin__text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lw-pin__fold { flex: none; width: 20px; height: 20px; display: grid; place-items: center; color: var(--color-text-depth-400); transform: rotate(180deg); }
+.lw-pin--msg[data-folded] .lw-pin__fold { transform: none; }
+.lw-pin--donate { background: linear-gradient(90deg, var(--color-brand-primary), #4962ff); color: #fff; align-items: center; }
+.lw-pin--donate b { font-weight: 700; }
+.lw-pin--donate em { margin-left: auto; font-style: normal; font-weight: 700; }
+
+/* 메시지 목록 */
+.lw-chat__scroll { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 6px 0 8px; }
+.lw-chat__list { list-style: none; margin: 0; padding: 0; font-size: var(--chat-fs); line-height: 1.6; }
+.lw[data-size="s"] { --chat-fs: 13px; }
+.lw[data-size="l"] { --chat-fs: 16px; }
+.lw-sys { margin: 4px 10px 8px; padding: 8px 10px; border-radius: 8px; background: rgba(255, 255, 255, 0.04); font-size: 13px; line-height: 1.55; color: var(--color-text-depth-300); }
+.lw-msg { padding: 2px 10px; word-break: break-word; color: var(--color-text-normal); }
+.lw-msg__badge {
+  display: inline-flex; align-items: center; gap: 3px; vertical-align: 1px;
+  height: 18px; padding: 0 5px 0 3px; margin-right: 4px; border-radius: 4px;
+  background: var(--color-border-400); font-size: 11px; font-weight: 600; line-height: 18px;
+}
+.lw-msg__badge img { width: 14px; height: 12px; object-fit: contain; }
+.lw[data-pref-badge="off"] .lw-msg__badge:not(.lw-msg__badge--creator) { display: none; }
+.lw-msg__badge--creator { padding: 0 6px; border-radius: 9999px; background: #ff4242; color: #fff; font-weight: 700; }
+.lw-msg__name { font-weight: 600; margin-right: 6px; cursor: pointer; }
+.lw-msg__name:hover { text-decoration: underline; }
+.lw-msg--creator { margin: 2px 0; padding: 6px 10px; background: rgba(255, 66, 66, 0.12); box-shadow: inset 3px 0 0 #ff4242; color: var(--color-text-strong); }
+.lw-msg--creator .lw-msg__name { color: #ff6363; font-weight: 700; }
+.lw-msg--me .lw-msg__name { color: var(--color-brand-primary); }
+.lw-msg--hidden { display: none; }
+.lw-dono {
+  margin: 6px 10px; padding: 10px 12px; border-radius: 12px;
+  background: linear-gradient(135deg, var(--color-brand-primary), #4962ff);
+  color: #fff; font-size: var(--chat-fs); line-height: 1.5;
+}
+.lw-dono__head { font-weight: 700; }
+.lw-dono__won { display: block; font-weight: 700; }
+.lw-dono__text { margin-top: 4px; font-weight: 500; }
+.lw[data-pref-lite="on"] .lw-dono { background: none; padding: 2px 10px; margin: 0; color: var(--color-text-normal); }
+.lw[data-pref-lite="on"] .lw-dono__won { display: inline; color: var(--color-brand-primary); margin-left: 6px; }
+.lw[data-pref-lite="on"] .lw-dono__head { display: inline; }
+.lw[data-pref-lite="on"] .lw-msg__badge:not(.lw-msg__badge--creator),
+.lw[data-pref-lite="on"] .lw-rankbar,
+.lw[data-pref-lite="on"] .lw-pin--donate { display: none; }
+.lw-divider { display: flex; align-items: center; gap: 8px; margin: 8px 10px; font-size: 11px; color: var(--color-text-depth-400); }
+.lw-divider::before, .lw-divider::after { content: ""; flex: 1; height: 1px; background: var(--color-border-300); }
+
+/* 새 메시지 미리보기 */
+.lw-newmsg {
+  position: absolute; left: 8px; right: 8px; bottom: calc(var(--dock-h, 104px) + 8px); z-index: 4;
+  display: flex; align-items: center; gap: 8px;
+  min-height: 40px; padding: 8px 12px; border-radius: 10px;
+  background: var(--color-bg-400); border: 1px solid var(--color-border-400);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+  font-size: 14px; color: var(--color-text-normal); text-align: left;
+}
+.lw-newmsg[hidden] { display: none; }
+.lw-newmsg__text { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lw-newmsg__text b { margin-right: 6px; }
+.lw-newmsg .ic { color: var(--color-text-depth-300); }
+
+/* 입력 54 */
+.lw-input { flex: none; position: relative; padding: 9px 8px 9px; }
+.lw-input__box {
+  height: 36px; padding: 0 2px 0 12px; border-radius: 9999px;
+  display: flex; align-items: center; gap: 2px;
+  background: var(--color-bg-400); border: 1px solid transparent;
+}
+.lw-input__box:focus-within { border-color: var(--color-border-400); }
+.lw-input__field { flex: 1; min-width: 0; height: 100%; border: 0; background: none; outline: none; color: var(--color-text-strong); font-size: 14px; }
+.lw-input__field::placeholder { color: var(--color-text-depth-400); }
+.lw-input__btn, .lw-input__send { flex: none; width: 32px; height: 32px; border-radius: 9999px; display: grid; place-items: center; color: var(--color-text-depth-400); }
+.lw-input__btn:hover { color: var(--color-text-strong); }
+.lw-input__send { background: rgba(255, 255, 255, 0.12); color: var(--color-text-depth-300); }
+.lw-input[data-has] .lw-input__send { background: var(--color-brand-primary); color: #fff; }
+.lw[data-auth="out"] .lw-input__field { cursor: pointer; }
+.lw-emoji {
+  position: absolute; right: 8px; bottom: 52px; z-index: 12;
+  width: 232px; padding: 8px; border-radius: 12px;
+  display: grid; grid-template-columns: repeat(6, 1fr); gap: 2px;
+  background: var(--color-bg-300); border: 1px solid var(--color-border-300);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+.lw-emoji[hidden] { display: none; }
+.lw-emoji button { height: 34px; border-radius: 6px; font-size: 20px; }
+.lw-emoji button:hover { background: rgba(255, 255, 255, 0.08); }
+
+/* 아래 막대 50 */
+.lw-dock { flex: none; height: 50px; padding: 0 8px 8px; display: flex; align-items: center; gap: 6px; }
+.lw-dock__pill {
+  flex: 1; height: 42px; padding: 0 6px; border-radius: 9999px;
+  display: flex; align-items: center; gap: 4px;
+  background: var(--color-bg-400);
+}
+.lw-dock__btn {
+  height: 32px; padding: 0 12px; border-radius: 9999px;
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 13px; font-weight: 600; color: var(--color-text-normal);
+}
+.lw-dock__btn:hover { background: rgba(255, 255, 255, 0.06); }
+.lw-dock__btn[aria-pressed="true"] { color: var(--color-brand-primary); }
+.lw-dock__more { display: none; width: 42px; height: 42px; border-radius: 9999px; place-items: center; background: var(--color-bg-400); color: var(--color-text-normal); }
+.lw[data-chatview] .lw-dock__more { display: grid; }
+
+/* 후원 패널 — 메시지 목록과 막대 사이 */
+.lw-donate { flex: none; max-height: 62%; display: flex; flex-direction: column; border-top: 1px solid var(--color-border-100); }
+.lw-donate[hidden] { display: none; }
+.lw-donate__scroll { flex: 1; min-height: 0; overflow-y: auto; padding: 12px 12px 0; display: flex; flex-direction: column; gap: 12px; }
+.lw-card { padding: 16px; border-radius: 12px; background: var(--color-bg-300); display: flex; flex-direction: column; gap: 10px; }
+.lw-card__head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.lw-card__title { font-size: 14px; font-weight: 600; color: var(--color-text-strong); }
+.lw-card__label { font-size: 13px; color: var(--color-text-depth-300); }
+.lw-count { font-size: 12px; color: var(--color-text-depth-400); }
+.lw-cash { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; }
+.lw-cash__chip { height: 18px; padding: 0 6px; border-radius: 4px; background: var(--color-brand-primary); color: #fff; font-size: 11px; font-weight: 600; line-height: 18px; }
+.lw-cash b { color: var(--color-text-strong); }
+.lw-cash__buy { color: var(--color-brand-primary); }
+.lw-amount {
+  height: 56px; padding: 0 16px 0 12px; border-radius: 12px;
+  display: flex; align-items: center; gap: 10px;
+  background: var(--color-bg-100); border: 1px solid var(--color-border-300);
+  font-size: 13px; color: var(--color-text-depth-300);
+}
+.lw-amount:focus-within { border-color: var(--color-brand-primary); }
+.lw-amount[data-error] { border-color: var(--color-sys-error); }
+.lw-amount img { width: 24px; height: 24px; }
+.lw-amount__input { flex: 1; min-width: 0; border: 0; background: none; outline: none; color: var(--color-text-strong); font-size: 22px; font-weight: 500; }
+.lw-chips { display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; }
+.lw-chips button { height: 32px; border-radius: 8px; background: var(--color-bg-400); font-size: 12px; font-weight: 600; color: var(--color-text-normal); white-space: nowrap; }
+.lw-chips button:hover { background: var(--color-bg-cancel); }
+.lw-chips button[data-add="all"] { color: var(--color-text-depth-400); }
+.lw-warn { font-size: 12px; color: #ff6363; }
+.lw-warn[hidden] { display: none; }
+.lw-textarea {
+  min-height: 64px; padding: 10px 12px; border-radius: 10px; resize: none;
+  background: var(--color-bg-400); border: 1px solid transparent; outline: none;
+  color: var(--color-text-strong); font-size: 13px; line-height: 1.5;
+}
+.lw-textarea:focus { border-color: var(--color-border-400); }
+.lw-textarea::placeholder, .lw-field input::placeholder { color: var(--color-text-depth-400); }
+.lw-field {
+  height: 40px; padding: 0 6px 0 12px; border-radius: 10px;
+  display: flex; align-items: center; gap: 10px;
+  background: var(--color-bg-400); font-size: 13px; color: var(--color-text-depth-300);
+}
+.lw-field > span { flex: none; }
+.lw-field input[type="text"] {
+  flex: 1; min-width: 0; height: 30px; padding: 0 8px; border-radius: 6px;
+  background: var(--color-bg-300); border: 0; outline: none; color: var(--color-text-strong); font-size: 13px;
+}
+.lw-field--switch { justify-content: space-between; padding-right: 12px; }
+.lw-hint { margin-top: -4px; font-size: 11px; color: var(--color-text-depth-400); }
+.lw-switch {
+  appearance: none; -webkit-appearance: none; margin: 0;
+  width: 36px; height: 20px; border-radius: 9999px; position: relative; cursor: pointer;
+  background: var(--color-bg-cancel); transition: background .2s;
+}
+.lw-switch::after { content: ""; position: absolute; left: 2px; top: 2px; width: 16px; height: 16px; border-radius: 9999px; background: #fff; transition: transform .2s; }
+.lw-switch:checked { background: var(--color-brand-primary); }
+.lw-switch:checked::after { transform: translateX(16px); }
+.lw-card--voice { padding: 0; gap: 0; }
+.lw-voice__btn { height: 52px; padding: 0 16px; display: flex; align-items: center; justify-content: space-between; text-align: left; }
+.lw-voice__now { display: inline-flex; align-items: center; gap: 4px; font-size: 13px; color: var(--color-text-depth-300); }
+.lw-voice__btn[aria-expanded="true"] .ic--chev { transform: rotate(90deg); }
+.lw-voice__list { list-style: none; margin: 0; padding: 0 8px 8px; max-height: 220px; overflow-y: auto; }
+.lw-voice__list[hidden] { display: none; }
+.lw-voice__list button { width: 100%; height: 34px; padding: 0 10px; border-radius: 8px; display: flex; align-items: center; justify-content: space-between; font-size: 13px; color: var(--color-text-normal); text-align: left; }
+.lw-voice__list button:hover { background: rgba(255, 255, 255, 0.05); }
+.lw-voice__list button[aria-selected="true"] { color: var(--color-brand-primary); }
+.lw-donate__foot { flex: none; padding: 12px; }
+.lw-donate__go {
+  width: 100%; height: 48px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  background: var(--color-brand-primary); color: #fff; font-size: 15px; font-weight: 600;
+}
+.lw-donate__go:hover { background: var(--color-interaction-hovered); }
+.lw-donate__go:disabled { background: var(--color-bg-cancel); color: var(--color-text-depth-500); cursor: default; }
+
+/* 켬/끔 버튼 */
+.lw-onoff {
+  flex: none; min-width: 32px; height: 22px; padding: 0 8px; border-radius: 6px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--color-bg-cancel); color: var(--color-text-depth-300); font-size: 11px; font-weight: 600;
+}
+.lw-onoff::after { content: "끔"; }
+.lw-onoff[aria-checked="true"] { background: var(--color-brand-primary); color: #fff; }
+.lw-onoff[aria-checked="true"]::after { content: "켬"; }
+.lw-onoff--word::after { content: attr(data-off); }
+.lw-onoff--word[aria-checked="true"]::after { content: attr(data-on); }
+.lw-menu__switch .lw-onoff { pointer-events: none; }
+.lw-menu__switch[aria-checked="true"] .lw-onoff { background: var(--color-brand-primary); color: #fff; }
+.lw-menu__switch[aria-checked="true"] .lw-onoff::after { content: "켬"; }
+
+/* 채팅 설정 */
+.lw-settings {
+  position: absolute; right: 8px; top: 40px; z-index: 15;
+  width: min(320px, calc(100% - 16px)); max-height: calc(100% - 100px); overflow-y: auto;
+  padding: 12px 14px; border-radius: 12px;
+  background: var(--color-bg-300); border: 1px solid var(--color-border-300);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+  font-size: 13px; color: var(--color-text-normal);
+  display: flex; flex-direction: column; gap: 8px;
+}
+.lw-settings[hidden] { display: none; }
+.lw[data-chatview] .lw-settings { top: auto; bottom: 58px; }
+.lw-settings hr { width: 100%; margin: 4px 0; border: 0; border-top: 1px solid var(--color-border-300); }
+.lw-set__row { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 26px; }
+.lw-set__label { display: flex; align-items: center; gap: 6px; color: var(--color-text-normal); }
+.lw-set__label .ic { color: var(--color-text-depth-300); }
+.lw-set__note { margin-top: -2px; font-size: 11px; color: var(--color-text-depth-400); }
+.lw-set__name { display: flex; gap: 6px; }
+.lw-set__name input {
+  flex: 1; min-width: 0; height: 36px; padding: 0 12px; border-radius: 8px;
+  background: var(--color-bg-200); border: 1px solid var(--color-border-300); outline: none;
+  color: var(--color-text-strong); font-size: 14px;
+}
+.lw-set__name input:focus { border-color: var(--color-brand-primary); }
+.lw-set__name button { flex: none; height: 36px; padding: 0 14px; border-radius: 8px; background: var(--color-brand-primary); color: #fff; font-size: 13px; font-weight: 600; }
+.lw-set__name button:disabled { background: var(--color-bg-cancel); color: var(--color-text-depth-500); cursor: default; }
+.lw-set__sizes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
+.lw-set__sizes button { height: 34px; border-radius: 6px; background: var(--color-bg-400); font-size: 13px; color: var(--color-text-normal); }
+.lw-set__sizes button[aria-checked="true"] { background: var(--color-brand-primary); color: #fff; }
+.lw-set__pair { display: inline-flex; align-items: center; gap: 6px; }
+.lw-set__link { display: inline-flex; align-items: center; gap: 4px; height: 22px; padding: 0 8px; border-radius: 6px; background: var(--color-bg-cancel); font-size: 11px; color: var(--color-text-normal); }
+
+/* 유저 카드 */
+.lw-user {
+  position: absolute; left: 8px; right: 8px; z-index: 16;
+  padding: 16px; border-radius: 12px;
+  background: var(--color-bg-300); border: 1px solid var(--color-border-300);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+}
+.lw-user[hidden] { display: none; }
+.lw-user__x { position: absolute; right: 8px; top: 8px; }
+.lw-user__head { display: flex; align-items: center; gap: 12px; }
+.lw-user__av { width: 48px; height: 48px; border-radius: 9999px; object-fit: cover; background: var(--color-bg-400); }
+.lw-user__name { font-size: 15px; font-weight: 600; color: var(--color-text-strong); }
+.lw-user__btns { margin-top: 6px; display: flex; gap: 6px; }
+.lw-user__talk { height: 24px; padding: 0 10px; border-radius: 6px; display: inline-flex; align-items: center; background: #ffd336; color: #12131a; font-size: 12px; font-weight: 700; }
+.lw-user__hide { height: 24px; padding: 0 10px; border-radius: 6px; background: var(--color-bg-cancel); color: var(--color-text-normal); font-size: 12px; }
+.lw-user__hide[aria-pressed="true"] { background: var(--color-brand-primary); color: #fff; }
+.lw-user__report { margin-top: 12px; padding-top: 12px; width: 100%; border-top: 1px solid var(--color-border-300); display: flex; align-items: center; gap: 6px; font-size: 13px; color: #ff6363; }
+
+/* 토스트 */
+.lw-toast {
+  position: fixed; left: 50%; bottom: 32px; z-index: 50; transform: translateX(-50%);
+  width: 344px; max-width: calc(100% - 32px); padding: 12px 16px; border-radius: 4px;
+  background: var(--color-bg-400); border: 1px solid var(--color-border-400);
+  font-size: 14px; color: var(--color-text-strong); text-align: center;
+}
+.lw-toast[hidden] { display: none; }
+
+/* ---------- 채팅뷰 — 상단 바 · 채팅 머리 · 고정 영역 · 입력칸을 빼고 채팅만 ---------- */
+.lw[data-chatview] .lw-top,
+.lw[data-chatview] .lw-chat__head,
+.lw[data-chatview] .lw-rankbar,
+.lw[data-chatview] .lw-pin,
+.lw[data-chatview] .lw-input { display: none; }
+
+/* ---------- 넓은 화면 — 영상이 위 전체 폭, 아래 왼쪽 정보 · 오른쪽 채팅 ---------- */
+.lw[data-layout="side"][data-wide] .lw-body-row { display: grid; grid-template-columns: 1fr auto; grid-template-rows: auto minmax(0, 1fr); overflow-y: auto; }
+.lw[data-layout="side"][data-wide] .lw-main { display: contents; }
+.lw[data-layout="side"][data-wide] .lw-player { grid-column: 1 / -1; margin: 0; border-radius: 0; max-height: calc(100dvh - 40px - 220px); width: 100%; }
+.lw[data-layout="side"][data-wide] .lw-info { grid-column: 1; grid-row: 2; align-self: start; }
+.lw[data-layout="side"][data-wide] .lw-resize { display: none; }
+.lw[data-layout="side"][data-wide] .lw-chat { grid-column: 2; grid-row: 2; min-height: 360px; }
+.lw[data-layout="side"][data-wide][data-folded] .lw-info { grid-column: 1 / -1; }
+
+/* ---------- 세로 배치 — 영상 → 채팅(또는 방송 정보), 아래 막대 채팅 · 후원 · 채팅뷰 ---------- */
+.lw-only-stack { display: none; }
+.lw[data-layout="stack"] .lw-only-side { display: none; }
+.lw[data-layout="stack"] .lw-only-stack { display: inline-flex; }
+.lw[data-layout="stack"] .lw-body-row { flex-direction: column; }
+.lw[data-layout="stack"] .lw-main { flex: none; overflow: visible; }
+.lw[data-layout="stack"] .lw-player { flex: none; width: 100%; margin: 0; border-radius: 0; }
+.lw[data-layout="stack"] .lw-info { display: none; }
+.lw[data-layout="stack"] .lw-info__title { font-size: 17px; }
+.lw[data-layout="stack"] .lw-info { padding: 12px 16px 16px; }
+.lw[data-layout="stack"] .lw-resize { display: none; }
+.lw[data-layout="stack"] .lw-chat { flex: 1; width: auto; border-left: 0; border-top: 1px solid var(--color-border-100); }
+.lw[data-layout="stack"] .lw-chat__head { padding: 0 8px 0 10px; }
+.lw[data-layout="stack"] .lw-chat__viewers { margin-left: 4px; margin-right: auto; }
+.lw[data-layout="stack"] .lw-chat__gear { display: grid; }
+.lw[data-layout="stack"] .lw-float { display: none; }
+/* 세로 배치에서 채팅을 닫으면(아래 "채팅") 방송 정보를 보여주고 채팅 내용은 숨김 */
+.lw[data-layout="stack"][data-chat-closed] .lw-main { flex: 1; overflow-y: auto; }
+.lw[data-layout="stack"][data-chat-closed] .lw-info { display: block; }
+.lw[data-layout="stack"][data-chat-closed] .lw-chat { flex: none; border-top: 0; background: var(--color-bg-100); }
+.lw[data-layout="stack"][data-chat-closed] .lw-chat > :not(.lw-dock):not(.lw-settings):not(.lw-donate) { display: none; }
+.lw[data-layout="stack"] .lw-settings { top: auto; bottom: 58px; }
+.lw[data-layout="stack"] .lw-rankpop { width: auto; left: 8px; right: 8px; top: 8px; }
+.lw[data-layout="stack"] .lw-user { bottom: 110px; }
+.lw-dock { padding-bottom: max(8px, env(safe-area-inset-bottom)); height: auto; min-height: 50px; }
+
+/* ---------- 스크롤바 — 6px 둥근 막대 · 바탕 투명, 막대 Border 400 · 마우스 올리면 Depth 500 ----------
+   Chrome · Safari 는 ::-webkit-scrollbar, Firefox 는 표준 속성 (styles.css 후원 패널 스크롤바와 같은 방식) */
+.lw {
+  --lw-scroll-thumb: var(--color-border-400);
+  --lw-scroll-thumb-hover: var(--color-text-depth-500);
+}
+.lw ::-webkit-scrollbar { width: 10px; height: 10px; }
+.lw ::-webkit-scrollbar-track,
+.lw ::-webkit-scrollbar-corner { background: transparent; }
+.lw ::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  border-radius: 9999px;
+  background: var(--lw-scroll-thumb) padding-box;
+}
+.lw ::-webkit-scrollbar-thumb:hover { background-color: var(--lw-scroll-thumb-hover); }
+.lw ::-webkit-scrollbar-button { display: none; }
+@supports (-moz-appearance: none) {
+  .lw-chat__scroll, .lw-donate__scroll, .lw-settings, .lw-people__list,
+  .lw-voice__list, .lw-rankpop__list, .lw-body-row {
+    scrollbar-width: thin;
+    scrollbar-color: var(--lw-scroll-thumb) transparent;
+  }
+}
+
+@media (max-width: 767px) {
+  /* 좁은 화면 — 컨트롤 32, 음량 막대 · 소리만 듣기 · 작은 창은 뺌 */
+  .lw-ctl { height: 64px; padding: 0 10px 10px; }
+  .lw-ctl__group { gap: 6px; }
+  .lw-ctl__btn { height: 32px; min-width: 32px; font-size: 12px; }
+  .lw-ctl__btn--pill { padding: 0 10px; }
+  .lw-vol__range, [data-audio-only], [data-pip] { display: none; }
+  .lw-unmute { left: 10px; top: 10px; height: 32px; padding: 0 12px; font-size: 12px; }
+  .lw-player__live { right: 10px; top: 10px; height: 24px; font-size: 12px; }
+  .lw-top { padding: 0 12px; }
+  .lw-top__logo.logo { width: 128px; height: 20px; }
+  .lw-info__actions { width: 100%; }
+  .lw-info__actions .lw-btn--follow,
+  .lw-info__actions .lw-btn--donate { flex: 1; justify-content: center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lw *, .lw *::after { transition: none !important; }
+}

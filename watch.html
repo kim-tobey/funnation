@@ -7,8 +7,10 @@
 <title>FUNNATION — 영상 상세</title>
 <link rel="icon" href="assets/favicon.ico" sizes="any">
 <link rel="icon" href="assets/favicon/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="icon" href="assets/favicon/favicon-16.png" type="image/png" sizes="16x16">
 <link rel="icon" href="assets/favicon/favicon-192.png" type="image/png" sizes="192x192">
 <link rel="apple-touch-icon" href="assets/favicon/apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
 <!-- 산돌구름 웹폰트 (Sandoll Mapssi · Sandoll Gyeokdonggulim, 둘 다 400) — 등록 도메인(funnation.co.kr · kim-tobey.github.io)에서만 로드, 로컬은 설치 폰트로 표시 -->
 <link rel="preconnect" href="https://o6cdhdutve.execute-api.ap-northeast-2.amazonaws.com">
 <link rel="stylesheet" href="https://o6cdhdutve.execute-api.ap-northeast-2.amazonaws.com/v1/api/css/drop_fontstream_css/?sid=gAAAAABq4sdeUvN_k3MsbvmMbZ_hBQFXfvEFSB2urLi1zybsfs0w_bksF-xrdzoNI69oxk_6Hv077SoP0M2EzWJCT3KGRbt5qdq9vhMcW010SeUDh5R02FT8iGpCI5xOjMvgScgXjRxcMcwj8Jo8ZvH4AE903t3kwE6qp7f6jM47d9dtp77LGtu6LAOFROE9J4kMMclS5je4qcppj1EPJJmQq0oUEN6FFF_ggb35Gkx0vhXI1AbrJ0xF6e_eenerTiwRE-Nlu49u" charset="utf-8" referrerpolicy="origin">
@@ -373,13 +375,13 @@
              세로 영상(66098:113753 · 114862)은 플레이어가 정보줄 위를 꽉 채우고 좌우 레터박스(YouTube 가 그림).
              data-orient 는 app.js 가 주소의 ?orient=vertical 로 정함. 세로 데모 영상 ID 는 data-yt-id-vertical (비어 있으면 data-yt-id) -->
         <section class="watch" data-yt-id="0sfDth4lMLc" data-yt-id-vertical="gILTsAlFWMI" data-orient="landscape" data-node-id="66098:110446">
-          <!-- 모바일 앱바 (66098:116109) — 767px 이하에서 기본 앱바 대신. 뒤로 · 채널(아바타 · 이름 · 팔로우) · 더보기 -->
+          <!-- 모바일 앱바 (66098:116109) — 767px 이하에서 기본 앱바 대신. 뒤로 · 채널(아바타 · 이름 · 즐겨찾기) · 더보기 -->
           <div class="wbar" data-node-id="66098:116109">
             <a class="wbar__btn" href="index.html" aria-label="뒤로 가기" data-watch-back><img src="assets/mo/appbar-back.svg" width="24" height="24" alt=""></a>
             <div class="wbar__channel">
               <img class="wbar__pic" src="assets/watch/v4/avatar-ymss-sm.jpg" width="24" height="24" alt="">
               <strong class="wbar__name">YM상사</strong>
-              <button class="wbar__follow" type="button" aria-pressed="false" data-watch-follow>팔로우</button>
+              <button class="wbar__follow" type="button" aria-pressed="false" data-watch-follow>즐겨찾기</button>
             </div>
             <button class="wbar__btn" type="button" aria-label="더보기" aria-haspopup="menu" aria-expanded="false" aria-controls="wmenu-mo" data-wmenu-btn><img src="assets/watch/v4/mo-more.svg" width="24" height="24" alt=""></button>
             <!-- 더보기 메뉴 · 모바일 (66146:13940 M1) — 화면에서 빠진 기능 + 계정 · 설정. 연결 화면이 없는 항목은 "준비 중" -->
@@ -408,7 +410,7 @@
               <p class="yt__off" data-yt-player-off hidden>YouTube 영상은 파일로 직접 열면 재생되지 않아요(오류 153).<br>로컬 서버(http://localhost)나 실제 도메인에서 열어 주세요.</p>
             </div>
 
-            <!-- 방송 정보 (66098:111836) — 채널 · 제목 · 태그 | 팔로우 · 후원하기 · 더보기, 시청자 · 공유. 아래 설명(더보기/간략히) -->
+            <!-- 방송 정보 (66098:111836) — 채널 · 제목 · 태그 | 즐겨찾기 · 후원하기 · 더보기, 시청자 · 공유. 아래 설명(더보기/간략히) -->
             <div class="winfo" data-node-id="66098:111836">
               <div class="winfo__head">
                 <div class="winfo__channel">
@@ -424,7 +426,7 @@
                 </div>
                 <div class="winfo__side">
                   <div class="winfo__actions">
-                    <button class="fstreamer__follow" type="button" aria-pressed="false" data-watch-follow><img src="assets/fun-watch/heart.svg" width="16" height="16" alt=""><span>팔로우</span></button>
+                    <button class="fstreamer__follow" type="button" aria-pressed="false" data-watch-follow><img src="assets/fun-watch/heart.svg" width="16" height="16" alt=""><span>즐겨찾기</span></button>
                     <button class="fstreamer__donate" type="button" data-watch-donate>후원하기</button>
                     <button class="fstreamer__icon fstreamer__icon--more" type="button" aria-label="더보기" aria-haspopup="menu" aria-expanded="false" aria-controls="wmenu-pc" data-wmenu-btn><img src="assets/fun-watch/more.svg" width="23" height="23" alt=""></button>
                     <!-- 더보기 메뉴 · PC (66098:153613 P1) — 화면에 버튼이 없는 기능만. ⋮ 위로 열림 -->

@@ -25,7 +25,14 @@
     "crew-card": "크루원 카드", "crew-card__av": "사진", "crew-card__name": "이름", "crew-card__sns": "SNS 아이콘",
     "crew-card__bar": "아래 버튼 줄", "crew-card__live": "LIVE 라벨", "creator-grid": "카드 목록",
     "crew-grid": "카드 목록", modal: "팝업", popover: "팝오버", toast: "토스트", banner: "배너",
-    pfring: "프로필 테두리", avring: "프로필 테두리", av: "사진", tabs: "탭"
+    pfring: "프로필 테두리", avring: "프로필 테두리", av: "사진", tabs: "탭",
+    /* 펀네이션 영상 상세 (fun-watch, 2026-11-23) */
+    "lw-top": "상단 바", "lw-player": "플레이어", "lw-ctl": "플레이어 컨트롤", "lw-info": "방송 정보",
+    "lw-info__title": "방송 제목", "lw-streamer": "방송인", "lw-info__actions": "즐겨찾기 · 후원 버튼 줄",
+    "lw-chat": "채팅", "lw-chat__head": "채팅 머리", "lw-rankbar": "후원 순위 줄", "lw-rankpop": "후원 랭킹 팝업",
+    "lw-pin": "고정 영역", "lw-chat__list": "채팅 목록", "lw-msg": "채팅 메시지", "lw-dono": "후원 카드",
+    "lw-input": "채팅 입력칸", "lw-dock": "아래 막대", "lw-donate": "후원 패널", "lw-settings": "채팅 설정",
+    "lw-user": "유저 카드", "lw-people__pop": "참여자 목록", "lw-newmsg": "새 메시지 미리보기"
   };
 
   var css = document.createElement("style");

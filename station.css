@@ -2096,10 +2096,10 @@ body.wire .stn .banner.def,body.wire .stn .rbi.def,body.wire .stn .mban.def .mb-
 .stn .lt-pf .lbl b{flex:0 1 auto;min-width:0}
 .stn .lt-pf .lbl .lv,.stn .lt-pf .lbl .ofb{flex:none;margin-top:0}
 
-/* 모바일 방송국 머리 버튼 — 쪽지 · 후원하기 · 즐겨찾기 · 알림을 아이콘만 남겨 한 줄 4칸 (2026-11-19 사용자 요청)
+/* 모바일 방송국 머리 버튼 — 후원하기 · 라이브 · TALK · 즐겨찾기 · 알림을 아이콘만 남겨 한 줄 5칸 (2026-11-19 사용자 요청, 11-23 5칸)
    글자는 화면에서만 숨기고 읽기 프로그램용 이름으로 남김 */
 @media (max-width:767px){
-  .stn .top .btns{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .stn .top .btns{grid-template-columns:repeat(5,minmax(0,1fr))}
   .stn .top .btns .btn:not(.circ){gap:0;padding:0}
   .stn .top .btns .bl{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 }
@@ -2142,7 +2142,7 @@ body.wire .stn .banner.def,body.wire .stn .rbi.def,body.wire .stn .mban.def .mb-
 .stn .crew-card .crew-card__av{margin:0 0 16px;padding:0;border:0;background:none;border-radius:0;cursor:pointer}
 .stn .crew-card.is-live .crew-card__av{margin-bottom:0}
 .stn .crew-card .crew-card__live{padding:2px 4px;font-size:12px;line-height:16px}
-.stn .crew-card .crew-card__name{margin:8px 0 0;padding:0;border:0;background:none;font-family:var(--font-score);font-size:16px;font-weight:700;line-height:1;letter-spacing:-.01em;color:#fff;cursor:pointer}
+.stn .crew-card .crew-card__name{margin:6px 0 -2px;padding:0;border:0;background:none;font-family:var(--font-score);font-size:16px;font-weight:700;line-height:20px;letter-spacing:-.01em;color:#fff;cursor:pointer}
 .stn .crew-card .crew-card__sns{gap:6px}
 .stn .crew-card .crew-card__sns button{padding:0;border:0;background:none;cursor:pointer}
 .stn .crew-card .crew-card__bar{padding:0 8px}
@@ -2170,10 +2170,53 @@ body.wire .stn .banner.def,body.wire .stn .rbi.def,body.wire .stn .mban.def .mb-
    [구현 제안] Figma 모바일 시안은 343×88. 스트리머가 올린 배너는 그대로 88 */
 @media (max-width:767px){.stn .banner.def{height:auto;aspect-ratio:343/120;--defbn-size:150% auto;--defbn-pos:50% 40%}} /* 2026-11-20 전체 장면이 너무 작아 PC 처럼 가운데(울타리 ~ 울타리)를 1.5배로, 양옆 풀밭은 자름. 375 화면 328×115 */
 
-/* 2026-11-20 PC 상단 배너 모서리 — Figma 컴포넌트 66866:13305 대로 위 24 · 아래 0 (사용자 확인). 모바일은 네 모서리 10 그대로 */
+/* 2026-11-20 PC 상단 배너 모서리 — Figma 컴포넌트 66866:13305 대로 위 24 · 아래 0 (사용자 확인).
+   2026-11-23 모바일도 PC 처럼 아래 0 (사용자 요청), 위는 10 그대로 */
 @media (min-width:768px){.stn .banner{border-radius:24px 24px 0 0}}
+@media (max-width:767px){.stn .banner{border-radius:10px 10px 0 0}}
 
 /* 2026-11-20 LNB "< 홈으로 | 방송국 꾸미기" — 메인 LNB 버튼(.btn-outline)과 같은 테두리 반짝이(도는 그라데이션, styles.css btn-border-spin) */
 .stn .gside .lbtn,body.fnshell .stn .gside .lbtn{--btn-angle:0deg;--btn-face:var(--btn-outline-bg);border:1px solid transparent;background:linear-gradient(var(--btn-face),var(--btn-face)) padding-box,conic-gradient(from var(--btn-angle),var(--btn-spin)) border-box;animation:btn-border-spin 4s linear infinite;color:var(--text-secondary)}
 .stn .gside .lbtn:hover{--btn-face:var(--surface)}
 @media (prefers-reduced-motion:reduce){.stn .gside .lbtn{animation:none}}
+
+/* 머리 라이브 버튼 (2026-11-23) — 방송 중이면 LIVE 빨강(BG Label Live) 글자 · 테두리 + 빨간 점, 아니면 다른 테두리 버튼과 같음 */
+.stn .btn.livego{position:relative}
+.stn .btn.livego.on{color:#ff4242;border-color:#ff4242}
+.stn .btn.livego .ldot{width:6px;height:6px;border-radius:50%;background:#ff4242;flex:none}
+@media (max-width:767px){.stn .top .btns .btn.livego .ldot{position:absolute;top:8px;right:calc(50% - 16px)}}
+
+/* 방송국 머리 버튼 통일 (2026-11-23 사용자 결정) — 후원하기만 Primary, 나머지 5개(라이브 · TALK · 즐겨찾기 · 알림 · 더보기)는
+   같은 회색 면: BG 400 · 테두리 없음 · hover BG Cancel. 높이 40 · 모서리 8 은 DS 버튼 그대로, 더보기만 동그라미(11-23 2차 사용자 결정).
+   상태는 버튼 모양이 아니라 아이콘 색 · 점으로만 — 방송 중 = 안테나 빨강(#FF4242) + 점, 즐겨찾기 중 = 노란 별, 알림 켜짐 = 종 Primary */
+.stn .top .btns .btn.out,.stn .top .btns .btn.circ{background:var(--surface);border-color:transparent;color:var(--text)}
+.stn .top .btns .btn.out:hover,.stn .top .btns .btn.circ:hover{background:var(--surface-2)}
+.stn .top .btns .btn.circ{width:40px;border-radius:50%}
+.stn .top .btns .btn.out.on{color:var(--text);border-color:transparent}
+.stn .top .btns .btn.out.on .ic{color:var(--accent)}
+.stn .top .btns .btn.livego.on{color:var(--text);border-color:transparent}
+.stn .top .btns .btn.livego.on .ic{color:#ff4242}
+@media (max-width:767px){.stn .top .btns .btn.circ{width:44px;height:44px;border-radius:50%}}
+
+/* 방송국 즐겨찾기 수 (2026-11-23) — 이름 바로 아래 · 소개 위 한 줄. 13 Medium Depth 300, 숫자만 흰색 SemiBold.
+   누르면 즐겨찾기 목록(LNB 즐겨찾기와 같은 화면) */
+.stn .top .favn{display:flex;align-items:center;gap:4px;margin-top:8px;padding:0;font-size:13px;font-weight:500;line-height:18px;color:var(--color-text-depth-300);background:none;border:0;cursor:pointer;text-align:left}
+.stn .top .favn b{font-weight:600;color:var(--color-text-strong)}
+/* 앞 아이콘 16 — 영상 상세 시청자 수(.winfo__stat)와 같은 사람 아이콘 assets/watch/v4/viewers.svg (2026-11-23 사용자 요청) */
+.stn .top .favn img{flex:none;width:16px;height:16px}
+.stn .top .favn:hover{color:var(--color-text-normal)}
+@media (max-width:767px){.stn .top .favn{margin-top:6px}}
+/* 모바일 이름 옆 SNS (2026-11-23 사용자 요청) — PC 처럼 동그란 바탕(BG 400) 안에 로고: 원 28 · 로고 18 · 사이 4.
+   이름 → 6 (4 는 너무 붙어 보여 4~8 중 6, 사용자 위임). 즐겨찾기 줄(.favn)이 이름보다 길어도 아이콘이 밀리지 않게 .pi 를 풀어서
+   이름(nm) · SNS 한 줄, 즐겨찾기 줄(fav)은 그 아래 따로 */
+@media (max-width:767px){
+  .stn .top{grid-template-rows:1fr auto auto auto 1fr auto;grid-template-areas:"av . ." "av nm sns" "av fav fav" "av intro intro" "av . ." "btns btns btns"}
+  .stn .top .avw{grid-row:1 / span 5}
+  .stn .top .btns{grid-row:6}
+  .stn .top .pi{display:contents}
+  .stn .top .pi h1{grid-area:nm;align-self:center}
+  .stn .top .favn{grid-area:fav;justify-self:start}
+  .stn .top .s-sns{align-self:center;margin:0 0 0 -8px;gap:4px}
+  .stn .top .s-sns .snsb{width:28px;height:28px;border-radius:50%;background:var(--surface)}
+  .stn .top .s-sns .snsb img,.stn .top .s-sns .snsb svg{width:18px;height:18px}
+}
