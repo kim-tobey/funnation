@@ -4,43 +4,7 @@
    서버 연동 전이라 채팅 · 랭킹 · 펀캐시는 샘플 데이터로 동작하고,
    이 기기 설정(채팅 폭 · 글자 크기 · 고정 영역 등)은 브라우저에 저장.
    ============================================================ */
-/* 고르기 모드(작업용) — app.js 맨 위와 같은 코드. 이 페이지는 app.js 를 안 불러서 따로 둠.
-   Shift 두 번(입력칸 밖) 또는 Option(Alt) + Shift + P 로 켜기 / 끄기, ?pick=1 · ?pick=0 */
-(function () {
-  var KEY = "funnation-pick", q = location.search + location.hash, on = false;
-  function load() {
-    if (document.querySelector('script[src^="pick.js"]')) return;
-    var s = document.createElement("script"); s.src = "pick.js?v=20261123b"; document.head.appendChild(s);
-  }
-  try {
-    if (/[?&#]pick=0\b/.test(q)) sessionStorage.removeItem(KEY);
-    else on = /[?&#]pick(=1)?\b/.test(q) || sessionStorage.getItem(KEY) === "1";
-  } catch (e) { on = /[?&#]pick(=1)?\b/.test(q); }
-  if (on) load();
-  function toggle() {
-    if (document.getElementById("pk-bar")) {
-      try { sessionStorage.removeItem(KEY); } catch (er) {}
-      var u = location.href.replace(/([?&])pick(=1)?(&|$)/, "$1").replace(/[?&](#|$)/, "$1").replace(/#pick(=1)?$/, "");
-      if (u === location.href) location.reload(); else location.href = u;
-    } else {
-      try { sessionStorage.setItem(KEY, "1"); } catch (er) {}
-      load();
-    }
-  }
-  function typing(t) { return t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)); }
-  var lastShift = 0, clean = false;
-  document.addEventListener("keydown", function (e) {
-    if (e.altKey && e.shiftKey && e.code === "KeyP") { e.preventDefault(); toggle(); return; }
-    if (e.key === "Shift") { if (!e.repeat) clean = true; return; }
-    clean = false; lastShift = 0;
-  }, true);
-  document.addEventListener("keyup", function (e) {
-    if (e.key !== "Shift" || !clean || typing(e.target)) return;
-    var now = Date.now();
-    if (now - lastShift < 400) { lastShift = 0; toggle(); } else lastShift = now;
-  }, true);
-})();
-
+/* 고르기 모드(Shift 두 번)는 app.js 가 처리 — 2026-11-23 GNB · LNB 를 유튜브 라이브 상세와 같게 바꾸며 app.js 를 불러옴 */
 (function () {
   "use strict";
 
@@ -62,9 +26,14 @@
   var forced = new URLSearchParams(location.search).get("auth");
   if (forced === "in" || forced === "out") auth = forced;
   lw.setAttribute("data-auth", auth);
+  /* GNB · 플로팅 버튼(app.js)으로 로그인 상태가 바뀌면 화면을 새로 그림 */
+  new MutationObserver(function () {
+    var now = document.documentElement.getAttribute("data-auth");
+    if (now && now !== auth && !forced) location.reload();
+  }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-auth"] });
   function needLogin() {
     if (auth !== "out") return false;
-    location.href = "index.html#login";
+    location.hash = "login"; /* app.js 로그인 화면 (이 페이지에 있음) */
     return true;
   }
 
@@ -99,7 +68,7 @@
   /* 채팅 팝업 창 — 채팅만 화면 가득 */
   if (POPOUT) {
     document.title = "채팅 — YM상사";
-    $(".lw-top").remove();
+    document.documentElement.setAttribute("data-lw-popout", "");
     $(".lw-main").remove();
     $(".lw-resize").remove();
     lw.classList.add("lw--popout");
@@ -302,18 +271,21 @@
     return l.filter(function (x) { return x && typeof x.n === "string"; });
   }
   function favSave(l) { try { localStorage.setItem(FAV_KEY, JSON.stringify(l)); } catch (e) {} }
-  var follow = $("[data-follow]");
+  var follows = $$("[data-follow]"), follow = follows[0]; /* 방송 정보 팔로우 + 모바일 앱바 팔로우 */
   if (follow) {
     var favName = follow.getAttribute("data-fav-name"), favPic = follow.getAttribute("data-fav-pic");
     var fc = $("[data-followers]"), baseCount = fc ? +fc.textContent.replace(/,/g, "") : 0; /* 2026-11-23 방송 정보를 유튜브 라이브 모양으로 바꾸며 팔로워 수 줄은 없앰 */
     var favHas = function () { return favList().some(function (x) { return x.n === favName; }); };
     var favSync = function () {
       var on = favHas();
-      follow.setAttribute("aria-pressed", on ? "true" : "false");
-      $("span", follow).textContent = on ? "팔로잉" : "팔로우";
+      follows.forEach(function (b) {
+        b.setAttribute("aria-pressed", on ? "true" : "false");
+        ($("span", b) || b).textContent = on ? "팔로잉" : "팔로우";
+      });
       if (fc) fc.textContent = won(baseCount + (on ? 1 : 0));
     };
-    follow.addEventListener("click", function () {
+    follows.forEach(function (b) { b.addEventListener("click", onFollow); });
+    function onFollow() {
       if (needLogin()) return;
       var l = favList(), on = !favHas();
       if (on) { var item = { n: favName }; if (favPic) item.p = favPic; l.push(item); }
@@ -321,12 +293,11 @@
       favSave(l);
       favSync();
       toast(on ? "팔로우했어요" : "팔로우를 취소했어요");
-    });
+    }
     window.addEventListener("storage", function (e) { if (e.key === FAV_KEY || e.key === null) favSync(); });
     favSync();
   }
-  var share = $("[data-share]");
-  if (share) share.addEventListener("click", function () {
+  $$("[data-share]").forEach(function (share) { share.addEventListener("click", function () {
     var url = location.href.split("#")[0];
     if (navigator.share && matchMedia("(pointer: coarse)").matches) {
       navigator.share({ title: document.title, url: url }).catch(function () {});
@@ -336,7 +307,8 @@
       function () { toast("방송 링크를 복사했어요"); },
       function () { toast("링크를 복사하지 못했어요"); }
     );
-  });
+    var mm = $("#wmenu-mo"); if (mm) mm.hidden = true;
+  }); });
   function bindMenu(btn, menu) {
     if (!btn) return;
     btn.addEventListener("click", function (e) {
@@ -350,6 +322,7 @@
     });
   }
   bindMenu($("[data-more-btn]"), $("#lw-more-menu"));
+  bindMenu($("[data-wbar-more]"), $("#wmenu-mo"));
   /* 설명 더보기 · 다시보기 정렬 칩 — 유튜브 라이브 영상 상세(app.js)와 같은 동작. 정렬은 선택 표시만(서버 연동 전) */
   var wdescBtn = $("[data-wdesc-toggle]");
   if (wdescBtn) wdescBtn.addEventListener("click", function () {
@@ -367,6 +340,7 @@
     b.addEventListener("click", function () {
       if (needLogin()) return;
       $("#lw-more-menu").hidden = true;
+      if ($("#wmenu-mo")) $("#wmenu-mo").hidden = true;
       toast(b.getAttribute("data-report") + " 신고를 접수했어요");
     });
   });

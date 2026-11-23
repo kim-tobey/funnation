@@ -2985,6 +2985,32 @@ ul {
   padding: 12px;
   background: #4782ff;
 }
+/* 펀네이션 라이브 상세(fun-watch.html, data-sub="fun-watch") — 영상 상세 중 이 페이지만 PC 에서 접힌 LNB 70 이 늘 보이고,
+   햄버거를 누르면 펼친 LNB 260 이 본문 위로 겹쳐 열림 (2026-11-23 사용자 요청). 유튜브 라이브(watch.html)는 그대로 숨김 */
+@media (min-width: 768px) {
+  [data-page="watch"][data-sub="fun-watch"] .lnb {
+    width: 70px;
+    box-shadow: none;
+    transform: none;
+    visibility: visible;
+    transition: width 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease, visibility 0.25s;
+  }
+  [data-page="watch"][data-sub="fun-watch"][data-drawer="open"] .lnb {
+    width: 260px;
+    box-shadow: 8px 0 24px rgba(0, 0, 0, 0.35);
+  }
+  [data-page="watch"][data-sub="fun-watch"] .main {
+    margin-left: 70px;
+  }
+  /* 넓은 화면(플레이어 컨트롤 "넓은 화면", .lw[data-wide])이면 접힌 LNB 도 숨김 — 유튜브 라이브처럼 햄버거로만 겹쳐 엶 (2026-11-23 사용자 요청) */
+  [data-page="watch"][data-sub="fun-watch"]:has(.lw[data-wide]) .main {
+    margin-left: 0;
+  }
+  [data-page="watch"][data-sub="fun-watch"]:has(.lw[data-wide]):not([data-drawer="open"]) .lnb {
+    transform: translateX(-100%);
+    visibility: hidden;
+  }
+}
 /* 메뉴 버튼 — 접히면 화살표가 오른쪽으로 빠지며 사라지고 막대 셋이 같은 길이(4~20)로 늘어남 */
 [data-lnb="mini"] .menu-toggle-icon__bar {
   transform: none;
@@ -2992,6 +3018,17 @@ ul {
 [data-lnb="mini"] .menu-toggle-icon__arrow {
   opacity: 0;
   transform: translateX(4px);
+}
+/* 영상 상세(유튜브 · 펀네이션 라이브) · PC 정책안내 · 서비스 소개 — LNB 가 겹쳐 열리는 페이지는 닫혀 있을 때 "메뉴 열기" 모양(막대 셋)이 기본,
+   열었을 때만 화살표(닫기). 전엔 닫혀 있어도 화살표가 보여 "닫기" 버튼처럼 보였음 (2026-11-23) */
+@media (min-width: 768px) {
+  :is([data-page="watch"], [data-page="terms"], [data-page="about"]):not([data-drawer="open"]) #lnb-toggle .menu-toggle-icon__bar {
+    transform: none;
+  }
+  :is([data-page="watch"], [data-page="terms"], [data-page="about"]):not([data-drawer="open"]) #lnb-toggle .menu-toggle-icon__arrow {
+    opacity: 0;
+    transform: translateX(4px);
+  }
 }
 
 /* 추천 크리에이터 — 아바타 5명 + 나머지 묶음 */

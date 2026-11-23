@@ -786,7 +786,37 @@
 .lw[data-layout="stack"] .wmore { display: none; }
 .lw[data-layout="stack"][data-chat-closed] .wmore { display: flex; padding: 4px 16px 32px; }
 /* 넓은 화면 — 영상(위 전체) / 왼쪽 정보 · 다시보기, 오른쪽 채팅 */
-.lw[data-layout="side"][data-wide] .lw-body-row { grid-template-rows: auto auto minmax(0, 1fr); }
+/* 행 높이를 내용 그대로(max-content) — auto 면 아래 정보 · 다시보기가 생겨 넘칠 때 첫 행(영상)이 줄어들어
+   영상이 방송 정보 · 채팅 위로 33px 겹쳤음(2026-11-23 수정). 넘치는 만큼은 본문이 세로 스크롤 */
+.lw[data-layout="side"][data-wide] .lw-body-row { grid-template-rows: max-content max-content max-content; }
+/* 채팅은 행 높이 계산에서 빠지고(contain: size — 메시지가 많아도 행이 늘지 않음) 정보 · 다시보기 높이만큼 채움, 최소 480 */
+.lw[data-layout="side"][data-wide] .lw-chat { contain: size; min-height: 480px; }
+.lw[data-layout="side"][data-wide] .lw-player { max-height: calc(100dvh - 65px - 220px); }
 .lw[data-layout="side"][data-wide] .wmore { grid-column: 1; grid-row: 3; min-width: 0; }
 .lw[data-layout="side"][data-wide] .lw-chat { grid-row: 2 / 4; }
 .lw[data-layout="side"][data-wide][data-folded] .wmore { grid-column: 1 / -1; }
+
+/* ============================================================
+   사이트 틀 — GNB · LNB(햄버거로 영상 위에 겹쳐 엶) · 모바일 앱바(.wbar)를 유튜브 라이브 영상 상세와 같게 (2026-11-23 사용자 요청).
+   html data-page="watch" 로 영상 상세 규칙(LNB 겹침 · 모바일 앱바 · 하단 내비 숨김)을 그대로 씀. 예전 상단 바(.lw-top)는 없앰
+   ============================================================ */
+html:not([data-view]) .lw-body { overflow: hidden; }
+html[data-view] .lw-body { overflow: auto; }
+.page--lw .main__inner { max-width: none; padding: 0; }
+.page--lw .lw { height: calc(100vh - 65px); height: calc(100dvh - 65px); min-height: 560px; }
+html[data-view] .page--lw .lw { display: none; }
+@media (max-width: 767px) {
+  .page--lw .lw { height: calc(100dvh - var(--mo-statusbar-h, 0px) - 20px); min-height: 0; }
+  .page--lw .wbar { z-index: 6; }
+}
+/* 채팅 팝업 창(?chat=popout) — 사이트 틀 없이 채팅만 */
+html[data-lw-popout] .top-nav,
+html[data-lw-popout] .mo-appbar,
+html[data-lw-popout] .lnb,
+html[data-lw-popout] .lnb-backdrop,
+html[data-lw-popout] .bottom-nav,
+html[data-lw-popout] .fab-auth,
+html[data-lw-popout] .fab-chrome,
+html[data-lw-popout] .wbar { display: none !important; }
+html[data-lw-popout] .page--lw .lw { height: 100dvh; min-height: 0; }
+html[data-lw-popout] .page { min-width: 0; min-height: 0; }
