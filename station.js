@@ -58,7 +58,7 @@ cafe:'<path d="M5 8h11v6a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4zM16 9h2a2 2 0 0 1 0 5h-2M
 calendar:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
 share:'<circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.2 11l7.6-4M8.2 13l7.6 4"/>',
 flag:'<path d="M5 21V4h12l-2 4 2 4H5"/>',
-talk:'<path d="M4 5h16v11H9l-5 4z"/><path d="M8 10h8M8 13h5"/>',
+talk:'<path d="M4 5h16v11H9l-5 4z"/><circle cx="8.5" cy="10.5" r="1" fill="currentColor" stroke="none"/><circle cx="12" cy="10.5" r="1" fill="currentColor" stroke="none"/><circle cx="15.5" cy="10.5" r="1" fill="currentColor" stroke="none"/>',
 mail:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>',
 copy:'<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/>',
 plus:'<path d="M12 5v14M5 12h14"/>',
@@ -963,7 +963,7 @@ function renderTop(){
    <div class="btns">
      <button class="btn pri" id="donBtn" data-act="donate" data-qa="B-05">${ic('heart',18)}<span class="bl">후원하기</span>${donDotHTML()}</button>
      <button class="btn out livego${S.live?' on':''}" data-act="liveGo" data-qa="B-07" aria-label="${S.live?'라이브, 지금 방송 중':'라이브, 방송 중 아님'}">${ic('antenna',18)}<span class="bl">라이브</span>${S.live?'<span class="ldot" aria-hidden="true"></span>':''}</button>
-     <button class="btn out" data-act="talk" data-qa="B-08">${ic('talk',18)}<span class="bl">TALK</span></button>
+     <button class="btn out" data-act="talk" data-qa="B-08">${ic('talk',18)}<span class="bl">채팅톡</span></button>
      <button class="btn out fav${S.favorite?' on':''}" data-act="fav" data-qa="B-04" aria-pressed="${S.favorite}">${S.favorite?`<svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="#f7df4e" stroke="#f7df4e" stroke-width="1.8" stroke-linejoin="round">${P.star}</svg><span class="bl">팔로잉</span>`:ic('star',18)+'<span class="bl">팔로우</span>'}</button>
      <button class="btn out${al[2]?' on':''}" data-act="alarm" data-qa="B-03">${ic(al[0],18)}<span class="bl">${al[1]}</span></button>
      <button class="btn circ" data-act="more" aria-label="더보기">${ic('more',20)}</button>
@@ -2455,7 +2455,7 @@ Object.assign(A,{
     confirmM('수신거부할까요?',esc(ns.join(', '))+'님이 보내는 쪽지는 앞으로 수신거부함에만 쌓이고 알림이 가지 않아요','수신거부',()=>msgRun('block',ids),null,false)}
   else msgRun(op,ids);
  },
- /* 머리 버튼 라이브 · TALK (2026-11-23) — 라이브는 방송 화면으로, 방송 중이 아니면 안내만. TALK 은 채팅톡(talk.html)에서 이 방송국 대화방을 엶 */
+ /* 머리 버튼 라이브 · 채팅톡(옛 TALK) (2026-11-23) — 라이브는 방송 화면으로, 방송 중이 아니면 안내만. TALK 은 채팅톡(talk.html)에서 이 방송국 대화방을 엶 */
  liveGo(){if(!S.live){toast('지금은 방송 중이 아니에요');return}location.href='fun-watch.html'},
  talk(){location.href='talk.html?to=funsangsa'},
  msgTo(){closePop();openMsg('in',actorId()==='funsangsa'?'':'funsangsa')},
