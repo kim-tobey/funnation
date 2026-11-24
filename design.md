@@ -363,6 +363,8 @@ Expanded: 260px
 Collapsed: 70px
 ```
 
+오른쪽 테두리: 1px · GNB 아래 선과 같은 색(--border-nav, Border100), 오른쪽만 (2026-11-24 사용자 요청).
+
 자동 collapse가 시작되는 breakpoint는 현재 확정되지 않았다.
 
 임의로 확정하지 않는다.

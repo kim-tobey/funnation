@@ -854,6 +854,7 @@ ul {
 .lnb {
   flex: none;
   width: 260px;
+  border-right: 1px solid var(--border-nav); /* GNB 아래 선과 같은 색, 오른쪽만 (2026-11-24 사용자 요청) */
   background: var(--bg-lnb);
 }
 
