@@ -566,6 +566,8 @@ Pretendard SemiBold 14 · line-height 160% · -0.01em · Text Normal
 홈 · 라이브 목록 · 펀네이션 라이브 · 팔로우 카드 공통 (영상 상세 아래 다시보기 카드는 화면 override 유지)
 ```
 
+제목 → 닉네임(2026-11-24, Content Card / Live Size=Large): **4** (닉네임 묶음 → 태그 8 그대로)
+
 Body internal gap:
 
 ```text
