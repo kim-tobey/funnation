@@ -1257,6 +1257,21 @@ window.FunFav = (function () {
   return { list: list, has: has, add: add, remove: remove, onChange: onChange };
 })();
 
+/* 차단 목록 — 방송인 팝오버 차단 버튼 · 채팅톡(대화방 ⋮ 차단하기)이 함께 쓰는 브라우저 저장 (서버 연동 전, 2026-11-24). 이름 배열 */
+window.FunBlock = (function () {
+  var KEY = "funnation-blocked";
+  function list() {
+    var l = null;
+    try { l = JSON.parse(localStorage.getItem(KEY)); } catch (e) {}
+    return Array.isArray(l) ? l.filter(function (x) { return typeof x === "string"; }) : [];
+  }
+  function save(l) { try { localStorage.setItem(KEY, JSON.stringify(l)); } catch (e) {} }
+  function has(name) { return list().indexOf(name) >= 0; }
+  function add(name) { var l = list(); if (l.indexOf(name) < 0) { l.push(name); save(l); } }
+  function remove(name) { save(list().filter(function (x) { return x !== name; })); }
+  return { list: list, has: has, add: add, remove: remove };
+})();
+
 /* 즐겨찾기 페이지 — 크리에이터 줄 · 숫자 · 관리 목록(PC 팝업 · 모바일)을 저장된 목록으로 그림.
    시안 10명은 HTML 의 원래 줄(방송 중 테두리 · LIVE 포함)을 그대로 쓰고, 팝오버로 새로 추가한 사람은 누른 카드의 사진으로 · 방송 중 아님 */
 (function () {
@@ -1772,6 +1787,28 @@ window.FunFav = (function () {
     thumbs[i].addEventListener("keydown", function (e) {
       if (e.key === "Enter") go.call(this);
     });
+    // 제목도 썸네일과 같은 곳으로 (2026-11-24 사용자 요청)
+    if (title) {
+      title.setAttribute("role", "link");
+      title.setAttribute("tabindex", "0");
+      title.classList.add("is-link");
+      title._thumb = thumbs[i];
+      title.addEventListener("click", function () { go.call(this._thumb); });
+      title.addEventListener("keydown", function (e) { if (e.key === "Enter") go.call(this._thumb); });
+    }
+  }
+  // 팔로우 카드 — 제목도 썸네일 링크로
+  var favTitles = document.querySelectorAll(".fav-card__title");
+  for (var f = 0; f < favTitles.length; f++) {
+    var fc = favTitles[f].closest(".fav-card");
+    var link = fc && fc.querySelector("a.fav-card__thumb");
+    if (!link) continue;
+    favTitles[f].setAttribute("role", "link");
+    favTitles[f].setAttribute("tabindex", "0");
+    favTitles[f].classList.add("is-link");
+    favTitles[f]._href = link.getAttribute("href");
+    favTitles[f].addEventListener("click", function () { location.href = this._href; });
+    favTitles[f].addEventListener("keydown", function (e) { if (e.key === "Enter") location.href = this._href; });
   }
   var target = /fun-live\.html$/.test(location.pathname) ? "fun-watch.html" : "watch.html";
   function go() {
@@ -3470,7 +3507,7 @@ document.addEventListener("click", function (e) {
 /* 개인 방송국 진입 — 크리에이터 찾기 카드, 영상 목록 · 영상 상세의 방송인 사진 · 이름을 누르면 방송국(station.html)으로.
    카드 전체 링크(영상 재생)보다 먼저 받아서 영상으로 넘어가지 않게 캡처 단계에서 처리 */
 (function () {
-  /* 사진 → 바로 방송국. 이름 → 방송인 팝오버(Figma 67446:87950): 방송국 홈 · 쪽지 · 즐겨찾기(해제) · 공지.
+  /* 사진 → 바로 방송국. 이름 → 방송인 팝오버(Figma 67446:87950, 2026-11-24 변경): 방송국 홈 · 채팅톡하기 · 팔로우(취소) · 차단(풀기).
      광고 카드(.card--ad)의 이름은 방송인이 아니라 팝오버 없이 예전처럼 방송국으로 */
   var PIC = ".creator-card__thumb, .creator-grid .crew-card__av, .winfo__pic, .wbar__pic, .fbar__channel img, .card__avatar, .fav-card__avatar";
   var NAME = ".creator-card__name, .creator-grid .crew-card__name, .winfo__name, .card__channel, .fav-card__channel";
@@ -3514,9 +3551,9 @@ document.addEventListener("click", function (e) {
     pop.hidden = true;
     pop.innerHTML =
       '<button type="button" class="ch-pop__btn ch-pop__btn--home" role="menuitem" data-ch="home" aria-label="방송국 홈"><img src="assets/v2/popover/home.svg" width="24" height="24" alt=""></button>' +
-      '<button type="button" class="ch-pop__btn ch-pop__btn--msg" role="menuitem" data-ch="msg" aria-label="쪽지 보내기"><img src="assets/v2/popover/chat.svg" width="24" height="24" alt=""></button>' +
+      '<button type="button" class="ch-pop__btn ch-pop__btn--msg" role="menuitem" data-ch="talk" aria-label="채팅톡하기"><img src="assets/v2/popover/chat.svg" width="24" height="24" alt=""></button>' +
       '<button type="button" class="ch-pop__btn ch-pop__btn--fav" role="menuitem" data-ch="fav" aria-pressed="false" aria-label="팔로우"><img class="ch-pop__on" src="assets/v2/popover/heart.svg" width="24" height="24" alt=""><img class="ch-pop__off" src="assets/v2/popover/heart-off.svg" width="24" height="24" alt=""></button>' +
-      '<button type="button" class="ch-pop__btn ch-pop__btn--notice" role="menuitem" data-ch="notice" aria-label="방송국 공지사항"><img src="assets/v2/popover/notice.svg" width="24" height="24" alt=""></button>';
+      '<button type="button" class="ch-pop__btn ch-pop__btn--block" role="menuitem" data-ch="block" aria-pressed="false" aria-label="차단하기"><img class="ch-pop__on" src="assets/v2/popover/block.svg" width="24" height="24" alt=""><img class="ch-pop__off" src="assets/v2/popover/block-on.svg" width="24" height="24" alt=""></button>';
     document.body.appendChild(pop);
     pop.addEventListener("click", onAction);
   }
@@ -3531,6 +3568,10 @@ document.addEventListener("click", function (e) {
     var b = pop.querySelector("[data-ch=fav]");
     b.setAttribute("aria-pressed", on ? "true" : "false");
     b.setAttribute("aria-label", on ? "팔로우 취소" : "팔로우");
+    var blocked = FunBlock.has(name);
+    var k = pop.querySelector("[data-ch=block]");
+    k.setAttribute("aria-pressed", blocked ? "true" : "false");
+    k.setAttribute("aria-label", blocked ? "차단 풀기" : "차단하기");
   }
 
   /* 이름 아래 8px, 왼쪽은 이름 왼쪽에 맞춤 — 화면 밖으로 나가면 안쪽 16 으로 밀고, 아래가 모자라면 위로 (2026-11-19 확정) */
@@ -3570,9 +3611,18 @@ document.addEventListener("click", function (e) {
     if (!b) return;
     var act = b.getAttribute("data-ch");
     if (act === "home") { location.href = STATION; return; }
-    if (act === "notice") { location.href = STATION + "#go=notice"; return; }
     if (!loggedIn()) { close(); location.hash = "login"; return; }
-    if (act === "msg") { location.href = STATION + "#modal=msg-write"; return; }
+    if (act === "talk") {
+      var pic = picOf(anchor);
+      location.href = "talk.html?to=" + encodeURIComponent(name) + "&n=" + encodeURIComponent(name) + (pic ? "&av=" + encodeURIComponent(pic) : "");
+      return;
+    }
+    if (act === "block") {
+      if (FunBlock.has(name)) { FunBlock.remove(name); toast("차단을 풀었어요"); }
+      else { FunBlock.add(name); toast("차단했어요"); }
+      syncFav();
+      return;
+    }
     if (act === "fav") {
       if (FunFav.has(name)) { FunFav.remove(name); toast("팔로우를 취소했어요"); }
       else { FunFav.add(name, picOf(anchor)); toast("팔로우했어요"); }

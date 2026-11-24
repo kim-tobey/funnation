@@ -99,6 +99,8 @@
   var S;
   try { S = JSON.parse(localStorage.getItem(KEY)); } catch (e) { S = null; }
   if (!S || S.v !== 1 || !S.convs) S = seed();
+  /* 차단은 방송인 팝오버와 같은 목록(app.js FunBlock)을 따름 */
+  if (window.FunBlock) S.convs.forEach(function (c) { c.blocked = FunBlock.has(c.n); });
   function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} document.dispatchEvent(new Event("talk:change")); }
 
   var ui = { tab: "msg", q: "", open: null, menu: false, typing: {} };
@@ -359,9 +361,9 @@
     if (e.target.closest("[data-mute]")) { c.mute = !c.mute; ui.menu = false; save(); renderList(); renderRoom(true); toast(c.mute ? "이 대화방 알림을 껐어요" : "이 대화방 알림을 켰어요"); return; }
     if (e.target.closest("[data-block]")) {
       ui.menu = false;
-      if (c.blocked) { c.blocked = false; save(); renderList(); renderRoom(true); toast("차단을 풀었어요"); return; }
+      if (c.blocked) { c.blocked = false; if (window.FunBlock) FunBlock.remove(c.n); save(); renderList(); renderRoom(true); toast("차단을 풀었어요"); return; }
       renderRoom(true);
-      confirmBox(c.n + "님을 차단할까요?", "차단하면 서로 메시지를 보낼 수 없어요. 차단은 언제든 풀 수 있어요.", "차단하기", true, function () { c.blocked = true; save(); renderList(); renderRoom(); toast("차단했어요"); });
+      confirmBox(c.n + "님을 차단할까요?", "차단하면 서로 메시지를 보낼 수 없어요. 차단은 언제든 풀 수 있어요.", "차단하기", true, function () { c.blocked = true; if (window.FunBlock) FunBlock.add(c.n); save(); renderList(); renderRoom(); toast("차단했어요"); });
       return;
     }
     if (e.target.closest("[data-report]")) { ui.menu = false; renderRoom(true); toast("신고는 준비 중이에요"); return; }
@@ -428,10 +430,15 @@
   setInterval(function () { if (ui.tab === "msg") renderList(); }, MIN);
 
   /* ---------- 시작 ---------- */
-  var to = new URLSearchParams(location.search).get("to");
+  var qs = new URLSearchParams(location.search);
+  var to = qs.get("to");
   if (to && !conv(to)) {
+    /* 방송인 팝오버 "채팅톡하기" — 이름(n) · 사진(av)으로 옴. 같은 이름 대화가 있으면 그 방, 없으면 새 방 */
+    var byName = S.convs.filter(function (c) { return c.n === (qs.get("n") || to); })[0];
     var known = { funsangsa: ["펀상사", "assets/v2/station/profile.jpg", "creator", true] }[to];
-    if (known) { S.convs.push({ id: to, n: known[0], av: known[1], role: known[2], live: known[3], mute: false, blocked: false, unread: 0, msgs: [] }); save(); }
+    if (byName) to = byName.id;
+    else if (known) { S.convs.push({ id: to, n: known[0], av: known[1], role: known[2], live: known[3], mute: false, blocked: false, unread: 0, msgs: [] }); save(); }
+    else if (qs.get("n")) { S.convs.push({ id: to, n: qs.get("n"), av: qs.get("av") || "assets/imgAccountCircle.svg", role: "creator", live: false, mute: false, blocked: window.FunBlock ? FunBlock.has(qs.get("n")) : false, unread: 0, msgs: [] }); save(); }
   }
   renderList();
   var startId = to && conv(to) ? to : (location.hash.match(/^#c=(.+)$/) || [])[1];

@@ -2497,14 +2497,36 @@ ul {
   color: var(--rich-meta);
   white-space: nowrap;
 }
+/* 크리에이터명 — Content Card 컴포넌트(66178:80035, 2026-11-24 변경): Pretendard SemiBold 14 / 160% · −1% · Text Normal, 인증 배지 16 · 사이 4 */
 .card__channel {
   gap: 4px;
-  font-weight: 700;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.6;
+  letter-spacing: -0.01em;
+  color: var(--color-text-normal);
 }
 .card__sub {
   gap: 5px;
   font-weight: 500;
   color: var(--rich-sub);
+}
+/* 닉네임 hover — 이름 + 인증 배지를 한 덩어리 라벨처럼 바탕색 (2026-11-24 사용자 요청 [구현 제안 · 시안 없음]).
+   좌우 안쪽 6 은 바깥 -6 으로 상쇄해 글자 위치는 그대로. 팝오버가 열린 동안도 유지 */
+.card__channel {
+  width: fit-content;
+  max-width: calc(100% + 12px);
+  margin-left: -6px;
+  margin-right: -6px;
+  padding: 0 6px;
+  border-radius: 4px;
+  transition: background-color 0.15s;
+}
+.card:not(.card--ad) .card__channel:hover,
+.card__channel[aria-expanded="true"],
+.fav-card__channel:hover,
+.fav-card__channel[aria-expanded="true"] {
+  background: var(--color-bg-cancel);
 }
 .card__channel span,
 .card__sub span:first-child {
@@ -2514,10 +2536,6 @@ ul {
 }
 .card__channel img {
   flex: none;
-}
-/* 인증 체크(assets/home/check.svg)는 14 칸 안에서 원이 왼쪽 위(가운데 6,6)로 그려져 있어 글자보다 1px 떠 보임 — 아래로 1px 내려 글자 줄 가운데에 맞춤 */
-.card__channel img[src$="check.svg"] {
-  transform: translateY(1px);
 }
 .card__dot {
   flex: none;
@@ -13191,7 +13209,8 @@ button.subnav__tab {
   line-height: 1.5;
   color: var(--color-text-normal);
 }
-.fav-card__channel { gap: 6px; font-weight: 700; }
+.fav-card__channel { gap: 4px; font-size: 14px; font-weight: 600; line-height: 1.6; letter-spacing: -0.01em; } /* 홈 카드 크리에이터명과 같게 (Content Card 66178:80035) */
+.fav-card__channel { width: fit-content; max-width: calc(100% + 12px); margin: 0 -6px; padding: 0 6px; border-radius: 4px; } /* hover 라벨 — 위 .card__channel 과 같음 */
 .fav-card__meta { gap: 5px; }
 .fav-card__tags {
   display: flex;
@@ -14473,8 +14492,16 @@ button.subnav__tab {
 .ch-pop__btn:hover img { filter: brightness(1.15); }
 .ch-pop__btn:focus-visible { outline: 2px solid #81b3ff; outline-offset: 4px; border-radius: 4px; }
 .ch-pop__btn--fav .ch-pop__off,
-.ch-pop__btn--fav[aria-pressed="true"] .ch-pop__on { display: none; }
-.ch-pop__btn--fav[aria-pressed="true"] .ch-pop__off { display: block; }
+.ch-pop__btn--fav[aria-pressed="true"] .ch-pop__on,
+.ch-pop__btn--block .ch-pop__off,
+.ch-pop__btn--block[aria-pressed="true"] .ch-pop__on { display: none; }
+.ch-pop__btn--fav[aria-pressed="true"] .ch-pop__off,
+.ch-pop__btn--block[aria-pressed="true"] .ch-pop__off { display: block; }
+/* 영상 카드 제목 — 누르면 영상 상세 (2026-11-24) */
+.card__title.is-link,
+.fav-card__title.is-link { cursor: pointer; }
+.card__title.is-link:focus-visible,
+.fav-card__title.is-link:focus-visible { outline: 2px solid var(--color-interaction-focus, #81b3ff); outline-offset: 2px; border-radius: 4px; }
 /* 라이트 테마 [구현 제안] — 시안 아이콘은 #DFE5ED 고정이라 어둡게 뒤집는다 */
 [data-theme="light"] .ch-pop__btn img { filter: invert(1) brightness(0.35); }
 /* 이름은 누를 수 있는 곳 */
