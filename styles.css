@@ -1469,16 +1469,16 @@ ul {
   position: relative;
   flex: 1 1 0;
   min-width: 0;
-  height: 350px; /* 2026-11-24 사용자 결정 (시안 665). 채팅은 삭제해 콘텐츠 폭 전체 */
+  height: 300px; /* 2026-11-24 사용자 결정 (시안 665 → 350 → 300). 채팅은 삭제해 콘텐츠 폭 전체 */
   border-radius: 8px;
   background: #000;
   overflow: hidden;
 }
 /* 영상은 가운데, 좌우는 바탕색 + 영상 가장자리로 그라데이션 (SOOP 메인 참고, 2026-11-24 사용자 요청).
-   SOOP 처럼 위아래를 잘라 더 넓게: 폭 960 → 16:9 높이 540 을 350 칸에 세로 가운데 (위아래 95 씩 잘림, YouTube 제목 줄도 가려짐).
+   SOOP 처럼 위아래를 잘라 더 넓게: 폭 840 → 16:9 높이 472.5 를 300 칸에 세로 가운데 (위아래 약 86 씩 잘림 — 350 일 때 960 과 같은 비율, YouTube 제목 줄도 가려짐).
    영상은 누르거나 올려도 YouTube 컨트롤 · 제목이 안 뜨게 pointer-events 없음 (재생바는 embed 의 controls=0) */
 /* 좌우 바탕은 완전 검정 대신 LNB 배경색 BG200 #12131A (2026-11-24 사용자 요청 — SOOP 다크처럼, 칩 색 #2A3340 은 너무 밝아 바꿈). 영상 위 글자가 흰색이라 라이트 테마에서도 다크 값 고정 */
-.hero-live__player { cursor: pointer; --hl-video-w: 960px; --hl-bg: #12131a; background: var(--hl-bg); }
+.hero-live__player { cursor: pointer; --hl-video-w: 840px; --hl-bg: #12131a; background: var(--hl-bg); }
 .hero-live__frame {
   position: absolute;
   top: 50%;
@@ -1565,11 +1565,11 @@ ul {
   outline: 2px solid #81b3ff;
   outline-offset: 2px;
 }
-/* 방송인 정보 — SOOP 메인 실측(히어로 높이 350 같음): 위 56 · 왼쪽 60, 사진 64 → 16 → 이름 14 → 5 → 제목 → 8 → 태그, 아래 버튼.
+/* 방송인 정보 — SOOP 메인 실측(히어로 350) 기준, 높이 300 에 맞춰 위 48 · 왼쪽 60, 사진 64 → 16 → 이름 14 → 5 → 제목 → 8 → 태그, 아래 버튼.
    사진은 글자 묶음(이름 · 제목 · 태그)의 세로 가운데 (2026-11-24 사용자 요청), 버튼은 글자 왼쪽 줄에 맞춰 아래 줄 */
 .hero-live__info {
   position: absolute;
-  top: 56px;
+  top: 48px;
   left: 60px;
   display: grid;
   grid-template-columns: 64px minmax(0, 1fr);
