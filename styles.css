@@ -15487,20 +15487,21 @@ button.subnav__tab {
       linear-gradient(90deg, rgba(18, 19, 26, 0.85) 0, rgba(18, 19, 26, 0.35) 55%, transparent 80%),
       linear-gradient(0deg, rgba(18, 19, 26, 0.7) 0, transparent 45%);
   }
+  /* 글자 묶음(사진 포함)은 영상 폭의 50% 까지 — 넘치면 이름 · 제목을 한 줄 "…" (2026-11-24 사용자 요청) */
   .hero-live__info {
     top: 16px;
     left: 16px;
     grid-template-columns: 40px minmax(0, 1fr);
     column-gap: 10px;
     width: auto;
-    max-width: calc(100% - 32px);
-    padding-right: 40px;
+    max-width: 50%;
+    padding-right: 0;
   }
   .hero-live__avatar { width: 40px; height: 44px; }
   .hero-live__avatar img { width: 40px; height: 40px; border-width: 3px; }
   .hero-live__badge { padding: 2px 4px; font-size: 9px; line-height: 10px; }
   .hero-live__name { font-size: 12px; line-height: 15px; }
-  .hero-live__title { margin-top: 4px; font-size: 20px; line-height: 1.2; }
+  .hero-live__title { display: block; margin-top: 4px; overflow: hidden; font-size: 20px; line-height: 1.2; white-space: nowrap; text-overflow: ellipsis; -webkit-line-clamp: unset; }
   .hero-live__tags { display: none; }
   .hero-live__cta-wrap { display: none; } /* 모바일은 "지금 시청하기" 없음 — 영상을 누르면 방송 보기 (2026-11-24 사용자 요청) */
   .hero-live__bar { left: 16px; right: 16px; bottom: 12px; }
