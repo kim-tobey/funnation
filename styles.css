@@ -15449,3 +15449,48 @@ button.subnav__tab {
   font-weight: 700;
   line-height: 18px;
 }
+
+/* ============================================================
+   홈 추천 라이브 — 모바일 (2026-11-24 사용자 요청, 모바일 시안 없음 [구현 제안])
+   로그인 상태 모바일도 히어로 슬라이더 자리(좌우 꽉 참 · 높이 220 · 모서리 없음)에 영상 스트리밍.
+   영상은 칸을 꽉 채우게(높이 220 → 16:9 폭 392 이상, 위아래 · 좌우 잘림), PC 와 같은 배치를 줄인 크기로:
+   좌상단 사진 40 · 이름 12 · 제목 D1 20(두 줄) · 지금 시청하기 36, 아래 줄 시청자 수 · 음소거. 태그는 숨김.
+   좌우 그라데이션 대신 왼쪽 · 아래를 어둡게 해 글자를 읽기 쉽게
+   ============================================================ */
+@media (max-width: 767px) {
+  [data-auth="in"] .hero-live { display: flex; margin: -16px -16px 0; }
+  [data-auth="in"] .hero { display: none; }
+  .hero-live__player {
+    --hl-video-w: max(100cqw, calc(220px * 16 / 9));
+    height: 220px;
+    border: 0;
+    border-radius: 0;
+  }
+  .hero-live__frame { height: calc(var(--hl-video-w) * 9 / 16); }
+  .hero-live__player::after {
+    background:
+      linear-gradient(90deg, rgba(18, 19, 26, 0.85) 0, rgba(18, 19, 26, 0.35) 55%, transparent 80%),
+      linear-gradient(0deg, rgba(18, 19, 26, 0.7) 0, transparent 45%);
+  }
+  .hero-live__info {
+    top: 16px;
+    left: 16px;
+    grid-template-columns: 40px minmax(0, 1fr);
+    column-gap: 10px;
+    width: auto;
+    max-width: calc(100% - 32px);
+    padding-right: 40px;
+  }
+  .hero-live__avatar { width: 40px; height: 44px; }
+  .hero-live__avatar img { width: 40px; height: 40px; border-width: 3px; }
+  .hero-live__badge { padding: 2px 4px; font-size: 9px; line-height: 10px; }
+  .hero-live__name { font-size: 12px; line-height: 15px; }
+  .hero-live__title { margin-top: 4px; font-size: 20px; line-height: 1.2; }
+  .hero-live__tags { display: none; }
+  .hero-live__cta-wrap { margin-top: 12px; }
+  .hero-live__cta-wrap .btn-primary { height: 36px; padding: 0 16px; font-size: 13px; }
+  .hero-live__bar { left: 16px; right: 16px; bottom: 12px; }
+  .hero-live__viewers { height: 24px; font-size: 13px; line-height: 24px; }
+  .hero-live__viewers img { width: 14px; height: 14px; }
+  .hero-live__mute { width: 32px; height: 32px; }
+}
