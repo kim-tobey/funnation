@@ -245,6 +245,8 @@
 [data-theme="light"] img[src$="imgComponent1.svg"] { content: url("assets/light/imgComponent1.svg"); }
 [data-theme="light"] img[src$="imgComponent2.svg"] { content: url("assets/light/imgComponent2.svg"); }
 [data-theme="light"] img[src$="imgComponent3.svg"] { content: url("assets/light/imgComponent3.svg"); }
+/* 팔로우 하트 (2026-11-24, 별 → 하트 · 캐시 때문에 새 파일 이름) */
+[data-theme="light"] img[src$="lnb-follow.svg"] { content: url("assets/light/v2/lnb-follow.svg"); }
 [data-theme="light"] img[src$="imgComponent4.svg"] { content: url("assets/light/imgComponent4.svg"); }
 [data-theme="light"] img[src$="imgComponent5.svg"] { content: url("assets/light/imgComponent5.svg"); }
 [data-theme="light"] img[src$="imgComponent6.svg"] { content: url("assets/light/imgComponent6.svg"); }
@@ -1240,7 +1242,7 @@ ul {
   content: url("assets/light/v2/lnb-fun-live-active.svg");
 }
 /* 선택 아이콘 (LNB - M 65183:61956) — 해당 페이지가 생기면 lnb__item--active 와 함께 사용 */
-[data-theme="light"] .lnb__item--active .lnb__item-icon img[src$="lnb-fav-active.svg"] { content: url("assets/light/v2/lnb-fav-active.svg"); }
+[data-theme="light"] .lnb__item--active .lnb__item-icon img[src$="lnb-follow-active.svg"] { content: url("assets/light/v2/lnb-follow-active.svg"); }
 [data-theme="light"] .lnb__item--active .lnb__item-icon img[src$="lnb-community-active.svg"] { content: url("assets/light/v2/lnb-community-active.svg"); }
 [data-theme="light"] .lnb__item--active .lnb__item-icon img[src$="lnb-event-active.svg"] { content: url("assets/light/v2/lnb-event-active.svg"); }
 [data-theme="light"] .lnb__item--active .lnb__item-icon img[src$="lnb-fame-active.svg"] { content: url("assets/light/v2/lnb-fame-active.svg"); }
@@ -4387,7 +4389,7 @@ ul {
   /* 아이콘은 LNB 와 같은 파일 — 라이트 교체도 공통 규칙을 따르고, 카메라만 추가 */
   [data-theme="light"] .bottom-nav__item img[src$="nav-creator.svg"] { content: url("assets/light/mo/nav-creator.svg"); }
   [data-theme="light"] .bottom-nav__item img[src$="nav-live.svg"] { content: url("assets/light/mo/nav-live.svg"); }
-  [data-theme="light"] .bottom-nav__item img[src$="nav-fav.svg"] { content: url("assets/light/mo/nav-fav.svg"); }
+  [data-theme="light"] .bottom-nav__item img[src$="nav-follow.svg"] { content: url("assets/light/mo/nav-follow.svg"); }
   [data-theme="light"] .bottom-nav__item img[src$="nav-user.svg"] { content: url("assets/light/mo/nav-user.svg"); }
   /* 내 정보 (65183:65641) — 라벨만 SemiBold. 로그인 프로필 사진은 24 칸 안에 21.12 (흰 테두리·그림자 포함 이미지) */
   #bn-account {
@@ -4535,8 +4537,8 @@ ul {
   [data-theme="light"] .bottom-nav__item.is-active img[src$="icHome.svg"] { content: url("assets/light/mo/nav-home-active.svg"); }
   .bottom-nav__item.is-active img[src$="nav-creator.svg"] { content: url("assets/mo/nav-creator-active.svg"); }
   [data-theme="light"] .bottom-nav__item.is-active img[src$="nav-creator.svg"] { content: url("assets/light/mo/nav-creator-active.svg"); }
-  .bottom-nav__item.is-active img[src$="nav-fav.svg"] { content: url("assets/mo/nav-fav-active.svg"); }
-  [data-theme="light"] .bottom-nav__item.is-active img[src$="nav-fav.svg"] { content: url("assets/light/mo/nav-fav-active.svg"); }
+  .bottom-nav__item.is-active img[src$="nav-follow.svg"] { content: url("assets/mo/nav-follow-active.svg"); }
+  [data-theme="light"] .bottom-nav__item.is-active img[src$="nav-follow.svg"] { content: url("assets/light/mo/nav-follow-active.svg"); }
   /* 채팅톡 (2026-11-23, 시안 67727:84583 — 랭킹 자리) — 선택은 속이 찬 Primary 말풍선 */
   .bottom-nav__item.is-active img[src$="nav-talk.svg"] { content: url("assets/mo/nav-talk-active.svg"); }
   [data-theme="light"] .bottom-nav__item img[src$="nav-talk.svg"] { content: url("assets/light/mo/nav-talk.svg"); }
@@ -13875,29 +13877,29 @@ button.subnav__tab {
   padding-bottom: 64px;
 }
 
-/* 추천 이벤트 (66606:180188) — 그림은 오른쪽 기준, 왼쪽 · 오른쪽 끝을 BG100 그라데이션으로 덮음.
+/* 추천 이벤트 (66606:180188 → 2026-11-24 수정 67859:93588) — 높이 350, 그림은 오른쪽 32 띄움, 왼쪽 · 오른쪽 끝 BG100 그라데이션.
    배너 그림이라 테마와 무관하게 어두운 색 고정 */
 .event-hero {
   position: relative;
   display: flex;
   align-items: center;
-  height: 452px;
+  height: 350px;
   overflow: hidden;
   border: 1px solid #262838;              /* Border 200 */
   border-radius: 20px;
   background: #0e0e14;                    /* BG 100 */
   isolation: isolate;
 }
-/* 시안: 1734×1002 그림을 왼쪽 -131 · 위 -218 에 둠(1604 폭 기준) → 오른쪽 끝 맞춤 */
+/* 시안(2026-11-24): 1498×866 그림을 왼쪽 74 · 위 -209 에 둠(1604 폭 기준) → 오른쪽 32 띄움 */
 .event-hero[hidden] { display: none; }
 .event-hero__img {
   position: absolute;
-  top: -218px;
-  right: 0;
+  top: -209px;
+  right: 32px;
   z-index: -2;
-  width: 1734px;
+  width: 1498px;
   max-width: none;
-  height: 1002px;
+  height: 866px;
   object-fit: cover;
 }
 .event-hero::before {
@@ -13907,16 +13909,20 @@ button.subnav__tab {
   z-index: -1;
   background:
     linear-gradient(90deg, #0e0e14 42.2%, rgba(14, 14, 20, 0.916) 46.4%, rgba(14, 14, 20, 0.847) 48.6%, rgba(14, 14, 20, 0.548) 52.3%, rgba(14, 14, 20, 0) 60%),
+    /* 오른쪽 끝 어둡게 — 새 시안은 오른쪽 그라데이션이 배너 밖에 놓여 빠졌지만 그림 끝이 그대로 보여 다시 넣음 (2026-11-24 사용자 요청) */
     linear-gradient(270deg, #0e0e14 83px, rgba(14, 14, 20, 0.916) 157px, rgba(14, 14, 20, 0.847) 194px, rgba(14, 14, 20, 0.548) 260px, rgba(14, 14, 20, 0) 394px);
 }
+/* 라벨 → 20 → 제목 → 24 → 설명 → 6 → 기간 → 24 → 버튼 */
 .event-hero__body {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 16px;
+  gap: 24px;
   max-width: 660px;
-  padding-left: 88px;
+  padding-left: 84px;
 }
+.event-hero__body > .event-hero__eyebrow { margin-bottom: -4px; }
+.event-hero__desc + .event-hero__date { margin-top: -18px; }
 .event-hero__eyebrow,
 .event-hero__date {
   margin: 0;
@@ -13924,14 +13930,21 @@ button.subnav__tab {
   line-height: 1.5;
   color: #dfe5ed;
 }
-/* Display/D1 */
+/* 기간 — SemiBold 14 / 160% · Depth 300 (2026-11-24) */
+.event-hero__date {
+  font-weight: 600;
+  line-height: 1.6;
+  letter-spacing: -0.01em;
+  color: #969da8;
+}
+/* Display — Sandoll Mapssi 32 (2026-11-24, 이전 D1 40) */
 .event-hero__title {
   display: flex;
   flex-direction: column;
   gap: 16px;
   margin: 0;
   font-family: var(--font-hero);
-  font-size: 40px;
+  font-size: 32px;
   font-weight: 400;
   line-height: 0.8;
   letter-spacing: -0.01em;
@@ -13946,22 +13959,22 @@ button.subnav__tab {
   letter-spacing: -0.01em;
   color: #dfe5ed;
 }
-/* 버튼 - 3XL (66606:180199) 220×52 · Bold 18 */
+/* 버튼 - S (2026-11-24, 이전 3XL 220×52 · Bold 18) — 높이 42 · 안쪽 14/24 · 모서리 8 · Bold 14 · Primary */
 .event-hero__cta {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 220px;
-  height: 52px;
+  height: 42px;
+  padding: 14px 24px;
   border-radius: 8px;
-  background: var(--btn-primary-bg);
-  font-size: 18px;
+  background: var(--color-brand-primary);
+  font-size: 14px;
   font-weight: 700;
-  line-height: 20px;
+  line-height: 1;
   color: #fff;
 }
 .event-hero__cta:hover {
-  background: var(--btn-primary-bg-hover);
+  background: #3569d1; /* Interaction Hovered */
 }
 
 /* 이벤트 목록 (66606:180200) — 제목 → 카드 32, 카드 → 페이지 버튼 48 */
@@ -14142,6 +14155,8 @@ button.subnav__tab {
     gap: 12px;
     padding: 0 20px 24px;
   }
+  .event-hero__body > .event-hero__eyebrow { margin-bottom: 0; }
+  .event-hero__desc + .event-hero__date { margin-top: -6px; }
   .event-hero__eyebrow,
   .event-hero__date { font-size: 12px; }
   /* 두 줄이 다시 줄바꿈될 수 있어 행간 0.8 대신 1.2 */
@@ -15453,7 +15468,7 @@ button.subnav__tab {
 /* ============================================================
    홈 추천 라이브 — 모바일 (2026-11-24 사용자 요청, 모바일 시안 없음 [구현 제안])
    로그인 상태 모바일도 히어로 슬라이더 자리(좌우 꽉 참 · 높이 220 · 모서리 없음)에 영상 스트리밍.
-   영상은 칸을 꽉 채우게(높이 220 → 16:9 폭 392 이상, 위아래 · 좌우 잘림), PC 와 같은 배치를 줄인 크기로:
+   영상은 칸을 꽉 채우게(16:9 폭 569 이상 = 높이 320 이상, 위아래 · 좌우 잘림 — 제목 줄 가림), PC 와 같은 배치를 줄인 크기로:
    좌상단 사진 40 · 이름 12 · 제목 D1 20(두 줄) · 지금 시청하기 36, 아래 줄 시청자 수 · 음소거. 태그는 숨김.
    좌우 그라데이션 대신 왼쪽 · 아래를 어둡게 해 글자를 읽기 쉽게
    ============================================================ */
@@ -15461,7 +15476,7 @@ button.subnav__tab {
   [data-auth="in"] .hero-live { display: flex; margin: -16px -16px 0; }
   [data-auth="in"] .hero { display: none; }
   .hero-live__player {
-    --hl-video-w: max(100cqw, calc(220px * 16 / 9));
+    --hl-video-w: max(100cqw, 569px); /* 16:9 높이 320 이상 → 220 칸에서 위아래 50 이상 잘려 YouTube 제목 줄이 안 보임 */
     height: 220px;
     border: 0;
     border-radius: 0;
@@ -15487,8 +15502,7 @@ button.subnav__tab {
   .hero-live__name { font-size: 12px; line-height: 15px; }
   .hero-live__title { margin-top: 4px; font-size: 20px; line-height: 1.2; }
   .hero-live__tags { display: none; }
-  .hero-live__cta-wrap { margin-top: 12px; }
-  .hero-live__cta-wrap .btn-primary { height: 36px; padding: 0 16px; font-size: 13px; }
+  .hero-live__cta-wrap { display: none; } /* 모바일은 "지금 시청하기" 없음 — 영상을 누르면 방송 보기 (2026-11-24 사용자 요청) */
   .hero-live__bar { left: 16px; right: 16px; bottom: 12px; }
   .hero-live__viewers { height: 24px; font-size: 13px; line-height: 24px; }
   .hero-live__viewers img { width: 14px; height: 14px; }
