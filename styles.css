@@ -1478,6 +1478,8 @@ ul {
    SOOP 처럼 위아래를 잘라 더 넓게: 폭 840 → 16:9 높이 472.5 를 300 칸에 세로 가운데 (위아래 약 86 씩 잘림 — 350 일 때 960 과 같은 비율, YouTube 제목 줄도 가려짐).
    영상은 누르거나 올려도 YouTube 컨트롤 · 제목이 안 뜨게 pointer-events 없음 (재생바는 embed 의 controls=0) */
 /* 좌우 바탕은 완전 검정 대신 LNB 배경색 BG200 #12131A (2026-11-24 사용자 요청 — SOOP 다크처럼, 칩 색 #2A3340 은 너무 밝아 바꿈). 영상 위 글자가 흰색이라 라이트 테마에서도 다크 값 고정 */
+/* 테두리 — GNB 아래 선(--border-nav, Border100)과 같은 색으로 한 바퀴 (2026-11-24 사용자 요청, 처음 50% → 100%) */
+.hero-live__player { border: 1px solid var(--border-nav); }
 .hero-live__player { cursor: pointer; --hl-video-w: 840px; --hl-bg: #12131a; background: var(--hl-bg); }
 .hero-live__frame {
   position: absolute;
@@ -2415,6 +2417,8 @@ ul {
 }
 /* 제목 → 닉네임 4 (Content Card / Live Size=Large 64610:160486, 2026-11-24 8 → 4). 닉네임 묶음 → 태그는 8 그대로 */
 .card__text > .card__title { margin-bottom: -4px; }
+/* 닉네임 → 날짜 줄 4 (같은 컴포넌트 Large · Medium · Small 모두, 2026-11-24 0 → 4) */
+.card__channel + .card__sub { margin-top: 4px; }
 /* Subtitle/S1 (65161:72614) — Pretendard Bold 16px/20px */
 .card--rich .card__title {
   font-size: 16px;
@@ -15123,14 +15127,18 @@ button.subnav__tab {
 /* ============================================================
    모바일 메뉴(드로어) — 로그인 상태 (2026-11-19, Figma 67590:79237)
    관리자 모드 · 연결 계정 버튼과 등급 카드를 빼고, 프로필 아래 펀캐시 카드(코인 · 펀캐시 / 금액 원 · 충전)를 둠.
-   로그아웃 상태는 그대로. PC LNB 는 그대로.
+   로그아웃 상태는 그대로. 2026-11-24 PC LNB 도 등급 카드 대신 이 카드(관리자 모드 · 연결 계정 버튼 줄은 PC 에 그대로).
    시안 색 #1f232d · #2a2f3c 는 가장 가까운 DS 색 BG400 · Border300 으로 (design.md 3장)
    ============================================================ */
+/* 2026-11-24: PC LNB 도 등급(VIP) 카드 대신 같은 펀캐시 카드 (사용자 요청). 접힌 LNB(mini)에서는 숨김 그대로 */
+[data-auth="in"] .lnb .grade { display: none; }
+[data-auth="in"][data-lnb="mini"] .lnb .cash { display: none; }
 @media (max-width: 767px) {
-  [data-auth="in"] .lnb .lnb__btn-row,
-  [data-auth="in"] .lnb .grade {
+  [data-auth="in"] .lnb .lnb__btn-row {
     display: none;
   }
+}
+@media all {
   [data-auth="in"] .lnb .cash {
     display: flex;
     padding: 13px;
@@ -15157,15 +15165,12 @@ button.subnav__tab {
     height: 18px;
     background: url("assets/watch/cash.png") center / contain no-repeat;
   }
+  /* "9억 9,999만원" 한 덩어리 흰 글씨 (2026-11-24 — "원"만 회색 · 띄움 없앰) */
   .lnb .cash__amount {
-    gap: 2px;
     font-size: 15px;
     font-weight: 600;
     line-height: 18px;
     color: var(--color-text-strong);
-  }
-  .lnb .cash__amount span {
-    color: var(--color-text-depth-300);
   }
   .lnb .cash__charge {
     height: 36px;
