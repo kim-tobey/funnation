@@ -1632,6 +1632,13 @@ ul {
   white-space: nowrap;
   text-overflow: ellipsis;
 }
+/* 말줄임 "…" 만 아래 점 글꼴로 — 로컬 설치 맵씨는 가운데 점, GitHub(산돌 웹폰트)는 글자가 없어 아래 점으로 달라 보여 통일 (2026-11-24 사용자 요청).
+   U+2026 한 글자만 이 글꼴이 맡고, 나머지 글자는 그대로 맵씨 */
+@font-face {
+  font-family: "HL Ellipsis";
+  src: local("Pretendard"), local("Pretendard Regular"), local("Apple SD Gothic Neo"), local("Helvetica Neue"), local("Helvetica"), local("Arial");
+  unicode-range: U+2026;
+}
 /* 제목 — 로그아웃 히어로 제목(.hero__h1, D1 Sandoll Mapssi)과 같은 서체를 줄여서 30 (2026-11-24 사용자 요청).
    D1 행간 0.8 은 두 줄이면 겹쳐서 1.2 로 [구현 제안], 두 줄까지. 이름 → 6 */
 .hero-live__title {
@@ -1641,7 +1648,7 @@ ul {
   max-width: 100%;
   margin-top: 6px;
   overflow: hidden;
-  font-family: var(--font-hero);
+  font-family: "HL Ellipsis", var(--font-hero);
   font-size: 30px;
   font-weight: 400;
   line-height: 1.2;
