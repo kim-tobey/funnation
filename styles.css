@@ -1440,7 +1440,7 @@ ul {
 
 /* ------------------------------------------------------------
    추천 라이브 (66498:205419) — 로그인 상태 PC 에서 히어로 슬라이더 · 퀵카드 대신.
-   1124 기준: 플레이어 726 + 12 + 채팅 386, 높이 665. 모바일 시안이 없어 모바일은 기존 히어로 유지.
+   1124 기준: 플레이어 726 + 12 + 채팅 386, 높이 665 → 2026-11-24 채팅 삭제 · 높이 350 (사용자 결정). 모바일 시안이 없어 모바일은 기존 히어로 유지.
    시안의 비 DS 색은 가까운 DS 색으로 (design.md 3장):
    반투명 바탕 rgba(11,11,12,.64) → Overlay Black 65 · 채팅 바탕 #090b0f → BG100 ·
    채팅 테두리 white 15% → Overlay White 10 · 아바타 테두리 #01b1fd → Primary · 꺼진 점 white 35% → Depth 400
@@ -1469,22 +1469,42 @@ ul {
   position: relative;
   flex: 1 1 0;
   min-width: 0;
-  height: 350px; /* 2026-11-24 사용자 결정 (시안 665). 채팅은 이 높이에 맞춰 늘어남 */
+  height: 350px; /* 2026-11-24 사용자 결정 (시안 665). 채팅은 삭제해 콘텐츠 폭 전체 */
   border-radius: 8px;
   background: #000;
   overflow: hidden;
 }
+/* 영상은 가운데, 좌우는 바탕색 + 영상 가장자리로 그라데이션 (SOOP 메인 참고, 2026-11-24 사용자 요청).
+   SOOP 처럼 위아래를 잘라 더 넓게: 폭 960 → 16:9 높이 540 을 350 칸에 세로 가운데 (위아래 95 씩 잘림, YouTube 제목 줄도 가려짐).
+   영상은 누르거나 올려도 YouTube 컨트롤 · 제목이 안 뜨게 pointer-events 없음 (재생바는 embed 의 controls=0) */
+/* 좌우 바탕은 완전 검정 대신 LNB 배경색 BG200 #12131A (2026-11-24 사용자 요청 — SOOP 다크처럼, 칩 색 #2A3340 은 너무 밝아 바꿈). 영상 위 글자가 흰색이라 라이트 테마에서도 다크 값 고정 */
+.hero-live__player { cursor: pointer; --hl-video-w: 960px; --hl-bg: #12131a; background: var(--hl-bg); }
 .hero-live__frame {
+  position: absolute;
+  top: 50%;
+  left: 50%;
   display: block;
-  width: 100%;
-  height: 100%;
+  width: var(--hl-video-w);
+  height: calc(var(--hl-video-w) * 9 / 16);
   border: 0;
   background: #000;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
 }
-.hero-live__frame[hidden],
-.hero-live__chat-frame[hidden] { display: none; }
-.hero-live__off,
-.hero-live__chat-off {
+.hero-live__player::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  --hl-edge: max(0px, calc(50% - var(--hl-video-w) / 2));
+  background: linear-gradient(90deg,
+    var(--hl-bg) 0, var(--hl-bg) var(--hl-edge), transparent calc(var(--hl-edge) + 160px),
+    transparent calc(100% - var(--hl-edge) - 160px), var(--hl-bg) calc(100% - var(--hl-edge)), var(--hl-bg) 100%);
+}
+.hero-live__info,
+.hero-live__bar { z-index: 1; }
+.hero-live__frame[hidden] { display: none; }
+.hero-live__off {
   margin: 0;
   padding: 120px 24px 0;
   font-size: 14px;
@@ -1492,28 +1512,40 @@ ul {
   text-align: center;
   color: var(--color-text-depth-300);
 }
-/* 시청자 수 (66498:205428) — 28 높이, 안쪽 0 4, 사이 4 */
-.hero-live__viewers {
+/* 아래 줄 — 시청자 수(왼쪽) · 음소거(오른쪽), 좌우 24 · 아래 16 (점 · 이전/다음은 2026-11-24 삭제) */
+.hero-live__bar {
   position: absolute;
-  top: 16px;
-  left: 16px;
+  left: 24px;
+  right: 24px;
+  bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  pointer-events: none;
+}
+.hero-live__bar > * { pointer-events: auto; }
+.hero-live__ctrls { margin-left: auto; }
+/* 시청자 수 (Figma 67760:56720) — 28 높이, 사람 아이콘 16(Primary, assets/watch/v4/viewers.svg) + 숫자, 사이 4 */
+.hero-live__viewers {
   display: flex;
   align-items: center;
   gap: 4px;
   height: 28px;
-  padding: 0 4px;
+  padding: 0 6px;
   border-radius: 4px;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
   line-height: 28px;
   color: #fff;
 }
 .hero-live__viewers img { flex: none; }
+.hero-live__ctrls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
 /* 음소거 (66498:205435) — 36 × 36 */
 .hero-live__mute {
-  position: absolute;
-  top: 16px;
-  right: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1524,27 +1556,35 @@ ul {
   border-radius: 4px;
   cursor: pointer;
 }
+.hero-live__mute:hover { filter: brightness(1.25); }
 .hero-live__mute-off,
 .hero-live__mute[aria-pressed="true"] .hero-live__mute-on { display: none; }
 .hero-live__mute[aria-pressed="true"] .hero-live__mute-off { display: block; }
 .hero-live__mute:focus-visible,
-.hero-live__arrow:focus-visible,
-.hero-live__dot:focus-visible,
-.hero-live__cta:focus-visible {
+.hero-live__cta-wrap .btn-primary:focus-visible {
   outline: 2px solid #81b3ff;
   outline-offset: 2px;
 }
-/* 아래 정보 박스 (66498:205439) — 좌우 · 아래 16, 안쪽 16, 사이 12 */
+/* 방송인 정보 — SOOP 메인 실측(히어로 높이 350 같음): 위 56 · 왼쪽 60, 사진 64 → 16 → 이름 14 → 5 → 제목 → 8 → 태그, 아래 버튼.
+   사진은 글자 묶음(이름 · 제목 · 태그)의 세로 가운데 (2026-11-24 사용자 요청), 버튼은 글자 왼쪽 줄에 맞춰 아래 줄 */
 .hero-live__info {
   position: absolute;
-  left: 16px;
-  right: 16px;
-  bottom: 16px;
+  top: 56px;
+  left: 60px;
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr);
+  align-items: center;
+  column-gap: 16px;
+  width: max(400px, calc(50% - var(--hl-video-w) / 2 + 80px));
+  max-width: calc(100% - 120px);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+}
+.hero-live__text {
+  flex: 1 1 0;
+  min-width: 0;
   display: flex;
+  flex-direction: column;
   align-items: flex-start;
-  gap: 12px;
-  padding: 16px;
-  border-radius: 8px;
 }
 .hero-live__avatar {
   position: relative;
@@ -1573,152 +1613,53 @@ ul {
   font-size: 10px;
   font-weight: 700;
   line-height: 12px;
-  color: #fff; /* 빨강 위 흰 글자 — 크루원 LIVE 와 같음 */
-}
-.hero-live__body {
-  flex: 1 1 0;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-.hero-live__top {
-  display: flex;
-  align-items: flex-start;
-  gap: 24px;
-}
-.hero-live__text {
-  flex: 1 1 0;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-.hero-live__name {
-  overflow: hidden;
-  font-size: 20px;
-  font-weight: 700;
-  line-height: 28px;
   color: #fff;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  text-shadow: none;
 }
-.hero-live__meta {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-width: 0;
-}
-.hero-live__title {
-  min-width: 0;
+/* 이름 14 Regular 흰색 (SOOP 실측 14 / 400) */
+.hero-live__name {
+  max-width: 100%;
   overflow: hidden;
   font-size: 14px;
-  font-weight: 700;
-  line-height: 20px;
+  font-weight: 400;
+  line-height: 17px;
   color: #fff;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
+/* 제목 — 로그아웃 히어로 제목(.hero__h1, D1 Sandoll Mapssi)과 같은 서체를 줄여서 30 (2026-11-24 사용자 요청).
+   D1 행간 0.8 은 두 줄이면 겹쳐서 1.2 로 [구현 제안], 두 줄까지. 이름 → 6 */
+.hero-live__title {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  max-width: 100%;
+  margin-top: 6px;
+  overflow: hidden;
+  font-family: var(--font-hero);
+  font-size: 30px;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: #fff;
+}
 .hero-live__tags {
-  flex: none;
   gap: 5px;
-  margin: 0;
+  margin: 8px 0 0;
 }
 /* 영상 위 태그 — 테마와 무관하게 다크 Tag (design.md 16장), 12 Medium */
 .hero-live__tags li {
   background: #31354f;
   font-size: 12px;
   color: #dfe5ed;
+  text-shadow: none;
 }
-.hero-live__cta {
-  flex: none;
-  display: flex;
-  align-items: center;
-  height: 36px;
-  padding: 6px 12px;
-  border-radius: 4px;
-  background: var(--color-brand-primary);
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 20px;
-  color: #fff;
-  white-space: nowrap;
-}
-.hero-live__cta:hover { background: #3569d1; } /* Interaction Hovered */
-.hero-live__nav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.hero-live__dots {
-  display: flex;
-  align-items: center;
-}
-.hero-live__dot {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 12px 4px;
-  border: 0;
-  background: none;
-  cursor: pointer;
-}
-.hero-live__dot::before {
-  content: "";
-  width: 7px;
-  height: 7px;
-  border-radius: 9999px;
-  background: #7c8594;
-  transition: width 0.25s ease, background-color 0.25s ease;
-}
-.hero-live__dot[aria-current="true"]::before {
-  width: 48px;
-  height: 8px;
-  background: var(--color-brand-primary);
-}
-.hero-live__arrows {
-  display: flex;
-  gap: 4px;
-}
-.hero-live__arrow {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  padding: 0;
-  border: 0;
-  border-radius: 4px;
-  background: none;
-  cursor: pointer;
-}
-.hero-live__arrow:hover { background: rgba(255, 255, 255, 0.1); } /* Overlay White 10 */
-/* 채팅 (66498:205493) — 386 */
-.hero-live__chat {
-  flex: none;
-  display: flex;
-  flex-direction: column;
-  width: 386px;
-  border: 1px solid var(--hl-chat-border, rgba(255, 255, 255, 0.1));
-  border-radius: 8px;
-  background: var(--color-bg-100);
-  overflow: hidden;
-}
-[data-theme="light"] .hero-live__chat { --hl-chat-border: var(--color-border-100); }
-.hero-live__chat-frame {
-  flex: 1 1 0;
-  display: block;
-  width: 100%;
-  min-height: 0;
-  border: 0;
-  background: var(--color-bg-100);
-}
-/* 좁은 PC — 채팅까지 두면 플레이어가 너무 좁아져 채팅을 빼고 16:9 [구현 제안 · 시안 없음] */
-/* 최대 콘텐츠 폭(1480, XL 컨테이너 1536 - 28*2)에서는 레터박스 없이 16:9 —
-   플레이어 폭 = 콘텐츠 - 12 - 채팅 386 = 1082 → 높이 1082 * 9/16 = 608.6 [구현 제안 · 시안은 665] */
-/* 2026-11-24: 높이를 350 으로 고정해 아래 두 규칙(최대 폭 16:9 · 좁은 PC 16:9)의 높이 계산은 뺌 */
+/* 지금 시청하기 — 로그아웃 히어로 CTA(.hero__cta .btn-primary, 139 × 42 · SemiBold 14 · radius 8)와 같음 */
+.hero-live__cta-wrap { grid-column: 2; justify-self: start; margin-top: 16px; }
+.hero-live__cta-wrap .btn-primary { text-shadow: none; }
+.hero-live__cta-wrap .btn-primary:hover { background: #3569d1; } /* Interaction Hovered */
+/* 좁은 PC(768–1099) — 정보 박스가 좁아 태그를 숨김 [구현 제안 · 시안 없음] */
 @media (min-width: 768px) and (max-width: 1099px) {
-  .hero-live__chat { display: none; }
   .hero-live__tags { display: none; }
 }
 

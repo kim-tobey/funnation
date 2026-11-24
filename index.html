@@ -373,50 +373,37 @@
             <iframe class="hero-live__frame" data-hl-player title="추천 라이브 영상" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
             <p class="hero-live__off" data-hl-player-off hidden>YouTube 영상은 파일로 직접 열면 재생되지 않아요.<br>로컬 서버(http://localhost)나 실제 도메인에서 열어 주세요.</p>
 
-            <span class="hero-live__viewers hl-glass" data-node-id="66498:205428">
-              <img src="assets/hero-live/live-dot.svg" width="10" height="10" alt="">
-              <span data-hl-viewers aria-label="시청자 수">584</span>
-            </span>
-            <button class="hero-live__mute hl-glass" type="button" aria-pressed="false" aria-label="음소거 해제" data-hl-mute data-node-id="66498:205435">
-              <img class="hero-live__mute-on" src="assets/hero-live/muted.svg" width="16" height="16" alt="">
-              <img class="hero-live__mute-off" src="assets/fun-watch/v2/volume-16.svg" width="16" height="16" alt="">
-            </button>
-
-            <div class="hero-live__info hl-glass" data-node-id="66498:205439">
+            <!-- 방송인 정보 — SOOP 메인처럼 사진 왼쪽, 오른쪽에 이름 → 제목(크게) → 태그, 아래 버튼 (2026-11-24) -->
+            <div class="hero-live__info" data-node-id="66498:205439">
               <a class="hero-live__avatar" href="watch.html" data-hl-link>
                 <img src="assets/watch/v4/avatar-ymss.jpg" width="56" height="56" alt="" data-hl-avatar>
                 <span class="hero-live__badge">LIVE</span>
               </a>
-              <div class="hero-live__body">
-                <div class="hero-live__top">
-                  <div class="hero-live__text">
-                    <a class="hero-live__name" href="watch.html" data-hl-link data-hl-name>YM상사</a>
-                    <div class="hero-live__meta">
-                      <a class="hero-live__title" href="watch.html" data-hl-link data-hl-title>YM상사 시즌7 7화 팀전</a>
-                      <ul class="tags hero-live__tags" data-hl-tags><li>엑셀</li><li>팀플레이</li><li>서바이벌</li></ul>
-                    </div>
-                  </div>
-                  <a class="hero-live__cta" href="watch.html" data-hl-link>지금 시청하기</a>
-                </div>
-                <div class="hero-live__nav">
-                  <div class="hero-live__dots" data-hl-dots></div>
-                  <div class="hero-live__arrows">
-                    <button class="hero-live__arrow" type="button" data-hl-dir="-1" aria-label="이전 추천 라이브">
-                      <img src="assets/hero-live/prev.svg" width="16" height="16" alt="">
-                    </button>
-                    <button class="hero-live__arrow" type="button" data-hl-dir="1" aria-label="다음 추천 라이브">
-                      <img src="assets/hero-live/next.svg" width="16" height="16" alt="">
-                    </button>
-                  </div>
-                </div>
+              <div class="hero-live__text">
+                <a class="hero-live__name" href="watch.html" data-hl-link data-hl-name>YM상사</a>
+                <a class="hero-live__title" href="watch.html" data-hl-link data-hl-title>YM상사 시즌7 7화 팀전</a>
+                <ul class="tags hero-live__tags" data-hl-tags><li>엑셀</li><li>팀플레이</li><li>서바이벌</li></ul>
+              </div>
+              <div class="hero__cta hero-live__cta-wrap">
+                <a class="btn-primary" href="watch.html" data-hl-link>지금 시청하기</a>
+              </div>
+            </div>
+
+            <!-- 아래 줄 — 시청자 수 · 음소거 (2026-11-24, 위에서 아래로 옮김. 점 · 이전/다음은 삭제) -->
+            <div class="hero-live__bar">
+              <span class="hero-live__viewers hl-glass" data-node-id="66498:205428">
+                <img src="assets/watch/v4/viewers.svg" width="16" height="16" alt="">
+                <span data-hl-viewers aria-label="시청자 수">584</span>
+              </span>
+              <div class="hero-live__ctrls">
+                <button class="hero-live__mute hl-glass" type="button" aria-pressed="false" aria-label="음소거 해제" data-hl-mute data-node-id="66498:205435">
+                  <img class="hero-live__mute-on" src="assets/hero-live/muted.svg" width="16" height="16" alt="">
+                  <img class="hero-live__mute-off" src="assets/fun-watch/v2/volume-16.svg" width="16" height="16" alt="">
+                </button>
               </div>
             </div>
           </div>
 
-          <aside class="hero-live__chat" aria-label="라이브 채팅" data-node-id="66498:205493">
-            <iframe class="hero-live__chat-frame" data-hl-chat title="YouTube 라이브 채팅"></iframe>
-            <p class="hero-live__chat-off" data-hl-chat-off hidden>YouTube 채팅은 로컬 서버(http://localhost)나 실제 도메인에서 열어야 보여요.</p>
-          </aside>
         </section>
 
         <!-- Hero -->

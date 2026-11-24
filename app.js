@@ -602,9 +602,9 @@
   }
 })();
 
-/* 추천 라이브 (66498:205419) — 로그인 상태 PC 에서 히어로 대신 보이는 플레이어 + 채팅.
+/* 추천 라이브 (66498:205419) — 로그인 상태 PC 에서 히어로 대신 보이는 플레이어 (2026-11-24 채팅 삭제, 사용자 요청).
    보일 때만 YouTube 를 불러오고, 로그아웃 · 모바일로 바뀌면 src 를 비워 소리 · 재생을 멈춤.
-   자동 넘김 없음(영상 재생 중) — 점 · 화살표로만 바꿈.
+   자동 넘김 없음 — 2026-11-24 점 · 이전/다음 버튼 삭제(사용자 요청)로 첫 추천 방송만 보임. 넘기기를 다시 넣으려면 FEATURED · i 를 그대로 쓰면 됨.
    ytId: 데모로 영상 상세(watch.html)와 같은 라이브 ID 를 씀 — 실제 추천 라이브 ID 로 바꿔야 함 */
 (function () {
   var root = document.documentElement;
@@ -625,9 +625,7 @@
   ];
 
   var player = box.querySelector("[data-hl-player]");
-  var chat = box.querySelector("[data-hl-chat]");
   var muteBtn = box.querySelector("[data-hl-mute]");
-  var dotsWrap = box.querySelector("[data-hl-dots]");
   var host = location.hostname;
   var blocked = location.protocol === "file:" || !host; // 파일로 열면 YouTube 가 막음(오류 153)
   var i = 0;
@@ -636,28 +634,12 @@
 
   if (blocked) {
     player.hidden = true;
-    chat.hidden = true;
     box.querySelector("[data-hl-player-off]").hidden = false;
-    box.querySelector("[data-hl-chat-off]").hidden = false;
   }
 
-  // 점 — 추천 수만큼
-  var dots = FEATURED.map(function (_, n) {
-    var b = document.createElement("button");
-    b.type = "button";
-    b.className = "hero-live__dot";
-    b.setAttribute("aria-label", (n + 1) + "번 추천 라이브");
-    b.addEventListener("click", function () { go(n); });
-    dotsWrap.appendChild(b);
-    return b;
-  });
 
   function visible() {
     return getComputedStyle(box).display !== "none";
-  }
-  function chatSrc(id) {
-    var dark = root.getAttribute("data-theme") !== "light";
-    return "https://www.youtube.com/live_chat?v=" + id + "&embed_domain=" + encodeURIComponent(host) + (dark ? "&dark_theme=1" : "");
   }
   function command(func) {
     if (!player.contentWindow) return;
@@ -677,29 +659,23 @@
       li.textContent = t;
       tags.appendChild(li);
     });
-    for (var d = 0; d < dots.length; d++) {
-      if (d === i) dots[d].setAttribute("aria-current", "true");
-      else dots[d].removeAttribute("aria-current");
-    }
     sync();
   }
 
-  // 보일 때만 영상 · 채팅을 불러오고, 안 보이면 비움
+  // 보일 때만 영상을 불러오고, 안 보이면 비움
   function sync() {
     if (blocked) return;
     var id = FEATURED[i].ytId;
     if (!visible()) {
       if (loadedId) {
         player.removeAttribute("src");
-        chat.removeAttribute("src");
         loadedId = null;
       }
       return;
     }
     if (loadedId === id + ":" + i) return;
     loadedId = id + ":" + i;
-    player.src = "https://www.youtube.com/embed/" + id + "?autoplay=1&mute=1&playsinline=1&enablejsapi=1&origin=" + encodeURIComponent(location.origin);
-    chat.src = chatSrc(id);
+    player.src = "https://www.youtube.com/embed/" + id + "?autoplay=1&mute=1&playsinline=1&controls=0&disablekb=1&fs=0&iv_load_policy=3&rel=0&modestbranding=1&enablejsapi=1&origin=" + encodeURIComponent(location.origin);
   }
 
   // 새 영상을 불러온 뒤에도 소리를 켜 둔 상태면 다시 켬
@@ -707,14 +683,12 @@
     if (!muted) setTimeout(function () { command("unMute"); }, 600);
   });
 
-  function go(n) {
-    i = (n + FEATURED.length) % FEATURED.length;
-    render();
-  }
-
   box.addEventListener("click", function (e) {
-    var arrow = e.target.closest("[data-hl-dir]");
-    if (arrow) go(i + Number(arrow.getAttribute("data-hl-dir")));
+    // 영상(빈 곳)을 누르면 방송 보기로 — 영상 iframe 은 눌리지 않게 막아 둠 (SOOP 메인처럼)
+    if (!e.target.closest("a, button") && e.target.closest(".hero-live__player")) {
+      var link = box.querySelector("[data-hl-link]");
+      if (link) location.href = link.getAttribute("href");
+    }
   });
 
   muteBtn.addEventListener("click", function () {
@@ -724,16 +698,8 @@
     muteBtn.setAttribute("aria-label", muted ? "음소거 해제" : "음소거");
   });
 
-  // 로그인 · 로그아웃, 화면 폭이 바뀌면 다시 확인 / 테마가 바뀌면 채팅을 같은 테마로
-  new MutationObserver(function (list) {
-    for (var m = 0; m < list.length; m++) {
-      if (list[m].attributeName === "data-theme" && loadedId && !blocked) {
-        var next = chatSrc(FEATURED[i].ytId);
-        if (chat.src !== next) chat.src = next;
-      }
-    }
-    sync();
-  }).observe(root, { attributes: true, attributeFilter: ["data-auth", "data-theme", "data-view"] });
+  // 로그인 · 로그아웃, 화면 폭이 바뀌면 다시 확인
+  new MutationObserver(sync).observe(root, { attributes: true, attributeFilter: ["data-auth", "data-view"] });
   matchMedia("(min-width: 768px)").addEventListener("change", sync);
 
   render();
