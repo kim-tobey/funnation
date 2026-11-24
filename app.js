@@ -650,6 +650,7 @@
     var f = FEATURED[i];
     box.querySelector("[data-hl-name]").textContent = f.name;
     box.querySelector("[data-hl-title]").textContent = f.title;
+    fitTitle();
     box.querySelector("[data-hl-viewers]").textContent = f.viewers;
     box.querySelector("[data-hl-avatar]").src = f.avatar;
     var tags = box.querySelector("[data-hl-tags]");
@@ -698,9 +699,31 @@
     muteBtn.setAttribute("aria-label", muted ? "음소거 해제" : "음소거");
   });
 
+  /* 모바일 제목 말줄임 — CSS text-overflow 는 띄어쓰기 뒤에서 잘리면 "시즌7 …" 처럼 공백이 남아(글꼴마다 자르는 자리가 다름)
+     직접 잘라 끝 공백을 지우고 "…" 를 붙임 (2026-11-24 사용자 요청). PC 는 CSS 두 줄 말줄임 그대로 */
+  var titleEl = box.querySelector("[data-hl-title]");
+  var mobileMQ = matchMedia("(max-width: 767px)");
+  function fitTitle() {
+    var full = FEATURED[i].title;
+    titleEl.textContent = full;
+    titleEl.removeAttribute("title");
+    if (!mobileMQ.matches || !visible() || titleEl.scrollWidth <= titleEl.clientWidth) return;
+    var lo = 0, hi = full.length;
+    while (lo < hi) {
+      var mid = Math.ceil((lo + hi) / 2);
+      titleEl.textContent = full.slice(0, mid).replace(/\s+$/, "") + "…";
+      if (titleEl.scrollWidth <= titleEl.clientWidth) lo = mid; else hi = mid - 1;
+    }
+    titleEl.textContent = full.slice(0, lo).replace(/\s+$/, "") + "…";
+    titleEl.setAttribute("title", full);
+  }
+  var fitTimer;
+  window.addEventListener("resize", function () { clearTimeout(fitTimer); fitTimer = setTimeout(fitTitle, 100); });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitTitle);
+
   // 로그인 · 로그아웃, 화면 폭이 바뀌면 다시 확인
-  new MutationObserver(sync).observe(root, { attributes: true, attributeFilter: ["data-auth", "data-view"] });
-  matchMedia("(min-width: 768px)").addEventListener("change", sync);
+  new MutationObserver(function () { sync(); fitTitle(); }).observe(root, { attributes: true, attributeFilter: ["data-auth", "data-view"] });
+  matchMedia("(min-width: 768px)").addEventListener("change", function () { sync(); fitTitle(); });
 
   render();
 })();
