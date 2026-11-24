@@ -58,7 +58,7 @@ cafe:'<path d="M5 8h11v6a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4zM16 9h2a2 2 0 0 1 0 5h-2M
 calendar:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
 share:'<circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.2 11l7.6-4M8.2 13l7.6 4"/>',
 flag:'<path d="M5 21V4h12l-2 4 2 4H5"/>',
-talk:'<path d="M4 5h16v11H9l-5 4z"/><circle cx="8.5" cy="10.5" r="1" fill="currentColor" stroke="none"/><circle cx="12" cy="10.5" r="1" fill="currentColor" stroke="none"/><circle cx="15.5" cy="10.5" r="1" fill="currentColor" stroke="none"/>',
+talk:'<path stroke-width="1.6" d="M21 7.2v7.6c0 1.12 0 1.68-.22 2.11a2 2 0 0 1-.87.87c-.43.22-.99.22-2.11.22H9.12c-.41 0-.62 0-.82.04a2 2 0 0 0-.51.18c-.18.09-.34.22-.67.48l-1.52 1.22c-.83.67-1.25 1-1.6 1a1 1 0 0 1-.78-.38C3 20.27 3 19.74 3 18.67V7.2c0-1.12 0-1.68.22-2.11a2 2 0 0 1 .87-.87C4.52 4 5.08 4 6.2 4h11.6c1.12 0 1.68 0 2.11.22a2 2 0 0 1 .87.87c.22.43.22.99.22 2.11z"/><circle cx="8" cy="11" r="1" fill="currentColor" stroke="none"/><circle cx="12" cy="11" r="1" fill="currentColor" stroke="none"/><circle cx="16" cy="11" r="1" fill="currentColor" stroke="none"/>', /* 채팅톡 — LNB · 모바일 하단 내비 채팅톡 아이콘(assets/v2/lnb-talk.svg)과 같은 모양 (2026-11-24) */
 mail:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>',
 copy:'<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/>',
 plus:'<path d="M12 5v14M5 12h14"/>',
@@ -195,7 +195,7 @@ function initStation(){
   return {
     bannerImg:null,
     intro:D.intro,introText:D.introLong.join('\n\n'),rulesText:D.rules.join('\n'),
-    links:[{type:'youtube',url:'https://youtube.com/@funsangsa-demo'},{type:'instagram',url:'https://instagram.com/funsangsa.demo'},{type:'tiktok',url:'https://tiktok.com/@funsangsa.demo'}],
+    links:[{type:'youtube',url:'https://youtube.com/@funsangsa-demo'},{type:'instagram',url:'https://instagram.com/funsangsa.demo'},{type:'tiktok',url:'https://tiktok.com/@funsangsa.demo'},{type:'chzzk',url:'https://chzzk.naver.com/funsangsa-demo'},{type:'twitch',url:'https://twitch.tv/funsangsa_demo'},{type:'discord',url:'https://discord.gg/funsangsa-demo'},{type:'kakao',url:'https://open.kakao.com/o/funsangsa-demo'},{type:'web',url:'https://funsangsa-demo.com'}],
     rightBanners:[],
     midBanners:[],
     seq:100,
@@ -824,9 +824,10 @@ const CH={
 };
 document.addEventListener('change',e=>{const k=e.target.dataset&&e.target.dataset.ch;if(k&&CH[k])CH[k](e.target)});
 window.addEventListener('resize',()=>{closePop();if(innerWidth>=960)sb.open=false;layoutSB();renderSide();layoutSB()});
-const LTYPE={youtube:['유튜브','youtube','youtube.com|youtu.be'],instagram:['인스타그램','instagram','instagram.com'],facebook:['페이스북','facebook','facebook.com|fb.com'],tiktok:['틱톡','tiktok','tiktok.com'],home:['홈페이지','globe','']};
-/* 외부 링크 아이콘 — 브랜드 색 벡터 로고(면 형태, 2026-11-19). 유튜브 · 인스타그램 · 페이스북 · 틱톡 · 홈페이지 */
-const SNSLOGO={youtube:'youtube',instagram:'instagram',facebook:'facebook',tiktok:'tiktok',home:'web'};
+const LTYPE={youtube:['유튜브','youtube','youtube.com|youtu.be'],instagram:['인스타그램','instagram','instagram.com'],facebook:['페이스북','facebook','facebook.com|fb.com'],tiktok:['틱톡','tiktok','tiktok.com'],chzzk:['치지직','chzzk','chzzk.naver.com'],twitch:['트위치','twitch','twitch.tv'],discord:['디스코드','discord','discord.gg|discord.com'],kakao:['카카오톡','kakao','open.kakao.com|pf.kakao.com|kakao.com'],web:['웹사이트','globe',''],home:['홈페이지','globe','']};
+/* 외부 링크 아이콘 — 브랜드 색 벡터 로고(면 형태, 2026-11-19). 유튜브 · 인스타그램 · 페이스북 · 틱톡 · 홈페이지
+   2026-11-24 샘플 추가: 치지직 · 트위치 · 디스코드 · 카카오톡 · 웹사이트(크롬 아이콘) */
+const SNSLOGO={youtube:'youtube',instagram:'instagram',facebook:'facebook',tiktok:'tiktok',chzzk:'chzzk',twitch:'twitch',discord:'discord',kakao:'kakaotalk',web:'chrome',home:'web'};
 const snsImg=(t,sz)=>`<img src="assets/v2/station/sns/${SNSLOGO[t]||'web'}.svg" width="${sz}" height="${sz}" alt="">`;
 function snsRow(){
   const ls=S.station.links;
@@ -962,7 +963,6 @@ function renderTop(){
    <div class="pi"><h1>${D.name}${modeBadge()}</h1><button class="favn" data-act="nav" data-arg="subfans" data-qa="B-09" title="팔로워 보기"><img src="assets/watch/v4/viewers.svg" width="16" height="16" alt=""><span>팔로워 <b>${fmt(S.favCount)}</b>명</span></button></div>
    <div class="btns">
      <button class="btn pri" id="donBtn" data-act="donate" data-qa="B-05">${ic('heart',18)}<span class="bl">후원하기</span>${donDotHTML()}</button>
-     <button class="btn out livego${S.live?' on':''}" data-act="liveGo" data-qa="B-07" aria-label="${S.live?'라이브, 지금 방송 중':'라이브, 방송 중 아님'}">${ic('antenna',18)}<span class="bl">라이브</span>${S.live?'<span class="ldot" aria-hidden="true"></span>':''}</button>
      <button class="btn out" data-act="talk" data-qa="B-08">${ic('talk',18)}<span class="bl">채팅톡</span></button>
      <button class="btn out fav${S.favorite?' on':''}" data-act="fav" data-qa="B-04" aria-pressed="${S.favorite}">${S.favorite?`<svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="#f7df4e" stroke="#f7df4e" stroke-width="1.8" stroke-linejoin="round">${P.star}</svg><span class="bl">팔로잉</span>`:ic('star',18)+'<span class="bl">팔로우</span>'}</button>
      <button class="btn out${al[2]?' on':''}" data-act="alarm" data-qa="B-03">${ic(al[0],18)}<span class="bl">${al[1]}</span></button>
