@@ -3589,7 +3589,7 @@ IN.dsq=function(el){don.sq=el.value;don.sgp=0;sigPickRefresh()};
 const defSVG=(w,h,v)=>{const c=[['#1a2a4a','#4a92ff'],['#1a2a4a','#7d5ef7'],['#004854','#48d481']][v%3];return 'data:image/svg+xml;utf8,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${c[0]}"/><stop offset="1" stop-color="${c[1]}"/></linearGradient></defs><rect width="${w}" height="${h}" fill="url(#g)"/><circle cx="${w*.15}" cy="${h*.2}" r="${Math.min(w,h)*.55}" fill="#ffffff" opacity=".06"/><circle cx="${w*.85}" cy="${h*.9}" r="${Math.min(w,h)*.45}" fill="#ffffff" opacity=".07"/><path d="M0 ${h*.75} C ${w*.3} ${h*.55}, ${w*.6} ${h*.95}, ${w} ${h*.7} L${w} ${h} L0 ${h} Z" fill="#ffffff" opacity=".05"/></svg>`)};
 /* 기본 배너는 비트맵(Figma AI 생성, 2026-11-12) — 상단 6:1 · 우측 1:2 · 중간 8:1 */
 // ?v= — 같은 파일 이름으로 그림을 바꿔서 브라우저에 남은 예전 그림이 보이지 않게 (2026-11-19 펀상사 픽셀 배너)
-const DEFBN='assets/v2/station/banner/title.webp?v=20261120g',DEFRB='assets/v2/station/banner/right.webp?v=20261120';
+const DEFBN='assets/v2/station/banner/title.webp?v=20261120g',DEFRB='assets/v2/station/banner/right.webp?v=20261124b';
 const renderBanner19=renderBanner;
 renderBanner=function(){
   renderBanner19();

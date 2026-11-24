@@ -4435,11 +4435,21 @@ ul {
 
 /* 홈 · 라이브 방송 — 모바일 (v2.0 64112:15590 / 64112:23596) */
 @media (max-width: 767px) {
-  /* 메뉴 버튼이 오른쪽으로 옮겨져 드로어도 오른쪽에서 열림 */
+  /* 메뉴 버튼이 오른쪽으로 옮겨져 드로어도 오른쪽에서 열림 — 테두리도 본문 쪽인 왼쪽에 (2026-11-24) */
   .lnb {
     right: 0;
     left: auto;
+    border-right: 0;
+    border-left: 1px solid var(--border-nav);
     transform: translateX(100%);
+  }
+  /* 영상 상세 · 펀네이션 라이브 상세 · 정책안내 · 서비스 소개는 모바일에서도 왼쪽에서 열려 테두리는 오른쪽 그대로 */
+  [data-page="watch"] .lnb,
+  [data-page="fun-watch"] .lnb,
+  [data-page="terms"] .lnb,
+  [data-page="about"] .lnb {
+    border-left: 0;
+    border-right: 1px solid var(--border-nav);
   }
 
   /* 홈 앱바 — 왼쪽 뒤로 · 가운데 로고(63x26) · 오른쪽 언어·메뉴 (시안 갱신 64112:15974) */
