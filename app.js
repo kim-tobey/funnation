@@ -2400,6 +2400,8 @@ window.FunBlock = (function () {
   if (moChatBtn) moChatBtn.addEventListener("click", function () { moChat(!fw.classList.contains("is-mochat")); });
   var moChatClose = fw.querySelector("[data-fmochat-close]");
   if (moChatClose) moChatClose.addEventListener("click", function () { moChat(false); });
+  // 2026-11-25 사용자 요청: 모바일로 들어오면 채팅이 열린 상태가 기본 (시안 67859:85198)
+  if (matchMedia("(max-width: 767px)").matches) moChat(true);
 
   /* 넓은화면 (2026-11-25 수정 시안 67897:61795) — 채팅 머리의 →| 또는 플레이어 "기본 화면" 버튼으로 켬.
      채팅을 접고 LNB 를 숨겨 영상이 GNB 아래를 꽉 채움, 왼쪽 위 제목 줄 · 오른쪽 위 채팅 · 후원 플로팅. 채팅 · ← · 기본 화면 버튼으로 끔 */

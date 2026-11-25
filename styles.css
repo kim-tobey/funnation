@@ -16116,3 +16116,13 @@ button.subnav__tab {
 @media (min-width: 768px) {
   [data-page="fun-watch"]:has(.fwatch.is-wide) .fab-auth { right: 24px; }
 }
+
+/* 펀네이션 라이브 상세 방송 정보 — 방송인 사진의 라이브 표시는 빨강 (2026-11-25 사용자 요청, 이전 파랑 #01B1FD · #015AFA).
+   모바일 방송 정보 · 홈 추천 라이브 · 크루원 카드 LIVE 와 같은 #FF4242 */
+.fwatch .winfo__pic img { border-color: #ff4242; }
+.fwatch .winfo__live { border-radius: 4px; background: #ff4242; color: #fff; }
+/* 영상은 칸을 꽉 채움 — 16:9 칸 폭이 소수점(874.67 등)이라 contain 이면 양옆 1px 검정이 생김 (2026-11-25 사용자 요청) */
+.fwatch .fplayer__video { left: 0; width: 100%; max-width: none; transform: none; object-fit: cover; }
+/* 원인: 플레이어 아래 테두리 1px 만큼 높이가 줄어 16:9 영상 폭이 칸보다 약 2px 좁았음 → 영상 폭을 칸 폭에 맞추고 cover */
+/* 넓은화면은 칸이 16:9 가 아니라 영상 전체가 보이게(위아래 검정) */
+.fwatch.is-wide .fplayer__video { object-fit: contain; }
