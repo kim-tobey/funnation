@@ -8181,11 +8181,10 @@ ul {
   max-width: none;
   padding: 0;
 }
-/* 데모용 로그인 플로팅 버튼 — 플레이어 오른쪽 위 (아래 컨트롤 · 방송 정보 버튼과 겹치지 않게) */
+/* 데모용 로그인 플로팅 버튼 — 채팅 칸(398) 왼쪽 24, 아래 130 (2026-11-23 구현 때 자리로 되돌림, 2026-11-25 사용자 요청) */
 [data-page="fun-watch"] .fab-auth {
-  top: 88px;
   right: 422px;
-  bottom: auto;
+  bottom: 130px;
 }
 /* LNB (66132:100915) — PC 는 접힌 LNB 70 을 늘 보여 주고, 햄버거를 누르면 펼친 LNB 260 이 본문 위로 겹쳐 열림.
    app.js 가 닫혀 있을 땐 data-lnb="mini", 열면 "full" 로 바꿈 */
@@ -15515,4 +15514,506 @@ button.subnav__tab {
   .hero-live__viewers { height: 24px; font-size: 13px; line-height: 24px; }
   .hero-live__viewers img { width: 14px; height: 14px; }
   .hero-live__mute { width: 32px; height: 32px; }
+}
+
+/* ============================================================
+   펀네이션 라이브 영상 상세 — 2026-11-25 Figma 새 시안 (66132:92982 안 67859:67980)
+   ============================================================ */
+
+/* 후원 랭킹 (67859:68563) — 메뉴 아래 채팅 위에 겹침. BG 300 · 아래 Border 100 · 위아래 8 · 좌우 12 · 그림자.
+   접힘: 1위 칩(금색 그라데이션 · 왼쪽 선 #FCF6D1) · 한방 칩(BG 400) 사이 10, 오른쪽 "10 ⌄"(44×28 알약) 앞은 바탕색으로 흐려짐 */
+/* 채팅 위 고정 묶음 — 랭킹 + 고정 후원 + 고정 메시지. 메뉴 아래 채팅 위에 겹치고, 목록 위 여백은 이 높이만큼(app.js) */
+.ftop {
+  position: absolute;
+  top: 42px;
+  right: 0;
+  left: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+}
+.frk {
+  position: relative;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--color-border-100);
+  background: var(--fw-sheet-bg);
+  filter: drop-shadow(0 8px 5.5px rgba(0, 0, 0, 0.3));
+}
+.frk[hidden] { display: none; }
+.frk__bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  overflow: hidden;
+  padding-right: 52px;
+  -webkit-mask-image: linear-gradient(to left, transparent 44px, #000 119px);
+  mask-image: linear-gradient(to left, transparent 44px, #000 119px);
+}
+.frk__chip {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 6px;
+  height: 34px;
+  margin: 0;
+  padding: 0 8px;
+  border-radius: 8px;
+  background: var(--color-bg-400);
+  white-space: nowrap;
+}
+.frk__chip--1 {
+  border-left: 1px solid #fcf6d1;
+  border-radius: 6px;
+  background: linear-gradient(270deg, rgba(255, 185, 23, 0) 0%, rgba(255, 185, 23, 0.2) 100%), var(--color-bg-400);
+}
+.frk__chip--1 > img { width: 20px; height: 20px; object-fit: contain; }
+.frk__tag {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  height: 24px;
+  min-width: 24px;
+  padding: 0 4px;
+  border-radius: 4px;
+  background: var(--color-bg-cancel);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--color-text-normal);
+}
+.frk__who {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  min-width: 0;
+  padding: 0;
+}
+.frk__who img { flex: none; width: 20px; height: 20px; object-fit: contain; }
+.frk__who .fname { font-size: 13px; line-height: 1.2; }
+.frk__won {
+  flex: none;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--color-text-normal);
+}
+.frk__toggle {
+  position: absolute;
+  top: 11px;
+  right: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 44px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid var(--color-border-200);
+  border-radius: 9999px;
+  background: var(--color-bg-400);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--color-text-normal);
+}
+.frk__toggle img { transition: transform 0.2s; }
+.frk.is-open .frk__toggle img { transform: scaleY(-1); }
+[data-theme="light"] .frk__toggle img { filter: brightness(0.3); }
+
+/* 펼침 (67859:69202) — 한 줄 대신 2 · 1 · 3위 카드(사이 8, 1위만 세로로 높음) → 16 → 선 → 16 → 4~10위 → 16 → 한방 최고 */
+.frk.is-open { padding-bottom: 12px; }
+.frk.is-open .frk__bar { display: none; }
+.frk__body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-right: 0;
+}
+.frk__body[hidden] { display: none; }
+.frk__podium {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  margin: 0;
+  padding: 0 52px 0 0;
+  list-style: none;
+}
+.frk__card {
+  display: flex;
+  flex: 1 1 0;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  padding: 8px 8px 9px;
+  border-bottom: 2px solid #7a96ac;
+  border-radius: 8px;
+  background: linear-gradient(180deg, rgba(102, 102, 102, 0.2) 0%, rgba(255, 255, 255, 0.2) 100%), var(--fw-sheet-bg);
+}
+.frk__card--1 {
+  flex-direction: column;
+  border-bottom-color: #fcf6d1;
+  background: linear-gradient(180deg, rgba(255, 185, 23, 0) 0%, rgba(255, 185, 23, 0.2) 100%), var(--color-bg-400);
+}
+.frk__card--3 {
+  border-bottom-color: #9e8976;
+  background: linear-gradient(180deg, rgba(201, 155, 112, 0) 0%, rgba(201, 155, 112, 0.2) 100%), var(--fw-sheet-bg);
+}
+.frk__medal { flex: none; width: 20px; height: 20px; margin: 2px; object-fit: contain; }
+.frk__txt { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; min-width: 0; }
+.frk__card--1 .frk__txt { align-items: center; }
+.frk__card .frk__won { color: var(--color-text-depth-300); }
+.frk__card--1 .frk__won {
+  display: flex;
+  align-items: center;
+  height: 22px;
+  padding: 0 8px;
+  border-radius: 9999px;
+  background: var(--color-bg-200);
+  line-height: 1.5;
+  color: var(--color-text-normal);
+}
+.frk__line { width: 100%; margin: 0; border: 0; border-top: 1px solid var(--color-border-300); }
+.frk__list { display: flex; flex-direction: column; gap: 4px; margin: 0; padding: 0; list-style: none; }
+.frk__list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 36px;
+  padding: 0 10px;
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--color-text-normal);
+}
+.frk__no { flex: none; width: 24px; text-align: center; color: var(--color-text-depth-300); }
+.frk__nm {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 0;
+  overflow: hidden;
+  font-weight: 600;
+  line-height: 1.6;
+  letter-spacing: -0.01em;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: inherit;
+}
+.frk__nm:hover { text-decoration: underline; }
+.frk__amt { flex: none; }
+.frk__chip--best strong {
+  flex: none;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--color-text-normal);
+}
+.frk__chip--best .frk__who { flex: 1 1 auto; }
+/* 채팅 목록 — 고정 묶음 아래부터 (--ftop-h 는 app.js 가 잼) */
+.fwatch .fchat__list { padding-top: calc(var(--ftop-h, 51px) + 8px); }
+/* 고정 후원 · 고정 메시지 (2026-11-23 구현 모양) */
+.fpin {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 6px 10px 0;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.5;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+}
+.fpin[hidden] { display: none; }
+.fpin--msg { background: var(--color-bg-400); color: var(--color-text-normal); }
+.fpin--msg > img { flex: none; margin-top: 2px; }
+.fpin__text { flex: 1; min-width: 0; margin: 0; }
+.fpin__text b { margin-right: 4px; color: #ff6363; }
+.fpin--msg[data-folded] .fpin__text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fpin__fold { display: grid; flex: none; place-items: center; width: 20px; height: 20px; padding: 0; transform: rotate(180deg); }
+.fpin--msg[data-folded] .fpin__fold { transform: none; }
+.fpin--donate { align-items: center; background: linear-gradient(90deg, var(--color-brand-primary), #4962ff); color: #fff; }
+.fpin--donate b { flex: none; }
+.fpin--donate span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fpin--donate em { flex: none; margin-left: auto; font-style: normal; font-weight: 700; }
+.fwatch .fchat.is-lite .fpin--donate { display: none; }
+[data-theme="light"] .fpin__fold img { filter: brightness(0.3); }
+
+/* 채팅 메시지 — 2026-11-23 구현 모양 그대로 (2026-11-25 사용자 결정, 시안의 분홍 이름 대신).
+   등급 배지(아이콘 + 등급 이름) · 이름 색 · 크리에이터 강조 · 후원 말풍선. 글자 크기는 설정의 가 · 가 · 가 (기본 14) */
+.fwatch .fchat__list {
+  display: block;
+  padding-right: 0;
+  padding-left: 0;
+  padding-bottom: 155px;
+  font-size: var(--fmsg-size, 14px);
+  line-height: 1.6;
+}
+.fwatch .fchat__list > li[hidden] { display: none; }
+.fwatch .lw-sys { margin: 4px 10px 8px; padding: 8px 10px; border-radius: 8px; background: rgba(255, 255, 255, 0.04); font-size: 13px; line-height: 1.55; color: var(--color-text-depth-300); }
+.fwatch .lw-msg { padding: 2px 10px; word-break: break-word; color: var(--color-text-normal); }
+.fwatch .lw-msg__badge {
+  display: inline-flex; align-items: center; gap: 3px; vertical-align: 1px;
+  height: 18px; padding: 0 5px 0 3px; margin-right: 4px; border-radius: 4px;
+  background: var(--color-border-400); font-size: 11px; font-weight: 600; line-height: 18px;
+}
+.fwatch .lw-msg__badge img { width: 14px; height: 12px; object-fit: contain; }
+.fwatch .lw-msg__badge--creator { padding: 0 6px; border-radius: 9999px; background: #ff4242; color: #fff; font-weight: 700; }
+.fwatch .lw-msg__name { display: inline; padding: 0; margin-right: 6px; font: inherit; font-weight: 600; color: inherit; cursor: pointer; }
+.fwatch .lw-msg__name:hover { text-decoration: underline; }
+.fwatch .lw-msg--creator { margin: 2px 0; padding: 6px 10px; background: rgba(255, 66, 66, 0.12); box-shadow: inset 3px 0 0 #ff4242; color: var(--color-text-strong); }
+.fwatch .lw-msg--creator .lw-msg__name { color: #ff6363; font-weight: 700; }
+.fwatch .lw-msg--me .lw-msg__name { color: var(--color-brand-primary); }
+.fwatch .lw-dono {
+  margin: 6px 10px; padding: 10px 12px; border-radius: 12px;
+  background: linear-gradient(135deg, var(--color-brand-primary), #4962ff);
+  color: #fff; line-height: 1.5;
+}
+.fwatch .lw-dono__head { display: inline; padding: 0; font: inherit; font-weight: 700; color: inherit; }
+.fwatch .lw-dono__won { display: block; font-weight: 700; }
+.fwatch .lw-dono__text { margin: 4px 0 0; font-weight: 500; }
+.fwatch .lw-divider { display: flex; align-items: center; gap: 8px; margin: 8px 10px; font-size: 11px; color: var(--color-text-depth-400); }
+.fwatch .lw-divider::before, .fwatch .lw-divider::after { content: ""; flex: 1; height: 1px; background: var(--color-border-300); }
+.fwatch .fmsg__time { display: none; margin-right: 6px; font-size: 11px; color: var(--color-text-depth-400); }
+.fwatch .fchat.is-time .fmsg__time { display: inline; }
+.fwatch .fchat.is-nobadge .lw-msg__badge:not(.lw-msg__badge--creator) { display: none; }
+/* 가볍게 보기 — 효과 · 카드 · 랭킹을 빼고 글자만 */
+.fwatch .fchat.is-lite .lw-dono { margin: 0; padding: 2px 10px; background: none; color: var(--color-text-normal); }
+.fwatch .fchat.is-lite .lw-dono__won { display: inline; margin-left: 6px; color: var(--color-brand-primary); }
+.fwatch .fchat.is-lite .lw-msg__badge:not(.lw-msg__badge--creator),
+.fwatch .fchat.is-lite .frk,
+.fwatch .fchat.is-lite .fpin--donate { display: none; }
+
+/* 채팅 설정 (67859:71717) — 묶음(제목 24 · 설명 11 · 토글 줄 36) 사이 선. 넘치면 카드 안에서 스크롤 */
+.fwatch .fopt { max-height: calc(100% - 167px); overflow-y: auto; scrollbar-width: none; }
+.fwatch .fopt__row { height: 36px; }
+.fopt__group { display: flex; flex-direction: column; gap: 4px; }
+.fopt__label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 24px;
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 16px;
+  color: var(--color-text-depth-400);
+}
+.fopt__hint { margin: 0; font-size: 11px; font-weight: 500; line-height: 1.5; color: var(--color-text-depth-500); }
+.fopt__group > .fopt__hint + .fopt__row,
+.fopt__group > .fopt__hint + .fopt__name { margin-top: 4px; }
+.fopt__group > .fopt__label + .fopt__row { margin-top: 4px; }
+.fopt__name { display: flex; height: 44px; margin: 4px 0 0; }
+.fopt__name input {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin-right: -1px;
+  padding: 0 16px;
+  border: 1px solid var(--color-border-300);
+  border-radius: 8px 0 0 8px;
+  background: var(--color-bg-200);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.6;
+  letter-spacing: -0.01em;
+  color: var(--color-text-normal);
+}
+.fopt__name input::placeholder { color: var(--color-text-depth-300); }
+.fopt__name input:focus { outline: none; border-color: var(--color-brand-primary); position: relative; }
+.fopt__name button {
+  flex: none;
+  width: 99px;
+  border-radius: 0 8px 8px 0;
+  background: var(--color-brand-primary);
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--color-text-strong);
+}
+.fopt__name button:hover { background: var(--color-interaction-hovered, #3569d1); }
+.fopt__msg { margin: 4px 0 0; font-size: 11px; font-weight: 500; line-height: 1.5; color: var(--color-brand-primary); }
+.fopt__msg.is-error { color: #ff6363; }
+.fopt__chips { display: flex; gap: 4px; }
+.fopt__chip {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 12px;
+  border-radius: 24px;
+  background: var(--color-bg-cancel);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  color: var(--color-text-depth-300);
+}
+.fopt__chip[aria-pressed="true"] { background: var(--color-brand-primary); font-weight: 700; color: var(--color-text-strong); }
+.fwatch .fopt__size--s { font-size: 12px; }
+.fwatch .fopt__size--m { font-size: 14px; }
+.fwatch .fopt__size--l { font-size: 17px; }
+@media (max-width: 767px) {
+  .fwatch .fopt { max-height: calc(100% - var(--fw-top, 0px) - 40px); }
+}
+
+/* 채팅 메뉴 오른쪽 — 참여자 수 · 관리자설정 알약 (67859:72300) 24 · BG 400 · Border 200 · 사이 6 */
+.fchat__tools { display: flex; align-items: center; gap: 6px; }
+.fwatch .fchat__people { height: 24px; padding: 0 8px; border-color: var(--color-border-200); background: var(--color-bg-400); }
+.fchat__admin {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 24px;
+  padding: 0 8px;
+  border: 1px solid var(--color-border-200);
+  border-radius: 9999px;
+  background: var(--color-bg-400);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  color: var(--color-brand-primary);
+  white-space: nowrap;
+}
+.fchat__admin[aria-expanded="true"] { border-color: var(--color-brand-primary); }
+.fchat__admin[hidden] { display: none; }
+[data-auth="out"] .fchat__admin { display: none; }
+/* 관리자 설정 카드 — 메뉴 바로 아래 오른쪽 */
+.fwatch .fadmin { top: 50px; right: 12px; bottom: auto; }
+@media (max-width: 767px) {
+  .fwatch .fadmin { top: auto; }
+}
+
+/* 방송 정보 팔로우 (67859:67981) — 팔로우 · 팔로잉 모두 후원하기와 같은 밝은 회색 바탕 · 진한 글자 (하트만 비움 ↔ 채움) */
+.fwatch .winfo .fstreamer__follow,
+.fwatch .fstreamer__follow { background: var(--fw-donate-bg); color: var(--fw-donate-text); }
+.fwatch .fstreamer__follow img { filter: brightness(0.1); }
+
+/* ---------- 모바일 (2026-11-25 새 시안 67859:82058 · 85198 · 86082) ----------
+   상태바 아래 바로 플레이어(앱바 없음) → 방송 정보 · 설명 · 이 방송국의 다시보기(본문 스크롤).
+   아래 고정 줄(52): 채팅 · 후원 · 시그니처 + 설정. 채팅을 누르면 플레이어 아래부터 채팅 칸이 열림 */
+.fmo,
+.fkind--chat,
+.fchat__close { display: none; }
+@media (max-width: 767px) {
+  .fwatch { --fw-top: calc(var(--mo-statusbar-h) + 56.25vw); }
+  .fwatch .fbar,
+  .fwatch.is-tapped .fminfo { display: none; }
+  .fwatch__main {
+    flex: 1 1 0;
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding-bottom: 72px;
+  }
+  .fwatch .fplayer { position: sticky; top: 0; z-index: 3; }
+  .fwatch .winfo { display: block; padding: 0; border: 0; background: none; }
+  .fwatch .winfo__head { display: none; }
+  .fwatch .wmore { display: block; padding: 28px 16px 0; }
+  .fwatch .wdesc { margin: 8px 16px 0; }
+
+  /* 방송 정보 (67859:82084) — BG 300 · 안 16 · 사이 16 */
+  .fmo {
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    background: var(--fw-sheet-bg);
+  }
+  .fmo__title {
+    margin: 0;
+    overflow: hidden;
+    font-family: var(--font-score);
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.01em;
+    color: var(--color-text-strong);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .fmo__tags { display: flex; flex-wrap: wrap; gap: 5px; margin: 12px 0 0; padding: 0; list-style: none; }
+  .fmo__tags li {
+    padding: 2px 8px;
+    border-radius: 20px;
+    background: var(--color-bg-cancel);
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 16px;
+    color: var(--color-text-normal);
+  }
+  .fmo__meta { display: flex; gap: 4px; margin: 8px 0 0; font-size: 11px; font-weight: 500; line-height: 1.5; color: var(--color-text-depth-400); }
+  .fmo__row { display: flex; align-items: center; justify-content: space-between; margin-top: 16px; }
+  .fmo__who { display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 700; line-height: 22px; letter-spacing: 0.25px; color: var(--color-text-normal); }
+  .fmo__pic { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: #ff4242; }
+  .fmo__pic img { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; }
+  .fmo__acts { display: flex; gap: 8px; }
+  .fmo__more { display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border-radius: 8px; background: var(--color-bg-400); }
+  .fmo__follow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    width: 75px;
+    height: 32px;
+    padding: 0;
+    border-radius: 8px;
+    background: var(--color-brand-primary);
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 16px;
+    color: var(--color-text-strong);
+  }
+  .fmo__follow[aria-pressed="true"] { background: var(--fw-donate-bg); color: var(--fw-donate-text); }
+  .fmo__follow[aria-pressed="true"] img { filter: brightness(0.1); }
+  [data-theme="light"] .fmo__more img { filter: brightness(0.3); }
+
+  /* 채팅 칸 — 닫혀 있으면 아래 고정 줄만, 열면 플레이어 아래부터 아래 끝까지 */
+  .fwatch .fchat {
+    position: fixed;
+    right: 0;
+    bottom: var(--fw-ind);
+    left: 0;
+    z-index: 20;
+    flex: none;
+    height: auto;
+    background: transparent;
+  }
+  .fwatch:not(.is-mochat) .fchat > :not(.fdock):not(.fpop):not(.fopt):not(.fusers):not(.fuser):not(.dfail),
+  .fwatch:not(.is-mochat) .finput { display: none; }
+  .fwatch.is-mochat .fchat { top: var(--fw-top); background: var(--color-bg-200); }
+  .fwatch.is-mochat .fchat__menu {
+    display: flex;
+    height: 48px;
+    padding: 0 8px 0 16px;
+    border-bottom: 1px solid var(--color-border-100);
+  }
+  .fwatch.is-mochat .fchat__menu .fchat__title { margin-right: 8px; }
+  .fwatch.is-mochat .fchat__menu { justify-content: flex-start; }
+  .fwatch.is-mochat .fchat__tools { flex: 1; }
+  .fchat__close { display: grid; place-items: center; width: 40px; height: 40px; padding: 0; }
+  .fwatch .ftop { top: 48px; }
+  .fwatch .fchat__list { padding-bottom: 112px; }
+  /* 랭킹 펼침 — 채팅 칸을 모두 덮음 */
+  .frk.is-open { max-height: calc(100vh - var(--fw-top) - 48px - var(--fw-ind)); overflow-y: auto; }
+  .frk__podium { padding-right: 52px; }
+
+  /* 아래 고정 줄 (67859:82131) — 52, BG 300 · 위 14 · 아래 6 · 좌우 16. 칩 32(BG Chips · S-Core Dream 12), 설정 32 원 */
+  .fwatch .fdock { position: relative; left: 0; width: 100%; border-radius: 0; box-shadow: none; filter: none; }
+  .fwatch.is-mochat .fdock { background: var(--fw-sheet-bg); }
+  .fwatch .fdock__tabs { height: 52px; padding: 14px 16px 6px; border: 0; background: var(--fw-sheet-bg); }
+  .fwatch .fdock__kinds { gap: 6px; }
+  .fwatch .fkind { height: 32px; gap: 4px; padding: 9px 12px 8px; background: var(--color-bg-cancel); font-size: 12px; font-weight: 800; }
+  .fwatch .fkind img { width: 16px; height: 16px; }
+  .fkind--chat { display: flex; }
+  .fwatch .fdock__gear { width: 32px; height: 32px; border-radius: 50%; background: var(--color-bg-cancel); }
+  .fwatch .fdock__gear img.only-mo { width: 16px; height: 16px; content: url("assets/fun-watch/v4/setting-16.svg"); }
+}
+/* 랭킹 카드 — 좁은 폭에서 이름은 말줄임 */
+.frk__txt { max-width: 100%; overflow: hidden; }
+.frk__card .frk__who { max-width: 100%; }
+.frk__card .fname { min-width: 0; }
+/* 랭킹을 펼친 동안은 고정 메시지 · 새 메시지 알림을 가림 (펼친 패널이 채팅 칸을 덮음) */
+.ftop:has(.frk.is-open) .fpin,
+.fchat:has(.frk.is-open) .fchat__jump { display: none; }
+@media (max-width: 767px) {
+  .fwatch.is-mochat .fchat:has(.frk.is-open) .fdock { display: none; }
 }

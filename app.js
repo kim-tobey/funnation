@@ -2386,9 +2386,25 @@ window.FunBlock = (function () {
     var two = function (n) { return (n < 10 ? "0" : "") + n; };
     setInterval(function () {
       sec++;
-      uptime.textContent = two(Math.floor(sec / 3600)) + ":" + two(Math.floor(sec / 60) % 60) + ":" + two(sec % 60);
+      var t = two(Math.floor(sec / 3600)) + ":" + two(Math.floor(sec / 60) % 60) + ":" + two(sec % 60);
+      uptime.textContent = t;
+      // 모바일 방송 정보의 "01:05:41 방송 중"도 같은 시간
+      var mo = fw.querySelectorAll("[data-fmo-uptime]");
+      for (var u = 0; u < mo.length; u++) mo[u].textContent = t;
     }, 1000);
   }
+
+  /* 모바일 채팅 (2026-11-25 새 시안 67859:82131 · 67859:85198) — 기본은 방송 정보 + 아래 채팅 · 후원 · 시그니처 버튼,
+     채팅을 누르면 플레이어 아래로 채팅 칸이 열림. 다시 누르거나 × 로 닫음 */
+  var moChatBtn = fw.querySelector("[data-fmochat]");
+  function moChat(on) {
+    fw.classList.toggle("is-mochat", on);
+    if (moChatBtn) moChatBtn.setAttribute("aria-pressed", on ? "true" : "false");
+    if (on) requestAnimationFrame(function () { var l = fw.querySelector("[data-fchat-list]"); l.scrollTop = l.scrollHeight; });
+  }
+  if (moChatBtn) moChatBtn.addEventListener("click", function () { moChat(!fw.classList.contains("is-mochat")); });
+  var moChatClose = fw.querySelector("[data-fmochat-close]");
+  if (moChatClose) moChatClose.addEventListener("click", function () { moChat(false); });
 
   // 채팅 접기 · 펼치기 — 접으면 왼쪽(플레이어 · 정보)이 오른쪽 끝까지 넓어짐
   var foldBtn = fw.querySelector("[data-fchat-fold]");
@@ -2402,30 +2418,15 @@ window.FunBlock = (function () {
   var infoDonate = fw.querySelector("[data-watch-donate]");
   if (infoDonate) infoDonate.addEventListener("click", function () { fold(false); });
 
-  // 후원 랭킹 TOP 3 ⌄ ↔ TOP 10 ⌃ (67427:71296 · 67427:74259) — 펼치면 4~10위 목록이 채팅 위로 겹침
-  var rankBtn = fw.querySelector("[data-frank-toggle]");
-  rankBtn.addEventListener("click", function () {
-    // 모바일 — 펼친 패널의 제목(TOP 10 ⌃)을 누르면 접음 (67427:93435)
-    var rk = this.closest(".frank");
-    if (rk.classList.contains("is-mo-open")) { fw.querySelector("[data-frank-more]").click(); return; }
-    var open = this.getAttribute("aria-expanded") !== "true";
+  /* 후원 랭킹 (2026-11-25 새 시안 67859:68563 · 67859:69202) — "10 ⌄" 로 펼치면 2 · 1 · 3위 카드 + 4~10위 + 한방 최고, "10 ⌃" 로 접음 */
+  var rank = fw.querySelector(".frk");
+  var rankBtn = fw.querySelector("[data-frk-toggle]");
+  if (rank && rankBtn) rankBtn.addEventListener("click", function () {
+    var open = !rank.classList.contains("is-open");
+    rank.classList.toggle("is-open", open);
+    rank.querySelector(".frk__body").hidden = !open;
     this.setAttribute("aria-expanded", open ? "true" : "false");
-    this.setAttribute("aria-label", open ? "후원 랭킹 TOP 3 로 접기" : "후원 랭킹 TOP 10 펼치기");
-    this.querySelector("[data-frank-label]").textContent = open ? "TOP 10" : "TOP 3";
-    this.closest(".frank").classList.toggle("is-top10", open);
-  });
-  // 모바일 랭킹 줄 ⌄ — [구현 제안] 펼치면 PC 와 같은 2 · 1 · 3위 카드 + 한방 최고를 줄 아래로
-  var rank = fw.querySelector(".frank");
-  var rankMore = fw.querySelector("[data-frank-more]");
-  rankMore.addEventListener("click", function () {
-    var open = !rank.classList.contains("is-mo-open");
-    rank.classList.toggle("is-mo-open", open);
-    // 펼친 패널 제목은 TOP 10 ⌃
-    rankBtn.setAttribute("aria-expanded", open ? "true" : "false");
-    rankBtn.querySelector("[data-frank-label]").textContent = open ? "TOP 10" : "TOP 3";
-    rank.classList.remove("is-top10");
-    this.setAttribute("aria-expanded", open ? "true" : "false");
-    this.setAttribute("aria-label", open ? "후원 랭킹 접기" : "후원 랭킹 펼치기");
+    this.setAttribute("aria-label", open ? "후원 랭킹 접기" : "후원 랭킹 10위까지 펼치기");
   });
 
   /* 모바일 재생화면 탭 (66132:100340) — 플레이어를 누르면 앱바 대신 플레이어 위 버튼 · 아래 방송 정보, 다시 누르거나 ⌄ 로 닫음 */
@@ -2446,24 +2447,94 @@ window.FunBlock = (function () {
   var chat = document.getElementById("wchat");
   var list = fw.querySelector("[data-fchat-list]");
 
-  // 글자 크기 3단계 (설정 66132:103272) — 채팅 목록 글자만
+  // 글자 크기 3단계 — 아래 채팅 설정에서
   var sizes = fw.querySelectorAll("[data-fchat-size]");
-  for (var z = 0; z < sizes.length; z++) sizes[z].addEventListener("click", function () {
-    var px = this.getAttribute("data-fchat-size");
-    for (var i = 0; i < sizes.length; i++) sizes[i].setAttribute("aria-pressed", sizes[i].getAttribute("data-fchat-size") === px ? "true" : "false");
-    list.style.setProperty("--fmsg-size", px + "px");
-  });
 
-  /* 설정 토글 (66132:103285~) — 배지 표시 · 메시지 시간 표시 · 채팅 얼리기.
-     [구현 제안] 시간은 이름 앞 작은 글자, 얼리기는 켜 둔 동안 새 메시지를 모아 두었다가 끄면 한꺼번에 보여줌 */
+  /* 채팅 설정 (2026-11-25 새 시안 67859:71717) — 고정 영역 3종 · 칭호 배지 · 가볍게 보기 · 글자 크기 · 채팅 이름.
+     이 기기에 저장 (localStorage funnation-fw-prefs, 서버 연동 전). 채팅 얼리기는 관리자 설정으로 옮김 */
   var frozen = false;
   var queue = [];
-  var opts = fw.querySelectorAll("[data-fopt]");
-  for (var o = 0; o < opts.length; o++) opts[o].addEventListener("change", function () {
-    var key = this.getAttribute("data-fopt");
-    if (key === "badge") chat.classList.toggle("is-nobadge", !this.checked);
-    if (key === "time") chat.classList.toggle("is-time", this.checked);
-    if (key === "freeze") {
+  var PREF_KEY = "funnation-fw-prefs";
+  var prefs = { rankbar: true, pindonate: true, pinmsg: true, lite: false, badge: true, size: "14", name: "", nameAt: 0 };
+  try { var saved = JSON.parse(localStorage.getItem(PREF_KEY) || "{}"); for (var pk in saved) prefs[pk] = saved[pk]; } catch (e) {}
+  function savePrefs() { try { localStorage.setItem(PREF_KEY, JSON.stringify(prefs)); } catch (e) {} }
+  var ftop = fw.querySelector("[data-ftop]");
+  function measureTop() { chat.style.setProperty("--ftop-h", (ftop ? ftop.offsetHeight : 0) + "px"); }
+  if (ftop && window.ResizeObserver) new ResizeObserver(measureTop).observe(ftop);
+  function applyPrefs() {
+    var areas = fw.querySelectorAll("[data-pref-area]");
+    for (var i = 0; i < areas.length; i++) {
+      var k = areas[i].getAttribute("data-pref-area");
+      // 고정 후원은 큰 후원이 들어온 뒤에만 내용이 생김
+      areas[i].hidden = !prefs[k] || (k === "pindonate" && !areas[i].innerHTML.trim());
+    }
+    chat.classList.toggle("is-lite", !!prefs.lite);
+    chat.classList.toggle("is-nobadge", !prefs.badge);
+    var bb = fw.querySelector("[data-fopt-badge]");
+    if (bb) bb.setAttribute("aria-pressed", prefs.badge ? "true" : "false");
+    list.style.setProperty("--fmsg-size", prefs.size + "px");
+    for (var z = 0; z < sizes.length; z++) sizes[z].setAttribute("aria-pressed", sizes[z].getAttribute("data-fchat-size") === String(prefs.size) ? "true" : "false");
+    var opts = fw.querySelectorAll("[data-fopt]");
+    for (var o = 0; o < opts.length; o++) opts[o].checked = !!prefs[opts[o].getAttribute("data-fopt")];
+    measureTop();
+  }
+  for (var z = 0; z < sizes.length; z++) sizes[z].addEventListener("click", function () {
+    prefs.size = this.getAttribute("data-fchat-size");
+    savePrefs();
+    applyPrefs();
+  });
+  var optEls = fw.querySelectorAll("[data-fopt]");
+  for (var o = 0; o < optEls.length; o++) optEls[o].addEventListener("change", function () {
+    prefs[this.getAttribute("data-fopt")] = this.checked;
+    savePrefs();
+    applyPrefs();
+  });
+  var badgeBtn = fw.querySelector("[data-fopt-badge]");
+  if (badgeBtn) badgeBtn.addEventListener("click", function () {
+    prefs.badge = !prefs.badge;
+    savePrefs();
+    applyPrefs();
+  });
+  // 채팅 이름 — 하루 1번 · 1~10자 · 중복/금칙어 불가 (중복 · 금칙어 검사는 서버 연동 전이라 샘플 목록으로)
+  var nameForm = fw.querySelector("[data-fopt-name]");
+  if (nameForm) {
+    var nameInput = nameForm.querySelector("[data-fopt-name-input]");
+    var nameMsg = fw.querySelector("[data-fopt-name-msg]");
+    if (prefs.name) nameInput.placeholder = prefs.name;
+    nameForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var v = nameInput.value.trim();
+      var err = "";
+      if (root.getAttribute("data-auth") === "out") { location.hash = "login"; return; }
+      if (!v || v.length > 10) err = "1~10자로 입력해주세요";
+      else if (CUSERS[v] || v === prefs.name) err = "이미 사용 중인 이름이에요";
+      else if (/시발|씨발|병신|운영자|관리자/.test(v)) err = "사용할 수 없는 이름이에요";
+      else if (prefs.nameAt && Date.now() - prefs.nameAt < 86400000) err = "채팅 이름은 하루에 한 번만 바꿀 수 있어요";
+      nameMsg.hidden = false;
+      nameMsg.classList.toggle("is-error", !!err);
+      if (err) { nameMsg.textContent = err; return; }
+      prefs.name = v;
+      prefs.nameAt = Date.now();
+      savePrefs();
+      nameInput.value = "";
+      nameInput.placeholder = v;
+      nameMsg.textContent = "채팅 이름을 '" + v + "'(으)로 바꿨어요";
+    });
+  }
+  /* 관리자 설정 (67859:72300) — 채팅 얼리기(켜 둔 동안 새 메시지를 모았다가 끄면 한꺼번에) · 채팅 참여(전체 · 팔로워 · 구독자, 서버 연동 전 표시만) */
+  var adminBtn = fw.querySelector("[data-fadmin-btn]");
+  var adminPop = document.getElementById("fadmin");
+  function adminOpen(on) {
+    if (!adminPop) return;
+    adminPop.hidden = !on;
+    adminBtn.setAttribute("aria-expanded", on ? "true" : "false");
+  }
+  if (adminBtn) {
+    adminBtn.addEventListener("click", function (e) { e.stopPropagation(); adminOpen(adminPop.hidden); });
+    adminPop.querySelector("[data-fadmin-close]").addEventListener("click", function () { adminOpen(false); });
+    document.addEventListener("click", function (e) { if (!adminPop.hidden && !adminPop.contains(e.target)) adminOpen(false); });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !adminPop.hidden) adminOpen(false); });
+    adminPop.querySelector("[data-fadmin-freeze]").addEventListener("change", function () {
       frozen = this.checked;
       if (!frozen) {
         var follow = atBottom();
@@ -2471,8 +2542,34 @@ window.FunBlock = (function () {
         trim();
         if (follow) list.scrollTop = list.scrollHeight;
       }
-    }
+    });
+    var joins = adminPop.querySelectorAll("[data-fadmin-join]");
+    for (var j = 0; j < joins.length; j++) joins[j].addEventListener("click", function () {
+      for (var k = 0; k < joins.length; k++) {
+        var on = joins[k] === this;
+        joins[k].setAttribute("aria-checked", on ? "true" : "false");
+        joins[k].setAttribute("aria-pressed", on ? "true" : "false");
+      }
+    });
+  }
+  // 고정 메시지 접기
+  var pinFold = fw.querySelector("[data-fpin-fold]");
+  if (pinFold) pinFold.addEventListener("click", function () {
+    var box = this.closest(".fpin");
+    var folded = !box.hasAttribute("data-folded");
+    box.toggleAttribute("data-folded", folded);
+    this.setAttribute("aria-expanded", folded ? "false" : "true");
+    this.setAttribute("aria-label", folded ? "고정 메시지 펼치기" : "고정 메시지 접기");
+    measureTop();
   });
+  // 고정 후원 — 1만원 이상 후원이 들어오면 맨 위에 고정
+  function pinDonation(m) {
+    var box = fw.querySelector("[data-fpin-donate]");
+    if (!box || !m.amount || m.amount < 10000) return;
+    box.innerHTML = '<img src="assets/fun-watch/v2/gift.svg" width="20" height="20" alt=""><b>' + esc(m.name) + "</b><span>" + esc(m.text || "후원 감사합니다") + "</span><em>" + m.amount.toLocaleString("ko-KR") + "원</em>";
+    applyPrefs();
+  }
+
   // 바깥을 누르면 설정 카드를 닫음
   var settings = document.getElementById("fchat-settings");
   document.addEventListener("click", function (e) {
@@ -2493,37 +2590,43 @@ window.FunBlock = (function () {
     var d = new Date();
     return (d.getHours() < 10 ? "0" : "") + d.getHours() + ":" + (d.getMinutes() < 10 ? "0" : "") + d.getMinutes();
   }
-  // m = { name, text, badge?, rank? } — 배지는 [crown 순위] 또는 칭호 글자
+  /* 메시지 모양 — 2026-11-23 구현 그대로 (2026-11-25 사용자 결정): 등급 배지(아이콘 + 등급 이름) · 이름 색 · 크리에이터 강조 · 후원 말풍선.
+     m = { name, text, amount? (후원), me? } */
+  var GRADES = { 1: "동화", 2: "은화", 3: "금화", 4: "백금화", 5: "다이아", 6: "사파이어", 7: "에메랄드", 8: "루비", 9: "토파즈", 10: "자수정", 11: "크라운", 17: "시리우스", 18: "헬리오스", 19: "갤럭시", 20: "코스모스" };
+  var GCOLORS = ["#ff9f43", "#c4b5fd", "#57dff7", "#7bed9f", "#ffd336", "#ff8fab", "#a0c4ff", "#f7b267"];
+  var CUSERS = {
+    "YM상사": { role: "creator" },
+    "초사단_미카엘": { grade: 5 }, "은버들": { grade: 2 }, "청림호수": { grade: 8 },
+    "불법충": { grade: 10 }, "더유니크이예또팬": { grade: 6 }, "백마토끼": { grade: 18 },
+    "한량왕자": { grade: 17 }, "부아앙": { grade: 11 }, "산책중입니다": {}, "오늘도함께": { grade: 1 }, "예또팬": { grade: 3 }
+  };
+  function colorOf(name) {
+    var h = 0;
+    for (var i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) >>> 0;
+    return GCOLORS[h % GCOLORS.length];
+  }
+  function esc(t) { return String(t).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  function badgeHtml(name) {
+    var u = CUSERS[name] || {};
+    if (u.role === "creator") return '<span class="lw-msg__badge lw-msg__badge--creator">크리에이터</span>';
+    if (!u.grade) return "";
+    var g = u.grade < 10 ? "0" + u.grade : String(u.grade);
+    return '<span class="lw-msg__badge" style="color:' + colorOf(GRADES[u.grade] || "") + '"><img src="assets/v2/station/grade/grade-' + g + '-s.webp" alt="">' + esc(GRADES[u.grade] || "") + "</span>";
+  }
   function add(m) {
     var li = document.createElement("li");
-    li.className = "fmsg";
-    var time = document.createElement("time");
-    time.className = "fmsg__time";
-    time.textContent = now();
-    var who = document.createElement("button");
-    who.type = "button";
-    who.className = "fmsg__name";
-    who.setAttribute("data-fuser", "");
-    who.textContent = m.name;
-    li.appendChild(time);
-    li.appendChild(who);
-    if (m.badge) {
-      var b = document.createElement("span");
-      b.className = "fmsg__badge" + (m.rank ? " fmsg__badge--rank" : "");
-      if (m.rank) {
-        var crown = document.createElement("img");
-        crown.src = "assets/fun-watch/badge-crown.svg";
-        crown.width = crown.height = 12;
-        crown.alt = "";
-        b.appendChild(crown);
-      }
-      b.appendChild(document.createTextNode(m.badge));
-      li.appendChild(b);
+    var u = CUSERS[m.name] || {};
+    li.setAttribute("data-user", m.name);
+    var time = '<time class="fmsg__time">' + now() + "</time>";
+    var who = '<button type="button" class="lw-msg__name" data-fuser' + (m.me || u.role === "creator" ? "" : ' style="color:' + colorOf(m.name) + '"') + ">" + esc(m.name) + "</button>";
+    if (m.amount) {
+      pinDonation(m);
+      li.className = "lw-dono";
+      li.innerHTML = time + '<button type="button" class="lw-dono__head" data-fuser>' + esc(m.name) + '</button><span class="lw-dono__won">' + m.amount.toLocaleString("ko-KR") + "원</span>" + (m.text ? '<p class="lw-dono__text">' + esc(m.text) + "</p>" : "");
+    } else {
+      li.className = "lw-msg" + (u.role === "creator" ? " lw-msg--creator" : "") + (m.me ? " lw-msg--me" : "");
+      li.innerHTML = time + badgeHtml(m.name) + who + '<span class="lw-msg__text">' + esc(m.text) + "</span>";
     }
-    var text = document.createElement("span");
-    text.className = "fmsg__text";
-    text.textContent = m.text;
-    li.appendChild(text);
     if (frozen) {
       queue.push(li);
       return;
@@ -2535,6 +2638,32 @@ window.FunBlock = (function () {
     if (follow) list.scrollTop = list.scrollHeight;
     else unread(1);
   }
+  // 처음 메시지 (2026-11-23 구현과 같은 내용)
+  [
+    ["YM상사", "오늘도 방송 와주셔서 감사합니다 🎃 후원 점수는 만원 이상부터 적용돼요!"],
+    ["불법충", "예또팬님 깡통까지는 본인이 계산 때려봐야할거같고 본계정은 10억 찍히네여", 100],
+    ["초사단_미카엘", "칭호빼면됨"],
+    ["은버들", "나 신규가입이고 등급신청안해서 아무것도 없었는데 그냥 들어가니 인사했어"],
+    ["초사단_미카엘", "ㅋㅋ"],
+    ["초사단_미카엘", "닉때문에 걸리신듯"],
+    ["YM상사", "다들 반가워요~ 오늘은 할로윈 특집!"],
+    ["은버들", "어쩔수없이 후원했는..."],
+    ["청림호수", "유튜브닉보면 형들은 거의다아는"],
+    ["불법충", "ㅋㅋㅋㅋ 설정란에서 R 안뜨게 숨길수있어요 그거 안숨기면 열혈팬배처럼 떠요", 100],
+    ["초사단_미카엘", "미카엘은 6명이상봄"],
+    ["청림호수", "펀네이션은 생소한형들이 많음"],
+    ["더유니크이예또팬", "불법님 숲 닉 뭐임?"]
+  ].forEach(function (x) { add({ name: x[0], text: x[1], amount: x[2] }); });
+  var newLine = document.createElement("li");
+  newLine.className = "lw-divider";
+  newLine.setAttribute("role", "separator");
+  newLine.textContent = "여기부터 새 채팅";
+  list.appendChild(newLine);
+  add({ name: "불법충", text: "닉 깔거였으면 불법충으로 안왔죠 ㅋㅋㅋ 그냥 산책중입니다", amount: 100 });
+  add({ name: "초사단_미카엘", text: "숲닉 내분캐아는분 없어서 모름." });
+  applyPrefs();
+  list.scrollTop = list.scrollHeight;
+  requestAnimationFrame(function () { list.scrollTop = list.scrollHeight; });
   list.scrollTop = list.scrollHeight;
 
   /* 새 메시지 알림 (67427:72034) — 위로 올려 읽는 동안 쌓인 수(10 넘으면 10+). 누르거나 맨 아래로 내리면 사라짐 */
@@ -2553,14 +2682,10 @@ window.FunBlock = (function () {
   list.addEventListener("scroll", function () { if (unreadN && atBottom()) unread(0); });
   // 데모 새 메시지 — 모바일 시안(66132:100189)의 메시지
   var DEMO = [
-    { name: "커피", text: "송피아 도하나 맛나게 먹어라" },
-    { name: "불금", text: "피아는 안먹어도 될 거 같은데?", badge: "골드노블레스" },
-    { name: "살려단", text: "ㅋㅋㅋㅋㅋ" },
-    { name: "도파민고퀴", text: "송피아 도하나 맛나게 먹어라" },
-    { name: "@Sasha.l9ve", text: "lol moon", badge: "#3", rank: true },
-    { name: "초사단_미카엘", text: "ㅋㅋㅋ" },
-    { name: "은버들", text: "오늘 방송 재밌네요" },
-    { name: "청림호수", text: "다들 반가워요" }
+    { name: "초사단_미카엘", text: "ㅋㅋㅋ" }, { name: "은버들", text: "오 대박" }, { name: "청림호수", text: "브금 좋다" },
+    { name: "더유니크이예또팬", text: "할로윈 분위기 미쳤다" }, { name: "산책중입니다", text: "형님 오늘 몇시까지 해요?" },
+    { name: "오늘도함께", text: "ㅎㅇㅎㅇ" }, { name: "예또팬", text: "이거 무슨 노래에요?" }, { name: "부아앙", text: "방송 잘 보고 있어요!", amount: 5000 },
+    { name: "초사단_미카엘", text: "화질 좋네요" }, { name: "은버들", text: "오늘 텐션 좋다" }
   ];
   var d = 0;
   setInterval(function () {
@@ -2580,7 +2705,7 @@ window.FunBlock = (function () {
     var text = input.value.trim();
     if (!text) return;
     list.scrollTop = list.scrollHeight;
-    add({ name: "토비라마", text: text });
+    add({ name: "토비라마", text: text, me: true });
     input.value = "";
     input.dispatchEvent(new Event("input"));
   });
@@ -4303,17 +4428,34 @@ void main() {
   if (!btn || !list) return;
   var muted = {};
   function who() { return pop.querySelector("[data-fuser-name]").textContent.trim(); }
+  function blocked(n) { return !!(window.FunBlock && window.FunBlock.has(n)); }
   function apply() {
-    var rows = list.querySelectorAll(".fmsg");
+    var rows = list.querySelectorAll("[data-user]");
     for (var i = 0; i < rows.length; i++) {
-      var n = rows[i].querySelector(".fmsg__name");
-      rows[i].hidden = !!(n && muted[n.textContent.trim()]);
+      var un = rows[i].getAttribute("data-user");
+      rows[i].hidden = !!muted[un] || blocked(un);
     }
   }
+  // 쪽지 보내기 · 사용자 차단 (2026-11-25 새 시안 67859:80808)
+  var talk = pop.querySelector("[data-fuser-talk]");
+  var blockBtn = pop.querySelector("[data-fuser-block]");
+  if (blockBtn) blockBtn.addEventListener("click", function () {
+    var n = who();
+    if (!window.FunBlock) return;
+    if (blocked(n)) window.FunBlock.remove(n); else window.FunBlock.add(n);
+    sync();
+    apply();
+  });
   function sync() {
     var on = !!muted[who()];
     btn.setAttribute("aria-pressed", on ? "true" : "false");
     btn.querySelector("span").textContent = on ? "채팅 다시 보기" : "채팅 안보기";
+    var nm = who();
+    if (talk) talk.href = "talk.html?to=" + encodeURIComponent(nm) + "&n=" + encodeURIComponent(nm);
+    if (blockBtn) {
+      blockBtn.setAttribute("aria-pressed", blocked(nm) ? "true" : "false");
+      blockBtn.querySelector("span").textContent = blocked(nm) ? "차단 풀기" : "사용자 차단";
+    }
   }
   btn.addEventListener("click", function () {
     var n = who();

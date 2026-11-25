@@ -58,6 +58,7 @@ cafe:'<path d="M5 8h11v6a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4zM16 9h2a2 2 0 0 1 0 5h-2M
 calendar:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
 share:'<circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.2 11l7.6-4M8.2 13l7.6 4"/>',
 flag:'<path d="M5 21V4h12l-2 4 2 4H5"/>',
+gift:'<g transform="scale(1.2)"><path stroke-width="1.5" d="M9.83333 15.9167H14.4556C14.86 15.9167 15.0626 15.9167 15.2171 15.8333C15.3529 15.76 15.4629 15.643 15.5321 15.4991C15.6108 15.3356 15.6111 15.1214 15.6111 14.6931V11.0225C15.6111 10.5943 15.6108 10.3801 15.5321 10.2166C15.4629 10.0727 15.3529 9.95568 15.2171 9.88237C15.0626 9.79902 14.8598 9.79902 14.4553 9.79902M9.83333 15.9167V11.0225M9.83333 15.9167H5.21083C4.80635 15.9167 4.60431 15.9167 4.44982 15.8333C4.31392 15.76 4.20351 15.643 4.13427 15.4991C4.05556 15.3356 4.05556 15.1214 4.05556 14.6931V11.0225C4.05556 10.5943 4.05556 10.3801 4.13427 10.2166C4.20351 10.0727 4.31392 9.95568 4.44982 9.88237C4.60431 9.79902 4.80635 9.79902 5.21083 9.79902M9.83333 11.0225C9.83333 10.5943 9.83333 10.3801 9.91205 10.2166C9.98129 10.0727 10.0917 9.95568 10.2276 9.88237C10.3821 9.79902 10.5841 9.79902 10.9886 9.79902M9.83333 11.0225C9.83333 10.5943 9.83306 10.3801 9.75434 10.2166C9.6851 10.0727 9.57517 9.95568 9.43928 9.88237C9.28478 9.79902 9.08198 9.79902 8.6775 9.79902M10.9886 9.79902H14.4553M10.9886 9.79902C10.5841 9.79902 10.3821 9.79901 10.2276 9.71566C10.0917 9.64235 9.98129 9.52539 9.91205 9.3815C9.83333 9.21792 9.83333 9.00375 9.83333 8.57547M14.4553 9.79902H15.1775C15.582 9.79902 15.7848 9.79901 15.9393 9.71566C16.0752 9.64235 16.1851 9.52539 16.2543 9.3815C16.3331 9.21792 16.3333 9.00375 16.3333 8.57547V7.96371C16.3333 7.53543 16.3331 7.32132 16.2543 7.15774C16.1851 7.01385 16.0752 6.89686 15.9393 6.82354C15.7848 6.7402 15.582 6.7402 15.1775 6.7402H11.6389M5.21083 9.79902H8.6775M5.21083 9.79902H4.48861C4.08412 9.79902 3.88209 9.79901 3.72759 9.71566C3.5917 9.64235 3.48129 9.52539 3.41205 9.3815C3.33333 9.21792 3.33333 9.00375 3.33333 8.57547V7.96371C3.33333 7.53543 3.33333 7.32132 3.41205 7.15774C3.48129 7.01385 3.5917 6.89686 3.72759 6.82354C3.88209 6.7402 4.08412 6.7402 4.48861 6.7402H8.02778M8.6775 9.79902C9.08198 9.79902 9.28478 9.79901 9.43928 9.71566C9.57517 9.64235 9.6851 9.52539 9.75434 9.3815C9.83306 9.21792 9.83333 9.00375 9.83333 8.57547M9.83333 8.57547V7.96371M9.83333 7.96371C9.83333 7.53543 9.83333 7.32132 9.91205 7.15774C9.98129 7.01385 10.0917 6.89686 10.2276 6.82354C10.3821 6.7402 10.5841 6.7402 10.9886 6.7402M9.83333 7.96371C9.83333 7.53543 9.83306 7.32132 9.75434 7.15774C9.6851 7.01385 9.57517 6.89686 9.43928 6.82354C9.28478 6.7402 9.08198 6.7402 8.6775 6.7402M10.9886 6.7402H11.6389M10.9886 6.7402H9.83333M11.6389 6.7402C12.6361 6.7402 13.4444 5.88427 13.4444 4.82843C13.4444 3.77259 12.6361 2.91667 11.6389 2.91667C10.6417 2.91667 9.83333 3.77259 9.83333 4.82843M8.02778 6.7402H8.6775M8.02778 6.7402C7.0306 6.7402 6.22222 5.88427 6.22222 4.82843C6.22222 3.77259 7.0306 2.91667 8.02778 2.91667C9.02496 2.91667 9.83333 3.77259 9.83333 4.82843M8.6775 6.7402H9.83333M9.83333 4.82843V6.7402"/></g>', /* 후원하기 — 펀네이션 라이브 상세 채팅 아래 후원 버튼의 선물 아이콘(assets/fun-watch/v2/gift.svg 20 상자)을 24 로 키움, 선 1.5×1.2 = 1.8 로 다른 머리 버튼 아이콘과 같은 굵기 (2026-11-25) */
 talk:'<path stroke-width="1.6" d="M21 7.2v7.6c0 1.12 0 1.68-.22 2.11a2 2 0 0 1-.87.87c-.43.22-.99.22-2.11.22H9.12c-.41 0-.62 0-.82.04a2 2 0 0 0-.51.18c-.18.09-.34.22-.67.48l-1.52 1.22c-.83.67-1.25 1-1.6 1a1 1 0 0 1-.78-.38C3 20.27 3 19.74 3 18.67V7.2c0-1.12 0-1.68.22-2.11a2 2 0 0 1 .87-.87C4.52 4 5.08 4 6.2 4h11.6c1.12 0 1.68 0 2.11.22a2 2 0 0 1 .87.87c.22.43.22.99.22 2.11z"/><circle cx="8" cy="11" r="1" fill="currentColor" stroke="none"/><circle cx="12" cy="11" r="1" fill="currentColor" stroke="none"/><circle cx="16" cy="11" r="1" fill="currentColor" stroke="none"/>', /* 채팅톡 — LNB · 모바일 하단 내비 채팅톡 아이콘(assets/v2/lnb-talk.svg)과 같은 모양 (2026-11-24) */
 mail:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>',
 copy:'<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/>',
@@ -380,7 +381,7 @@ function layoutSB(){
   $('#sbback').hidden=!(sb.open&&w<960);
 }
 function renderBnav(){
-  const it=[['홈','home'],['라이브','antenna'],['크리에이터','user'],['팔로우','star'],['커뮤니티','users'],['MY','user']];
+  const it=[['홈','home'],['라이브','antenna'],['크리에이터','user'],['팔로우','heart'],['커뮤니티','users'],['MY','user']];
   $('#bnav').innerHTML=it.map(i=>`<button data-act="oos" class="${i[0]==='크리에이터'?'act':''}">${ic(i[1],22)}${i[0]}</button>`).join('');
 }
 
@@ -726,7 +727,7 @@ const A={
  donate:()=>openDonate(),
  plplay:()=>toast('실제 서비스에서는 유튜브 라이브가 재생돼요'),
  big(){
-  openModal({title:D.live.title.split(' #')[0],cls:'wide',body:`${playerHTML()}<h3 style="font-size:18px">${esc(D.live.title)}</h3>`,foot:`<button class="btn pri" data-act="donate">${ic('heart',16)}후원하기</button>`});
+  openModal({title:D.live.title.split(' #')[0],cls:'wide',body:`${playerHTML()}<h3 style="font-size:18px">${esc(D.live.title)}</h3>`,foot:`<button class="btn pri" data-act="donate">${ic('gift',16)}후원하기</button>`});
   startOvSoon();
  },
  ovtoggle(){S.overlay=!S.overlay;renderView();toast(S.overlay?'오버레이를 켰어요':'오버레이를 껐어요')},
@@ -962,9 +963,9 @@ function renderTop(){
    <div class="avw"><div class="avring${S.live?' on':''}">${av(D.name,90)}</div>${S.live?'<span class="livebdg">LIVE</span>':''}</div>
    <div class="pi"><h1>${D.name}${modeBadge()}</h1><button class="favn" data-act="nav" data-arg="subfans" data-qa="B-09" title="팔로워 보기"><img src="assets/watch/v4/viewers.svg" width="16" height="16" alt=""><span>팔로워 <b>${fmt(S.favCount)}</b>명</span></button></div>
    <div class="btns">
-     <button class="btn pri" id="donBtn" data-act="donate" data-qa="B-05">${ic('heart',18)}<span class="bl">후원하기</span>${donDotHTML()}</button>
+     <button class="btn pri" id="donBtn" data-act="donate" data-qa="B-05">${ic('gift',18)}<span class="bl">후원하기</span>${donDotHTML()}</button>
      <button class="btn out" data-act="talk" data-qa="B-08">${ic('talk',18)}<span class="bl">채팅톡</span></button>
-     <button class="btn out fav${S.favorite?' on':''}" data-act="fav" data-qa="B-04" aria-pressed="${S.favorite}">${S.favorite?`<svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="#f7df4e" stroke="#f7df4e" stroke-width="1.8" stroke-linejoin="round">${P.star}</svg><span class="bl">팔로잉</span>`:ic('star',18)+'<span class="bl">팔로우</span>'}</button>
+     <button class="btn out fav${S.favorite?' on':''}" data-act="fav" data-qa="B-04" aria-pressed="${S.favorite}">${S.favorite?`<svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round">${P.heart}</svg><span class="bl">팔로잉</span>`:ic('heart',18)+'<span class="bl">팔로우</span>'}</button>
      <button class="btn out${al[2]?' on':''}" data-act="alarm" data-qa="B-03">${ic(al[0],18)}<span class="bl">${al[1]}</span></button>
      <button class="btn circ" data-act="more" aria-label="더보기">${ic('more',20)}</button>
    </div>
@@ -2922,7 +2923,7 @@ function playView(){
   const from=S.play&&S.play.from||'home';
   const backLbl={videos:'영상 목록',replay:'다시보기 목록',shorts:'쇼츠 목록',home:'홈'}[from]||'목록';
   const cmBox=`<div class="cmts" data-qa="PLAY-cm"><h3>댓글 <span>${cms.length}</span></h3><div class="cmtf"><textarea id="plIn" rows="2" maxlength="200" data-in="plcm" placeholder="댓글을 입력하세요"></textarea><div style="display:flex;justify-content:space-between;align-items:center"><span class="cnt" id="plCnt">0/200</span><button class="btn pri sm" id="plBtn" data-act="plCmAdd" disabled>등록</button></div></div><div id="plCmList">${cms.map(c=>`<div class="cmt">${av(c.n,32)}<div><b>${esc(c.n)}</b><small>${c.t}</small><p>${esc(c.x)}</p></div></div>`).join('')}</div></div>`;
-  const acts=`<div class="plact"><button class="btn out${liked?' on':''}" data-act="plLike" aria-pressed="${liked}" data-qa="PLAY-like">${ic('heart',16)}좋아요 <span>${fmt(likes)}</span></button><button class="btn out" data-act="share" data-qa="PLAY-share">${ic('share',16)}공유</button><button class="btn pri" data-act="donate">${ic('heart',16)}후원하기</button></div>`;
+  const acts=`<div class="plact"><button class="btn out${liked?' on':''}" data-act="plLike" aria-pressed="${liked}" data-qa="PLAY-like">${ic('heart',16)}좋아요 <span>${fmt(likes)}</span></button><button class="btn out" data-act="share" data-qa="PLAY-share">${ic('share',16)}공유</button><button class="btn pri" data-act="donate">${ic('gift',16)}후원하기</button></div>`;
   if(it.kind==='short'){
     const i=SHORTS.findIndex(s=>s.id===it.id),pv=SHORTS[i-1],nx=SHORTS[i+1];
     return `<div class="plp shortp" data-qa="PLAY-01"><button class="back" data-act="plBack">${ic('chevL',16)}${backLbl}</button>
@@ -2987,7 +2988,7 @@ function fnSideHTML(){
   const it=(v,icn,label)=>`<div class="mi${S.fn.view===v?' act':''}" role="button" tabindex="0" data-act="fnNav" data-arg="${v}" data-qa="FN-nav-${v}">${ic(icn,20)}<span class="nm">${label}</span></div>`;
   const favs=fnCreators().slice(0,6).map(c=>`<div class="mi" role="button" tabindex="0" data-act="fnCreator" data-arg="${c.id}">${av(c.n,24)}<span class="nm">${esc(c.n)}</span><span class="rt">${c.live?'<span class="lv">LIVE</span>':''}</span></div>`).join('');
   return `<div class="lnbtop"><div class="lt-pf"><span class="fnlogo">${ic('crown',24)}</span><span class="lbl"><b>FUNNATION</b></span></div><button class="lbtn" data-act="fnBack" data-qa="FN-back">${ic('chevL',14)}<span class="lbl">${D.name} 방송국으로 돌아가기</span></button></div>${!S.loggedIn&&innerWidth<768?'<button class="loginbtn" style="width:100%;margin-bottom:10px" data-act="login">로그인</button>':''}<hr>
-   ${it('fnhome','home','홈')}${it('fnlive','antenna','펀네이션 라이브')}${it('fnyt','youtube','유튜브 라이브')}${it('fnfind','search','크리에이터 찾기')}${it('fnfav','star','팔로우')}<hr><div class="pg">팔로우한 크리에이터</div>${favs}`;
+   ${it('fnhome','home','홈')}${it('fnlive','antenna','펀네이션 라이브')}${it('fnyt','youtube','유튜브 라이브')}${it('fnfind','search','크리에이터 찾기')}${it('fnfav','heart','팔로우')}<hr><div class="pg">팔로우한 크리에이터</div>${favs}`;
 }
 function fnLiveCard(c,i){return `<button class="fnc" data-act="fnCreator" data-arg="${c.id}" data-qa="FN-live">${thumb(c.lt||c.n,i,`<span class="bd live">LIVE</span>`)}<div class="vt">${esc(c.lt||c.n+' 라이브')}</div><div class="vm">${esc(c.n)} · 시청 ${fmt(300+i*137)}명</div></button>`}
 function fnCreatorCard(c){return `<div class="fncr" data-qa="FN-creator">${av(c.n,56)}<div class="fncb"><b>${esc(c.n)}${c.live?'<span class="lv">LIVE</span>':''}</b><small>${esc(c.intro)}</small><small>팔로워 ${fmt(c.fav)}</small></div><button class="btn sec sm" data-act="fnCreator" data-arg="${c.id}">${c.own?'방송국 가기':'채널 보기'}</button></div>`}
@@ -3004,7 +3005,7 @@ function fnView(){
   }
   if(f.view==='creator'){
     const c=cs.find(x=>x.id===f.cid)||cs[0];
-    return `<div class="fnh" data-qa="FN-creatorpage"><button class="back" data-act="fnNav" data-arg="search">${ic('chevL',16)}검색 결과</button><div class="fncp">${av(c.n,88)}<div><h2>${esc(c.n)}${c.live?'<span class="lv">LIVE</span>':''}</h2><p>${esc(c.intro)}</p><small class="fanl">팔로워 ${fmt(c.fav)}</small></div><div class="fncpb">${c.own?`<button class="btn pri" data-act="fnBack" data-qa="FN-go-station">${D.name} 방송국 가기</button>`:`<button class="btn sec" data-act="crewGo" data-arg="${c.n}">방송국 가기</button>`}<button class="btn out" data-act="oos">${ic('star',16)}팔로우</button></div></div>
+    return `<div class="fnh" data-qa="FN-creatorpage"><button class="back" data-act="fnNav" data-arg="search">${ic('chevL',16)}검색 결과</button><div class="fncp">${av(c.n,88)}<div><h2>${esc(c.n)}${c.live?'<span class="lv">LIVE</span>':''}</h2><p>${esc(c.intro)}</p><small class="fanl">팔로워 ${fmt(c.fav)}</small></div><div class="fncpb">${c.own?`<button class="btn pri" data-act="fnBack" data-qa="FN-go-station">${D.name} 방송국 가기</button>`:`<button class="btn sec" data-act="crewGo" data-arg="${c.n}">방송국 가기</button>`}<button class="btn out" data-act="oos">${ic('heart',16)}팔로우</button></div></div>
      ${c.live?`<section class="fnsec"><h3>지금 라이브</h3><div class="grid g3">${fnLiveCard(c,1)}</div></section>`:''}
      <section class="fnsec"><h3>최근 영상</h3><div class="grid g3">${fnVids().slice(0,3).map(fnVidCard).join('')}</div></section></div>`;
   }
