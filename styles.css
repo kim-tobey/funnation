@@ -8338,9 +8338,8 @@ ul {
 .fplayer__controls {
   position: absolute;
   bottom: 0;
-  left: 50%;
-  width: min(100%, 541px * 16 / 9);
-  transform: translateX(-50%);
+  left: 0;
+  width: 100%; /* 2026-11-25 사용자 요청: 아래 어둠(그라데이션) · 컨트롤을 플레이어 폭 100% 로 (이전 영상 폭 16:9) */
   z-index: 1;
   display: flex;
   align-items: center;
@@ -16090,21 +16089,25 @@ button.subnav__tab {
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-  .fwide-bar__live,
+  /* 시청자 수 (67930:64285, 2026-11-25 시안 변경) — LIVE 배지 없앰. 28 · 좌우 6 · 사이 4 · radius 4 · Overlay Black 65 + 흐림 8 + 안쪽 빛 그림자, 사람 16(Primary) + 숫자 Regular 16 / 28 흰색 */
   .fwide-bar__viewers {
     display: flex;
     flex: none;
     align-items: center;
-    padding: 2px 4px;
+    gap: 4px;
+    height: 28px;
+    padding: 0 6px;
     border-radius: 4px;
-    font-size: 12px;
-    font-weight: 500;
-    line-height: 1;
-    letter-spacing: -0.01em;
+    background: rgba(0, 0, 0, 0.65);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.55), inset 4px 4px 14px rgba(255, 255, 255, 0.12), inset -4px -4px 14px rgba(0, 0, 0, 0.4);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 28px;
     color: #fff;
   }
-  .fwide-bar__live { height: 16px; background: #ff4242; }
-  .fwide-bar__viewers { height: 18px; margin-left: 2px; background: rgba(0, 0, 0, 0.65); }
+  .fwide-bar__viewers img { flex: none; width: 16px; height: 16px; }
   /* 플로팅 — 오른쪽 위(위 32 · 오른쪽 16) 40 원 두 개, 사이 10 */
   .fwatch.is-wide .fwide-fab {
     position: absolute;
