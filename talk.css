@@ -555,3 +555,8 @@ body:has(.page--talk) .fab-auth { bottom: 112px; }
   body:has(.talk.is-room-open) { overflow: hidden; }
   body:has(.page--talk) .fab-auth { bottom: calc(var(--bottom-nav-h) + 16px); }
 }
+
+/* 아바타 공통 규칙(2026-11-25, Figma 68060:29928 채팅톡) — 대화 목록 44 · 대화방 머리 36 · 메시지 32 모두 Default(링 없음, 사진 없으면 BG 400) */
+.talk-av.is-live img,
+.talk-room__who .talk-av.is-live img { box-shadow: none; }
+.talk-msg__av img { background: #1f212e; }

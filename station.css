@@ -2236,3 +2236,28 @@ body.wire .stn .banner.def,body.wire .stn .rbi.def,body.wire .stn .mban.def .mb-
 @media (min-width:768px){
   .stn .top .btns .btn:not(.circ){width:120px;padding:0;justify-content:center}
 }
+
+/* ===== 아바타 공통 규칙 (2026-11-25, Figma Avatar 67907:34938 · 적용 위치 68060:29928) — 색은 styles.css --av-* =====
+   13 방송국 LNB 프로필: Size 56 Gold → 51 (링 3 → 띠 3 #0E0E14 → 사진). 접힌 LNB 48 그대로
+   13 방송국 머리 프로필: Size 96 — 방송 중 Live(링 4, 사진에 바로 닿음) + LIVE 배지 36×18, 아니면 Gold
+   14 크루원 카드: styles.css 크루 카드 규칙(방송 중 Live · 아니면 Gold)을 방송국 초기화보다 우선
+   15 활동 랭커: 1 · 2 · 3위 = Gold · Silver · Bronze 링(사용자 결정: 금 · 은 · 동은 랭킹 1 · 2 · 3위). 1위 64 · 2 · 3위 52
+   16 · 17 · 18 게시글 · 댓글 · 쪽지 · 관리 목록: Default (사진 없으면 BG 400) */
+.stn .av.pf{background:var(--av-ph)}
+.stn .pfring{width:51px;height:51px;padding:3px;background:var(--av-gold)}
+.stn .pfring .av{border:3px solid var(--av-gap)}
+.stn .gside.rail .pfring{width:48px;height:48px}
+.stn .avring{padding:3px;background:var(--av-gold)}
+.stn .avring .av{border:3px solid var(--av-gap)}
+.stn .avring.on{padding:4px;background:var(--av-live)}
+.stn .avring.on .av{border:0}
+.stn .livebdg{display:flex;align-items:center;justify-content:center;box-sizing:border-box;min-width:36px;height:18px;padding:2px 4px;border-radius:4px;background:var(--av-live);font-size:11px;font-weight:700;line-height:16px;color:#fff}
+.stn .crew-card .crew-card__av{border-radius:50%;background:var(--av-gold)}
+.stn .crew-card.is-live .crew-card__av{background:var(--av-live)}
+.stn .crew-card .crew-card__live{margin:-12px 0 10px;padding:2px 4px;font-size:11px;line-height:16px}
+.stn .crew-card.is-live .crew-card__av{margin-bottom:0}
+@media (max-width:767px){.stn .crew-card .crew-card__av,.stn .crew-card.is-live .crew-card__av{margin:0 0 10px}.stn .crew-card.is-live .crew-card__av{margin-bottom:0}}
+.stn .lrf{padding:3px;border:0;background:var(--av-gold)}
+.stn .lre2 .lrf{background:var(--av-silver)}
+.stn .lre3 .lrf{background:var(--av-bronze)}
+.stn .lrf .av{box-sizing:border-box;border:3px solid var(--av-gap)}
