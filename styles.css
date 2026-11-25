@@ -8317,6 +8317,10 @@ ul {
 .fplayer.is-ended .fplayer__controls {
   display: none;
 }
+/* 2026-11-25 사용자 요청: 방송 종료면 영상 칸 · 좌우 여백 모두 순수 검정 #000 (뒤 영상 · 포스터가 양옆에 비치던 것) */
+.fplayer.is-ended { background: #000; }
+.fplayer.is-ended .fplayer__ended { left: 0; width: 100%; max-width: none; aspect-ratio: auto; transform: none; }
+.fplayer.is-ended .fplayer__video { visibility: hidden; }
 .fplayer__audio-only {
   position: absolute;
   inset: 0;
