@@ -5964,9 +5964,11 @@ ul {
   color: var(--color-text-depth-300);
 }
 .winfo__stat b {
-  margin-right: 2px;
   color: var(--color-brand-primary);
 }
+/* 숫자 → "명" 사이는 "명 시청중"의 띄어쓰기와 같은 한 칸 (2026-11-25 사용자 요청, 이전 flex 간격 4 + 2 = 6) */
+.winfo__stat b + span { margin-left: -4px; }
+.winfo__stat b + span::before { content: "\00a0"; }
 .winfo__share {
   display: flex;
   align-items: center;
@@ -15987,7 +15989,7 @@ button.subnav__tab {
   .fwatch.is-mochat .fchat__tools { flex: 1; }
   .fchat__close { display: grid; place-items: center; width: 40px; height: 40px; padding: 0; }
   .fwatch .ftop { top: 48px; }
-  .fwatch .fchat__list { padding-bottom: 112px; }
+  .fwatch .fchat__list { padding-bottom: 8px; }
   /* 랭킹 펼침 — 채팅 칸을 모두 덮음 */
   .frk.is-open { max-height: calc(100vh - var(--fw-top) - 48px - var(--fw-ind)); overflow-y: auto; }
   .frk__podium { padding-right: 52px; }
@@ -16126,3 +16128,47 @@ button.subnav__tab {
 /* 원인: 플레이어 아래 테두리 1px 만큼 높이가 줄어 16:9 영상 폭이 칸보다 약 2px 좁았음 → 영상 폭을 칸 폭에 맞추고 cover */
 /* 넓은화면은 칸이 16:9 가 아니라 영상 전체가 보이게(위아래 검정) */
 .fwatch.is-wide .fplayer__video { object-fit: contain; }
+
+/* 모바일 키보드 (2026-11-25 시안 67859:85770) — 키보드가 뜨면 플레이어는 보이는 화면 맨 위에 고정, 채팅 칸 아래 끝 = 키보드 위.
+   --kb · --vv-top 은 app.js(visualViewport) */
+@media (max-width: 767px) {
+  .fwatch.is-kb .fplayer {
+    position: fixed;
+    top: calc(var(--vv-top, 0px) + var(--mo-statusbar-h, 0px));
+    right: 0;
+    left: 0;
+    z-index: 21;
+  }
+  .fwatch.is-kb .fchat {
+    top: calc(var(--vv-top, 0px) + var(--fw-top));
+    bottom: var(--kb, 0px);
+  }
+  /* 모바일 아래 줄(입력 · 버튼)은 채팅 칸 흐름 안이라 목록 아래 여백이 필요 없음. 키보드가 뜨면 좁은 목록을 위해 고정 메시지는 숨김(시안에 없음) */
+  .fwatch.is-kb .fpin { display: none; }
+  [data-page="fun-watch"]:has(.fwatch.is-kb) .fab-auth,
+  [data-page="fun-watch"]:has(.fwatch.is-kb) .fab-chrome,
+  [data-page="fun-watch"]:has(.fwatch.is-kb) .bottom-nav { display: none; }
+}
+
+/* 모바일 채팅 칸 간격 · 크기 — 시안 67859:85198 기준으로 다시 맞춤 (2026-11-25) */
+@media (max-width: 767px) {
+  /* 머리 45 · 안 4/12, 제목 SemiBold 14 Depth 300, 참여자 알약 24(좌우 10), 닫기 36(아이콘 24) */
+  .fwatch.is-mochat .fchat__menu { box-sizing: border-box; height: 45px; padding: 4px 12px; }
+  .fwatch.is-mochat .fchat__menu .fchat__title { margin-right: 0; color: var(--color-text-depth-300); }
+  .fwatch.is-mochat .fchat__tools { gap: 6px; margin-left: 8px; }
+  .fwatch .fchat__people { padding: 0 10px; }
+  .fwatch .fchat__head { gap: 0; }
+  .fwatch .fchat__fold { display: none; }
+  .fchat__close { width: 36px; height: 36px; margin-left: auto; }
+  .fwatch .ftop { top: 45px; }
+  /* 랭킹 펼치기 — 28 동그라미(⌄만, BG 400 · Border 200), 앞쪽 113 은 바탕색으로 흐려짐(35% 부터) */
+  .frk__toggle { top: 11px; right: 12px; width: 28px; gap: 0; }
+  .frk__toggle-n { display: none; }
+  .frk__bar { padding-right: 40px; -webkit-mask-image: linear-gradient(to left, transparent 40px, #000 113px); mask-image: linear-gradient(to left, transparent 40px, #000 113px); }
+  /* 입력 줄 48 — 평평한 BG 300, 위 12 · 좌우 16 · 아래 0. 입력칸 36 · BG 100 · Border 100 · 모서리 6 · 안 11/12 */
+  .fwatch .finput { box-sizing: border-box; height: 48px; padding: 12px 16px 0; border: 0; border-radius: 0; background: var(--fw-sheet-bg); }
+  .fwatch .finput__box { box-sizing: border-box; height: 36px; padding: 0 12px; border-color: var(--color-border-100); }
+  .fwatch .finput__box:focus-within { border-color: var(--color-brand-primary); }
+  /* 아래 버튼 줄 52 (패딩 포함) */
+  .fwatch .fdock__tabs { box-sizing: border-box; height: 52px; }
+}

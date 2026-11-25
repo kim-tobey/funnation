@@ -2403,6 +2403,28 @@ window.FunBlock = (function () {
   // 2026-11-25 사용자 요청: 모바일로 들어오면 채팅이 열린 상태가 기본 (시안 67859:85198)
   if (matchMedia("(max-width: 767px)").matches) moChat(true);
 
+  /* 모바일 키보드 (2026-11-25, 시안 67859:85770 채팅입력중 · 67859:85596 키보드 내림) — 키보드가 올라와도 플레이어 · 채팅 머리 · 랭킹은 위에 그대로,
+     채팅 목록이 줄고 입력칸 + 채팅 · 후원 · 시그니처 줄이 키보드 바로 위에 붙음.
+     iOS 는 키보드가 떠도 innerHeight 가 그대로라 visualViewport 로 키보드 높이(--kb)와 화면이 밀린 만큼(--vv-top)을 잼 */
+  var vv = window.visualViewport;
+  function kbSync() {
+    if (!vv || !matchMedia("(max-width: 767px)").matches) { fw.classList.remove("is-kb"); return; }
+    var top = Math.max(0, vv.offsetTop);
+    var kb = Math.max(0, Math.round(window.innerHeight - vv.height - top));
+    var on = kb > 80; // 주소창 높이 변화(~70)는 키보드로 보지 않음
+    fw.classList.toggle("is-kb", on);
+    fw.style.setProperty("--kb", on ? kb + "px" : "0px");
+    fw.style.setProperty("--vv-top", on ? top + "px" : "0px");
+    if (on) { var l = fw.querySelector("[data-fchat-list]"); if (l) l.scrollTop = l.scrollHeight; }
+  }
+  if (vv) { vv.addEventListener("resize", kbSync); vv.addEventListener("scroll", kbSync); }
+  // 입력칸을 누르면 iOS 가 페이지를 위로 미는 것을 되돌림 (플레이어가 밀려 올라가지 않게)
+  var chatInput = fw.querySelector("[data-fchat-input]");
+  if (chatInput) {
+    chatInput.addEventListener("focus", function () { setTimeout(function () { window.scrollTo(0, 0); kbSync(); }, 60); });
+    chatInput.addEventListener("blur", function () { setTimeout(kbSync, 60); });
+  }
+
   /* 넓은화면 (2026-11-25 수정 시안 67897:61795) — 채팅 머리의 →| 또는 플레이어 "기본 화면" 버튼으로 켬.
      채팅을 접고 LNB 를 숨겨 영상이 GNB 아래를 꽉 채움, 왼쪽 위 제목 줄 · 오른쪽 위 채팅 · 후원 플로팅. 채팅 · ← · 기본 화면 버튼으로 끔 */
   var foldBtn = fw.querySelector("[data-fchat-fold]");
