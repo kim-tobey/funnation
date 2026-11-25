@@ -2028,6 +2028,7 @@ window.FunBlock = (function () {
       [amount.closest(".damount__box")]) && ok;
     /* 펀네이션 (67427:77456 · 67427:78259) — 경고 대신 금액 칸 아래 안내 줄. 잔액 부족만 빨간 테두리 + 충전하기,
        최소 금액 미만 · 잔액 부족이면 후원하기를 흐리게 (누르면 안내만) */
+    var key0 = panel.getAttribute("data-donate-panel");
     var hint = amount.closest(".damount").querySelector("[data-donate-hint]");
     if (hint) {
       var lack = won > BALANCE, low = won < min && (won > 0 || all);
@@ -2036,7 +2037,9 @@ window.FunBlock = (function () {
         : "최소 후원금액은 " + (min >= 10000 ? min / 10000 + "만원" : fmt(min) + "원") + "입니다";
       hint.querySelector("[data-donate-charge]").hidden = !lack;
       amount.closest(".damount__box").classList.toggle("is-warn", lack);
-      panel.querySelector("[data-donate-submit]").classList.toggle("is-off", lack || won < min);
+      // 2026-11-25 사용자 요청: 펀네이션 일반 후원은 응원 메시지를 쓰기 전까지 후원하기 꺼짐(시안)
+      var noMsg = key0 === "general" && !text.trim();
+      panel.querySelector("[data-donate-submit]").classList.toggle("is-off", lack || won < min || noMsg);
     }
 
     var key = panel.getAttribute("data-donate-panel");
@@ -2120,6 +2123,9 @@ window.FunBlock = (function () {
   var submits = watch.querySelectorAll("[data-donate-submit]");
   for (var t = 0; t < submits.length; t++) submits[t].addEventListener("click", function () {
     var panel = this.closest(".donate");
+    // 메시지를 안 써서 꺼진 상태면 메시지 칸으로만 보냄
+    var m = panel.querySelector("[data-donate-msg]");
+    if (panel.closest(".fchat") && panel.getAttribute("data-donate-panel") === "general" && m && !m.value.trim()) { m.focus(); return; }
     panel.setAttribute("data-tried", "");
     if (check(panel)) donate(panel);
     else {
@@ -2764,7 +2770,22 @@ window.FunBlock = (function () {
     ended.hidden = !on;
     box.classList.toggle("is-ended", on);
     if (on && video && !video.paused) video.pause();
+    if (endedBtn) {
+      endedBtn.classList.toggle("is-active", on);
+      endedBtn.setAttribute("aria-pressed", on ? "true" : "false");
+    }
   }
+  /* [미리보기] 다시보기 정렬 옆 "방송종료" 칩 — #ended 켜고 끄고 플레이어로 올라감 */
+  var endedBtn = fw.querySelector("[data-fended-toggle]");
+  if (endedBtn) endedBtn.addEventListener("click", function (e) {
+    e.stopPropagation(); // 공통 칩 선택 코드가 켜짐 표시를 다시 덮지 않게
+    if (location.hash === "#ended") history.replaceState(null, "", location.pathname + location.search);
+    else history.replaceState(null, "", "#ended");
+    syncEnded();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    var main = fw.querySelector(".fwatch__main");
+    if (main) main.scrollTo({ top: 0, behavior: "smooth" });
+  });
   fw.querySelector("[data-fplayer-replay]").addEventListener("click", function (e) {
     e.preventDefault();
     var t = document.getElementById("wmore-title");

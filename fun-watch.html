@@ -10,7 +10,7 @@
 <link rel="icon" href="assets/favicon/favicon-192.png" type="image/png" sizes="192x192">
 <link rel="apple-touch-icon" href="assets/favicon/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
-<link rel="stylesheet" href="styles.css?v=20261125l">
+<link rel="stylesheet" href="styles.css?v=20261125o">
 </head>
 <!-- 펀네이션 라이브 영상 상세 — 2026-11-25 Figma 새 시안(66132:92982 안 67859:67980) 기준. 2026-11-23 실서비스 기준 구현은 폐기 -->
 <body>
@@ -549,10 +549,17 @@
                 </div>
                 <p class="wmore__desc">크리에이터의 라이브를 만나보세요.</p>
                 <!-- 정렬 — 선택 표시만 바뀌고 목록 정렬은 서버 연동 전 -->
-                <div class="chips creators-chips" data-wmore-sort>
-                  <button type="button" class="is-active" aria-pressed="true">인기순</button>
-                  <button type="button" aria-pressed="false">최신순</button>
-                  <button type="button" aria-pressed="false">후원순</button>
+                <div class="wmore__sortrow">
+                  <div class="chips creators-chips" data-wmore-sort>
+                    <button type="button" class="is-active" aria-pressed="true">인기순</button>
+                    <button type="button" aria-pressed="false">최신순</button>
+                    <button type="button" aria-pressed="false">후원순</button>
+                  </div>
+                  <!-- [미리보기] 방송 종료 화면 보기 — 서버 연동 전 데모, 누르면 #ended 켜고 끔 -->
+                  <span class="wmore__sep" aria-hidden="true"></span>
+                  <div class="chips creators-chips">
+                    <button type="button" aria-pressed="false" data-fended-toggle>방송종료</button>
+                  </div>
                 </div>
               </div>
               <div class="wmore__row">
@@ -870,7 +877,7 @@
               <form class="finput" data-fchat-form data-node-id="66132:101608">
                 <div class="finput__box">
                   <textarea class="finput__text" rows="1" maxlength="200" placeholder="메시지 입력" aria-label="채팅 입력" data-fchat-input></textarea>
-                  <button class="finput__btn" type="button" aria-label="이모티콘"><img src="assets/fun-watch/emoji.svg" width="24" height="24" alt=""></button>
+                  <button class="finput__btn" type="button" aria-label="이모티콘"><img src="assets/fun-watch/v4/face-smile-24.svg" width="24" height="24" alt=""></button>
                   <!-- PC 보내기 — 글이 없으면 회색(Depth 300), 입력하면 Primary (67427:70656 · 67427:87654) -->
                   <button class="finput__btn finput__go only-pc" type="submit" aria-label="보내기" aria-disabled="true" data-fchat-go><img class="finput__go-off" src="assets/fun-watch/v3/send-off.svg" width="24" height="24" alt=""><img class="finput__go-on" src="assets/fun-watch/v2/send.svg" width="24" height="24" alt=""></button>
                 </div>
@@ -884,7 +891,7 @@
                   <button class="fkind" type="button" aria-pressed="false" aria-controls="donate-general" data-donate="general" data-donate-toggle><img class="fkind__off" src="assets/fun-watch/v2/gift.svg" width="20" height="20" alt=""><img class="fkind__on" src="assets/fun-watch/v3/gift-on.svg" width="20" height="20" alt="">후원</button>
                   <button class="fkind" type="button" aria-pressed="false" aria-controls="donate-signature" data-donate="signature" data-donate-toggle><img class="fkind__off" src="assets/fun-watch/v3/signature-vip.svg" width="20" height="20" alt=""><img class="fkind__on" src="assets/fun-watch/v3/signature-vip-on.svg" width="20" height="20" alt="">시그니처</button>
                 </div>
-                <button class="fdock__gear" type="button" aria-label="채팅 설정" aria-pressed="false" aria-controls="fchat-settings" data-donate="settings" data-donate-toggle><img class="only-pc" src="assets/fun-watch/settings.svg" width="17" height="17" alt=""><img class="only-mo" src="assets/fun-watch/v2/settings-24.svg" width="24" height="24" alt=""></button>
+                <button class="fdock__gear" type="button" aria-label="채팅 설정" aria-pressed="false" aria-controls="fchat-settings" data-donate="settings" data-donate-toggle><img class="fdock__gear-off" src="assets/fun-watch/v4/setting-16.svg" width="16" height="16" alt=""><img class="fdock__gear-on" src="assets/fun-watch/v4/setting-16-on.svg" width="16" height="16" alt=""></button>
               </div>
             </div>
 
@@ -1501,6 +1508,6 @@
   <span class="auth-out">로그인</span>
 </button>
 
-<script src="app.js?v=20261125d"></script>
+<script src="app.js?v=20261125i"></script>
 </body>
 </html>

@@ -15856,6 +15856,19 @@ button.subnav__tab {
 /* 채팅 메뉴 오른쪽 — 참여자 수 · 관리자설정 알약 (67859:72300) 24 · BG 400 · Border 200 · 사이 6 */
 .fchat__tools { display: flex; align-items: center; gap: 6px; }
 .fwatch .fchat__people { height: 24px; padding: 0 8px; border-color: var(--color-border-200); background: var(--color-bg-400); }
+/* 채팅 입력칸 기본 (67859:68563 채팅 입력) — BG 100 · Border 100 · radius 10 (이전 Border 400 · 6). 모바일은 6 (67859:85340) */
+.fwatch .finput__box { border-color: var(--color-border-100); border-radius: 10px; }
+.fwatch .finput__box:focus-within { border-color: var(--color-brand-primary); }
+/* 채팅 설정 버튼 (67859:68563 · 켜짐 67859:72299) — 36 원 · BG Cancel · 톱니 16(채움) Normal, 켜지면 톱니만 Primary. 모바일 32 */
+.fwatch .fdock__gear { width: 36px; height: 36px; border: 0; border-radius: 9999px; background: var(--color-bg-cancel); }
+.fwatch .fdock__gear img { width: 16px; height: 16px; }
+.fwatch .fdock__gear .fdock__gear-on,
+.fwatch .fdock__gear[aria-pressed="true"] .fdock__gear-off { display: none; }
+.fwatch .fdock__gear[aria-pressed="true"] .fdock__gear-on { display: block; }
+/* 다시보기 정렬 뒤 구분선 + [미리보기] 방송종료 칩 */
+.wmore__sortrow { display: flex; align-items: center; gap: 8px; }
+.wmore__sortrow > .chips { margin: 0; }
+.wmore__sep { flex: none; align-self: center; width: 1px; height: 16px; background: var(--color-border-300); }
 .fchat__admin {
   display: flex;
   align-items: center;
@@ -16003,7 +16016,6 @@ button.subnav__tab {
   .fwatch .fkind img { width: 16px; height: 16px; }
   .fkind--chat { display: flex; }
   .fwatch .fdock__gear { width: 32px; height: 32px; border-radius: 50%; background: var(--color-bg-cancel); }
-  .fwatch .fdock__gear img.only-mo { width: 16px; height: 16px; content: url("assets/fun-watch/v4/setting-16.svg"); }
 }
 /* 랭킹 카드 — 좁은 폭에서 이름은 말줄임 */
 .frk__txt { max-width: 100%; overflow: hidden; }
@@ -16167,7 +16179,7 @@ button.subnav__tab {
   .frk__bar { padding-right: 40px; -webkit-mask-image: linear-gradient(to left, transparent 40px, #000 113px); mask-image: linear-gradient(to left, transparent 40px, #000 113px); }
   /* 입력 줄 48 — 평평한 BG 300, 위 12 · 좌우 16 · 아래 0. 입력칸 36 · BG 100 · Border 100 · 모서리 6 · 안 11/12 */
   .fwatch .finput { box-sizing: border-box; height: 48px; padding: 12px 16px 0; border: 0; border-radius: 0; background: var(--fw-sheet-bg); }
-  .fwatch .finput__box { box-sizing: border-box; height: 36px; padding: 0 12px; border-color: var(--color-border-100); }
+  .fwatch .finput__box { box-sizing: border-box; height: 36px; padding: 0 12px; border-color: var(--color-border-100); border-radius: 6px; }
   .fwatch .finput__box:focus-within { border-color: var(--color-brand-primary); }
   /* 아래 버튼 줄 52 (패딩 포함) */
   .fwatch .fdock__tabs { box-sizing: border-box; height: 52px; }
