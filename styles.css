@@ -5941,12 +5941,10 @@ ul {
 .winfo .fstreamer__follow {
   height: 42px;
 }
+/* 2026-11-25 사용자 요청: 팔로잉(누른 상태)은 취소 · 이전 버튼 색 BG Cancel + 흰 글자 */
 .winfo .fstreamer__follow[aria-pressed="true"] {
-  background: var(--fw-donate-bg);
-  color: var(--fw-donate-text);
-}
-.winfo .fstreamer__follow[aria-pressed="true"] img {
-  filter: brightness(0.1);
+  background: var(--color-bg-cancel);
+  color: #fff;
 }
 .winfo__stat {
   display: flex;
@@ -15897,10 +15895,11 @@ button.subnav__tab {
   .fwatch .fadmin { top: auto; }
 }
 
-/* 방송 정보 팔로우 (67859:67981) — 팔로우 · 팔로잉 모두 후원하기와 같은 밝은 회색 바탕 · 진한 글자 (하트만 비움 ↔ 채움) */
+/* 방송 정보 팔로우 — 2026-11-25 사용자 요청: 팔로우 = Primary · 흰 글자, 팔로잉 = 취소 · 이전 버튼 색 BG Cancel · 흰 글자 (하트만 비움 ↔ 채움) */
 .fwatch .winfo .fstreamer__follow,
-.fwatch .fstreamer__follow { background: var(--fw-donate-bg); color: var(--fw-donate-text); }
-.fwatch .fstreamer__follow img { filter: brightness(0.1); }
+.fwatch .fstreamer__follow { background: var(--color-brand-primary); color: #fff; }
+.fwatch .winfo .fstreamer__follow[aria-pressed="true"],
+.fwatch .fstreamer__follow[aria-pressed="true"] { background: var(--color-bg-cancel); color: #fff; }
 
 /* ---------- 모바일 (2026-11-25 새 시안 67859:82058 · 85198 · 86082) ----------
    상태바 아래 바로 플레이어(앱바 없음) → 방송 정보 · 설명 · 이 방송국의 다시보기(본문 스크롤).
@@ -15977,8 +15976,7 @@ button.subnav__tab {
     line-height: 16px;
     color: var(--color-text-strong);
   }
-  .fmo__follow[aria-pressed="true"] { background: var(--fw-donate-bg); color: var(--fw-donate-text); }
-  .fmo__follow[aria-pressed="true"] img { filter: brightness(0.1); }
+  .fmo__follow[aria-pressed="true"] { background: var(--color-bg-cancel); color: #fff; }
   [data-theme="light"] .fmo__more img { filter: brightness(0.3); }
 
   /* 채팅 칸 — 닫혀 있으면 아래 고정 줄만, 열면 플레이어 아래부터 아래 끝까지 */
