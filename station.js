@@ -3443,7 +3443,9 @@ const CSNI={'유튜브':'youtube','SOOP':'soop','인스타그램':'instagram'};
 function crewCardHTML(c){
   const on=c.live===1||(c.live===2&&S.live),x=CREWX[c.n]||[0,0,0],n=esc(c.n);
   const sn=[[x[0],'유튜브'],[x[2],'SOOP'],[x[1],'인스타그램']].filter(a=>a[0]).map(a=>`<button type="button" data-act="csn" data-arg="${a[1]}" aria-label="${a[1]}"><img src="assets/v2/creator/${CSNI[a[1]]}.svg" width="16" height="16" alt=""></button>`).join('');
-  return `<div class="crew-card${on?' is-live':''}" data-qa="CREW-card"><div class="crew-card__top">
+  // 2026-11-25 사용자 요청: 방송 안 하는 크루원 테두리를 금 · 은 · 동 섞어서(샘플, 이름으로 고정)
+  const mt=on?'':['',' is-silver',' is-bronze'][[...n].reduce((h,ch)=>h+ch.charCodeAt(0),0)%3];
+  return `<div class="crew-card${on?' is-live':''}${mt}" data-qa="CREW-card"><div class="crew-card__top">
    <button type="button" class="crew-card__av" data-act="crewGo" data-arg="${n}" aria-label="${n} 방송국">${av(c.n,92)}</button>${on?'<span class="crew-card__live">LIVE</span>':''}
    <button type="button" class="crew-card__name" data-act="crewGo" data-arg="${n}" data-qa="CREW-go">${n}</button>
    ${sn?`<div class="crew-card__sns" role="group" aria-label="SNS">${sn}</div>`:''}</div>

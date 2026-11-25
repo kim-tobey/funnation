@@ -2254,6 +2254,8 @@ body.wire .stn .banner.def,body.wire .stn .rbi.def,body.wire .stn .mban.def .mb-
 .stn .livebdg{display:flex;align-items:center;justify-content:center;box-sizing:border-box;min-width:36px;height:18px;padding:2px 4px;border-radius:4px;background:var(--av-live);font-size:11px;font-weight:700;line-height:16px;color:#fff}
 .stn .crew-card .crew-card__av{border-radius:50%;background:var(--av-gold)}
 .stn .crew-card.is-live .crew-card__av{background:var(--av-live)}
+.stn .crew-card.is-silver .crew-card__av{background:var(--av-silver)}
+.stn .crew-card.is-bronze .crew-card__av{background:var(--av-bronze)}
 .stn .crew-card .crew-card__live{margin:-12px 0 10px;padding:2px 4px;font-size:11px;line-height:16px}
 .stn .crew-card.is-live .crew-card__av{margin-bottom:0}
 @media (max-width:767px){.stn .crew-card .crew-card__av,.stn .crew-card.is-live .crew-card__av{margin:0 0 10px}.stn .crew-card.is-live .crew-card__av{margin-bottom:0}}

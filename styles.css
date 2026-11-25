@@ -16151,7 +16151,7 @@ button.subnav__tab {
 .fwatch .winfo__pic img { border-color: #ff4242; }
 .fwatch .winfo__live { border-radius: 4px; background: #ff4242; color: #fff; }
 /* 영상은 칸을 꽉 채움 — 16:9 칸 폭이 소수점(874.67 등)이라 contain 이면 양옆 1px 검정이 생김 (2026-11-25 사용자 요청) */
-.fwatch .fplayer__video { left: 0; width: 100%; max-width: none; transform: none; object-fit: cover; }
+.fwatch .fplayer__video { left: 0; width: 100%; max-width: none; transform: none; object-fit: contain; background: #000; } /* 2026-11-25 사용자 요청: 유튜브 라이브처럼 레터박스가 생겨도 영상 전체 */
 /* 원인: 플레이어 아래 테두리 1px 만큼 높이가 줄어 16:9 영상 폭이 칸보다 약 2px 좁았음 → 영상 폭을 칸 폭에 맞추고 cover */
 /* 넓은화면은 칸이 16:9 가 아니라 영상 전체가 보이게(위아래 검정) */
 .fwatch.is-wide .fplayer__video { object-fit: contain; }
@@ -16260,6 +16260,9 @@ button.subnav__tab {
 /* 3 · 14 크루 카드 (크리에이터 찾기 · 방송국 크루원) — Size 96: 방송 중 Live(4), 아니면 Gold(3 + 띠 3). 링 그림 파일 대신 CSS */
 .crew-card .crew-card__av { border-radius: 50%; background: var(--av-gold); }
 .crew-card.is-live .crew-card__av { background: var(--av-live); }
+/* 2026-11-25 사용자 요청: 방송 안 하는 크리에이터 테두리에 은 · 동도 섞음 [샘플 — 순위 연동 전] */
+.crew-card.is-silver .crew-card__av { background: var(--av-silver); }
+.crew-card.is-bronze .crew-card__av { background: var(--av-bronze); }
 .crew-card .crew-card__av::before { display: none; }
 .crew-card .crew-card__av img,
 .crew-card .crew-card__av .av {
@@ -16305,6 +16308,8 @@ button.subnav__tab {
   background: var(--av-gold);
 }
 .fav-person.is-live .fav-person__pic::before { background: var(--av-live); }
+.fav-person.is-silver .fav-person__pic::before { background: var(--av-silver); }
+.fav-person.is-bronze .fav-person__pic::before { background: var(--av-bronze); }
 .fav-person__img {
   z-index: 1;
   top: 13px;
@@ -16395,3 +16400,28 @@ button.subnav__tab {
   background: url("assets/v2/avatar/action-edit.svg") center / 32px 32px no-repeat;
 }
 .profile-card__edit > * { visibility: hidden; }
+
+/* 홈 로그인 추천 라이브 방송인 — 컴포넌트에 새로 넣은 Size 64(PC) · 40(모바일) Live (2026-11-25).
+   링 64 → 4 · 40 → 3(사진에 바로 닿음), LIVE 배지 36×18 이 링 아래에 12 걸치고 6 밖으로 → 칸 높이 사진 + 6 */
+.hero-live__avatar { width: 64px; height: 70px; align-items: flex-start; }
+.hero-live__avatar img { box-sizing: border-box; width: 64px; height: 64px; border: 4px solid var(--av-live); background: var(--av-ph); }
+.hero-live__badge {
+  bottom: 0;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  height: 18px;
+  padding: 2px 4px;
+  border-radius: 4px;
+  background: var(--av-live);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 16px;
+}
+@media (max-width: 767px) {
+  .hero-live__avatar { width: 40px; height: 46px; }
+  .hero-live__avatar img { width: 40px; height: 40px; border-width: 3px; }
+  .hero-live__badge { padding: 2px 4px; font-size: 11px; line-height: 16px; }
+}
