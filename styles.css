@@ -4248,7 +4248,7 @@ ul {
   }
   .card-rows {
     gap: 16px;
-    padding-bottom: 8px;
+    padding-bottom: 0; /* 2026-11-25 사용자 요청 (이전 8) */
   }
   .card-row {
     grid-template-columns: repeat(2, 1fr);
@@ -4281,7 +4281,7 @@ ul {
   .vod-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 16px 12px;
-    padding-bottom: 8px;
+    padding-bottom: 0; /* 2026-11-25 사용자 요청 (이전 8) */
   }
   .vod-card {
     gap: 10px;
