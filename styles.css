@@ -16017,6 +16017,8 @@ button.subnav__tab {
   .fwatch .fkind img { width: 16px; height: 16px; }
   .fkind--chat { display: flex; }
   .fwatch .fdock__gear { width: 32px; height: 32px; border-radius: 50%; background: var(--color-bg-cancel); }
+  /* 2026-11-25 사용자 요청(시안 67859:85105): 방송 정보 · 설명 · 다시보기 바탕이 끊기지 않고 BG 300 한 색으로 이어짐 */
+  .fwatch .fwatch__main { background: var(--color-bg-300); }
 }
 /* 랭킹 카드 — 좁은 폭에서 이름은 말줄임 */
 .frk__txt { max-width: 100%; overflow: hidden; }
