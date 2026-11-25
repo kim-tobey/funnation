@@ -16013,3 +16013,106 @@ button.subnav__tab {
 @media (max-width: 767px) {
   .fwatch.is-mochat .fchat:has(.frk.is-open) .fdock { display: none; }
 }
+
+/* ---------- 넓은화면 · 채팅 접기 (2026-11-25 수정 시안 67897:61795 · 채팅 머리 67704:111507) ---------- */
+/* 채팅 머리 — 접기 →|(20, Depth 300) · 사이 10 · "실시간 채팅" SemiBold 14 Normal. 예전 바깥 › 탭은 없앰 */
+.fchat__head { display: flex; align-items: center; gap: 10px; }
+.fwatch .fchat__fold {
+  position: static;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+}
+.fwatch .fchat__fold img { transform: none; }
+.fwatch .fchat__title { font-size: 14px; font-weight: 600; color: var(--color-text-normal); }
+[data-theme="light"] .fwatch .fchat__fold img { filter: brightness(0.4); }
+
+/* 넓은화면 — LNB 숨김 · 채팅 접힘, 영상이 GNB 아래 화면 높이를 꽉 채움 */
+.fwide-bar,
+.fwide-fab { display: none; }
+@media (min-width: 768px) {
+  [data-page="fun-watch"]:has(.fwatch.is-wide):not([data-drawer="open"]) .lnb { display: none; }
+  [data-page="fun-watch"]:has(.fwatch.is-wide) .main { margin-left: 0; }
+  .fwatch.is-wide { position: relative; }
+  .fwatch.is-wide .fchat { border-left: 0; }
+  .fwatch.is-wide .fplayer {
+    max-height: none;
+    height: calc(100vh - 65px);
+    min-height: 480px;
+    aspect-ratio: auto;
+    border-bottom: 0;
+    background: #000;
+  }
+  .fwatch.is-wide .fplayer__video,
+  .fwatch.is-wide .fplayer__ended { width: 100%; max-width: none; aspect-ratio: auto; }
+  /* 제목 줄 — 위 51 · 왼쪽 12, 위쪽 그라데이션 위 */
+  .fwatch.is-wide .fwide-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    height: 51px;
+    padding-left: 12px;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 100%);
+    pointer-events: none;
+  }
+  .fwide-bar > * { pointer-events: auto; }
+  .fwide-bar__back { display: grid; place-items: center; width: 48px; height: 48px; padding: 0; }
+  .fwide-bar__title {
+    margin: 0 12px 0 12px;
+    overflow: hidden;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 24px;
+    color: var(--color-text-strong);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .fwide-bar__live,
+  .fwide-bar__viewers {
+    display: flex;
+    flex: none;
+    align-items: center;
+    padding: 2px 4px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.01em;
+    color: #fff;
+  }
+  .fwide-bar__live { height: 16px; background: #ff4242; }
+  .fwide-bar__viewers { height: 18px; margin-left: 2px; background: rgba(0, 0, 0, 0.65); }
+  /* 플로팅 — 오른쪽 위(위 32 · 오른쪽 16) 40 원 두 개, 사이 10 */
+  .fwatch.is-wide .fwide-fab {
+    position: absolute;
+    top: 32px;
+    right: 16px;
+    z-index: 6;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .fwide-fab button {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border-radius: 9999px;
+    background: rgba(0, 0, 0, 0.5);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+  }
+  .fwide-fab button:hover { background: rgba(0, 0, 0, 0.65); }
+}
+/* 넓은화면에선 채팅이 없어 데모 로그인 플로팅 버튼을 오른쪽 아래로 */
+@media (min-width: 768px) {
+  [data-page="fun-watch"]:has(.fwatch.is-wide) .fab-auth { right: 24px; }
+}

@@ -2350,12 +2350,7 @@ window.FunBlock = (function () {
     box.classList.toggle("is-audio", on);
     fw.querySelector("[data-fplayer-audio-note]").hidden = !on;
   });
-  fw.querySelector("[data-fplayer-fit]").addEventListener("click", function () {
-    var fit = this.getAttribute("aria-pressed") !== "true";
-    this.setAttribute("aria-pressed", fit ? "true" : "false");
-    this.setAttribute("aria-label", fit ? "기본 화면" : "꽉 찬 화면");
-    box.classList.toggle("is-cover", !fit);
-  });
+  // 기본 화면 ↔ 넓은 화면 버튼은 아래 "넓은화면"에서
   // 작은 창 — 영상이 재생 중일 때만 (포스터만 있는 데모에선 동작 안 함)
   fw.querySelector("[data-fplayer-pip]").addEventListener("click", function () {
     if (document.pictureInPictureElement) document.exitPictureInPicture();
@@ -2406,14 +2401,31 @@ window.FunBlock = (function () {
   var moChatClose = fw.querySelector("[data-fmochat-close]");
   if (moChatClose) moChatClose.addEventListener("click", function () { moChat(false); });
 
-  // 채팅 접기 · 펼치기 — 접으면 왼쪽(플레이어 · 정보)이 오른쪽 끝까지 넓어짐
+  /* 넓은화면 (2026-11-25 수정 시안 67897:61795) — 채팅 머리의 →| 또는 플레이어 "기본 화면" 버튼으로 켬.
+     채팅을 접고 LNB 를 숨겨 영상이 GNB 아래를 꽉 채움, 왼쪽 위 제목 줄 · 오른쪽 위 채팅 · 후원 플로팅. 채팅 · ← · 기본 화면 버튼으로 끔 */
   var foldBtn = fw.querySelector("[data-fchat-fold]");
+  var fitBtn = fw.querySelector("[data-fplayer-fit]");
   function fold(folded) {
     fw.classList.toggle("is-folded", folded);
+    fw.classList.toggle("is-wide", folded);
     foldBtn.setAttribute("aria-expanded", folded ? "false" : "true");
-    foldBtn.setAttribute("aria-label", folded ? "채팅 펼치기" : "채팅 접기");
+    if (fitBtn) {
+      fitBtn.setAttribute("aria-pressed", folded ? "false" : "true");
+      fitBtn.setAttribute("aria-label", folded ? "넓은 화면 끄기" : "넓은 화면");
+    }
   }
-  foldBtn.addEventListener("click", function () { fold(!fw.classList.contains("is-folded")); });
+  foldBtn.addEventListener("click", function () { fold(true); });
+  if (fitBtn) fitBtn.addEventListener("click", function () { fold(!fw.classList.contains("is-wide")); });
+  var wideExit = fw.querySelector("[data-fwide-exit]");
+  if (wideExit) wideExit.addEventListener("click", function () { fold(false); });
+  var wideChat = fw.querySelector("[data-fwide-chat]");
+  if (wideChat) wideChat.addEventListener("click", function () { fold(false); });
+  var wideDonate = fw.querySelector("[data-fwide-donate]");
+  if (wideDonate) wideDonate.addEventListener("click", function () {
+    fold(false);
+    var tab = fw.querySelector('[data-donate="general"]');
+    if (tab && tab.getAttribute("aria-pressed") !== "true") tab.click();
+  });
   // 방송 정보 후원하기 — 채팅을 펼침 (후원 팝오버는 위 방송 정보 코드가 엶)
   var infoDonate = fw.querySelector("[data-watch-donate]");
   if (infoDonate) infoDonate.addEventListener("click", function () { fold(false); });

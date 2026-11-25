@@ -10,7 +10,7 @@
 <link rel="icon" href="assets/favicon/favicon-192.png" type="image/png" sizes="192x192">
 <link rel="apple-touch-icon" href="assets/favicon/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
-<link rel="stylesheet" href="styles.css?v=20261125b">
+<link rel="stylesheet" href="styles.css?v=20261125d">
 </head>
 <!-- 펀네이션 라이브 영상 상세 — 2026-11-25 Figma 새 시안(66132:92982 안 67859:67980) 기준. 2026-11-23 실서비스 기준 구현은 폐기 -->
 <body>
@@ -395,6 +395,12 @@
             <!-- 테스트 영상 (2026-11-19 사용자 요청) — Big Buck Bunny 720p, (c) Blender Foundation · CC BY 3.0, Wikimedia Commons.
                  실제 방송 주소가 생기면 data-stream-src 만 바꾸면 됨. 주소가 있으면 정지 이미지 없이 검은 화면 → 영상, 비우면 정지 화면(data-poster) -->
             <div class="fplayer" data-node-id="66132:101007" data-stream-src="https://upload.wikimedia.org/wikipedia/commons/transcoded/c/c0/Big_Buck_Bunny_4K.webm/Big_Buck_Bunny_4K.webm.720p.vp9.webm">
+              <!-- 넓은화면 제목 줄 (2026-11-25 수정 시안 67897:61839) — 넓은화면일 때만: 뒤로 48 · 제목 Bold 18 · LIVE · 시청자 -->
+              <div class="fwide-bar" data-node-id="67897:61839">
+                <button class="fwide-bar__back" type="button" aria-label="기본 화면으로" data-fwide-exit><img src="assets/fun-watch/v4/back-20.svg" width="20" height="20" alt=""></button>
+                <p class="fwide-bar__title">김인호x이노레이블 시즌2 8화</p>
+                <span class="fwide-bar__live">LIVE</span><span class="fwide-bar__viewers">875명</span>
+              </div>
               <video class="fplayer__video" playsinline loop preload="auto" data-poster="assets/fun-watch/stream.jpg" data-fplayer-video></video>
               <p class="fplayer__audio-only" data-fplayer-audio-note hidden>소리만 듣는 중이에요</p>
               <!-- 방송 종료 (67427:72975) — 손 흔들기 48 · 제목 H5 · 설명 · 다시보기로 이동. 미리보기 fun-watch.html#ended [구현 제안] -->
@@ -435,7 +441,7 @@
                   </div>
                   <button class="fctl" type="button" aria-label="소리만 듣기" aria-pressed="false" data-fplayer-audio><img src="assets/fun-watch/audio-only.svg" width="20" height="20" alt=""></button>
                   <button class="fctl" type="button" aria-label="작은 창으로 보기" data-fplayer-pip><img src="assets/fun-watch/pip.svg" width="20" height="20" alt=""></button>
-                  <button class="fctl" type="button" aria-label="기본 화면" aria-pressed="true" data-fplayer-fit><img src="assets/fun-watch/default-view.svg" width="20" height="20" alt=""></button>
+                  <button class="fctl" type="button" aria-label="넓은 화면" aria-pressed="true" data-fplayer-fit><img src="assets/fun-watch/default-view.svg" width="20" height="20" alt=""></button>
                   <button class="fctl" type="button" aria-label="전체화면" aria-pressed="false" data-fplayer-full><img src="assets/fun-watch/fullscreen.svg" width="20" height="20" alt=""></button>
                 </div>
               </div>
@@ -674,12 +680,21 @@
           </div>
 
           <!-- 채팅 (66132:101491) — 398px, 왼쪽 Border 200. 접기 버튼(42×43)은 왼쪽 바깥에 붙음 -->
+          <!-- 넓은화면 플로팅 (2026-11-25 수정 시안 67897:61859) — 오른쪽 위 채팅하기 · 후원 40 원(Overlay Black 50 · 흐림 4), 사이 10 -->
+          <div class="fwide-fab" data-node-id="67897:61859">
+            <button type="button" aria-label="채팅 열기" data-fwide-chat><img src="assets/fun-watch/v4/message-more-20.svg" width="20" height="20" alt=""></button>
+            <button type="button" aria-label="후원하기" data-fwide-donate><img src="assets/fun-watch/v4/gift-fill-20.svg" width="20" height="20" alt=""></button>
+          </div>
+
           <aside class="fchat" id="wchat" aria-label="채팅" data-mode="chat" data-node-id="66132:101491">
-            <button class="fchat__fold" type="button" aria-label="채팅 접기" aria-expanded="true" aria-controls="wchat" data-fchat-fold><img src="assets/fun-watch/chat-fold.svg" width="6" height="10.2734" alt=""></button>
 
             <!-- 메뉴 (66132:101497) — 실시간 채팅 · 참여자 수(누르면 유저 찾기) -->
             <div class="fchat__menu" data-node-id="66132:101497">
-              <h2 class="fchat__title">실시간 채팅</h2>
+              <!-- 2026-11-25 수정 시안: 접기 버튼은 채팅 머리 안 왼쪽(→| 20, 사이 10). 누르면 넓은화면 -->
+              <span class="fchat__head">
+                <button class="fchat__fold" type="button" aria-label="채팅 접기 · 넓은화면" aria-expanded="true" aria-controls="wchat" data-fchat-fold><img src="assets/fun-watch/v4/arrow-right-to-line-20.svg" width="20" height="20" alt=""></button>
+                <h2 class="fchat__title">실시간 채팅</h2>
+              </span>
               <span class="fchat__tools">
                 <button class="fchat__people" type="button" aria-label="채팅 참여자 2,051명 — 유저 찾기" aria-expanded="false" aria-controls="fusers" data-fusers-btn><img src="assets/fun-watch/v4/users-12.svg" width="12" height="12" alt=""><span>2,051명</span></button>
                 <!-- 관리자설정 (67859:72300) — 스트리머 · 매니저만 [구현 제안: 데모는 로그인 상태면 보임] -->
@@ -1487,6 +1502,6 @@
   <span class="auth-out">로그인</span>
 </button>
 
-<script src="app.js?v=20261125a"></script>
+<script src="app.js?v=20261125b"></script>
 </body>
 </html>
