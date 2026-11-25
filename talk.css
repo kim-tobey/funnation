@@ -30,7 +30,7 @@
   border-radius: 12px 0 0 12px;
   overflow: hidden;
 }
-/* 2뎁스 탭(전체 · 안 읽음 · 알림)은 사이트 공통 .subnav__tab — 옆 숫자만 여기서 */
+/* 2뎁스 탭(전체 · 안읽음 · 알림)은 사이트 공통 .subnav__tab — 옆 숫자만 여기서 */
 .talk-tabs .subnav__tab { gap: 6px; }
 .talk-tabs__n {
   min-width: 18px;
