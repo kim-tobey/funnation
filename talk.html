@@ -14,7 +14,7 @@
 <link rel="preconnect" href="https://o6cdhdutve.execute-api.ap-northeast-2.amazonaws.com">
 <link rel="stylesheet" href="https://o6cdhdutve.execute-api.ap-northeast-2.amazonaws.com/v1/api/css/drop_fontstream_css/?sid=gAAAAABq4sdeUvN_k3MsbvmMbZ_hBQFXfvEFSB2urLi1zybsfs0w_bksF-xrdzoNI69oxk_6Hv077SoP0M2EzWJCT3KGRbt5qdq9vhMcW010SeUDh5R02FT8iGpCI5xOjMvgScgXjRxcMcwj8Jo8ZvH4AE903t3kwE6qp7f6jM47d9dtp77LGtu6LAOFROE9J4kMMclS5je4qcppj1EPJJmQq0oUEN6FFF_ggb35Gkx0vhXI1AbrJ0xF6e_eenerTiwRE-Nlu49u" charset="utf-8" referrerpolicy="origin">
 <link rel="stylesheet" href="styles.css">
-<link rel="stylesheet" href="talk.css?v=20261123f">
+<link rel="stylesheet" href="talk.css?v=20261125c">
 </head>
 <body>
 
@@ -356,7 +356,8 @@
 
     <!-- ===================== Main ===================== -->
     <main class="main">
-      <!-- 2depth 메뉴 — "← 채팅톡" 제목만(즐겨찾기와 같은 모양). 모바일은 앱바 "채팅톡"이 대신해 숨김 -->
+      <!-- 2depth 메뉴 — "← 채팅톡 ㅣ 전체 · 안 읽음 · 알림" (2026-11-25 사용자 요청, dev.funnation.co.kr/donor/messages 기준 + 알림).
+           모바일은 앱바 "채팅톡" 아래 같은 탭 3개 균등 -->
       <div class="subnav talk-subnav">
         <div class="subnav__title">
           <a class="subnav__back" href="index.html" aria-label="홈으로">
@@ -364,6 +365,12 @@
           </a>
           <h1>채팅톡</h1>
         </div>
+        <span class="subnav__sep">ㅣ</span>
+        <nav class="subnav__tabs talk-tabs" role="tablist" aria-label="채팅톡 구분">
+          <button class="subnav__tab subnav__tab--active" type="button" role="tab" aria-selected="true" data-talk-tab="all">전체</button>
+          <button class="subnav__tab" type="button" role="tab" aria-selected="false" data-talk-tab="unread">안 읽음<span class="talk-tabs__n" data-talk-unread hidden></span></button>
+          <button class="subnav__tab" type="button" role="tab" aria-selected="false" data-talk-tab="noti">알림<span class="talk-tabs__n" data-talk-noti-n hidden></span></button>
+        </nav>
       </div>
 
       <!-- 채팅톡 (2026-11-23 사용자 요청 — 예전 사이트 보관함 Figma 67590:44795 참고, 펀네이션 DS 로 새로 그림).
@@ -372,15 +379,14 @@
            talk.html?to=<아이디> 로 들어오면 그 사람 대화방을 바로 엶 -->
       <div class="main__inner talk" id="talk">
         <section class="talk-list" aria-label="대화 목록">
-          <div class="talk-tabs" role="tablist" aria-label="채팅톡 구분">
-            <button class="talk-tabs__tab" type="button" role="tab" aria-selected="true" data-talk-tab="msg">1:1 메시지<span class="talk-tabs__n" data-talk-unread hidden></span></button>
-            <button class="talk-tabs__tab" type="button" role="tab" aria-selected="false" data-talk-tab="noti">알림<span class="talk-tabs__n" data-talk-noti-n hidden></span></button>
-            <span class="talk-tabs__ind" aria-hidden="true"></span>
+          <!-- 이름으로 찾기 + 오른쪽 설정(채팅톡 받기 · 정보 비공개) -->
+          <div class="talk-find" data-talk-search>
+            <label class="talk-search">
+              <img src="assets/v2/creator/search.svg" width="18" height="18" alt="">
+              <input type="search" placeholder="이름으로 찾기" aria-label="대화 상대 이름으로 찾기" data-talk-q>
+            </label>
+            <button class="talk-ib talk-find__set" type="button" aria-label="채팅톡 설정" aria-haspopup="dialog" data-talk-settings><img src="assets/fun-watch/settings.svg" width="18" height="18" alt=""></button>
           </div>
-          <label class="talk-search" data-talk-search>
-            <img src="assets/v2/creator/search.svg" width="18" height="18" alt="">
-            <input type="search" placeholder="이름으로 찾기" aria-label="대화 상대 이름으로 찾기" data-talk-q>
-          </label>
           <ul class="talk-rows" data-talk-rows></ul>
         </section>
         <section class="talk-room" data-talk-room aria-label="대화방"></section>
@@ -709,7 +715,7 @@
 </button>
 
 <script src="app.js"></script>
-<script src="talk.js?v=20261124a"></script>
+<script src="talk.js?v=20261125b"></script>
 
 </body>
 </html>

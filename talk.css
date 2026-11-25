@@ -30,24 +30,8 @@
   border-radius: 12px 0 0 12px;
   overflow: hidden;
 }
-.talk-tabs {
-  position: relative;
-  flex: none;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  height: 52px;
-  border-bottom: 1px solid var(--talk-line);
-}
-.talk-tabs__tab {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--color-text-depth-300);
-}
-.talk-tabs__tab[aria-selected="true"] { font-weight: 600; color: var(--color-brand-primary); }
+/* 2뎁스 탭(전체 · 안 읽음 · 알림)은 사이트 공통 .subnav__tab — 옆 숫자만 여기서 */
+.talk-tabs .subnav__tab { gap: 6px; }
 .talk-tabs__n {
   min-width: 18px;
   height: 18px;
@@ -60,17 +44,50 @@
   color: #fff;
   text-align: center;
 }
-.talk-tabs__ind {
-  position: absolute;
-  bottom: -1px;
-  left: 0;
-  width: 50%;
-  height: 2px;
-  background: var(--color-brand-primary);
-  transition: transform .25s ease;
+.talk-tabs__n[hidden] { display: none; }
+
+/* 이름으로 찾기 + 설정 (2026-11-25) */
+.talk-find { flex: none; display: flex; align-items: center; gap: 8px; margin: 16px 16px 4px; }
+.talk-find[hidden] { display: none; }
+.talk-find .talk-search { flex: 1; min-width: 0; margin: 0; }
+.talk-find__set { flex: none; width: 40px; height: 40px; }
+[data-theme="light"] .talk-find__set img { filter: brightness(0.3); }
+
+/* 채팅톡 설정 팝업 — Alert 363 틀, 왼쪽 정렬. 받기 3칸(선택 Primary 테두리) · 정보 비공개 토글 */
+.talk-modal__box.talk-set { text-align: left; padding: 24px 20px 20px; }
+.talk-set__head { display: flex; align-items: center; justify-content: space-between; }
+.talk-set__head h2 { font-size: 19px; }
+.talk-modal__box .talk-set__label { margin: 20px 0 8px; font-size: 13px; font-weight: 600; color: var(--color-text-depth-300); }
+.talk-set__opts { display: flex; flex-direction: column; gap: 8px; }
+.talk-set__opt {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 1px solid var(--color-border-400);
+  border-radius: 8px;
+  background: var(--color-bg-300);
+  cursor: pointer;
 }
-.talk-tabs[data-tab="noti"] .talk-tabs__ind { transform: translateX(100%); }
-@media (prefers-reduced-motion: reduce) { .talk-tabs__ind { transition: none; } }
+.talk-set__opt:has(input:checked) { border-color: var(--color-brand-primary); }
+.talk-set__opt input {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  margin: 2px 0 0;
+  border: 1.5px solid var(--color-border-400);
+  border-radius: 50%;
+  background: transparent;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.talk-set__opt input:checked { border: 4.5px solid var(--color-brand-primary); background: #fff; }
+.talk-set__opt input:focus-visible { outline: 2px solid var(--color-interaction-focus, #81b3ff); outline-offset: 2px; }
+.talk-set__opt span, .talk-set__row span { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.talk-set__opt b, .talk-set__row b { font-size: 14px; font-weight: 600; line-height: 20px; color: var(--color-text-normal); }
+.talk-set__opt small, .talk-set__row small { word-break: keep-all; font-size: 12px; line-height: 18px; color: var(--color-text-depth-400); }
+.talk-set__row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 20px; cursor: pointer; }
+.talk-set__row .switch { flex: none; }
 
 .talk-search {
   flex: none;
@@ -499,22 +516,14 @@ body:has(.page--talk) .fab-auth { bottom: 112px; }
 
 /* ---------- 모바일 (<768) — 목록 전체 화면, 대화방은 위에 덮는 전체 화면 ---------- */
 @media (max-width: 767px) {
-  .talk-subnav { display: none; }
   .page--talk .main__inner.talk {
     display: block;
     height: auto;
     padding: 0 0 calc(var(--bottom-nav-h, 84px) + 16px);
   }
   .talk-list { width: auto; background: none; border: 0; border-radius: 0; overflow: visible; }
-  .talk-tabs {
-    position: sticky;
-    top: calc(var(--mo-statusbar-h, 0px) + var(--mo-appbar-h, 56px));
-    z-index: 5;
-    height: 48px;
-    background: var(--color-bg-100);
-  }
-  .talk-tabs__tab { font-size: 16px; font-weight: 500; }
-  .talk-tabs__tab[aria-selected="true"] { font-weight: 600; }
+  .talk-tabs .subnav__tab { gap: 4px; }
+  .talk-find { margin: 12px 16px 4px; }
   .talk-rows { padding: 4px 8px; overflow: visible; }
   .talk-row { padding: 12px 8px; }
 

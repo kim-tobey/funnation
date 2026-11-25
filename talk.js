@@ -103,7 +103,9 @@
   if (window.FunBlock) S.convs.forEach(function (c) { c.blocked = FunBlock.has(c.n); });
   function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} document.dispatchEvent(new Event("talk:change")); }
 
-  var ui = { tab: "msg", q: "", open: null, menu: false, typing: {} };
+  var ui = { tab: "all", q: "", open: null, menu: false, typing: {} };
+  /* 채팅톡 설정 (2026-11-25, dev.funnation.co.kr/donor/messages 와 같은 항목) — 받기: all · follow · none, 정보 비공개 */
+  if (!S.set) S.set = { recv: "all", priv: false };
 
   /* ---------- 시간 표시 ---------- */
   function hm(t) {
@@ -164,21 +166,25 @@
   }
 
   /* ---------- 목록 ---------- */
-  var rowsEl = $("[data-talk-rows]", root), roomEl = $("[data-talk-room]", root), tabsEl = $(".talk-tabs", root);
+  var rowsEl = $("[data-talk-rows]", root), roomEl = $("[data-talk-room]", root), tabsEl = $(".talk-tabs");
 
   function renderCounts() {
     var n = 0;
     S.convs.forEach(function (c) { if (!c.mute && !c.blocked) n += c.unread; });
-    var u = $("[data-talk-unread]", root); u.hidden = !n || !loggedIn(); u.textContent = n > 99 ? "99+" : n;
+    var u = $("[data-talk-unread]"); u.hidden = !n || !loggedIn(); u.textContent = n > 99 ? "99+" : n;
     var r = S.notis.filter(function (x) { return !x.read; }).length;
-    var v = $("[data-talk-noti-n]", root); v.hidden = !r || !loggedIn(); v.textContent = r;
+    var v = $("[data-talk-noti-n]"); v.hidden = !r || !loggedIn(); v.textContent = r;
   }
 
   function renderList() {
     renderCounts();
     tabsEl.setAttribute("data-tab", ui.tab);
-    [].forEach.call(tabsEl.querySelectorAll("[data-talk-tab]"), function (b) { b.setAttribute("aria-selected", b.getAttribute("data-talk-tab") === ui.tab ? "true" : "false"); });
-    $("[data-talk-search]", root).hidden = ui.tab !== "msg" || !loggedIn();
+    [].forEach.call(tabsEl.querySelectorAll("[data-talk-tab]"), function (b) {
+      var on = b.getAttribute("data-talk-tab") === ui.tab;
+      b.setAttribute("aria-selected", on ? "true" : "false");
+      b.classList.toggle("subnav__tab--active", on);
+    });
+    $("[data-talk-search]", root).hidden = ui.tab === "noti" || !loggedIn();
 
     if (!loggedIn()) {
       rowsEl.innerHTML = '<li class="talk-empty">' + ic("talk", 48) + "로그인하고 채팅톡을 시작해 보세요<small>팔로우한 크리에이터와 1:1 로 이야기할 수 있어요</small><a class=\"talk-btn talk-btn--pri\" href=\"#login\">로그인</a></li>";
@@ -195,9 +201,9 @@
       return;
     }
     var q = ui.q.trim().toLowerCase();
-    var list = sorted().filter(function (c) { return !q || c.n.toLowerCase().indexOf(q) >= 0; });
+    var list = sorted().filter(function (c) { return (!q || c.n.toLowerCase().indexOf(q) >= 0) && (ui.tab !== "unread" || c.unread > 0); });
     if (!list.length) {
-      rowsEl.innerHTML = '<li class="talk-empty">' + (q ? '<img src="assets/v2/creator/search-empty.svg" width="48" height="48" alt="">검색결과가 없어요' : ic("talk", 48) + "아직 대화가 없어요<small>방송국의 TALK 버튼으로 대화를 시작해 보세요</small>") + "</li>";
+      rowsEl.innerHTML = '<li class="talk-empty">' + (ui.tab === "unread" && !q ? ic("talk", 48) + "안 읽은 대화가 없어요" : q ? '<img src="assets/v2/creator/search-empty.svg" width="48" height="48" alt="">검색결과가 없어요' : ic("talk", 48) + "아직 대화가 없어요<small>방송국의 TALK 버튼으로 대화를 시작해 보세요</small>") + "</li>";
       return;
     }
     rowsEl.innerHTML = list.map(function (c) {
@@ -328,6 +334,35 @@
   });
   $("[data-talk-q]", root).addEventListener("input", function (e) { ui.q = e.target.value; renderList(); });
 
+  /* 채팅톡 설정 — 채팅톡 받기(모두 · 팔로우 관계만 · 받지 않음) · 정보 비공개. 바꾸면 바로 저장 + 토스트 (서버 연동 전, 이 브라우저) */
+  var RECV = [
+    ["all", "모두", ""],
+    ["follow", "팔로우 관계만", "내가 팔로우한 방송국의 주인과 내 방송국을 팔로우한 사람만"],
+    ["none", "받지 않음", "내가 먼저 보낸 대화의 답장은 받아요"]
+  ];
+  function openSettings() {
+    var wrap = document.createElement("div");
+    wrap.className = "talk-modal";
+    wrap.innerHTML = '<div class="talk-modal__box talk-set" role="dialog" aria-modal="true" aria-labelledby="talk-set-t">' +
+      '<div class="talk-set__head"><h2 id="talk-set-t">채팅톡 설정</h2><button class="talk-ib" type="button" aria-label="닫기" data-x><img src="assets/watch/close-sm.svg" width="24" height="24" alt=""></button></div>' +
+      '<p class="talk-set__label" id="talk-set-recv">채팅톡 받기</p><div class="talk-set__opts" role="radiogroup" aria-labelledby="talk-set-recv">' +
+      RECV.map(function (r) {
+        return '<label class="talk-set__opt"><input type="radio" name="talk-recv" value="' + r[0] + '"' + (S.set.recv === r[0] ? " checked" : "") + '><span><b>' + r[1] + "</b>" + (r[2] ? "<small>" + r[2] + "</small>" : "") + "</span></label>";
+      }).join("") + "</div>" +
+      '<label class="talk-set__row"><span><b>정보 비공개</b><small>채팅톡 상대에게 내 후원·채팅 기록과 칭호를 보이지 않아요</small></span><input class="switch switch--s" type="checkbox" role="switch"' + (S.set.priv ? " checked" : "") + " data-priv></label></div>";
+    document.body.appendChild(wrap);
+    var close = function () { wrap.remove(); document.removeEventListener("keydown", onKey); $("[data-talk-settings]", root).focus(); };
+    var onKey = function (e) { if (e.key === "Escape") close(); };
+    document.addEventListener("keydown", onKey);
+    wrap.addEventListener("click", function (e) { if (e.target === wrap || e.target.closest("[data-x]")) close(); });
+    wrap.addEventListener("change", function (e) {
+      if (e.target.name === "talk-recv") { S.set.recv = e.target.value; save(); toast("채팅톡 받기를 '" + RECV.filter(function (r) { return r[0] === S.set.recv; })[0][1] + "'(으)로 바꿨어요"); }
+      if (e.target.hasAttribute("data-priv")) { S.set.priv = e.target.checked; save(); toast(S.set.priv ? "정보 비공개를 켰어요" : "정보 비공개를 껐어요"); }
+    });
+    $("input:checked", wrap).focus();
+  }
+  $("[data-talk-settings]", root).addEventListener("click", openSettings);
+
   rowsEl.addEventListener("click", function (e) {
     var b = e.target.closest("[data-open]");
     if (b) { open(b.getAttribute("data-open")); return; }
@@ -339,7 +374,7 @@
       if (ok && x) {
         if (!conv(x.from.id)) S.convs.push({ id: x.from.id, n: x.from.n, av: x.from.av, role: x.from.role, live: false, mute: false, blocked: false, unread: 1, msgs: [{ me: false, t: x.t, x: x.x, fail: false }] });
         save();
-        ui.tab = "msg";
+        ui.tab = "all";
         open(x.from.id);
         toast(x.from.n + "님과 대화를 시작했어요");
       } else {
@@ -427,7 +462,7 @@
   /* PC ↔ 모바일 */
   mobile.addEventListener("change", function () { renderRoom(true); });
   /* 목록 시간 표시 1분마다 */
-  setInterval(function () { if (ui.tab === "msg") renderList(); }, MIN);
+  setInterval(function () { if (ui.tab !== "noti") renderList(); }, MIN);
 
   /* ---------- 시작 ---------- */
   var qs = new URLSearchParams(location.search);
