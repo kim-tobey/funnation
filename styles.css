@@ -10347,6 +10347,14 @@ ul {
   .fpm__more {
     margin-left: auto;
   }
+  /* 소리 버튼 — 켜짐 스피커 · 꺼짐 스피커 X (PC 컨트롤과 같은 그림) */
+  .fpm__mute .fctl__off,
+  .fpm__mute[aria-pressed="true"] .fctl__on { display: none; }
+  .fpm__mute[aria-pressed="true"] .fctl__off { display: block; }
+  /* 방송인 (67930:63365, 2026-11-25 LIVE 배지 대신) — ⌄ 옆 3 · 사진 28(사진 24 가운데) · 사이 6 · Bold 14 / 22 · 0.25 Normal */
+  .fpm__who { display: flex; align-items: center; gap: 6px; height: 28px; margin: 6px 0 0 3px; font-size: 14px; font-weight: 700; line-height: 22px; letter-spacing: 0.25px; color: var(--color-text-normal); white-space: nowrap; }
+  .fpm__pic { display: grid; place-items: center; width: 28px; height: 28px; }
+  .fpm__pic img { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; }
   /* LIVE 배지 — #FF0015 · 16 · 모서리 4, Medium 12 */
   .fpm__live {
     display: flex;

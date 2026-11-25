@@ -10,7 +10,7 @@
 <link rel="icon" href="assets/favicon/favicon-192.png" type="image/png" sizes="192x192">
 <link rel="apple-touch-icon" href="assets/favicon/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
-<link rel="stylesheet" href="styles.css?v=20261125v">
+<link rel="stylesheet" href="styles.css?v=20261125x">
 </head>
 <!-- 펀네이션 라이브 영상 상세 — 2026-11-25 Figma 새 시안(66132:92982 안 67859:67980) 기준. 2026-11-23 실서비스 기준 구현은 폐기 -->
 <body>
@@ -450,13 +450,14 @@
               <div class="fpm" data-node-id="66132:100366">
                 <div class="fpm__top">
                   <button class="fpm__btn" type="button" aria-label="재생 화면 닫기" data-fpm-close><img src="assets/fun-watch/v2/caret-down-24.svg" width="24" height="24" alt=""></button>
-                  <span class="fpm__live">LIVE</span>
+                  <!-- 방송인 (67930:63365) — 사진 28(안 24) · 6 · 이름 Bold 14 Normal, 누르면 방송국 -->
+                  <a class="fpm__who" href="station.html" data-node-id="67930:63365"><span class="fpm__pic"><img src="assets/watch/v4/avatar-ymss-sm.jpg" width="24" height="24" alt=""></span>YM상사</a>
                   <button class="fpm__btn fpm__more" type="button" aria-label="더보기" aria-haspopup="menu" aria-expanded="false" aria-controls="wmenu-mo" data-wmenu-btn><img src="assets/fun-watch/v2/more-vertical.svg" width="24" height="24" alt=""></button>
                 </div>
                 <div class="fpm__bottom">
                   <button class="fpm__now" type="button" data-fpm="live"><i aria-hidden="true"></i>실시간</button>
                   <time class="fpm__time" data-fwatch-uptime="3941">01:05:41</time>
-                  <button class="fpm__btn" type="button" aria-label="음소거" data-fpm="mute"><img src="assets/fun-watch/v2/volume-24.svg" width="22" height="22" alt=""></button>
+                  <button class="fpm__btn fpm__mute" type="button" aria-label="음소거" aria-pressed="false" data-fpm="mute"><img class="fctl__on" src="assets/fun-watch/v2/volume-24.svg" width="22" height="22" alt=""><svg class="fctl__off" width="22" height="22" viewBox="0 0 20 20" aria-hidden="true"><path d="M10.6 2.7a.9.9 0 0 1 1.4.8v13a.9.9 0 0 1-1.4.8l-5.4-3.9H3.3A1.7 1.7 0 0 1 1.7 11.7V8.3a1.7 1.7 0 0 1 1.6-1.6h1.9l5.4-4Z" fill="#fff"/><path d="m14 7.5 5 5m0-5-5 5" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg></button>
                   <button class="fpm__btn" type="button" aria-label="전체화면" data-fpm="full"><img src="assets/fun-watch/fullscreen.svg" width="20" height="20" alt=""></button>
                 </div>
               </div>
@@ -1508,6 +1509,6 @@
   <span class="auth-out">로그인</span>
 </button>
 
-<script src="app.js?v=20261125i"></script>
+<script src="app.js?v=20261125j"></script>
 </body>
 </html>

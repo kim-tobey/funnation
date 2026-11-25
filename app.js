@@ -2300,6 +2300,12 @@ window.FunBlock = (function () {
     playBtn.setAttribute("aria-label", paused ? "재생" : "일시정지");
     muteBtn.setAttribute("aria-pressed", video.muted ? "true" : "false");
     muteBtn.setAttribute("aria-label", video.muted ? "음소거 해제" : "음소거");
+    // 모바일 재생 화면 탭의 소리 버튼도 같은 상태(스피커 ↔ X)
+    var moMute = fw.querySelector('[data-fpm="mute"]');
+    if (moMute) {
+      moMute.setAttribute("aria-pressed", video.muted ? "true" : "false");
+      moMute.setAttribute("aria-label", video.muted ? "음소거 해제" : "음소거");
+    }
   }
   video.addEventListener("play", sync);
   video.addEventListener("pause", sync);
