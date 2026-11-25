@@ -15165,11 +15165,7 @@ button.subnav__tab {
 /* 2026-11-24: PC LNB 도 등급(VIP) 카드 대신 같은 펀캐시 카드 (사용자 요청). 접힌 LNB(mini)에서는 숨김 그대로 */
 [data-auth="in"] .lnb .grade { display: none; }
 [data-auth="in"][data-lnb="mini"] .lnb .cash { display: none; }
-@media (max-width: 767px) {
-  [data-auth="in"] .lnb .lnb__btn-row {
-    display: none;
-  }
-}
+/* 2026-11-25 사용자 요청 — 모바일 메뉴도 PC 와 같은 구성: 내 방송국 · 연결 계정 버튼 줄을 다시 보임 (11-19 에 뺐던 것) */
 @media all {
   [data-auth="in"] .lnb .cash {
     display: flex;
