@@ -10353,7 +10353,7 @@ ul {
   .fpm__mute[aria-pressed="true"] .fctl__off { display: block; }
   /* 방송인 (67930:63365, 2026-11-25 LIVE 배지 대신) — ⌄ 옆 3 · 사진 28(사진 24 가운데) · 사이 6 · Bold 14 / 22 · 0.25 Normal */
   .fpm__who { display: flex; align-items: center; gap: 6px; height: 28px; margin: 6px 0 0 3px; font-size: 14px; font-weight: 700; line-height: 22px; letter-spacing: 0.25px; color: var(--color-text-normal); white-space: nowrap; }
-  .fpm__pic { display: grid; place-items: center; width: 28px; height: 28px; }
+  .fpm__pic { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--av-live, #ff4242); } /* 아바타 Size 28 · Live Ring(2026-11-25) — 빨강 링 2 + 사진 24 */
   .fpm__pic img { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; }
   /* LIVE 배지 — #FF0015 · 16 · 모서리 4, Medium 12 */
   .fpm__live {
@@ -16424,4 +16424,27 @@ button.subnav__tab {
   .hero-live__avatar { width: 40px; height: 46px; }
   .hero-live__avatar img { width: 40px; height: 40px; border-width: 3px; }
   .hero-live__badge { padding: 2px 4px; font-size: 11px; line-height: 16px; }
+}
+
+/* 펀네이션 라이브 상세 채팅 유저 정보 카드 (Figma 67960:87406, 2026-11-25) — 아바타 Size 72 · Gold(링 3 → 띠 3 → 사진), 이전 74×70 테두리 없음 */
+.fuser__pic {
+  box-sizing: border-box;
+  width: 72px;
+  height: 72px;
+  padding: 3px;
+  border: 3px solid transparent;
+  border-radius: 50%;
+  background: linear-gradient(var(--av-gap), var(--av-gap)) padding-box, var(--av-gold) border-box;
+}
+.fuser__pic { padding: 3px; background-clip: padding-box, border-box; }
+/* 이름 — S-Core Dream 19 가 행간 1 이면 글자 위가 잘려(말줄임 overflow) 행간 24 로 칸을 키우고 위아래 -2.5 로 자리는 그대로 */
+.fuser__name strong { line-height: 24px; margin: -2.5px 0; }
+
+/* 유튜브 영상 상세 모바일 앱바 방송인 (2026-11-25) — 펀네이션 라이브 재생 화면 탭과 같은 Size 28 · Live Ring(빨강 링 2 → 사진 24) */
+.wbar__pic {
+  box-sizing: border-box;
+  width: 28px;
+  height: 28px;
+  border: 2px solid var(--av-live);
+  background: var(--av-ph);
 }
