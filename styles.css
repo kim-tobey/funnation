@@ -16348,6 +16348,7 @@ button.subnav__tab {
 /* 8 펀네이션 라이브 상세 모바일 방송인 — Size 28 Live Ring(2) : 기존 .fmo__pic 그대로(28 · 빨강 · 사진 24) */
 
 /* 10 · 12 LNB 내 계정 프로필 — Size 56 Gold (예전 테두리 그림 imgBorder.svg 대신 CSS) */
+/* 사진은 imgWhiteBg-photo.png — 원본 imgWhiteBg.png 에 박혀 있던 어두운 띠(114 중 12)를 잘라내 띠가 CSS 3px 하나만 보이게 (2026-11-25) */
 .profile__pic {
   box-sizing: border-box;
   width: 56px;
