@@ -14956,8 +14956,8 @@ button.subnav__tab {
   .fpop .dform {
     gap: 20px;
   }
+  /* 2026-11-26 시안(67859:82151): 메시지 카드 위 → 20 → 금액 아래 (이전 시안은 금액이 맨 위) */
   .fpop .damount {
-    order: -1;
     row-gap: 4px;
   }
   .fpop .dtitle,
@@ -16447,4 +16447,32 @@ button.subnav__tab {
   height: 28px;
   border: 2px solid var(--av-live);
   background: var(--av-ph);
+}
+
+/* ============================================================
+   펀네이션 라이브 상세 — 모바일 후원 · 시그니처 시트 (2026-11-26 시안 67859:82151 · 82333 · 84382)
+   시트는 고정 높이: 화면 위(상태바) + 48 부터 아래 고정 줄(52) 바로 위까지 — 플레이어 위 48 만 보임.
+   후원하기는 아래에 고정하지 않고 금액 칩 아래 20 에 내용과 함께 놓임(시트 전체가 스크롤).
+   ============================================================ */
+@media (max-width: 767px) {
+  .fwatch .fchat #donate-general,
+  .fwatch .fchat #donate-signature {
+    top: calc(var(--mo-statusbar-h) + 48px);
+    bottom: calc(var(--fw-ind) + 52px);
+    max-height: none;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: none;
+  }
+  .fwatch .fchat #donate-general::-webkit-scrollbar,
+  .fwatch .fchat #donate-signature::-webkit-scrollbar { display: none; }
+  /* 채팅 칸이 열려 있어도 시트는 아래 고정 줄 바로 위까지 — 채팅 입력 줄(48)은 시트가 덮음(시안) */
+  .fwatch .fchat #donate-general .donate__body,
+  .fwatch .fchat #donate-signature .donate__body {
+    flex: none;
+    overflow: visible;
+  }
+  .fwatch .fchat #donate-general .donate__foot,
+  .fwatch .fchat #donate-signature .donate__foot { flex: none; }
 }
