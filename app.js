@@ -4607,3 +4607,84 @@ void main() {
   document.addEventListener("talk:change", render);
   new MutationObserver(render).observe(html, { attributes: true, attributeFilter: ["data-auth"] });
 })();
+
+/* ============================================================
+   마켓 (market.html) — 탭(#shop · #subs · #passes, 기본 내 이용권), 이용권 장수 1~100 · 합계,
+   스트리머 검색(서버 연동 전이라 늘 빈 결과), 새로고침. 가입 · 구매는 준비 중 알림(data-coming-soon)
+   ============================================================ */
+(function () {
+  var page = document.querySelector(".page--market");
+  if (!page) return;
+  var tabs = page.querySelectorAll("[data-market-tab]");
+  var panels = page.querySelectorAll("[data-market-panel]");
+
+  function render() {
+    var key = location.hash.replace("#", "");
+    if (!page.querySelector('[data-market-panel="' + key + '"]')) key = "passes";
+    tabs.forEach(function (a) {
+      var on = a.getAttribute("data-market-tab") === key;
+      a.classList.toggle("subnav__tab--active", on);
+      a.setAttribute("aria-selected", on ? "true" : "false");
+    });
+    panels.forEach(function (p) {
+      p.hidden = p.getAttribute("data-market-panel") !== key;
+    });
+  }
+  window.addEventListener("hashchange", function () {
+    render();
+    window.scrollTo(0, 0);
+  });
+  render();
+
+  // 이용권 장수 — 1~100, 합계 = 6,900원 × 장수
+  var PRICE = 6900;
+  var input = page.querySelector("[data-qty-input]");
+  var total = page.querySelector("[data-qty-total]");
+  var minus = page.querySelector('[data-qty-step="-1"]');
+  var plus = page.querySelector('[data-qty-step="1"]');
+  function setQty(n) {
+    n = Math.min(100, Math.max(1, parseInt(n, 10) || 1));
+    input.value = n;
+    total.textContent = (PRICE * n).toLocaleString("ko-KR") + "원";
+    minus.disabled = n <= 1;
+    plus.disabled = n >= 100;
+  }
+  if (input) {
+    page.querySelectorAll("[data-qty-step]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        setQty((parseInt(input.value, 10) || 1) + Number(b.getAttribute("data-qty-step")));
+      });
+    });
+    input.addEventListener("input", function () {
+      input.value = input.value.replace(/\D/g, "").slice(0, 3);
+      var n = parseInt(input.value, 10);
+      if (n) {
+        if (n > 100) setQty(100);
+        else total.textContent = (PRICE * n).toLocaleString("ko-KR") + "원";
+      }
+    });
+    input.addEventListener("blur", function () { setQty(input.value); });
+    setQty(1);
+  }
+
+  // 스트리머 검색 — 결과 없음 문구만 바꿈
+  var form = page.querySelector("[data-market-search]");
+  var empty = page.querySelector("[data-market-search-empty]");
+  if (form) {
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var q = form.querySelector("input").value.trim();
+      empty.textContent = q ? "‘" + q + "’ 검색 결과가 없어요." : "아직 구독을 연 스트리머가 없어요.";
+    });
+  }
+
+  // 새로고침 — 한 바퀴 도는 표시만
+  var refresh = page.querySelector("[data-market-refresh]");
+  if (refresh) {
+    refresh.addEventListener("click", function () {
+      refresh.classList.remove("is-spin");
+      void refresh.offsetWidth;
+      refresh.classList.add("is-spin");
+    });
+  }
+})();

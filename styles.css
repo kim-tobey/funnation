@@ -11901,7 +11901,8 @@ ul {
    다크 테마 시안만 있어 라이트 테마 값은 정하지 않음
    ============================================================ */
 .page--settings,
-.page--profile {
+.page--profile,
+.page--market {
   --st-red: #ff6363;          /* Atomic/Red/60 — 위험 글자 */
   --st-error: #cd0c0c;        /* Semantic/Sys/Fill/Error — 위험 버튼 · 테두리 */
   --st-border-200: #262838;   /* Border 200 */
@@ -16767,4 +16768,279 @@ button.subnav__tab {
 .dmsg.is-anon .dmsg__name strong { cursor: default; pointer-events: none; }
 @media (max-width: 767px) {
   .dmsg__nickin { font-size: 14px; width: 9em; }
+}
+
+/* ============================================================
+   마켓 (market.html) — GNB 왕관에서 진입(#passes). 실서비스 dev.funnation.co.kr/market 의
+   상품 · 내 멤버십·구독 · 내 이용권 구성을 설정 페이지 부품(2뎁스 탭 · 800 본문 · 카드 · st-btn)으로 옮김
+   [구현 제안 · Figma 시안 없음]
+   ============================================================ */
+.main__inner.market {
+  align-items: center;
+  padding-bottom: 60px;
+}
+.market-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  max-width: 800px;
+}
+.market-panel[hidden] { display: none; }
+
+/* 페이지 제목 — 2뎁스가 있어 Headline/H6 (29장) */
+.market-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+.market-head__title {
+  margin: 0;
+  font-family: var(--font-score);
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: var(--color-text-strong);
+}
+.market-head__desc {
+  margin: 12px 0 0;
+  font-size: 14px;
+  line-height: 21px;
+  color: var(--color-text-depth-300);
+}
+
+/* 카드 — 설정 카드와 같은 BG300 · Border100 · 12 · 안 24 */
+.market-card {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 24px;
+  border: 1px solid var(--color-border-100);
+  border-radius: 12px;
+  background: var(--color-bg-300);
+}
+.market-card__head {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.market-card__head--row {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+.market-card__title,
+.market-plan__title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 20px;
+  color: var(--color-text-strong);
+}
+.market-card__desc,
+.market-plan__desc {
+  margin: 0;
+  font-size: 13px;
+  line-height: 20.8px;
+  letter-spacing: -0.01em;
+  color: var(--color-text-depth-400);
+}
+.market-plan__desc b {
+  font-weight: 600;
+  color: var(--color-text-normal);
+}
+.market-rule {
+  width: 100%;
+  height: 1px;
+  margin: 0;
+  border: 0;
+  background: var(--st-border-200);
+}
+
+/* 멤버십 줄 — 왕관 48 원(BG400) · 이름 · 설명 · 가입 */
+.market-plan {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.market-plan__icon {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 9999px;
+  background: var(--color-bg-400);
+}
+.market-plan__body {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* 이용권 사기 — 장수(− 입력 +) · 합계 · 사기 버튼, 아래 안내 */
+.market-buy {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.market-buy__label {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 20px;
+  color: var(--color-text-strong);
+}
+.market-buy__label span {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text-depth-400);
+}
+.market-buy__row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.market-qty {
+  display: flex;
+  flex: none;
+  align-items: center;
+  height: 42px;
+  border: 1px solid var(--color-border-300);
+  border-radius: 8px;
+  background: var(--color-bg-200);
+}
+.market-qty:focus-within { border-color: var(--color-brand-primary); }
+.market-qty__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-text-normal);
+  cursor: pointer;
+}
+.market-qty__btn:disabled {
+  color: var(--st-depth-500);
+  cursor: default;
+}
+.market-qty__input {
+  width: 48px;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  text-align: center;
+  color: var(--color-text-strong);
+  outline: none;
+}
+.market-buy__total {
+  flex: 1;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-depth-300);
+}
+.market-buy__total strong {
+  margin-left: 6px;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-text-strong);
+}
+.market-buy__cta:hover { background: var(--color-bg-cancel); }
+.market-notes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  color: var(--st-depth-500);
+}
+.market-notes li:not(:last-child)::after {
+  content: "·";
+  margin: 0 6px;
+}
+
+/* 스트리머 검색 */
+.market-search {
+  display: flex;
+  gap: 8px;
+}
+.market-search__field {
+  flex: 1;
+  min-width: 0;
+  height: 42px;
+}
+.market-search__btn { height: 42px; }
+
+.market-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 96px;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-depth-400);
+  text-align: center;
+}
+.market-icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: 9999px;
+  background: var(--color-bg-400);
+  color: var(--color-text-normal);
+  cursor: pointer;
+}
+.market-icon-btn:hover { background: var(--color-bg-cancel); }
+.market-icon-btn.is-spin svg { animation: market-spin 0.6s ease; }
+@keyframes market-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .market-icon-btn.is-spin svg { animation: none; }
+}
+
+@media (max-width: 767px) {
+  .main__inner.market {
+    align-items: stretch;
+    padding: 24px 16px 40px;
+  }
+  .market-panel { max-width: none; gap: 16px; }
+  .market-head { margin-bottom: 4px; }
+  .market-head__title { font-size: 17px; }
+  .market-head__desc { margin-top: 8px; font-size: 13px; line-height: 20px; }
+  .market-card { gap: 16px; padding: 20px 16px; }
+  .market-plan { flex-wrap: wrap; gap: 12px; }
+  .market-plan__icon { width: 40px; height: 40px; }
+  .market-plan__cta { width: 100%; }
+  .market-buy__row { flex-wrap: wrap; gap: 12px 16px; }
+  .market-buy__cta { width: 100%; }
+  /* 설정 모바일 입력칸(56 · 19) 규칙을 쓰지 않고 PC 와 같은 42 · 14 */
+  .market-search .market-search__field {
+    min-width: 0;
+    height: 42px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 22px;
+  }
 }
