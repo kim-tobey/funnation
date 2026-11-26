@@ -3825,8 +3825,8 @@ const sdNum=v=>+(String(v||'').replace(/\D/g,''))||0;
 const sdMo=()=>innerWidth<768;
 function sdRecent(){try{return JSON.parse(localStorage.getItem('funnation-stn-sig-recent')||'[]')}catch(e){return []}}
 function sdInit(preset){
-  const keep=sd?sd.bal:SD_BAL;
-  sd={tab:'gen',bal:keep,g:{msg:'',anon:false,vol:true,amt:'10000'},s:{msg:'',anon:false,vol:true,amt:'0'},sig:null,member:null,all:false,pick:null,q:'',ftab:'all',range:'',menu:false,tried:false};
+  const keep=sd?sd.bal:SD_BAL,nk=sd?sd.nick:null;
+  sd={tab:'gen',bal:keep,nick:nk,g:{msg:'',anon:false,vol:true,amt:'10000'},s:{msg:'',anon:false,vol:true,amt:'0'},sig:null,member:null,all:false,pick:null,q:'',ftab:'all',range:'',menu:false,tried:false};
   if(preset&&typeof preset==='object'&&preset.sig){const g=SG().find(x=>x.id===preset.sig);if(g){sd.tab='sig';sd.sig=g.id;sd.s.amt=String(g.amt)}}
   else if(preset)sd.g.amt=String(preset);
 }
@@ -3841,9 +3841,9 @@ function sdState(){
 const SDI={chev16:'<img src="assets/watch/chevron-right.svg" width="16" height="16" alt="">',chev20:'<img src="assets/watch/chevron-right.svg" width="20" height="20" alt="">'};
 function sdMsgHTML(){
   const p=sdP();
-  return `<div class="dmsg">
+  return `<div class="dmsg${p.anon?' is-anon':''}">
    <div class="dmsg__top">
-    <p class="dmsg__name"><strong id="sdnick">${p.anon?'익명':esc(actorName())}</strong><span>님</span><button class="dmsg__grade" type="button" data-act="sdSoon"><img src="assets/v2/station/grade/grade-15-s.webp" width="18" height="18" alt=""><b class="fname fname--gold">골드 다이아</b>${SDI.chev16}</button></p>
+    <p class="dmsg__name"><button class="dmsg__edit" type="button" aria-label="후원 닉네임 바꾸기" data-act="sdNick"><img src="assets/v2/avatar/action-edit.svg" width="20" height="20" alt=""></button><strong id="sdnick">${p.anon?'익명':esc(sd.nick||actorName())}</strong><input class="dmsg__nickin" id="sdnickin" type="text" maxlength="10" aria-label="후원 닉네임" autocomplete="off" hidden><span>님</span><button class="dmsg__grade" type="button" data-act="sdSoon"><img src="assets/v2/station/grade/grade-15-s.webp" width="18" height="18" alt=""><b class="fname fname--gold">골드 다이아</b>${SDI.chev16}</button></p>
     <label class="dmsg__anon">익명<input class="switch" type="checkbox" role="switch" data-ch="sdAnon" ${p.anon?'checked':''}></label>
    </div>
    <div class="dmsg__box" id="sdmbox">
@@ -3914,7 +3914,7 @@ function sdGridHTML(){
 }
 function sdAllHTML(){
   const rl=(SD_RANGES.find(r=>r[0]===sd.range)||SD_RANGES[0]);
-  return `<header class="fsigall__head"><button class="fsigall__back" type="button" aria-label="후원으로 돌아가기" data-act="sdAllClose"><img src="assets/fun-watch/v2/arrow-left-md.svg" width="20" height="20" alt=""></button><h3>시그니처 전체보기</h3><span>${fmt(SG().length)}개</span></header>
+  return `<header class="fsigall__head"><button class="fsigall__back" type="button" aria-label="후원으로 돌아가기" data-act="sdAllClose"><img class="sdic-pc" src="assets/fun-watch/v2/arrow-left-md.svg" width="20" height="20" alt=""><img class="sdic-mo" src="assets/fun-watch/v4/chevron-down-24.svg" width="24" height="24" alt=""></button><h3><span class="sdic-pc">시그니처 전체보기</span><span class="sdic-mo">시그니처 선택</span></h3><span>${fmt(SG().length)}개</span></header>
    <label class="fsigall__search"><input type="search" placeholder="시그니처 이름 검색" aria-label="시그니처 이름 검색" autocomplete="off" data-in="sdQ" value="${esc(sd.q)}"><img src="assets/fun-watch/v3/search.svg" width="16" height="16" alt=""></label>
    <div class="fsigall__filters">
     <button class="fsigall__chip" type="button" aria-pressed="${sd.ftab==='all'}" data-act="sdFtab" data-arg="all">전체</button>
@@ -3945,7 +3945,7 @@ function sdClose(){
   sdOv.remove();sdOv=null;document.documentElement.classList.remove('is-sdon');
   if(sdOpener&&document.body.contains(sdOpener))try{sdOpener.focus({preventScroll:true})}catch(e){}
 }
-function sdKey(e){if(e.key!=='Escape'||!sdOv)return;e.stopPropagation();if(sd.menu){sd.menu=false;sdAllRender()}else if(sd.all){sd.all=false;sd.pick=null;sdAllRender()}else sdClose()}
+function sdKey(e){if(e.key!=='Escape'||!sdOv||e.target.id==='sdnickin')return;e.stopPropagation();if(sd.menu){sd.menu=false;sdAllRender()}else if(sd.all){sd.all=false;sd.pick=null;sdAllRender()}else sdClose()}
 openDonate=function(preset){
   if(!need())return;
   if(blocked('donate')){toast('운영 정책에 따라 이 방송국에서 후원할 수 없어요');return}
@@ -3972,6 +3972,14 @@ Object.assign(A,{
  sdVoice(el){const L=['야옹이','유나','민준','서연'],sp=el.querySelector('span');sd.voice=L[(L.indexOf(sp.textContent)+1)%L.length];sp.textContent=sd.voice},
  sdMem(el,a){sd.member=sd.member===a?null:a;sdRender(true)},
  sdSoon(){toast('준비 중이에요')},
+ /* 후원 닉네임 바꾸기 — 연필 → 입력칸(기본값 닉네임), Enter · 칸 밖 저장(비우면 기본), Esc 취소 */
+ sdNick(){
+  const m=$('.dmsg',sdOv),inp=$('#sdnickin',sdOv),nm=$('#sdnick',sdOv);if(!m||!inp)return;
+  inp.value=sd.nick||actorName();inp.hidden=false;nm.hidden=true;m.classList.add('is-nick-edit');inp.focus();inp.select();
+  const done=save=>{if(inp.hidden)return;if(save)sd.nick=inp.value.trim()||null;nm.textContent=sd.nick||actorName();inp.hidden=true;nm.hidden=false;m.classList.remove('is-nick-edit');inp.onkeydown=inp.onblur=null};
+  inp.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();done(true)}else if(e.key==='Escape'){e.preventDefault();e.stopPropagation();done(false)}};
+  inp.onblur=()=>done(true);
+ },
  sdAll(){sd.all=!sd.all;sd.pick=null;sd.menu=false;sdAllRender()},
  sdAllClose(){sd.all=false;sd.pick=null;sdAllRender()},
  sdFtab(el,a){sd.ftab=a;sdAllRender()},
@@ -3984,6 +3992,7 @@ Object.assign(A,{
   const p=sdP(),g=sd.tab==='sig'?sdSig():null;
   don={key:'custom',custom:String(s.won),anon:p.anon,msg:p.msg,sig:g?g.id:null,done:false};
   finalizeDon();sd.bal-=s.won;
+  {const last=S.donations[S.donations.length-1];if(last&&!p.anon&&sd.nick)last.n=esc(sd.nick)}
   if(g){const r=sdRecent().filter(x=>x!==g.id);r.unshift(g.id);try{localStorage.setItem('funnation-stn-sig-recent',JSON.stringify(r.slice(0,12)))}catch(e){}}
   sdClose();toast(`${D.name}님에게 ${fmt(s.won)}원 후원했어요${g?` · 시그니처 '${g.n}'`:''}`);
  }
@@ -3995,7 +4004,7 @@ Object.assign(IN,{
  sdQ(el){sd.q=el.value;const g=$('#sdgrid',sdOv);if(g)g.innerHTML=sdGridHTML()}
 });
 Object.assign(CH,{
- sdAnon(el){sdP().anon=el.checked;const n=$('#sdnick',sdOv);if(n)n.textContent=el.checked?'익명':actorName()}
+ sdAnon(el){sdP().anon=el.checked;const n=$('#sdnick',sdOv);if(n)n.textContent=el.checked?'익명':(sd.nick||actorName());el.closest('.dmsg').classList.toggle('is-anon',el.checked)}
 });
 
 renderAll();

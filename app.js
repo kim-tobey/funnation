@@ -1920,9 +1920,42 @@ window.FunBlock = (function () {
 
   // 익명 — 켜면 닉네임 자리에 "익명"
   var anons = watch.querySelectorAll("[data-donate-anon]");
+  var NICK0 = "토비라마", nick = NICK0;
   for (var a = 0; a < anons.length; a++) anons[a].addEventListener("change", function () {
-    this.closest(".dmsg").querySelector("[data-donate-nick]").textContent = this.checked ? "익명" : "토비라마";
+    var m = this.closest(".dmsg");
+    m.querySelector("[data-donate-nick]").textContent = this.checked ? "익명" : nick;
+    m.classList.toggle("is-anon", this.checked);
   });
+  // 후원 닉네임 바꾸기 (2026-11-26 사용자 요청) — 이름 옆 연필(아바타 액션 Edit 의 연필)을 누르면 입력칸으로, 기본값은 닉네임.
+  // Enter · 칸 밖으로 나가면 저장(비우면 기본 닉네임), Esc 는 취소. 일반 후원 · 시그니처 두 칸이 같은 이름을 씀 [서버 연동 전]
+  function nickEdit(m, on, save) {
+    var nameEl = m.querySelector("[data-donate-nick]"), input = m.querySelector("[data-donate-nickin]");
+    if (on) {
+      input.value = nick; input.hidden = false; nameEl.hidden = true; m.classList.add("is-nick-edit");
+      input.focus(); input.select(); return;
+    }
+    if (input.hidden) return;
+    if (save) {
+      nick = input.value.trim() || NICK0;
+      var all = watch.querySelectorAll(".dmsg");
+      for (var k = 0; k < all.length; k++) if (!all[k].classList.contains("is-anon")) all[k].querySelector("[data-donate-nick]").textContent = nick;
+    }
+    input.hidden = true; nameEl.hidden = false; m.classList.remove("is-nick-edit");
+  }
+  var nickBtns = watch.querySelectorAll("[data-donate-nickedit]");
+  for (var nb = 0; nb < nickBtns.length; nb++) nickBtns[nb].addEventListener("click", function () {
+    var m = this.closest(".dmsg"), anon = m.querySelector("[data-donate-anon]");
+    if (anon && anon.checked) { anon.checked = false; anon.dispatchEvent(new Event("change")); }
+    nickEdit(m, true);
+  });
+  var nickIns = watch.querySelectorAll("[data-donate-nickin]");
+  for (var ni = 0; ni < nickIns.length; ni++) {
+    nickIns[ni].addEventListener("keydown", function (e) {
+      if (e.key === "Enter") { e.preventDefault(); nickEdit(this.closest(".dmsg"), false, true); }
+      else if (e.key === "Escape") { e.preventDefault(); e.stopPropagation(); nickEdit(this.closest(".dmsg"), false, false); }
+    });
+    nickIns[ni].addEventListener("blur", function () { nickEdit(this.closest(".dmsg"), false, true); });
+  }
 
   // 음성 읽기 켜기/끄기 · 목소리 바꾸기
   var VOICES = ["야옹이", "유나", "민준", "서연"];

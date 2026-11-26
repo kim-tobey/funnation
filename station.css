@@ -2305,6 +2305,8 @@ html.is-sdon{overflow:hidden}
 /* 시그니처 전체보기 판 — 채팅창 .fsigall 그대로, 자리만 이 팝업 기준(JS 가 left · top 을 넣음) */
 .sdov .fsigall{position:fixed;right:auto;bottom:auto;z-index:1;animation:fpop-in .18s ease-out}
 .sdov .fsigall .fsigall__back,.sdov .fsigall .fsigall__ok{display:none}
+.sdov .fsigall .sdic-mo{display:none}
+.sdov .fsigall h3 span{font:inherit;color:inherit;letter-spacing:inherit}
 .sdov .fsigall.is-over{border-radius:16px}
 .sdov .fsigall.is-over .fsigall__back{display:flex;margin-right:8px;padding:2px}
 .sdov .fsigall.is-over .fsigall__grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px 8px}
@@ -2314,18 +2316,25 @@ html.is-sdon{overflow:hidden}
 @media (max-width:767px){
   .sdov{align-items:stretch;padding:var(--mo-statusbar-h,0px) 0 0;background:var(--color-bg-300)}
   .sdpop{width:100%;max-height:none;gap:0;padding:0;border:0;border-radius:0;filter:none;animation:none}
-  .sdpop__head{gap:4px;height:56px;padding:0 16px 0 8px;border-bottom:1px solid var(--color-border-100)}
+  .sdpop__head{gap:4px;height:56px;padding:0 16px 0 8px}
   .sdpop__back{display:flex;align-items:center;justify-content:center;width:40px;height:40px}
   .sdpop__close{display:none}
   .sdpop__head h3{font-size:16px;line-height:20px;letter-spacing:0}
   .sdtabs{margin:0;padding:0 16px}
   .sdtab{height:48px;font-size:16px}
-  .sdpop .donate__body{flex:1 1 auto;margin:0;padding:16px 16px 20px}
-  .sdpop .donate__foot{padding:12px 16px calc(12px + env(safe-area-inset-bottom));border-top:1px solid var(--color-border-100)}
+  /* 후원하기는 아래 고정이 아니라 채팅창처럼 내용 맨 아래(금액 → 20 → 버튼), 페이지 전체가 스크롤 (2026-11-26 사용자 요청) */
+  .sdpop{overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none}
+  .sdpop::-webkit-scrollbar{display:none}
+  .sdpop__head{position:sticky;top:0;z-index:2;background:var(--color-bg-300)}
+  .sdpop .donate__body{flex:none;overflow:visible;margin:0;padding:16px 16px 0}
+  .sdpop .donate__foot{padding:20px 16px calc(20px + env(safe-area-inset-bottom))}
   /* 시그니처 전체보기 — 앱바 아래를 덮는 판(채팅창 모바일 시그니처 선택 68101:72574 과 같은 모양), 고른 뒤 확인 */
   .sdov .fsigall{top:calc(var(--mo-statusbar-h,0px) + 57px);right:0;bottom:0;left:0;width:auto;height:auto;max-height:none;gap:0;padding:0;border:1px solid var(--color-border-200);border-bottom:0;border-radius:12px 12px 0 0;background:var(--color-bg-400);filter:none;box-shadow:0 -12px 11px rgba(0,0,0,.3)}
   .sdov .fsigall .fsigall__head{height:24px;margin:16px 20px 0;gap:8px}
   .sdov .fsigall .fsigall__back{display:flex;padding:0}
+  .sdov .fsigall .sdic-pc{display:none}
+  .sdov .fsigall .fsigall__back .sdic-mo{display:block}
+  .sdov .fsigall h3 .sdic-mo{display:inline}
   .sdov .fsigall .fsigall__head h3{font-size:16px;line-height:20px;letter-spacing:0}
   .sdov .fsigall .fsigall__search{margin:20px 20px 0;background:var(--color-bg-300)}
   .sdov .fsigall .fsigall__filters{margin:10px 20px 0}

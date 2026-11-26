@@ -16679,3 +16679,57 @@ button.subnav__tab {
     letter-spacing: -0.01em;
   }
 }
+
+/* 후원 닉네임 바꾸기 (2026-11-26 사용자 요청) — 채팅창 후원 · 시그니처, 방송국 후원하기 공통.
+   이름 앞(누르기 쉽게, 같은 날 사용자 요청) 연필 = 내 정보 프로필 사진의 액션 배지 Edit(파란 동그라미 · 흰 연필, assets/v2/avatar/action-edit.svg)를 20 으로 →
+   누르면 이름 자리에 입력칸(이름 글자 그대로, Primary 밑줄 1px), 익명이면 연필 숨김 */
+.dmsg__edit {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  /* 세로 — 이름(펀시청자) 글자 가운데에 맞춤: 칸 가운데 정렬 후 동그라미 바깥 어두운 테두리 때문에 아래로 보이던 1px 올림 */
+  align-self: center;
+  margin: -3px 4px -3px 0;
+  transform: translateY(-1px);
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  cursor: pointer;
+  transition: filter 0.15s ease;
+}
+.dmsg__edit img { display: block; width: 20px; height: 20px; }
+/* PC 이름 16(모바일 14) — 글자가 칸 위쪽에 앉아 1px 더 올림 */
+@media (min-width: 768px) {
+  .dmsg__edit { transform: translateY(-2px); }
+}
+.dmsg__edit:hover { filter: brightness(1.12); }
+.dmsg__edit:focus-visible { outline: 2px solid var(--color-interaction-focus, #81B3FF); outline-offset: 1px; }
+.dmsg.is-anon .dmsg__edit,
+.dmsg.is-nick-edit .dmsg__edit { display: none; }
+.dmsg__nickin {
+  width: 10em;
+  min-width: 0;
+  height: 20px;
+  margin: -2px 0;
+  padding: 0 2px;
+  border: 0;
+  border-bottom: 1px solid var(--color-brand-primary);
+  border-radius: 0;
+  background: transparent;
+  font-family: var(--font-score);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 20px;
+  letter-spacing: -0.01em;
+  color: var(--color-text-strong);
+  outline: none;
+}
+.dmsg__nickin[hidden] { display: none; }
+.dmsg__name strong[hidden] { display: none; }
+@media (max-width: 767px) {
+  .dmsg__nickin { font-size: 14px; width: 9em; }
+}
