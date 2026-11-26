@@ -16730,6 +16730,10 @@ button.subnav__tab {
 }
 .dmsg__nickin[hidden] { display: none; }
 .dmsg__name strong[hidden] { display: none; }
+/* 이름을 눌러도 바꾸기 — 익명일 땐 안 눌림 */
+.dmsg__name strong[data-donate-nick],
+.dmsg__name strong#sdnick { cursor: pointer; }
+.dmsg.is-anon .dmsg__name strong { cursor: default; pointer-events: none; }
 @media (max-width: 767px) {
   .dmsg__nickin { font-size: 14px; width: 9em; }
 }

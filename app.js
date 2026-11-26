@@ -1942,7 +1942,8 @@ window.FunBlock = (function () {
     }
     input.hidden = true; nameEl.hidden = false; m.classList.remove("is-nick-edit");
   }
-  var nickBtns = watch.querySelectorAll("[data-donate-nickedit]");
+  // 연필뿐 아니라 이름을 눌러도 바꾸기 (같은 날 사용자 요청)
+  var nickBtns = watch.querySelectorAll("[data-donate-nickedit], [data-donate-nick]");
   for (var nb = 0; nb < nickBtns.length; nb++) nickBtns[nb].addEventListener("click", function () {
     var m = this.closest(".dmsg"), anon = m.querySelector("[data-donate-anon]");
     if (anon && anon.checked) { anon.checked = false; anon.dispatchEvent(new Event("change")); }

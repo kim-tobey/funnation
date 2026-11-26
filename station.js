@@ -3843,7 +3843,7 @@ function sdMsgHTML(){
   const p=sdP();
   return `<div class="dmsg${p.anon?' is-anon':''}">
    <div class="dmsg__top">
-    <p class="dmsg__name"><button class="dmsg__edit" type="button" aria-label="후원 닉네임 바꾸기" data-act="sdNick"><img src="assets/v2/avatar/action-edit.svg" width="20" height="20" alt=""></button><strong id="sdnick">${p.anon?'익명':esc(sd.nick||actorName())}</strong><input class="dmsg__nickin" id="sdnickin" type="text" maxlength="10" aria-label="후원 닉네임" autocomplete="off" hidden><span>님</span><button class="dmsg__grade" type="button" data-act="sdSoon"><img src="assets/v2/station/grade/grade-15-s.webp" width="18" height="18" alt=""><b class="fname fname--gold">골드 다이아</b>${SDI.chev16}</button></p>
+    <p class="dmsg__name"><button class="dmsg__edit" type="button" aria-label="후원 닉네임 바꾸기" data-act="sdNick"><img src="assets/v2/avatar/action-edit.svg" width="20" height="20" alt=""></button><strong id="sdnick" data-act="sdNick" title="후원 닉네임 바꾸기">${p.anon?'익명':esc(sd.nick||actorName())}</strong><input class="dmsg__nickin" id="sdnickin" type="text" maxlength="10" aria-label="후원 닉네임" autocomplete="off" hidden><span>님</span><button class="dmsg__grade" type="button" data-act="sdSoon"><img src="assets/v2/station/grade/grade-15-s.webp" width="18" height="18" alt=""><b class="fname fname--gold">골드 다이아</b>${SDI.chev16}</button></p>
     <label class="dmsg__anon">익명<input class="switch" type="checkbox" role="switch" data-ch="sdAnon" ${p.anon?'checked':''}></label>
    </div>
    <div class="dmsg__box" id="sdmbox">
