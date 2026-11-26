@@ -110,7 +110,8 @@
     if (overlay()) {
       // 펀네이션 라이브 상세(66132:100915)는 닫혀 있을 때 접힌 LNB 70 을 보여줌
       // 2026-11-23: 펀네이션 라이브 상세는 html data-page="watch" + data-sub="fun-watch" — 영상 상세 중 이 페이지만 접힌 LNB 70 을 늘 보여줌
-      root.setAttribute("data-lnb", (page === "fun-watch" || root.getAttribute("data-sub") === "fun-watch") && !drawerOpen ? "mini" : "full");
+      // 2026-11-26: 유튜브 라이브(watch.html)도 펀네이션 라이브와 똑같이 — PC 에서 접힌 LNB 70 을 늘 보여줌
+      root.setAttribute("data-lnb", (page === "fun-watch" || (page === "watch" && !mobile.matches) || root.getAttribute("data-sub") === "fun-watch") && !drawerOpen ? "mini" : "full");
       root.setAttribute("data-drawer", drawerOpen ? "open" : "closed");
       btn.setAttribute("aria-expanded", drawerOpen ? "true" : "false");
       btn.setAttribute("aria-label", drawerOpen ? "메뉴 닫기" : "메뉴 열기");

@@ -14651,7 +14651,7 @@ button.subnav__tab {
 /* 시그니처 전체보기 — 시그니처 팝오버(398) 왼쪽 4 · 아래 맞춤. 500×560, BG 300 · Border 200, 모서리 16(오른쪽 아래만 0) · 안 20 · 사이 20 */
 .fsigall {
   position: absolute;
-  right: calc(100% + 12px + 398px + 4px);
+  right: calc(100% + 12px + 398px + 10px);
   bottom: 12px;
   z-index: 5;
   display: flex;
@@ -14663,7 +14663,7 @@ button.subnav__tab {
   padding: 20px;
   border: 1px solid var(--fw-line);
   border-radius: 16px 16px 0 16px;
-  background: var(--color-bg-300);
+  background: var(--color-bg-400);
   filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.35));
   animation: fpop-in 0.18s ease-out;
 }
@@ -14688,7 +14688,7 @@ button.subnav__tab {
   letter-spacing: -0.01em;
   color: var(--color-text-normal);
 }
-.fsigall__head span {
+.fsigall__head > span {
   font-size: 12px;
   line-height: 1.6;
   letter-spacing: -0.01em;
@@ -14703,7 +14703,7 @@ button.subnav__tab {
   height: 40px;
   padding: 0 40px 0 16px;
   border-radius: 8px;
-  background: var(--color-bg-400);
+  background: var(--color-bg-300);
 }
 .fsigall__search:focus-within {
   box-shadow: inset 0 0 0 1px var(--color-brand-primary);
@@ -14865,7 +14865,7 @@ button.subnav__tab {
   text-align: left;
 }
 .fsigall .dsig__item:hover {
-  background: var(--color-bg-400);
+  background: var(--color-bg-cancel);
 }
 .fsigall .dsig__item:focus-visible {
   box-shadow: inset 0 0 0 2px var(--color-brand-primary);
@@ -16550,5 +16550,117 @@ button.subnav__tab {
 @media (max-width: 767px) {
   .fwatch .fchat #fchat-settings {
     max-height: calc(100dvh - var(--mo-statusbar-h, 0px) - var(--fw-ind, 0px));
+  }
+}
+
+/* 영상 상세(유튜브 라이브 watch.html · 펀네이션 라이브 fun-watch.html) PC — LNB 를 열면 본문 위에 겹치며 어둡게 하지 않고,
+   본문을 오른쪽으로 밀어내며 메뉴가 보임 (2026-11-26 사용자 요청). 모바일 드로어는 그대로 */
+@media (min-width: 768px) {
+  [data-page="watch"] .main,
+  [data-page="fun-watch"] .main {
+    transition: margin-left 0.25s ease;
+  }
+  [data-page="watch"][data-drawer="open"] .main,
+  [data-page="fun-watch"][data-drawer="open"] .main,
+  [data-page="fun-watch"][data-drawer="open"]:has(.fwatch.is-wide) .main {
+    margin-left: 260px;
+  }
+  [data-page="watch"][data-drawer="open"] .lnb,
+  [data-page="fun-watch"][data-drawer="open"] .lnb {
+    box-shadow: none;
+  }
+  [data-page="watch"] .lnb-backdrop,
+  [data-page="fun-watch"] .lnb-backdrop {
+    display: none;
+  }
+}
+@media (min-width: 768px) and (prefers-reduced-motion: reduce) {
+  [data-page="watch"] .main,
+  [data-page="fun-watch"] .main {
+    transition: none;
+  }
+}
+
+/* 유튜브 라이브(watch.html) PC LNB 를 펀네이션 라이브와 똑같이 — 접힌 LNB 70 을 늘 보여 주고, 햄버거로 펼치면 260 으로 넓어지며 본문을 밀어냄
+   (2026-11-26 사용자 요청, 기준은 펀네이션 라이브) */
+@media (min-width: 768px) {
+  [data-page="watch"] .lnb {
+    width: 70px;
+    box-shadow: none;
+    transform: none;
+    visibility: visible;
+    transition: width 0.25s ease;
+  }
+  [data-page="watch"][data-drawer="open"] .lnb {
+    width: 260px;
+    box-shadow: none;
+  }
+  [data-page="watch"] .main {
+    margin-left: 70px;
+  }
+  [data-page="watch"][data-drawer="open"] .main {
+    margin-left: 260px;
+  }
+  /* 세로 영상 데모 로그인 버튼 — LNB 오른쪽 24 */
+  [data-page="watch"]:has(.watch[data-orient="portrait"]) .fab-auth {
+    left: 94px;
+  }
+  [data-page="watch"][data-drawer="open"]:has(.watch[data-orient="portrait"]) .fab-auth {
+    left: 284px;
+  }
+}
+@media (min-width: 768px) and (prefers-reduced-motion: reduce) {
+  [data-page="watch"] .lnb { transition: none; }
+}
+
+/* 모바일 시그니처 선택 시트 (2026-11-26 시안 68101:72574) — 시그니처 시트의 "시그니처" 제목 줄 아래부터 시트 끝까지 덮는 판.
+   판 BG 400 · 위 · 좌우 Border 200 · 위 모서리 12 · 위 그림자. ⌄(24) → 8 → 시그니처 선택(S-Core Dream 16 / 20) · 개수(12 Depth 400),
+   20 → 검색 40(시안 bg-elevation BG 300 90% → BG 300) → 10 → 필터 → 16 → 3열 목록(사이 8 · 줄 12, 그림 98×56 비율) → 확인(위 20 · 아래 8 · 48 · 모서리 10 · Medium 16) */
+@media (max-width: 767px) {
+  .fwatch .fsigall {
+    top: calc(var(--mo-statusbar-h, 0px) + 48px + 57px);
+    bottom: calc(var(--fw-ind) + 52px);
+    height: auto;
+    gap: 0;
+    padding: 0;
+    border: 1px solid var(--color-border-200);
+    border-bottom: 0;
+    border-radius: 12px 12px 0 0;
+    background: var(--color-bg-400);
+    box-shadow: 0 -12px 11px rgba(0, 0, 0, 0.3);
+  }
+  .fwatch .fsigall__head {
+    height: 24px;
+    margin: 16px 20px 0;
+    gap: 8px;
+  }
+  .fwatch .fsigall__back {
+    padding: 0;
+  }
+  .fwatch .fsigall__search {
+    margin: 20px 20px 0;
+    background: var(--color-bg-300);
+  }
+  .fwatch .fsigall__filters {
+    margin: 10px 20px 0;
+  }
+  .fwatch .fsigall__scroll {
+    margin-top: 16px;
+    padding: 0 20px;
+  }
+  .fwatch .fsigall__grid {
+    gap: 12px 8px;
+  }
+  .fwatch .fsigall .dsig__item img {
+    aspect-ratio: 98 / 56;
+  }
+  .fwatch .fsigall__ok {
+    width: auto;
+    height: 48px;
+    margin: 20px 20px 8px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
   }
 }
