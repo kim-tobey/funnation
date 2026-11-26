@@ -388,6 +388,11 @@
             <hr class="wmenu__line" data-admin-only>
             <button class="wmenu__item" type="button" role="menuitem" data-coming-soon data-admin-only><img src="assets/watch/v4/menu/admin.svg" width="20" height="20" alt=""><span>관리자 페이지<small class="wmenu__note">관리자만</small></span></button>
           </div>
+          <!-- 모바일 방송 정보 더보기(⋯) 시트 (68096:65914) — 공유 · 이 방송 신고. 화면 아래, 뒤는 Overlay Black 65 딤(누르면 닫힘) -->
+          <div class="fmore" id="fmore" role="menu" aria-label="더보기" data-node-id="68096:66007" hidden>
+            <button class="wmenu__item fmore__item" type="button" role="menuitem" data-watch-share><img src="assets/fun-watch/v4/share-2-20.svg" width="20" height="20" alt=""><span>공유</span></button>
+            <button class="wmenu__item fmore__item" type="button" role="menuitem" data-coming-soon><img src="assets/fun-watch/v4/message-square-alert-20.svg" width="20" height="20" alt=""><span>이 방송 신고</span></button>
+          </div>
           <div class="fwatch__main">
 
             <!-- 자체 플레이어 (66132:101007) — 송출 주소(HLS .m3u8)는 data-stream-src. 서버 연동 전이라 비어 있고 시안 화면을 포스터로 씀.
@@ -472,7 +477,7 @@
               <div class="fmo__row">
                 <a class="fmo__who" href="station.html"><span class="fmo__pic"><img src="assets/watch/v4/avatar-ymss-sm.jpg" width="24" height="24" alt=""></span>YM상사</a>
                 <span class="fmo__acts">
-                  <button class="fmo__more" type="button" aria-label="더보기" aria-haspopup="menu" aria-expanded="false" aria-controls="wmenu-mo" data-wmenu-btn><img src="assets/fun-watch/v4/more-horizontal-20.svg" width="20" height="20" alt=""></button>
+                  <button class="fmo__more" type="button" aria-label="더보기" aria-haspopup="menu" aria-expanded="false" aria-controls="fmore" data-wmenu-btn><img src="assets/fun-watch/v4/more-horizontal-20.svg" width="20" height="20" alt=""></button>
                   <button class="fmo__follow" type="button" aria-pressed="false" data-watch-follow><img src="assets/fun-watch/v4/heart-02-16.svg" width="16" height="16" alt=""><span>팔로우</span></button>
                 </span>
               </div>

@@ -15908,19 +15908,20 @@ button.subnav__tab {
 [data-auth="out"] .fchat__admin { display: none; }
 /* 관리자 설정 카드 — 시안 67859:72300: 채팅 메뉴 바로 아래 6 · 오른쪽 6, 폭 340. 관리자설정 버튼을 가리지 않음 */
 .fwatch .fadmin { top: 48px; right: 6px; bottom: auto; } /* 코드 메뉴 42 + 6 */
-/* 모바일 — 시안 없음 [구현 제안]: PC 와 같은 카드로 채팅 머리(45) 아래 6 · 오른쪽 6 (아래 시트 · 딤 안 씀) */
+/* 모바일 — 바텀시트 (2026-11-26 시안 68096:66223): 채팅 설정 시트와 같은 모양 · 화면 아래 · 위 모서리 12 · 뒤 Overlay Black 65 딤 */
 @media (max-width: 767px) {
   .fwatch .fchat .fadmin {
-    position: absolute;
-    top: 51px;
-    right: 6px;
-    bottom: auto;
-    left: auto;
-    width: 340px;
-    max-width: calc(100% - 12px);
-    border-radius: 12px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    position: fixed;
+    top: auto;
+    right: 0;
+    bottom: var(--fw-ind);
+    left: 0;
+    width: auto;
+    max-width: none;
+    border-radius: 12px 12px 0 0;
+    box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.65);
   }
+  .fwatch .fchat .fadmin > .fopt__line { display: none; } /* 시안: 제목 아래 선 없음 */
 }
 
 /* 방송 정보 팔로우 — 2026-11-25 사용자 요청: 팔로우 = Primary · 흰 글자, 팔로잉 = 취소 · 이전 버튼 색 BG Cancel · 흰 글자 (하트만 비움 ↔ 채움) */
@@ -16496,4 +16497,58 @@ button.subnav__tab {
   }
   .fwatch .fchat #donate-general .donate__foot,
   .fwatch .fchat #donate-signature .donate__foot { flex: none; }
+}
+
+/* 펀네이션 라이브 상세 — 모바일 방송 정보 더보기(⋯) 시트 (2026-11-26 시안 68096:65914)
+   화면 아래 붙음 · BG 300 · Border 200 · 위 모서리 12 · 안 18/16/6, 줄 36 · 사이 4, 아이콘 20 → 8 → SemiBold 13 / 1.5 Normal.
+   뒤는 Overlay Black 65 딤. PC 에는 ⋯ 버튼이 없음 */
+.fmore { display: none; }
+@media (max-width: 767px) {
+  .fwatch .fmore {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 60;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 18px 16px calc(6px + var(--fw-ind, 0px));
+    border: 1px solid var(--color-border-200);
+    border-bottom: 0;
+    border-radius: 12px 12px 0 0;
+    background: var(--color-bg-300);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), 0 0 0 100vmax rgba(0, 0, 0, 0.65);
+    animation: fsheet-up 0.18s ease-out;
+  }
+  .fwatch .fmore[hidden] { display: none; }
+  .fwatch .fmore__item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    height: 36px;
+    padding: 0;
+    border: 0;
+    background: none;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.5;
+    letter-spacing: -0.0075em;
+    color: var(--color-text-normal);
+    text-align: left;
+  }
+  .fwatch .fmore__item:hover { background: none; }
+  .fwatch .fmore__item img { width: 20px; height: 20px; margin: 0; }
+}
+@media (max-width: 767px) and (prefers-reduced-motion: reduce) {
+  .fwatch .fmore { animation: none; }
+}
+
+/* 펀네이션 라이브 상세 — 모바일 채팅 설정 시트 (2026-11-26 시안 67859:84937, 사용자 요청 "스크롤 없이 전부")
+   시트 높이는 내용대로(시안 626) — 플레이어 위까지 올라와 덮음. 화면이 아주 낮을 때만 상태바 아래에서 스크롤 */
+@media (max-width: 767px) {
+  .fwatch .fchat #fchat-settings {
+    max-height: calc(100dvh - var(--mo-statusbar-h, 0px) - var(--fw-ind, 0px));
+  }
 }
