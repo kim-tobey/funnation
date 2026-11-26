@@ -524,6 +524,10 @@ ul {
   width: 24px;
   height: 24px;
 }
+/* VIP 왕관 (65514:33867) — 로그아웃 상태는 언어 버튼과 붙여 48 칸 연속(시안 우측 메뉴), .top-nav__right 의 15 간격을 상쇄 */
+.nav-icon--crown.auth-out {
+  margin-right: -15px;
+}
 
 /* GNB 아이콘 호버 레이어 (app.js) — [구현 제안 · Figma 시안 없음] 호버하는 동안만 아이콘 그림 아래 10px 에 표시.
    다크: BG400 · Border400 · Normal / 라이트는 알림 팝업 라이트 색을 따름 */
@@ -1012,6 +1016,26 @@ ul {
   flex: none;
   width: 15px;
   height: 15px;
+}
+/* 언어 설정 — 모바일(<768) 로그인 상태만 내 방송국 · 연결 계정 옆 36 정사각, 앱바 언어 아이콘은 숨김
+   (2026-11-26 사용자 요청 [구현 제안 · 시안 없음]). PC 는 GNB 지구본 그대로 */
+.lnb__lang {
+  display: none;
+}
+@media (max-width: 767px) {
+  .lnb__lang {
+    display: flex;
+    flex: none;
+    width: 36px;
+    padding: 0;
+  }
+  .lnb__lang img {
+    width: 20px;
+    height: 20px;
+  }
+  [data-auth="in"] .mo-appbar [data-lang-btn] {
+    display: none;
+  }
 }
 
 /* 등급 info 카드 */
@@ -4019,6 +4043,7 @@ ul {
   [data-theme="light"] .mo-appbar__btn img[src$="appbar-back.svg"] { content: url("assets/light/mo/appbar-back.svg"); }
   [data-theme="light"] .mo-appbar__btn img[src$="appbar-bell.svg"] { content: url("assets/light/mo/appbar-bell.svg"); }
   [data-theme="light"] .mo-appbar__btn img[src$="appbar-lang.svg"] { content: url("assets/light/mo/appbar-lang.svg"); }
+  [data-theme="light"] .lnb__lang img { content: url("assets/light/mo/appbar-lang.svg"); }
 
   /* LNB — 좌측 드로어 */
   .lnb {
@@ -4471,6 +4496,12 @@ ul {
   /* 홈 앱바 왼쪽은 검색(64162:199925) — 로그인 화면에서는 뒤로 가기(닫기)로 바뀜 */
   :root:not([data-view="login"]):not([data-view="signup"]) .mo-appbar--home [data-history-back],
   [data-view="login"] .mo-appbar--home .mo-appbar__search {
+    display: none;
+  }
+  /* 홈 앱바 (65562:21635) — 왼쪽 검색 · 언어 / 오른쪽 VIP 왕관 · 메뉴.
+     검색 · 알림 · 로그인 등 다른 화면(65183:135804)은 왼쪽 뒤로 · 제목 / 오른쪽 왕관 · 언어 · 메뉴 */
+  :root:not([data-view]) .mo-appbar--home .mo-appbar__lang-r,
+  [data-view] .mo-appbar--home .mo-appbar__lang-l {
     display: none;
   }
   /* 라이브 방송 앱바 — 제목 왼쪽 정렬, 오른쪽 버튼 3개(144px) 앞까지 */

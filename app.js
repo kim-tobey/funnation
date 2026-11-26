@@ -3063,7 +3063,7 @@ window.FunBlock = (function () {
   }
   function open(btn) {
     owner = btn;
-    var host = btn.closest(".top-nav__inner, .mo-appbar, .wbar");
+    var host = btn.closest(".top-nav__inner, .mo-appbar, .wbar, .lnb");
     if (host && pop.parentNode !== host) host.appendChild(pop);
     pop.hidden = false;
     btn.setAttribute("aria-expanded", "true");
