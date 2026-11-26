@@ -2263,3 +2263,77 @@ body.wire .stn .banner.def,body.wire .stn .rbi.def,body.wire .stn .mban.def .mb-
 .stn .lre2 .lrf{background:var(--av-silver)}
 .stn .lre3 .lrf{background:var(--av-bronze)}
 .stn .lrf .av{box-sizing:border-box;border:3px solid var(--av-gap)}
+
+/* ============================================================
+   후원하기 (2026-11-26 사용자 요청) — 탭 · 멤버 · 바로 후원은 실서비스 개발 서버 방송국, 카드 구조 · 모양은 펀네이션 라이브 채팅창 후원 팝오버
+   (안쪽은 styles.css 의 .fpop · .dmsg · .dbox · .damount · .dpick · .fsigall 를 그대로 씀). 방송국 본문(.stn) 초기화가 닿지 않게 body 에 붙임.
+   틀: 398 · BG 300 · Border 200 · 모서리 16 · 안 20 · 사이 20, 제목 S-Core Dream 19 + 닫기 24 (채팅창 .fchat .fpop 과 같은 값)
+   ============================================================ */
+.sdov{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;padding:24px 12px;background:rgba(0,0,0,.65)}
+html.is-sdon{overflow:hidden}
+.sdpop{display:flex;flex-direction:column;gap:20px;width:398px;max-width:100%;max-height:min(880px,100%);padding:20px;border:1px solid var(--fw-line);border-radius:16px;background:var(--color-bg-300);color:var(--color-text-normal);font-family:var(--font-base);filter:drop-shadow(0 8px 12px rgba(0,0,0,.35));animation:fpop-in .18s ease-out}
+@media (prefers-reduced-motion:reduce){.sdpop{animation:none}}
+.sdpop__head{display:flex;flex:none;align-items:center;justify-content:space-between;height:24px}
+.sdpop__head h3{flex:1;margin:0;font-family:var(--font-score);font-size:19px;font-weight:700;line-height:1;letter-spacing:-.01em;color:var(--color-text-normal);outline:none}
+.sdpop__close{display:flex}
+.sdpop__back{display:none}
+/* 탭 — 개발 서버 구조, 모양은 사이트 2뎁스 탭(선택 Primary + 2px 밑줄 · 나머지 Depth 300) */
+.sdtabs{display:flex;flex:none;margin-top:-8px;border-bottom:1px solid var(--fw-line)}
+.sdtab{position:relative;flex:1;height:40px;font-size:14px;font-weight:600;line-height:1;color:var(--color-text-depth-300)}
+.sdtab.is-on{color:var(--color-brand-primary)}
+.sdtab.is-on::after{content:"";position:absolute;right:0;bottom:-1px;left:0;height:2px;background:var(--color-brand-primary)}
+.sdpop .donate__body{gap:16px;margin:-4px -20px 0;padding:4px 20px 0;scrollbar-width:none}
+.sdpop .donate__body::-webkit-scrollbar{display:none}
+.sdpop .donate__foot{padding:0}
+/* 아래 동의 문구 — 개발 서버 구조 (Medium 11 · Depth 400, 안내보기 Normal 밑줄) */
+.sdagree{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:-2px 0 0;font-size:11px;font-weight:500;line-height:1.5;color:var(--color-text-depth-400)}
+.sdagree button{flex:none;font-size:11px;font-weight:500;color:var(--color-text-normal);text-decoration:underline;text-underline-offset:2px}
+/* 멤버 — 채팅창에 없는 부분(개발 서버 구조), 카드는 칭호 · 후원 금액 칸과 같은 .dbox */
+.sdmembers{gap:10px}
+.sdgrp{display:flex;align-items:center;gap:6px;margin:-2px 0 0;font-size:11px;font-weight:500;line-height:1.5;color:var(--color-text-depth-300)}
+.sdgrp i{width:6px;height:6px;border-radius:50%;background:var(--color-brand-primary)}
+.sdmems{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.sdmem{display:flex;align-items:center;gap:8px;min-width:0;height:40px;padding:0 10px;border:1px solid var(--fw-line);border-radius:8px;background:var(--color-bg-300);font-size:13px;font-weight:500;color:var(--color-text-normal);text-align:left}
+.sdmem .av{flex:none;display:block;overflow:hidden;border-radius:50%}
+.sdmem .av img{display:block;width:100%;height:100%;object-fit:cover}
+.sdmem span:last-child{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.sdmem:hover{border-color:var(--color-border-400)}
+.sdmem.is-on{border-color:var(--color-brand-primary)}
+.sdpop .dmsg__voice{flex:none}
+.sdpop .dmsg__tts span{white-space:nowrap}
+.sdnote{margin:0;font-size:11px;font-weight:500;line-height:1.5;color:var(--color-text-depth-400)}
+/* 시그니처 전체보기 판 — 채팅창 .fsigall 그대로, 자리만 이 팝업 기준(JS 가 left · top 을 넣음) */
+.sdov .fsigall{position:fixed;right:auto;bottom:auto;z-index:1;animation:fpop-in .18s ease-out}
+.sdov .fsigall .fsigall__back,.sdov .fsigall .fsigall__ok{display:none}
+.sdov .fsigall.is-over{border-radius:16px}
+.sdov .fsigall.is-over .fsigall__back{display:flex;margin-right:8px;padding:2px}
+.sdov .fsigall.is-over .fsigall__grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px 8px}
+.sdov .fsigall.is-over .dsig__item{width:100%;height:auto}
+.sdov .fsigall.is-over .dsig__item img{width:100%;height:auto;aspect-ratio:132/75}
+/* 모바일(<768) — 바텀시트가 아니라 한 페이지: 앱바 56 "← 후원하기"(S-Core Dream 16), 닫기 × 없음, 후원하기는 아래 고정 */
+@media (max-width:767px){
+  .sdov{align-items:stretch;padding:var(--mo-statusbar-h,0px) 0 0;background:var(--color-bg-300)}
+  .sdpop{width:100%;max-height:none;gap:0;padding:0;border:0;border-radius:0;filter:none;animation:none}
+  .sdpop__head{gap:4px;height:56px;padding:0 16px 0 8px;border-bottom:1px solid var(--color-border-100)}
+  .sdpop__back{display:flex;align-items:center;justify-content:center;width:40px;height:40px}
+  .sdpop__close{display:none}
+  .sdpop__head h3{font-size:16px;line-height:20px;letter-spacing:0}
+  .sdtabs{margin:0;padding:0 16px}
+  .sdtab{height:48px;font-size:16px}
+  .sdpop .donate__body{flex:1 1 auto;margin:0;padding:16px 16px 20px}
+  .sdpop .donate__foot{padding:12px 16px calc(12px + env(safe-area-inset-bottom));border-top:1px solid var(--color-border-100)}
+  /* 시그니처 전체보기 — 앱바 아래를 덮는 판(채팅창 모바일 시그니처 선택 68101:72574 과 같은 모양), 고른 뒤 확인 */
+  .sdov .fsigall{top:calc(var(--mo-statusbar-h,0px) + 57px);right:0;bottom:0;left:0;width:auto;height:auto;max-height:none;gap:0;padding:0;border:1px solid var(--color-border-200);border-bottom:0;border-radius:12px 12px 0 0;background:var(--color-bg-400);filter:none;box-shadow:0 -12px 11px rgba(0,0,0,.3)}
+  .sdov .fsigall .fsigall__head{height:24px;margin:16px 20px 0;gap:8px}
+  .sdov .fsigall .fsigall__back{display:flex;padding:0}
+  .sdov .fsigall .fsigall__head h3{font-size:16px;line-height:20px;letter-spacing:0}
+  .sdov .fsigall .fsigall__search{margin:20px 20px 0;background:var(--color-bg-300)}
+  .sdov .fsigall .fsigall__filters{margin:10px 20px 0}
+  .sdov .fsigall .fsigall__scroll{margin-top:16px;padding:0 20px}
+  .sdov .fsigall .fsigall__grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px 8px}
+  .sdov .fsigall .dsig__item{width:100%;height:auto}
+  .sdov .fsigall .dsig__item img{width:100%;height:auto;aspect-ratio:98/56}
+  .sdov .fsigall .fsigall__note{display:none}
+  .sdov .fsigall .fsigall__ok{display:flex;flex:none;width:auto;height:48px;margin:20px 20px calc(8px + env(safe-area-inset-bottom));border-radius:10px;background:var(--color-brand-primary);font-size:16px;font-weight:500;letter-spacing:-.01em;color:#fff}
+  .sdov .fsigall .fsigall__ok.is-off{background:var(--color-bg-cancel);color:var(--color-text-depth-500)}
+}

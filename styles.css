@@ -6860,8 +6860,23 @@ ul {
   width: 24px;
   height: 24px;
 }
+/* 금액이 없으면 지우기(×)를 빼서 "원"이 오른쪽 안쪽 여백까지 붙음, 금액이 생기면 × 가 다시 나오며 원이 지금 자리로 — 0.2초 동안 ×가 접히고 펴지며 원이 미끄러짐 (2026-11-26 사용자 요청 — 채팅창 · 방송국 후원 공통) */
+.damount__clear {
+  flex: none;
+  overflow: hidden;
+  transition: width 0.2s ease, margin 0.2s ease, opacity 0.2s ease, visibility 0.2s;
+}
 .damount__box.is-empty .damount__clear {
+  width: 0;
+  margin-left: -10px; /* 칸 사이(gap 10)까지 접어 원이 안쪽 여백에 붙음 */
+  opacity: 0;
   visibility: hidden;
+}
+.fpop .damount__box.is-empty .damount__clear {
+  margin-left: -8px; /* 채팅창 · 방송국 후원 칸 사이 8 */
+}
+@media (prefers-reduced-motion: reduce) {
+  .damount__clear { transition: none; }
 }
 /* 지우기 — 시안(64822:112773)은 평소에도 파란 X, 오류일 때만 노란 X */
 .damount__clear img:first-child,

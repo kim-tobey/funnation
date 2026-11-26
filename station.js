@@ -3810,6 +3810,194 @@ document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest
 /* 시안 캡처용 — #...&cap=1 : 데모 설정 · 플로팅 로그인 버튼 숨김, &fix=1 : 화면 높이로 잘라 모달을 가운데에 */
 function capMode(){const h=location.hash;ROOT.classList.toggle('is-cap',/(^#|&)cap=1(&|$)/.test(h));ROOT.classList.toggle('is-cap-fix',/(^#|&)fix=1(&|$)/.test(h))}
 window.addEventListener('hashchange',capMode);capMode();
+/* ============================================================
+   후원하기 (2026-11-26 사용자 요청) — 탭(일반 후원 · 시그니처) · 멤버 · 바로 후원은 실서비스 개발 서버 방송국(dev.funnation.co.kr/store/…),
+   카드 구조 · 모양 · 규칙은 펀네이션 라이브 영상 상세 채팅창 후원 팝오버 그대로(fun-watch.html 의 같은 클래스 · styles.css):
+   일반 = 응원 메시지(이름님 · 칭호 칩 · 익명 / 입력 · 채팅 읽어주기 · 목소리 · 0/200) → 칭호 → 선 → 후원 금액(내 펀캐시 · 칩), 최소 1만원 · 메시지 필수
+   시그니처 = 선택한 시그니처(점선 · 시그니처 선택 → 시그니처 전체보기 판) → 멤버 → 응원 메시지 → 칭호 → 선 → 후원 금액, 최소 1천원
+   방송국 본문(.stn)의 초기화 스타일이 닿지 않게 body 에 붙임. PC 가운데 팝업 398, 모바일 한 페이지(앱바 "← 후원하기")
+   ============================================================ */
+const SD_BAL=100000; /* [데모] 보유 펀캐시 — 채팅창과 같은 값, 서버 연동 전 */
+const SD_BAN=['바보','욕설'];
+const SD_RANGES=[['','전체 금액'],['100-999','100원 이상 ~ 1천원 미만'],['1000-4999','1천원 이상 ~ 5천원 미만'],['5000-9999','5천원 이상 ~ 1만원 미만'],['10000-49999','1만원 이상 ~ 5만원 미만'],['50000-99999','5만원 이상 ~ 10만원 미만'],['100000-499999','10만원 이상 ~ 50만원 미만'],['500000-999999','50만원 이상 ~ 100만원 미만'],['1000000-2000000','100만원 이상 ~ 200만원 이하']];
+let sd=null,sdOv=null,sdOpener=null;
+const sdNum=v=>+(String(v||'').replace(/\D/g,''))||0;
+const sdMo=()=>innerWidth<768;
+function sdRecent(){try{return JSON.parse(localStorage.getItem('funnation-stn-sig-recent')||'[]')}catch(e){return []}}
+function sdInit(preset){
+  const keep=sd?sd.bal:SD_BAL;
+  sd={tab:'gen',bal:keep,g:{msg:'',anon:false,vol:true,amt:'10000'},s:{msg:'',anon:false,vol:true,amt:'0'},sig:null,member:null,all:false,pick:null,q:'',ftab:'all',range:'',menu:false,tried:false};
+  if(preset&&typeof preset==='object'&&preset.sig){const g=SG().find(x=>x.id===preset.sig);if(g){sd.tab='sig';sd.sig=g.id;sd.s.amt=String(g.amt)}}
+  else if(preset)sd.g.amt=String(preset);
+}
+const sdP=()=>sd.tab==='gen'?sd.g:sd.s;
+function sdSig(){return sd.sig&&SG().find(x=>x.id===sd.sig)}
+function sdState(){
+  const p=sdP(),won=sdNum(p.amt),min=sd.tab==='gen'?10000:1000,lack=won>sd.bal,low=won<min;
+  const t=p.msg,mwarn=t.length>200?'후원메세지는 200자 이내로 입력해주세요':SD_BAN.some(b=>t.indexOf(b)>-1)?'후원메세지에 사용할 수 없는 표현이 포함되어 있어요':'';
+  const noMsg=sd.tab==='gen'&&!t.trim(),noSig=sd.tab==='sig'&&!sdSig();
+  return {won,min,lack,low,mwarn,noMsg,noSig,ok:!lack&&!low&&!mwarn&&!noMsg&&!noSig};
+}
+const SDI={chev16:'<img src="assets/watch/chevron-right.svg" width="16" height="16" alt="">',chev20:'<img src="assets/watch/chevron-right.svg" width="20" height="20" alt="">'};
+function sdMsgHTML(){
+  const p=sdP();
+  return `<div class="dmsg">
+   <div class="dmsg__top">
+    <p class="dmsg__name"><strong id="sdnick">${p.anon?'익명':esc(actorName())}</strong><span>님</span><button class="dmsg__grade" type="button" data-act="sdSoon"><img src="assets/v2/station/grade/grade-15-s.webp" width="18" height="18" alt=""><b class="fname fname--gold">골드 다이아</b>${SDI.chev16}</button></p>
+    <label class="dmsg__anon">익명<input class="switch" type="checkbox" role="switch" data-ch="sdAnon" ${p.anon?'checked':''}></label>
+   </div>
+   <div class="dmsg__box" id="sdmbox">
+    <textarea class="dmsg__input" id="sdm" rows="2" placeholder="응원의 한마디를 남겨주세요" aria-label="응원 메시지" data-in="sdMsg">${esc(p.msg)}</textarea>
+    <div class="dmsg__foot">
+     <div class="dmsg__voice">
+      <button class="dmsg__vol" type="button" aria-pressed="${p.vol}" data-act="sdVol"><img src="assets/fun-watch/v2/checkbox-check.svg" width="16" height="16" alt="">채팅 읽어주기</button>
+      <i class="dmsg__bar" aria-hidden="true"></i>
+      <button class="dmsg__tts" type="button" aria-label="읽어줄 목소리 바꾸기" data-act="sdVoice"><span>${esc(sd.voice||'야옹이')}</span>${SDI.chev20}<img class="dmsg__speaker" src="assets/fun-watch/v2/volume-16.svg" width="16" height="16" alt=""></button>
+     </div>
+     <span class="dmsg__count" id="sdmc" aria-hidden="true">${p.msg.length}/200</span>
+    </div>
+   </div>
+   <p class="dwarn" id="sdmw" hidden></p>
+  </div>`;
+}
+function sdTitleHTML(){return `<button class="dbox dtitle" type="button" data-act="sdSoon"><span class="dbox__head"><strong>칭호</strong>${SDI.chev20}</span><span class="dtitle__value">표시 안 함</span></button>`}
+function sdAmountHTML(){
+  const p=sdP(),won=sdNum(p.amt);
+  return `<div class="dbox damount">
+   <div class="dbox__head"><label for="sda"><strong>후원 금액</strong></label><span class="dcash"><img src="assets/watch/cash.png" width="14" height="14" alt=""><span class="dcash__label">내 펀캐시</span><i aria-hidden="true"></i><b>${fmt(sd.bal)}</b><b class="dcash__own">보유</b></span></div>
+   <div class="damount__box${won?'':' is-empty'}" id="sdabox"><input class="damount__input" id="sda" type="text" inputmode="numeric" value="${fmt(won)}" autocomplete="off" data-in="sdAmt"><span class="damount__unit">원</span><button class="damount__clear" type="button" aria-label="금액 지우기" data-act="sdClear"><img src="assets/watch/close-circle.svg" width="24" height="24" alt=""><img src="assets/watch/close-circle-active.svg" width="20" height="20" alt=""><img src="assets/watch/close-circle-warn.svg" width="20" height="20" alt=""></button></div>
+   <div class="dhint" id="sdhint" hidden><p id="sdhintt"></p><a class="dhint__charge" id="sdcharge" href="wallet.html" hidden>충전하기</a></div>
+   ${sd.tab==='gen'?`<div class="damount__chips">${[[1000,'+1천'],[10000,'+1만'],[100000,'+10만'],[300000,'+30만'],[500000,'+50만'],['all','전액']].map(c=>`<button type="button" data-act="sdAdd" data-arg="${c[0]}">${c[1]}</button>`).join('')}</div>`:''}
+  </div>`;
+}
+function sdPickHTML(){
+  const g=sdSig();
+  return `<div class="dsec dpick"><div class="dsec__head"><h4>선택한 시그니처</h4></div>
+   <div class="dpick__box${g?' is-picked':''}">${g?`<button class="dpick__sel" type="button" aria-label="시그니처 다시 고르기" data-act="sdAll"><img src="${g.img.data}" width="140" height="80" alt=""><span class="dpick__info"><b>${esc(g.n)}</b><strong>${fmt(g.amt)}원</strong></span></button>`
+   :`<div class="dpick__empty"><p>선택한 시그니처가 없어요. 시그니처를 선택해주세요</p><button class="dpick__open" type="button" aria-haspopup="dialog" data-act="sdAll">시그니처 선택</button></div>`}</div>
+   <p class="dwarn" id="sdsw" hidden></p></div>`;
+}
+function sdMemberHTML(){
+  return `<div class="dbox sdmembers"><div class="dbox__head"><strong>멤버</strong></div><p class="sdgrp"><i aria-hidden="true"></i>플레이어</p>
+   <div class="sdmems">${CRW().map(c=>`<button type="button" class="sdmem${sd.member===c.n?' is-on':''}" data-act="sdMem" data-arg="${esc(c.n)}" aria-pressed="${sd.member===c.n}">${av(c.n,24)}<span>${esc(c.n)}</span></button>`).join('')}</div>
+   <p class="sdnote">좋아하는 시그를 선택하면 그 멤버에 효과가 나타납니다!<br>멤버를 지정하지 않으면 원하는 멤버에게 전달되지 않을 수 있어요.</p></div>`;
+}
+function sdRender(keep){
+  if(!sdOv)return;
+  const body=sdOv.querySelector('.donate__body'),st=keep?body.scrollTop:0;
+  sdOv.querySelectorAll('.sdtab').forEach(b=>{const on=b.dataset.arg===sd.tab;b.classList.toggle('is-on',on);b.setAttribute('aria-selected',on)});
+  body.innerHTML=(sd.tab==='sig'?sdPickHTML()+sdMemberHTML():'')+`<div class="dform">${sdMsgHTML()}${sdTitleHTML()}<hr class="dform__line">${sdAmountHTML()}</div>`;
+  body.scrollTop=st;sdUpd();
+}
+function sdUpd(){
+  if(!sdOv)return;const p=sdP(),s=sdState(),all=sd.tried;
+  const mc=$('#sdmc',sdOv);if(mc)mc.textContent=p.msg.length+'/200';
+  const mw=$('#sdmw',sdOv);if(mw){mw.textContent=s.mwarn?'⚠️ '+s.mwarn:'';mw.hidden=!s.mwarn}
+  const mb=$('#sdmbox',sdOv);if(mb)mb.classList.toggle('is-warn',!!s.mwarn);
+  const box=$('#sdabox',sdOv);if(box){box.classList.toggle('is-empty',!s.won);box.classList.toggle('is-warn',s.lack)}
+  const h=$('#sdhint',sdOv);if(h){const low=s.low&&(s.won>0||all);h.hidden=!(s.lack||low);$('#sdhintt',sdOv).textContent=s.lack?'보유 펀캐시가 부족합니다':'최소 후원금액은 '+(s.min>=10000?s.min/10000+'만원':fmt(s.min)+'원')+'입니다';$('#sdcharge',sdOv).hidden=!s.lack}
+  const sw=$('#sdsw',sdOv);if(sw){const m=all&&s.noSig?'후원할 시그니처를 선택해주세요':'';sw.textContent=m?'⚠️ '+m:'';sw.hidden=!m}
+  const b=$('#sdgo',sdOv);if(b)b.classList.toggle('is-off',!s.ok);
+  const fw=$('#sdfw',sdOv);if(fw)fw.hidden=!(all&&!s.ok&&(s.mwarn||s.noSig));
+}
+/* 시그니처 전체보기 판 — PC 는 팝업 왼쪽 10 · 아래 맞춤(자리가 없으면 팝업 위에 겹치고 ←), 모바일은 앱바 아래 전체 + 확인 */
+function sdAllList(){
+  const q=sd.q.trim().toLowerCase(),r=sd.range?sd.range.split('-').map(Number):null,rec=sdRecent();
+  let L=sd.ftab==='recent'?rec.map(id=>SG().find(g=>g.id===id)).filter(Boolean):SG().slice();
+  return L.filter(g=>(!q||g.n.toLowerCase().indexOf(q)>-1)&&(!r||(g.amt>=r[0]&&g.amt<=r[1])));
+}
+function sdGridHTML(){
+  const L=sdAllList(),cur=sd.pick!=null?sd.pick:sd.sig;
+  if(!L.length){const t=sd.q.trim()?'검색결과가 없어요':sd.ftab==='recent'?'최근 사용한 시그니처가 없어요':'이 금액대의 시그니처가 없어요';
+    return `<ul class="fsigall__grid"></ul><div class="fsigall__empty"><img src="assets/fun-watch/v3/empty-state.svg" width="44" height="44" alt=""><p>${t}</p></div>`}
+  return `<ul class="fsigall__grid">${L.map(g=>`<li><button class="dsig__item" type="button" aria-pressed="${cur===g.id}" data-act="sdPick" data-arg="${g.id}"><img src="${g.img.data}" width="132" height="75" alt="" loading="lazy"><span>${esc(g.n)} ${fmt(g.amt)}원</span></button></li>`).join('')}</ul>`;
+}
+function sdAllHTML(){
+  const rl=(SD_RANGES.find(r=>r[0]===sd.range)||SD_RANGES[0]);
+  return `<header class="fsigall__head"><button class="fsigall__back" type="button" aria-label="후원으로 돌아가기" data-act="sdAllClose"><img src="assets/fun-watch/v2/arrow-left-md.svg" width="20" height="20" alt=""></button><h3>시그니처 전체보기</h3><span>${fmt(SG().length)}개</span></header>
+   <label class="fsigall__search"><input type="search" placeholder="시그니처 이름 검색" aria-label="시그니처 이름 검색" autocomplete="off" data-in="sdQ" value="${esc(sd.q)}"><img src="assets/fun-watch/v3/search.svg" width="16" height="16" alt=""></label>
+   <div class="fsigall__filters">
+    <button class="fsigall__chip" type="button" aria-pressed="${sd.ftab==='all'}" data-act="sdFtab" data-arg="all">전체</button>
+    <button class="fsigall__chip" type="button" aria-pressed="${sd.ftab==='recent'}" data-act="sdFtab" data-arg="recent">최근사용</button>
+    <div class="fsigall__range"><button class="fsigall__chip fsigall__chip--menu${sd.range?' is-on':''}" type="button" aria-haspopup="menu" aria-expanded="${sd.menu}" data-act="sdMenu"><span>${sd.range?rl[1]:'금액 전체'}</span><img src="assets/fun-watch/v3/caret-down-sm.svg" width="16" height="16" alt=""></button>
+     <ul class="fsigall__menu" role="menu" aria-label="금액 필터" ${sd.menu?'':'hidden'}>${SD_RANGES.map(r=>`<li><button type="button" role="menuitemradio" aria-checked="${sd.range===r[0]}" data-act="sdRange" data-arg="${r[0]}">${r[1]}</button></li>`).join('')}</ul></div>
+   </div>
+   <div class="fsigall__scroll" id="sdgrid">${sdGridHTML()}</div>
+   <p class="fsigall__note">목록만 스크롤돼요. 작성 중인 후원 내용은 유지됩니다.</p>
+   <button class="fsigall__ok donate__submit${sd.pick!=null?'':' is-off'}" type="button" data-act="sdOk">확인</button>`;
+}
+function sdPlace(){
+  const el=$('.fsigall',sdOv);if(!el)return;
+  el.classList.remove('is-over');el.style.cssText='';
+  if(sdMo())return;
+  const r=sdOv.querySelector('.sdpop').getBoundingClientRect();
+  if(r.left>=510+8){el.style.left=(r.left-510)+'px';el.style.top=Math.max(8,r.bottom-560)+'px';el.style.height=Math.min(560,r.bottom-8)+'px'}
+  else{el.classList.add('is-over');el.style.left=r.left+'px';el.style.top=r.top+'px';el.style.width=r.width+'px';el.style.height=r.height+'px'}
+}
+function sdAllRender(){
+  let el=$('.fsigall',sdOv);
+  if(!sd.all){if(el)el.remove();sdOv.classList.remove('is-all');return}
+  if(!el){el=document.createElement('section');el.className='fsigall';el.setAttribute('role','dialog');el.setAttribute('aria-label','시그니처 전체보기');sdOv.appendChild(el)}
+  el.innerHTML=sdAllHTML();sdOv.classList.add('is-all');sdPlace();
+}
+function sdClose(){
+  if(!sdOv)return;removeEventListener('resize',sdPlace);document.removeEventListener('keydown',sdKey,true);
+  sdOv.remove();sdOv=null;document.documentElement.classList.remove('is-sdon');
+  if(sdOpener&&document.body.contains(sdOpener))try{sdOpener.focus({preventScroll:true})}catch(e){}
+}
+function sdKey(e){if(e.key!=='Escape'||!sdOv)return;e.stopPropagation();if(sd.menu){sd.menu=false;sdAllRender()}else if(sd.all){sd.all=false;sd.pick=null;sdAllRender()}else sdClose()}
+openDonate=function(preset){
+  if(!need())return;
+  if(blocked('donate')){toast('운영 정책에 따라 이 방송국에서 후원할 수 없어요');return}
+  if(sdOv)sdClose();
+  sdInit(preset);sdOpener=document.activeElement;
+  sdOv=document.createElement('div');sdOv.className='sdov';sdOv.dataset.qa='B-05';
+  sdOv.innerHTML=`<section class="sdpop fpop" role="dialog" aria-modal="true" aria-labelledby="sdtitle">
+    <header class="sdpop__head"><button class="sdpop__back" type="button" aria-label="뒤로" data-act="sdClose"><img src="assets/fun-watch/v2/arrow-left-md.svg" width="24" height="24" alt=""></button><h3 id="sdtitle" tabindex="-1">후원하기</h3><button class="sdpop__close" type="button" aria-label="후원 닫기" data-act="sdClose"><img src="assets/watch/close-sm.svg" width="24" height="24" alt=""></button></header>
+    <div class="sdtabs" role="tablist"><button type="button" role="tab" class="sdtab" data-act="sdTab" data-arg="gen">일반 후원</button><button type="button" role="tab" class="sdtab" data-act="sdTab" data-arg="sig">시그니처</button></div>
+    <div class="donate__body"></div>
+    <footer class="donate__foot"><p class="dwarn" id="sdfw" hidden>⚠️ 입력정보를 확인해주세요</p><button class="donate__submit is-off" id="sdgo" type="button" data-act="sdGo">${esc(D.name)}에게 후원하기</button><p class="sdagree"><span>펀캐시 충전/후원 유의사항에 동의합니다.</span><button type="button" data-act="sdSoon">안내보기</button></p></footer>
+  </section>`;
+  sdOv.addEventListener('mousedown',e=>{if(e.target===sdOv)sdClose()});
+  document.body.appendChild(sdOv);document.documentElement.classList.add('is-sdon');
+  addEventListener('resize',sdPlace);document.addEventListener('keydown',sdKey,true);
+  sdRender();$('#sdtitle',sdOv).focus({preventScroll:true});
+};
+Object.assign(A,{
+ sdClose(){sdClose()},
+ sdTab(el,a){if(sd.tab===a)return;sd.tab=a;sd.tried=false;sd.all=false;sdAllRender();sdRender()},
+ sdAdd(el,a){const p=sdP();p.amt=String(a==='all'?sd.bal:sdNum(p.amt)+(+a));const i=$('#sda',sdOv);if(i)i.value=fmt(sdNum(p.amt));sdUpd()},
+ sdClear(){const p=sdP();p.amt='0';const i=$('#sda',sdOv);if(i){i.value='0';i.focus()}sdUpd()},
+ sdVol(){const p=sdP();p.vol=!p.vol;$('.dmsg__vol',sdOv).setAttribute('aria-pressed',p.vol)},
+ sdVoice(el){const L=['야옹이','유나','민준','서연'],sp=el.querySelector('span');sd.voice=L[(L.indexOf(sp.textContent)+1)%L.length];sp.textContent=sd.voice},
+ sdMem(el,a){sd.member=sd.member===a?null:a;sdRender(true)},
+ sdSoon(){toast('준비 중이에요')},
+ sdAll(){sd.all=!sd.all;sd.pick=null;sd.menu=false;sdAllRender()},
+ sdAllClose(){sd.all=false;sd.pick=null;sdAllRender()},
+ sdFtab(el,a){sd.ftab=a;sdAllRender()},
+ sdMenu(){sd.menu=!sd.menu;sdAllRender()},
+ sdRange(el,a){sd.range=a;sd.menu=false;sdAllRender()},
+ sdPick(el,a){const id=+a;if(sdMo()){sd.pick=id;sdAllRender();return}sdChoose(id)},
+ sdOk(){if(sd.pick!=null)sdChoose(sd.pick)},
+ sdGo(){
+  sd.tried=true;const s=sdState();sdUpd();if(!s.ok)return;
+  const p=sdP(),g=sd.tab==='sig'?sdSig():null;
+  don={key:'custom',custom:String(s.won),anon:p.anon,msg:p.msg,sig:g?g.id:null,done:false};
+  finalizeDon();sd.bal-=s.won;
+  if(g){const r=sdRecent().filter(x=>x!==g.id);r.unshift(g.id);try{localStorage.setItem('funnation-stn-sig-recent',JSON.stringify(r.slice(0,12)))}catch(e){}}
+  sdClose();toast(`${D.name}님에게 ${fmt(s.won)}원 후원했어요${g?` · 시그니처 '${g.n}'`:''}`);
+ }
+});
+function sdChoose(id){const g=SG().find(x=>x.id===id);if(!g)return;sd.sig=g.id;sd.s.amt=String(g.amt);sd.all=false;sd.pick=null;sdAllRender();sdRender(true)}
+Object.assign(IN,{
+ sdMsg(el){sdP().msg=el.value;sdUpd()},
+ sdAmt(el){const p=sdP(),n=sdNum(el.value);p.amt=String(n);const v=fmt(n);if(el.value!==v){el.value=v;el.setSelectionRange(v.length,v.length)}sdUpd()},
+ sdQ(el){sd.q=el.value;const g=$('#sdgrid',sdOv);if(g)g.innerHTML=sdGridHTML()}
+});
+Object.assign(CH,{
+ sdAnon(el){sdP().anon=el.checked;const n=$('#sdnick',sdOv);if(n)n.textContent=el.checked?'익명':actorName()}
+});
+
 renderAll();
 applyHash();
 })();
