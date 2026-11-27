@@ -2621,7 +2621,7 @@ function applyHash(){
   if(o.admin){adminEnter(AVIEW(o.admin)?o.admin:undefined)}
   if(o.drawer==='1'){sb.open=true;layoutSB()}
   const md=o.modal;
-  if(md==='donate')openDonate();
+  if(md==='donate'){sdFromShorts=o.from==='shorts';openDonate()}
   else if(md==='donate-step2'){openDonate(10000);don.step=2;donRender()}
   else if(md==='donate-done'){openDonate(10000);don.step=3;finalizeDon();donRender()}
   else if(md==='msg')openMsg(o.msgtab||'in');
@@ -3939,8 +3939,10 @@ function sdAllRender(){
   if(!el){el=document.createElement('section');el.className='fsigall';el.setAttribute('role','dialog');el.setAttribute('aria-label','시그니처 전체보기');sdOv.appendChild(el)}
   el.innerHTML=sdAllHTML();sdOv.classList.add('is-all');sdPlace();
 }
+/* 쇼츠에서 후원하기로 들어왔으면(#modal=donate&from=shorts) 뒤로 · 닫기 = 쇼츠로 돌아감 (2026-11-27) */
+let sdFromShorts=false;
 function sdClose(){
-  if(!sdOv)return;removeEventListener('resize',sdPlace);document.removeEventListener('keydown',sdKey,true);
+  if(!sdOv)return;if(sdFromShorts){sdFromShorts=false;if(document.referrer.indexOf('shorts.html')>=0&&history.length>1)history.back();else location.href='shorts.html';return}removeEventListener('resize',sdPlace);document.removeEventListener('keydown',sdKey,true);
   sdOv.remove();sdOv=null;document.documentElement.classList.remove('is-sdon');
   if(sdOpener&&document.body.contains(sdOpener))try{sdOpener.focus({preventScroll:true})}catch(e){}
 }
@@ -3952,7 +3954,7 @@ openDonate=function(preset){
   sdInit(preset);sdOpener=document.activeElement;
   sdOv=document.createElement('div');sdOv.className='sdov';sdOv.dataset.qa='B-05';
   sdOv.innerHTML=`<section class="sdpop fpop" role="dialog" aria-modal="true" aria-labelledby="sdtitle">
-    <header class="sdpop__head"><button class="sdpop__back" type="button" aria-label="뒤로" data-act="sdClose"><img src="assets/fun-watch/v2/arrow-left-md.svg" width="24" height="24" alt=""></button><h3 id="sdtitle" tabindex="-1">후원하기</h3><button class="sdpop__close" type="button" aria-label="후원 닫기" data-act="sdClose"><img src="assets/watch/close-sm.svg" width="24" height="24" alt=""></button></header>
+    <header class="sdpop__head"><button class="sdpop__back" type="button" aria-label="뒤로 가기" data-act="sdClose"><img src="assets/mo/appbar-back.svg" width="24" height="24" alt=""></button><h3 id="sdtitle" tabindex="-1">후원하기</h3><button class="sdpop__close" type="button" aria-label="후원 닫기" data-act="sdClose"><img src="assets/watch/close-sm.svg" width="24" height="24" alt=""></button></header>
     <div class="sdtabs" role="tablist"><button type="button" role="tab" class="sdtab" data-act="sdTab" data-arg="gen">일반 후원</button><button type="button" role="tab" class="sdtab" data-act="sdTab" data-arg="sig">시그니처</button></div>
     <div class="donate__body"></div>
     <footer class="donate__foot"><p class="dwarn" id="sdfw" hidden>⚠️ 입력정보를 확인해주세요</p><button class="donate__submit is-off" id="sdgo" type="button" data-act="sdGo">${esc(D.name)}에게 후원하기</button><p class="sdagree"><span>펀캐시 충전/후원 유의사항에 동의합니다.</span><button type="button" data-act="sdSoon">안내보기</button></p></footer>
@@ -4021,6 +4023,7 @@ function alAnimRun(){
   void b.offsetWidth;
   requestAnimationFrame(()=>requestAnimationFrame(()=>b.classList.toggle('no-al',d==='out')));
 }
+
 
 renderAll();
 applyHash();

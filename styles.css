@@ -4581,6 +4581,10 @@ ul {
   .bottom-nav__item.is-active img[src$="nav-talk.svg"] { content: url("assets/mo/nav-talk-active.svg"); }
   [data-theme="light"] .bottom-nav__item img[src$="nav-talk.svg"] { content: url("assets/light/mo/nav-talk.svg"); }
   [data-theme="light"] .bottom-nav__item.is-active img[src$="nav-talk.svg"] { content: url("assets/light/mo/nav-talk-active.svg"); }
+  /* 쇼츠 (2026-11-27, 크리에이터 자리 교체 — DS Bottom Navigation 속성 1=쇼츠, 선택은 속이 찬 Primary) */
+  .bottom-nav__item.is-active img[src$="nav-shorts.svg"] { content: url("assets/mo/nav-shorts-active.svg"); }
+  [data-theme="light"] .bottom-nav__item img[src$="nav-shorts.svg"] { content: url("assets/light/mo/nav-shorts.svg"); }
+  [data-theme="light"] .bottom-nav__item.is-active img[src$="nav-shorts.svg"] { content: url("assets/light/mo/nav-shorts-active.svg"); }
 }
 
 /* ============================================================

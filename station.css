@@ -2381,3 +2381,12 @@ html.is-sdon{overflow:hidden}
   .stn .top .btns.no-al .btn.al{flex-grow:0;width:0!important;transition:flex-grow .3s cubic-bezier(.3,.7,.2,1),margin .3s cubic-bezier(.3,.7,.2,1),opacity .15s ease,transform .3s cubic-bezier(.3,.7,.2,1),visibility 0s .3s}
 }
 @media (prefers-reduced-motion:reduce){.stn .top .btns,.stn .top .btns .btn.al{transition:none!important}}
+/* 방송국 후원하기 모바일 페이지 위 줄 — 사이트 모바일 앱바 규격(2026-11-27 사용자 요청): 높이 56 · 안쪽 4 · 뒤로 48(아이콘 appbar-back 24) ·
+   제목 Pretendard SemiBold 22 / 28 · 왼쪽 정렬(뒤로 바로 옆) · 앱바 제목 색. 아래 선은 11-26 사용자 결정대로 없음 */
+@media (max-width:767px){
+  .sdpop__head{gap:4px;height:56px;padding:4px}
+  .sdpop__back{width:48px;height:48px}
+  .sdpop__head h3{font-family:inherit;font-size:22px;font-weight:600;line-height:28px;letter-spacing:0;color:var(--mo-appbar-title,#fefefe);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  [data-theme="light"] .sdpop__back img[src$="appbar-back.svg"]{content:url("assets/light/mo/appbar-back.svg")}
+}
+
