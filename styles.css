@@ -524,6 +524,17 @@ ul {
   width: 24px;
   height: 24px;
 }
+/* 내 정보 — 로그인하면 프로필 사진(모바일 하단 내비 내 정보와 같음, 2026-11-27 사용자 요청).
+   테두리는 원래 내 정보 · 언어 아이콘의 바깥 원과 같게 — 24 칸 안 지름 20 · 두께 2 · 흰색 60%(라이트 #687385) */
+.nav-icon > img.nav-icon__av {
+  box-sizing: border-box;
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  border-radius: 50%;
+  object-fit: cover;
+}
+[data-theme="light"] .nav-icon > img.nav-icon__av { border-color: #687385; }
 /* VIP 왕관 (65514:33867) — 로그아웃 상태는 언어 버튼과 붙여 48 칸 연속(시안 우측 메뉴), .top-nav__right 의 15 간격을 상쇄 */
 .nav-icon--crown.auth-out {
   margin-right: -15px;

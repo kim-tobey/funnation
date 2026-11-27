@@ -174,8 +174,9 @@
 .sh-info__who small { display: flex; align-items: center; gap: 2px; font-size: 12px; line-height: 16px; color: var(--color-text-depth-400); }
 .sh-info__tools { display: flex; gap: 4px; flex: none; }
 /* 이름 옆 팔로우 — 모바일과 같은 알약(Primary / 팔로잉 BG Cancel) */
-.sh-follow { flex: none; height: 32px; margin-right: auto; padding: 0 14px; border-radius: 9999px; background: var(--color-brand-primary); font-size: 13px; font-weight: 600; color: #fff; }
+.sh-follow { flex: none; display: inline-flex; align-items: center; gap: 4px; height: 32px; margin-right: auto; padding: 0 14px; border-radius: 9999px; background: var(--color-brand-primary); font-size: 13px; font-weight: 600; color: #fff; }
 .sh-follow.is-on { background: var(--color-bg-cancel); }
+.sh-fic { flex: none; }
 .sh-info__head .sh-info__who { flex: 0 1 auto; }
 .sh-ib { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; color: var(--color-text-normal); }
 .sh-ib:hover, .sh-ib[aria-expanded="true"] { background: var(--color-bg-400); }
@@ -274,14 +275,16 @@
 
 /* 댓글 입력 */
 .sh-cin { position: relative; }
-.sh-cin__box { display: flex; align-items: center; gap: 2px; height: 44px; padding: 0 6px 0 14px; border: 1px solid var(--color-border-300); border-radius: 10px; background: var(--color-bg-300); }
-.sh-cin__box:focus-within { border-color: var(--color-border-400); }
-.sh-cin__field { flex: 1; min-width: 0; height: 100%; border: 0; background: none; font: inherit; font-size: 14px; color: var(--color-text-normal); outline: none; }
-.sh-cin__field::placeholder { color: var(--color-text-depth-500); }
-.sh-cin__ib { display: grid; place-items: center; flex: none; width: 32px; height: 32px; border-radius: 8px; color: var(--color-text-depth-300); }
-.sh-cin__ib:hover { color: var(--color-text-normal); background: var(--color-bg-400); }
-.sh-cin__send { flex: none; height: 32px; margin-left: 4px; padding: 0 12px; border-radius: 8px; background: var(--color-brand-primary); font-size: 13px; font-weight: 600; color: #fff; }
-.sh-cin__send:disabled { background: var(--color-bg-cancel); color: var(--color-text-depth-500); cursor: default; }
+/* 댓글 입력 — 펀네이션 라이브 채팅 입력칸(.finput, 66132:101608)과 같은 모양: BG 100 · Border 100 · 모서리 10 · 위아래 11 · 좌우 12 · 이모티콘 24 · 보내기 24(글이 없으면 회색, 쓰면 Primary) */
+.sh-cin__box { display: flex; align-items: center; gap: 8px; padding: 11px 12px; border: 1px solid var(--color-border-100); border-radius: 10px; background: var(--color-bg-100); }
+.sh-cin__box:focus-within { border-color: var(--color-brand-primary); }
+.sh-cin__field { flex: 1 1 auto; min-width: 0; height: 21px; padding: 0; border: 0; background: none; font: inherit; font-size: 14px; line-height: 1.5; color: #fff; outline: none; }
+.sh-cin__field::placeholder { color: var(--color-text-depth-300); }
+.sh-cin__ib { display: flex; flex: none; padding: 0; background: none; }
+.sh-cin__go-on, .sh-cin.has-text .sh-cin__go-off { display: none; }
+.sh-cin.has-text .sh-cin__go-on { display: block; }
+.sh-cin__go[aria-disabled="true"] { cursor: default; }
+.sh-cin__send { display: none; }
 .sh-emo { position: absolute; left: 0; bottom: calc(100% + 8px); z-index: 5; display: grid; grid-template-columns: repeat(8, 36px); gap: 2px; padding: 6px; border: 1px solid var(--color-border-400); border-radius: 12px; background: var(--color-bg-400); box-shadow: 0 8px 24px rgba(0, 0, 0, .4); }
 .sh-emo[hidden] { display: none; }
 .sh-emo button { width: 36px; height: 36px; border-radius: 8px; font-size: 20px; line-height: 1; }
@@ -343,7 +346,7 @@ body:has(.page--shorts) .fab-auth { bottom: 112px; }
   .sh-mcap__who a { display: flex; align-items: center; gap: 8px; min-width: 0; color: #fff; }
   .sh-mcap__who img { flex: none; width: 32px; height: 32px; border-radius: 50%; object-fit: cover; background: var(--color-bg-400); }
   .sh-mcap__who b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px; font-weight: 700; text-shadow: 0 1px 3px rgba(0, 0, 0, .5); }
-  .sh-mfollow { flex: none; height: 28px; padding: 0 12px; border-radius: 9999px; background: var(--color-brand-primary); font-size: 13px; font-weight: 600; color: #fff; }
+  .sh-mfollow { flex: none; display: inline-flex; align-items: center; gap: 4px; height: 28px; padding: 0 12px; border-radius: 9999px; background: var(--color-brand-primary); font-size: 13px; font-weight: 600; color: #fff; }
   .sh-mfollow.is-on { background: var(--color-bg-cancel); }
   .sh-mcap__title { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-size: 14px; font-weight: 500; line-height: 1.45; color: #fff; text-align: left; text-shadow: 0 1px 3px rgba(0, 0, 0, .5); }
   .sh-mcap__title.is-open { display: block; max-height: 40dvh; overflow-y: auto; }
@@ -366,7 +369,10 @@ body:has(.page--shorts) .fab-auth { bottom: 112px; }
   .sh-sheet__head h2 { margin: 0; font-family: var(--font-score); font-size: 19px; font-weight: 700; line-height: 1; letter-spacing: -0.01em; color: var(--color-text-strong); }
   .sh-sheet__head .sh-mo__ib { color: var(--color-text-normal); }
   .sh-sheet__body { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 0 16px; }
-  .sh-sheet__box > .sh-cin { flex: none; padding: 10px 12px 12px; border-top: 1px solid var(--color-border-100); }
+  .sh-sheet__box > .sh-cin { flex: none; display: flex; align-items: center; gap: 8px; padding: 12px 16px 8px; border-top: 1px solid var(--color-border-100); }
+  .sh-sheet__box > .sh-cin .sh-cin__box { flex: 1 1 auto; min-width: 0; height: 36px; box-sizing: border-box; padding: 0 12px; border-radius: 6px; }
+  .sh-sheet__box > .sh-cin .sh-cin__go { display: none; }
+  .sh-sheet__box > .sh-cin.has-text .sh-cin__send { display: flex; flex: none; padding: 0; background: none; }
   .sh-sheet__menu { display: flex; flex-direction: column; padding: 8px 8px 12px; }
   .sh-sheet__menu button { height: 52px; padding: 0 12px; font-size: 16px; }
   .sh-emo { grid-template-columns: repeat(8, 1fr); right: 0; }

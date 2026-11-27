@@ -3,7 +3,7 @@
    SOOP Catch 플레이어(vod.sooplive.com/player/…/catch)의 기능 · 구성을 그대로, 펀네이션 DS 로 [구현 제안 · 시안 없음]
    - PC: 가운데 9:16 영상(뒤 같은 그림 흐림) · 오른쪽 위 정보 영역 열고/닫기 · 이전/다음(↑ ↓ 키 · 휠) · 음소거 ·
          아래 재생바(재생/멈춤 · 시간 · 눌러서 이동) · 영상 누르면 재생/멈춤
-         정보 영역 = 올린 사람(방송국) · 조회수 · 공유 · 더보기(신고하기 · 원본 영상 · 스마트 볼륨 NEW) · 제목 · 원본 방송인 + 태그 ·
+         정보 영역 = 올린 사람(방송국) · 조회수 · 공유 · 더보기(신고하기 · 원본 영상) · 제목 · 원본 방송인 + 태그 ·
          설명 더보기 · 좋아요 · 팔로우 · 후원 · 구독 · 다른 쇼츠(가로 넘김) · 댓글(좋아요 · 이모티콘 · 유저 태그 · 등록)
          정보 영역이 닫혀 있으면 영상 아래에 올린 사람 · 제목
    - 모바일(<768): 전체 화면 세로 넘김(한 장씩 붙음) · 오른쪽 버튼 줄(좋아요 · 댓글 · 공유 · 더보기) · 아래 올린 사람 · 팔로우 · 제목 · 태그 ·
@@ -125,7 +125,7 @@
   function likeN(d) { return d.likes + (liked(d.id) ? 1 : 0); }
 
   /* ---------- 상태 ---------- */
-  var S = { i: 0, t: 0, playing: true, smart: false, descOpen: false, more: false, emo: false, otherX: 0 };
+  var S = { i: 0, t: 0, playing: true, descOpen: false, more: false, emo: false, otherX: 0 };
   var m = /(?:^#|&)s=(\d+)/.exec(location.hash);
   if (m && DATA[+m[1]]) S.i = +m[1];
 
@@ -174,20 +174,22 @@
         esc(c.text).replace(/(@[^\s@]+)/g, '<span class="sh-c__at">$1</span>') + '</p></div><button class="sh-c__like' + (c.liked ? " is-on" : "") + '" type="button" data-clike="' + esc(c.k) + '" aria-pressed="' + c.liked + '" aria-label="댓글 좋아요">' + ic(c.liked ? "heartOn" : "heart", 16) + "<span>" + (c.likes || "") + "</span></button></li>";
     }).join("") + "</ul>";
   }
+  /* 팔로우 하트 — 사이트 팔로우 아이콘(LNB assets/v2/lnb-follow.svg 와 같은 모양), 팔로잉이면 속이 참 */
+  function followIc(on) {
+    return '<svg class="sh-fic" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10C3 4 10 3.5 12 8.19444C14 3.5 21 4 21 10C21 16.0001 12 21 12 21C12 21 3 16.0001 3 10Z" fill="' + (on ? "currentColor" : "none") + '" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  }
   function inputHTML(where) {
     var out = loggedOut();
     return '<form class="sh-cin" data-cform="' + where + '"><div class="sh-cin__box">' +
-      '<input class="sh-cin__field" type="text" maxlength="300" autocomplete="off" placeholder="' + (out ? "로그인 후 댓글을 쓸 수 있어요" : "내용을 입력해 주세요.") + '" aria-label="댓글 입력"' + (out ? " readonly data-need-login" : "") + ">" +
-      '<button class="sh-cin__ib" type="button" data-emo aria-label="이모티콘" title="이모티콘">' + ic("smile", 20) + "</button>" +
-      '<button class="sh-cin__ib" type="button" data-cimg aria-label="사진" title="사진">' + ic("image", 20) + "</button>" +
-      '<button class="sh-cin__ib" type="button" data-at aria-label="유저 태그" title="유저 태그">' + ic("at", 20) + "</button>" +
-      '<button class="sh-cin__send" type="submit" disabled>등록</button></div>' +
+      '<input class="sh-cin__field" type="text" maxlength="300" autocomplete="off" placeholder="' + (out ? "로그인 후 댓글을 쓸 수 있어요" : "댓글 입력") + '" aria-label="댓글 입력"' + (out ? " readonly data-need-login" : "") + ">" +
+      '<button class="sh-cin__ib" type="button" data-emo aria-label="이모티콘" title="이모티콘"><img src="assets/fun-watch/v4/face-smile-24.svg" width="24" height="24" alt=""></button>' +
+      '<button class="sh-cin__ib sh-cin__go" type="submit" aria-label="등록" aria-disabled="true"><img class="sh-cin__go-off" src="assets/fun-watch/v3/send-off.svg" width="24" height="24" alt=""><img class="sh-cin__go-on" src="assets/fun-watch/v2/send.svg" width="24" height="24" alt=""></button></div>' +
+      '<button class="sh-cin__send" type="submit" aria-label="등록"><img src="assets/fun-watch/v2/send.svg" width="24" height="24" alt=""></button>' +
       '<div class="sh-emo" hidden>' + EMO.map(function (e) { return '<button type="button" data-emo-pick="' + e + '">' + e + "</button>"; }).join("") + "</div></form>";
   }
   function moreMenuHTML() {
     return '<button type="button" data-act="report">' + ic("flag", 20) + "신고하기</button>" +
-      '<button type="button" data-act="full">' + ic("video", 20) + "원본 영상 보기</button>" +
-      '<button type="button" data-act="smart" aria-pressed="' + S.smart + '">' + ic("wave", 20) + "스마트 볼륨 " + (S.smart ? "끄기" : "켜기") + '<span class="sh-new">NEW</span></button>';
+      '<button type="button" data-act="full">' + ic("video", 20) + "원본 영상 보기</button>";
   }
 
   /* ---------- PC ---------- */
@@ -214,14 +216,12 @@
     var f = following(d), others = DATA.filter(function (x) { return x.id !== d.id; });
     return '<div class="sh-info">' +
       '<div class="sh-info__head"><a class="sh-info__who" href="' + stationHref + '"><img src="' + esc(d.av) + '" width="48" height="48" alt=""><span><b>' + esc(d.ch) + "</b><small>" + ic("play2", 12, 2) + fmtN(d.views) + "</small></span></a>" +
-        '<button class="sh-follow' + (f ? " is-on" : "") + '" type="button" data-follow aria-pressed="' + f + '">' + (f ? "팔로잉" : "팔로우") + "</button>" +
+        '<button class="sh-follow' + (f ? " is-on" : "") + '" type="button" data-follow aria-pressed="' + f + '">' + followIc(f) + (f ? "팔로잉" : "팔로우") + "</button>" +
         '<div class="sh-info__tools">' +
         '<div class="sh-more"><button class="sh-ib" type="button" data-more aria-label="더 보기" title="더 보기" aria-expanded="' + S.more + '">' + ic("more", 22) + "</button>" +
         '<div class="sh-menu" role="menu"' + (S.more ? "" : " hidden") + ">" + moreMenuHTML() + "</div></div></div></div>" +
       '<h1 class="sh-info__title">' + esc(d.title) + "</h1>" +
       '<div class="sh-chips">' + chipsHTML(d) + "</div>" +
-      '<div class="sh-desc' + (S.descOpen ? " is-open" : "") + '">' + (S.descOpen ? "<p>" + esc(d.desc).replace(/\n/g, "<br>") + '</p><p class="sh-desc__date">' + d.date + " 업로드 · 조회 " + d.views.toLocaleString("ko-KR") + "회</p>" : "") +
-        '<button class="sh-desc__btn" type="button" data-desc>' + (S.descOpen ? "간략히" : "더보기") + "</button></div>" +
       '<div class="sh-acts">' +
         '<button class="sh-act' + (liked(d.id) ? " is-on" : "") + '" type="button" data-like aria-pressed="' + liked(d.id) + '" title="좋아요">' + ic(liked(d.id) ? "likeOn" : "like", 18) + "<span>" + fmtN(likeN(d)) + "</span></button>" +
         '<a class="sh-act" href="' + stationHref + '#modal=donate&amp;from=shorts" title="후원하기">' + ic("gift", 18) + "<span>후원</span></a>" +
@@ -267,7 +267,7 @@
   function mcapHTML(d) {
     var f = following(d), open = S.descOpen && d.id === S.i;
     return '<div class="sh-mcap__who"><a href="' + stationHref + '"><img src="' + esc(d.av) + '" width="32" height="32" alt=""><b>' + esc(d.ch) + "</b></a>" +
-      '<button class="sh-mfollow' + (f ? " is-on" : "") + '" type="button" data-follow aria-pressed="' + f + '">' + (f ? "팔로잉" : "팔로우") + "</button></div>" +
+      '<button class="sh-mfollow' + (f ? " is-on" : "") + '" type="button" data-follow aria-pressed="' + f + '">' + followIc(f) + (f ? "팔로잉" : "팔로우") + "</button></div>" +
       '<button class="sh-mcap__title' + (open ? " is-open" : "") + '" type="button" data-desc>' + esc(d.title) + (open ? '<span class="sh-mcap__desc">' + esc(d.desc).replace(/\n/g, "<br>") + "<br>" + d.date + " 업로드 · 조회 " + d.views.toLocaleString("ko-KR") + "회</span>" : "") + "</button>" +
       '<div class="sh-chips sh-chips--mo">' + chipsHTML(d) + "</div>";
   }
@@ -310,7 +310,10 @@
     $(".sh-bg img", root).src = d.img;
     $(".sh-video__img", root).src = d.img;
     $(".sh-cap", root).innerHTML = capHTML(d);
-    $("[data-panel]", root).innerHTML = ic(store.panel ? "panelClose" : "panelOpen", 22);
+    $("[data-panel]", root).innerHTML = store.panel
+      ? '<img src="assets/fun-watch/v4/arrow-right-to-line-20.svg" width="20" height="20" alt="">'
+      : '<img src="assets/fun-watch/v4/message-more-20.svg" width="20" height="20" alt="">';
+    $("[data-panel]", root).setAttribute("aria-label", store.panel ? "정보 영역 닫기" : "정보 영역 열기");
     $("[data-panel]", root).setAttribute("aria-expanded", store.panel);
     $("[data-prev]", root).hidden = S.i === 0;
     $("[data-next]", root).hidden = S.i === DATA.length - 1;
@@ -516,7 +519,6 @@
       S.more = false; sheetClose();
       if (a === "report") toast("신고가 접수되었어요");
       if (a === "full") { window.open("https://www.youtube.com/shorts/" + d.yt, "_blank", "noopener"); return; }
-      if (a === "smart") { S.smart = !S.smart; toast(S.smart ? "스마트 볼륨을 켰어요" : "스마트 볼륨을 껐어요"); }
       paintPanel(); return;
     }
     if (t.closest("[data-desc]")) { S.descOpen = !S.descOpen; paintPanel(); paintMobile(); return; }
@@ -560,7 +562,8 @@
   sheetEl.addEventListener("click", onClick);
   function onInput(e) {
     if (e.target.classList.contains("sh-cin__field")) {
-      $(".sh-cin__send", e.target.closest("form")).disabled = !e.target.value.trim();
+      var f = e.target.closest("form"), on = !!e.target.value.trim();
+      f.classList.toggle("has-text", on); $(".sh-cin__go", f).setAttribute("aria-disabled", String(!on));
     }
   }
   root.addEventListener("input", onInput);
@@ -571,7 +574,7 @@
     var inp = $(".sh-cin__field", e.target), v = inp.value.trim();
     if (!v) return;
     inp.value = "";
-    $(".sh-cin__send", e.target).disabled = true;
+    e.target.classList.remove("has-text"); $(".sh-cin__go", e.target).setAttribute("aria-disabled", "true");
     addComment(v);
   }
   root.addEventListener("submit", onSubmit);
