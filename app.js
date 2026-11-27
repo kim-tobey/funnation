@@ -4601,6 +4601,19 @@ void main() {
       b.textContent = label;
       items[i].setAttribute("aria-label", "채팅톡, 안 읽은 메시지 " + n + "개");
     }
+    /* PC GNB 내 정보 프사 오른쪽 위 레드닷 — 실서비스 개발 서버 GNB 내 정보와 같은 모양(8 · #FF4242 · BG100 링 2), 숫자 없음 (2026-11-27 사용자 요청) */
+    var avs = document.querySelectorAll(".nav-icon__av");
+    for (var k = 0; k < avs.length; k++) {
+      var btn = avs[k].parentNode, nd = btn.querySelector(".nav-icon__dot");
+      if (!n) { if (nd) nd.remove(); btn.setAttribute("aria-label", "내 정보"); continue; }
+      if (!nd) {
+        nd = document.createElement("span");
+        nd.className = "nav-icon__dot";
+        nd.setAttribute("aria-hidden", "true");
+        btn.appendChild(nd);
+      }
+      btn.setAttribute("aria-label", "내 정보, 안 읽은 메시지 " + n + "개");
+    }
   }
   render();
   window.addEventListener("storage", function (e) { if (e.key === "funnation-talk") render(); });
@@ -4620,7 +4633,9 @@ void main() {
 
   function render() {
     var key = location.hash.replace("#", "");
-    if (!page.querySelector('[data-market-panel="' + key + '"]')) key = "passes";
+    // 크리에이터 상품(#passes)은 준비 중 — 탭을 누르면 알림만(data-coming-soon), 주소로 와도 상품 탭 (2026-11-27)
+    if (key === "shop") key = "membership"; // 예전 상품 탭 주소
+    if (key === "passes" || !page.querySelector('[data-market-panel="' + key + '"]')) key = "membership";
     tabs.forEach(function (a) {
       var on = a.getAttribute("data-market-tab") === key;
       a.classList.toggle("subnav__tab--active", on);

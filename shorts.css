@@ -149,6 +149,8 @@
 .sh-fab--vol { right: 16px; bottom: 16px; }
 .sh-fabs { position: absolute; right: 16px; top: 50%; z-index: 4; display: flex; flex-direction: column; gap: 12px; transform: translateY(-50%); }
 .sh-fabs .sh-fab { position: static; }
+/* 이전 / 다음 쇼츠 — hover 는 홈 인기 Shorts 화살표와 같게 Primary 바탕 + 흰 아이콘 */
+.sh-fabs .sh-fab:hover { background: var(--color-brand-primary); color: #fff; }
 .sh-fab[hidden] { display: none; }
 
 /* ---------- 정보 영역 (오른쪽 400) ---------- */
@@ -253,6 +255,10 @@
 .sh-other__nav--prev { left: -10px; }
 .sh-other__nav--next { right: 6px; }
 .sh-other__nav[hidden] { display: none; }
+/* 홈 인기 Shorts 화살표(.catch__nav)와 같은 hover — Primary 바탕 · 테두리 + 흰 아이콘 */
+.sh-other__nav { cursor: pointer; transition: background-color .15s ease, border-color .15s ease, color .15s ease; }
+.sh-other__nav:hover { border-color: var(--color-brand-primary); background: var(--color-brand-primary); color: #fff; }
+.sh-other__nav:focus-visible { outline: 2px solid var(--color-interaction-focus, #81b3ff); outline-offset: 2px; }
 
 /* 댓글 */
 .sh-cmt { padding: 20px 20px 24px; border-top: 1px solid var(--color-border-100); }
@@ -371,8 +377,6 @@ body:has(.page--shorts) .fab-auth { bottom: 112px; }
   .sh-sheet__body { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 0 16px; }
   .sh-sheet__box > .sh-cin { flex: none; display: flex; align-items: center; gap: 8px; padding: 12px 16px 8px; border-top: 1px solid var(--color-border-100); }
   .sh-sheet__box > .sh-cin .sh-cin__box { flex: 1 1 auto; min-width: 0; height: 36px; box-sizing: border-box; padding: 0 12px; border-radius: 6px; }
-  .sh-sheet__box > .sh-cin .sh-cin__go { display: none; }
-  .sh-sheet__box > .sh-cin.has-text .sh-cin__send { display: flex; flex: none; padding: 0; background: none; }
   .sh-sheet__menu { display: flex; flex-direction: column; padding: 8px 8px 12px; }
   .sh-sheet__menu button { height: 52px; padding: 0 12px; font-size: 16px; }
   .sh-emo { grid-template-columns: repeat(8, 1fr); right: 0; }

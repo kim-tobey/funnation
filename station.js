@@ -19,6 +19,7 @@ const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'
 const fmt=n=>Number(n).toLocaleString('en-US');
 const TODAY='2026.11.05';
 const P={
+ticket:'<path d="M3 8a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v1.5a2.5 2.5 0 0 0 0 5V16a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1.5a2.5 2.5 0 0 0 0-5Z"/><path d="M15 6v2M15 11v2M15 16v2"/>',
 search:'<circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/>',
 menu:'<path d="M4 6h16M4 12h16M4 18h16"/>',
 globe:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/>',
@@ -196,7 +197,7 @@ function initStation(){
   return {
     bannerImg:null,
     intro:D.intro,introText:D.introLong.join('\n\n'),rulesText:D.rules.join('\n'),
-    links:[{type:'youtube',url:'https://youtube.com/@funsangsa-demo'},{type:'instagram',url:'https://instagram.com/funsangsa.demo'},{type:'tiktok',url:'https://tiktok.com/@funsangsa.demo'},{type:'chzzk',url:'https://chzzk.naver.com/funsangsa-demo'},{type:'twitch',url:'https://twitch.tv/funsangsa_demo'},{type:'discord',url:'https://discord.gg/funsangsa-demo'},{type:'kakao',url:'https://open.kakao.com/o/funsangsa-demo'},{type:'web',url:'https://funsangsa-demo.com'}],
+    links:[{type:'youtube',url:'https://youtube.com/@funsangsa-demo'},{type:'instagram',url:'https://instagram.com/funsangsa.demo'},{type:'tiktok',url:'https://tiktok.com/@funsangsa.demo'},{type:'x',url:'https://x.com/funsangsa_demo'},{type:'chzzk',url:'https://chzzk.naver.com/funsangsa-demo'},{type:'twitch',url:'https://twitch.tv/funsangsa_demo'},{type:'discord',url:'https://discord.gg/funsangsa-demo'},{type:'kakao',url:'https://open.kakao.com/o/funsangsa-demo'},{type:'web',url:'https://funsangsa-demo.com'}],
     rightBanners:[],
     midBanners:[],
     seq:100,
@@ -825,10 +826,10 @@ const CH={
 };
 document.addEventListener('change',e=>{const k=e.target.dataset&&e.target.dataset.ch;if(k&&CH[k])CH[k](e.target)});
 window.addEventListener('resize',()=>{closePop();if(innerWidth>=960)sb.open=false;layoutSB();renderSide();layoutSB()});
-const LTYPE={youtube:['유튜브','youtube','youtube.com|youtu.be'],instagram:['인스타그램','instagram','instagram.com'],facebook:['페이스북','facebook','facebook.com|fb.com'],tiktok:['틱톡','tiktok','tiktok.com'],chzzk:['치지직','chzzk','chzzk.naver.com'],twitch:['트위치','twitch','twitch.tv'],discord:['디스코드','discord','discord.gg|discord.com'],kakao:['카카오톡','kakao','open.kakao.com|pf.kakao.com|kakao.com'],web:['웹사이트','globe',''],home:['홈페이지','globe','']};
+const LTYPE={youtube:['유튜브','youtube','youtube.com|youtu.be'],instagram:['인스타그램','instagram','instagram.com'],facebook:['페이스북','facebook','facebook.com|fb.com'],tiktok:['틱톡','tiktok','tiktok.com'],x:['X','x','x.com|twitter.com'],chzzk:['치지직','chzzk','chzzk.naver.com'],twitch:['트위치','twitch','twitch.tv'],discord:['디스코드','discord','discord.gg|discord.com'],kakao:['카카오톡','kakao','open.kakao.com|pf.kakao.com|kakao.com'],web:['웹사이트','globe',''],home:['홈페이지','globe','']};
 /* 외부 링크 아이콘 — 브랜드 색 벡터 로고(면 형태, 2026-11-19). 유튜브 · 인스타그램 · 페이스북 · 틱톡 · 홈페이지
    2026-11-24 샘플 추가: 치지직 · 트위치 · 디스코드 · 카카오톡 · 웹사이트(크롬 아이콘) */
-const SNSLOGO={youtube:'youtube',instagram:'instagram',facebook:'facebook',tiktok:'tiktok',chzzk:'chzzk',twitch:'twitch',discord:'discord',kakao:'kakaotalk',web:'chrome',home:'web'};
+const SNSLOGO={youtube:'youtube',instagram:'instagram',facebook:'facebook',tiktok:'tiktok',x:'x',chzzk:'chzzk',twitch:'twitch',discord:'discord',kakao:'kakaotalk',web:'chrome',home:'web'};
 const snsImg=(t,sz)=>`<img src="assets/v2/station/sns/${SNSLOGO[t]||'web'}.svg" width="${sz}" height="${sz}" alt="">`;
 function snsRow(){
   const ls=S.station.links;
@@ -964,10 +965,11 @@ function renderTop(){
    <div class="pi"><h1>${D.name}${modeBadge()}</h1><button class="favn" data-act="nav" data-arg="subfans" data-qa="B-09" title="팔로워 보기"><img src="assets/watch/v4/viewers.svg" width="16" height="16" alt=""><span>팔로워 <b>${fmt(S.favCount)}</b>명</span></button></div>
    <div class="btns${(!S.favorite&&S.ui.alAnim!=='out')||S.ui.alAnim==='in'?' no-al':''}">
      <button class="btn pri" id="donBtn" data-act="donate" data-qa="B-05">${ic('gift',18)}<span class="bl">후원하기</span>${donDotHTML()}</button>
-     <button class="btn out" data-act="talk" data-qa="B-08">${ic('talk',18)}<span class="bl">채팅톡</span></button>
-     <button class="btn out fav${S.favorite?' on':''}" data-act="fav" data-qa="B-04" aria-pressed="${S.favorite}">${S.favorite?`<svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round">${P.heart}</svg><span class="bl">팔로잉</span>`:ic('heart',18)+'<span class="bl">팔로우</span>'}</button>
-     <button class="btn out al${al[2]?' on':''}" data-act="alarm" data-qa="B-03"${S.favorite?'':' tabindex="-1" aria-hidden="true"'}>${ic(al[0],18)}<span class="bl">${al[1]}</span></button>
-     <button class="btn circ" data-act="more" aria-label="더보기">${ic('more',20)}</button>
+     <a class="btn out sub" href="market.html#subs" data-qa="B-10">${ic('ticket',18)}<span class="bl">구독권 구매</span></a>
+     <button class="btn out ico" data-act="talk" data-qa="B-08" title="채팅톡">${ic('talk',18)}<span class="bl">채팅톡</span></button>
+     <button class="btn out ico fav${S.favorite?' on':''}" data-act="fav" data-qa="B-04" aria-pressed="${S.favorite}" title="${S.favorite?'팔로잉':'팔로우'}">${S.favorite?`<svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round">${P.heart}</svg><span class="bl">팔로잉</span>`:ic('heart',18)+'<span class="bl">팔로우</span>'}</button>
+     <button class="btn out ico al${al[2]?' on':''}" data-act="alarm" data-qa="B-03" title="${al[1]}"${S.favorite?'':' tabindex="-1" aria-hidden="true"'}>${ic(al[0],18)}<span class="bl">${al[1]}</span></button>
+     <button class="btn circ" data-act="more" aria-label="더보기" title="더보기">${ic('more',20)}</button>
    </div>
    <div class="intro${st.intro?'':' empty'}" data-qa="B-01">${st.intro?`<span class="t">${esc(st.intro)}</span> `:'<span class="t">아직 방송국 소개가 없어요</span> '}<button class="link" data-act="introT" aria-expanded="${!!S.ui.introOpen}" data-qa="B-01t">${S.ui.introOpen?'접기 ▴':'소개 더보기 ›'}</button>${S.ui.introOpen?`<div class="intro-full" data-qa="B-01x">${introBody({intro:st.intro,text:st.introText,rules:st.rulesText},[])}${canSt()?'<button class="btn sec sm" data-act="introEdit">소개 수정</button>':''}</div>`:''}</div>
    ${st.links.length||canSt()?`<div class="s-sns" data-qa="B-06">${snsRow()}</div>`:''}`;

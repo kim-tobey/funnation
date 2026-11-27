@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>FUNNATION — 마켓</title>
+<title>FUNNATION — 잡화점</title>
 <link rel="icon" href="assets/favicon.ico" sizes="any">
 <link rel="icon" href="assets/favicon/favicon-32.png" type="image/png" sizes="32x32">
 <link rel="icon" href="assets/favicon/favicon-16.png" type="image/png" sizes="16x16">
@@ -72,7 +72,7 @@
 
         <div class="top-nav__icons auth-in">
           <!-- VIP 왕관 (65514:33867 · 68182:46441) — 로그인 · 로그아웃 모두. 누르면 마켓 > 내 이용권(market.html#passes) -->
-          <a class="nav-icon nav-icon--crown" href="market.html#passes" aria-label="마켓" data-tooltip="마켓"><img src="assets/v2/gnb/crown.svg" width="24" height="24" alt=""></a>
+          <a class="nav-icon nav-icon--crown" href="market.html#membership" aria-label="잡화점" data-tooltip="잡화점"><img src="assets/v2/gnb/crown.svg" width="24" height="24" alt=""></a>
           <button class="nav-icon" type="button" aria-label="내 정보" data-tooltip="내 정보">
             <img class="nav-icon__av" src="assets/imgWhiteBg-photo.png" width="24" height="24" alt="">
           </button>
@@ -87,7 +87,7 @@
         </button>
 
         <!-- 로그아웃 상태 (v2.0 64372:140618) — 언어 설정은 로그인 상태와 같은 아이콘 버튼 -->
-        <a class="nav-icon nav-icon--crown auth-out" href="market.html#passes" aria-label="마켓" data-tooltip="마켓"><img src="assets/v2/gnb/crown.svg" width="24" height="24" alt=""></a>
+        <a class="nav-icon nav-icon--crown auth-out" href="market.html#membership" aria-label="잡화점" data-tooltip="잡화점"><img src="assets/v2/gnb/crown.svg" width="24" height="24" alt=""></a>
         <button class="nav-icon auth-out" type="button" aria-label="언어 변경" data-tooltip="언어 변경" data-node-id="64372:140627" aria-haspopup="menu" aria-expanded="false" aria-controls="lang-pop" data-lang-btn>
           <img src="assets/imgLanguage.svg" width="24" height="24" alt="">
         </button>
@@ -145,9 +145,9 @@
         <img src="assets/mo/appbar-back.svg" width="24" height="24" alt="">
       </a>
     </div>
-    <h1 class="mo-appbar__title" id="mo-title">마켓</h1>
+    <h1 class="mo-appbar__title" id="mo-title">잡화점</h1>
     <div class="mo-appbar__side">
-      <a class="mo-appbar__btn mo-appbar__crown" href="market.html#passes" aria-label="마켓"><img src="assets/v2/gnb/crown.svg" width="24" height="24" alt=""></a>
+      <a class="mo-appbar__btn mo-appbar__crown" href="market.html#membership" aria-label="잡화점"><img src="assets/v2/gnb/crown.svg" width="24" height="24" alt=""></a>
       <button class="mo-appbar__btn" type="button" aria-label="언어 설정" aria-haspopup="menu" aria-expanded="false" aria-controls="lang-pop" data-lang-btn>
         <img src="assets/mo/appbar-lang.svg" width="24" height="24" alt="">
       </button>
@@ -372,24 +372,25 @@
           <a class="subnav__back" href="index.html" aria-label="홈으로">
             <img src="assets/imgFrame.svg" width="20" height="20" alt="">
           </a>
-          <h1>마켓</h1>
+          <h1>잡화점</h1>
         </div>
         <span class="subnav__sep">ㅣ</span>
-        <nav class="subnav__tabs settings-tabs" role="tablist" aria-label="마켓 메뉴">
-          <a class="subnav__tab" href="#shop" role="tab" aria-controls="market-shop" data-market-tab="shop">상품</a>
-          <a class="subnav__tab" href="#subs" role="tab" aria-controls="market-subs" data-market-tab="subs">내 멤버십·구독</a>
-          <a class="subnav__tab subnav__tab--active" href="#passes" role="tab" aria-controls="market-passes" aria-selected="true" data-market-tab="passes">내 이용권</a>
+        <nav class="subnav__tabs settings-tabs" role="tablist" aria-label="잡화점 메뉴">
+          <a class="subnav__tab subnav__tab--active" href="#membership" role="tab" aria-controls="market-membership" aria-selected="true" data-market-tab="membership">멤버십</a>
+          <a class="subnav__tab" href="#subs" role="tab" aria-controls="market-subs" data-market-tab="subs">구독권</a>
+          <a class="subnav__tab" href="#passes" role="tab" aria-controls="market-passes" data-market-tab="passes" data-coming-soon>크리에이터 상품</a>
+          <a class="subnav__tab" href="#inven" role="tab" aria-controls="market-inven" data-market-tab="inven">내 이용권</a>
         </nav>
       </div>
 
       <div class="main__inner market">
 
-        <!-- ============ 상품 ============ -->
-        <section class="market-panel" id="market-shop" role="tabpanel" data-market-panel="shop" hidden>
+        <!-- ============ 멤버십 (2026-11-27 상품 → 멤버십 · 구독권 으로 나눔) ============ -->
+        <section class="market-panel" id="market-membership" role="tabpanel" data-market-panel="membership" hidden>
           <header class="market-head">
             <div>
-              <h2 class="market-head__title">상품</h2>
-              <p class="market-head__desc">펀네이션 멤버십과 스트리머 구독. 매월 자동결제로 이용하거나, 1개월 이용권을 사서 쓰거나 선물할 수 있어요.</p>
+              <h2 class="market-head__title">멤버십</h2>
+              <p class="market-head__desc">펀네이션 멤버십. 매월 자동결제로 이용하거나, 1개월 이용권을 사서 쓰거나 선물할 수 있어요.</p>
             </div>
           </header>
 
@@ -428,6 +429,16 @@
               </ul>
             </div>
           </div>
+        </section>
+
+        <!-- ============ 구독권 — 스트리머 구독 ============ -->
+        <section class="market-panel" id="market-subs" role="tabpanel" data-market-panel="subs" hidden>
+          <header class="market-head">
+            <div>
+              <h2 class="market-head__title">구독권</h2>
+              <p class="market-head__desc">스트리머 구독. 구독을 연 스트리머를 찾아 매월 구독하거나 1개월 구독권을 사서 쓰거나 선물할 수 있어요.</p>
+            </div>
+          </header>
 
           <!-- 스트리머 구독 — 구독을 연 스트리머 찾기 (서버 연동 전이라 늘 빈 목록) -->
           <div class="market-card">
@@ -446,53 +457,68 @@
           </div>
         </section>
 
-        <!-- ============ 내 멤버십·구독 ============ -->
-        <section class="market-panel" id="market-subs" role="tabpanel" data-market-panel="subs" hidden>
+        <!-- ============ 내 이용권 (2026-11-27 사용자 요청) — 실서비스 개발 서버 /market/passes '인벤토리'를 펀네이션 DS 로
+             요약(보유 장 · 구독 중 · 이용권 사기) → 가방(빈 칸 6×2) → 구독 중(멤버십 줄 · 이용 기간 진행 · 연장 해지). 서버 연동 전 데모 값 -->
+        <section class="market-panel" id="market-inven" role="tabpanel" data-market-panel="inven" hidden>
           <header class="market-head">
             <div>
-              <h2 class="market-head__title">내 멤버십·구독</h2>
-              <p class="market-head__desc">펀네이션 멤버십과 스트리머 구독의 정기결제·등록한 카드를 관리합니다.</p>
+              <h2 class="market-head__title">내 이용권</h2>
+              <p class="market-head__desc">1장 = 1개월. 산 것은 쓰거나 선물하고, 받은 것은 원할 때 씁니다.</p>
             </div>
           </header>
 
           <div class="market-card">
-            <div class="market-plan">
-              <span class="market-plan__icon"><img src="assets/v2/gnb/crown.svg" width="24" height="24" alt=""></span>
-              <div class="market-plan__body">
-                <h3 class="market-plan__title">펀네이션 멤버십</h3>
-                <p class="market-plan__desc"><b>월 6,900원</b> · 매월 자동결제 · 언제든 해지</p>
-              </div>
-              <button class="st-btn st-btn--primary market-plan__cta" type="button" data-coming-soon>멤버십 가입</button>
+            <div class="market-plan market-inv">
+              <span class="market-plan__icon market-inv__icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v1.5a2.5 2.5 0 0 0 0 5V16a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1.5a2.5 2.5 0 0 0 0-5Z"/><path d="M15 6v2M15 11v2M15 16v2"/></svg>
+              </span>
+              <dl class="market-inv__stats">
+                <div><dt>보유</dt><dd>0<span>장</span></dd></div>
+                <div><dt>구독 중</dt><dd>1</dd></div>
+              </dl>
+              <a class="st-btn st-btn--primary market-plan__cta" href="#membership">이용권 사기</a>
             </div>
+          </div>
+
+          <div class="market-card">
+            <div class="market-card__head">
+              <h3 class="market-card__title">가방</h3>
+              <p class="market-card__desc">산 것과 받은 것을 합친 이용권이에요. 쓰면 그 멤버십·구독의 이용 기간이 장수만큼 늘어나요.</p>
+            </div>
+            <ul class="market-bag" aria-label="가방 칸">
+              <li class="market-bag__slot"></li>
+              <li class="market-bag__slot"></li>
+              <li class="market-bag__slot"></li>
+              <li class="market-bag__slot"></li>
+              <li class="market-bag__slot"></li>
+              <li class="market-bag__slot"></li>
+              <li class="market-bag__slot"></li>
+              <li class="market-bag__slot"></li>
+              <li class="market-bag__slot"></li>
+              <li class="market-bag__slot"></li>
+              <li class="market-bag__slot"></li>
+              <li class="market-bag__slot"></li>
+            </ul>
+            <p class="market-bag__empty">가방이 비었습니다.</p>
           </div>
 
           <div class="market-card">
             <div class="market-card__head market-card__head--row">
-              <h3 class="market-card__title">이용 중</h3>
-              <button class="market-icon-btn" type="button" aria-label="새로고침" data-market-refresh>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 0 1-15.5 6.2L3 16"/><path d="M3 12a9 9 0 0 1 15.5-6.2L21 8"/><path d="M21 3v5h-5"/><path d="M3 21v-5h5"/></svg>
-              </button>
+              <h3 class="market-card__title">구독 중</h3>
+              <a class="market-link" href="#" data-coming-soon>카드·결제 관리</a>
             </div>
-            <p class="market-empty">이용 중인 멤버십·구독이 없습니다.</p>
-          </div>
-        </section>
-
-        <!-- ============ 내 이용권 (크라운 진입 기본 탭) ============ -->
-        <section class="market-panel" id="market-passes" role="tabpanel" data-market-panel="passes">
-          <header class="market-head">
-            <div>
-              <h2 class="market-head__title">내 이용권</h2>
-              <p class="market-head__desc">1장에 1개월. 산 것은 직접 쓰거나 선물하고, 받은 것은 원할 때 씁니다.</p>
+            <div class="market-plan market-sub">
+              <span class="market-plan__icon"><img src="assets/v2/gnb/crown.svg" width="24" height="24" alt=""></span>
+              <div class="market-plan__body">
+                <h4 class="market-plan__title">펀네이션 멤버십 <span class="market-badge">1개월째</span></h4>
+                <p class="market-plan__desc">2026. 11. 27. ~ 2026. 12. 27.</p>
+                <div class="market-sub__prog">
+                  <span class="market-sub__bar" role="progressbar" aria-label="이용 기간" aria-valuemin="0" aria-valuemax="30" aria-valuenow="1"><i style="width: 3.4%"></i></span>
+                  <span class="market-sub__next">자동 연장 중 · 다음 2026. 12. 27.</span>
+                </div>
+              </div>
+              <button class="st-btn market-plan__cta market-buy__cta" type="button" data-coming-soon>연장 해지</button>
             </div>
-            <a class="st-btn st-btn--outline" href="#shop">이용권 사기</a>
-          </header>
-
-          <div class="market-card">
-            <div class="market-card__head">
-              <h3 class="market-card__title">가진 이용권</h3>
-              <p class="market-card__desc">산 것과 받은 것을 합친 장수입니다. 사용하면 그 멤버십·구독의 이용 기간이 장수만큼 늘어납니다.</p>
-            </div>
-            <p class="market-empty">가진 이용권이 없습니다.</p>
           </div>
         </section>
 
