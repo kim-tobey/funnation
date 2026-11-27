@@ -716,12 +716,12 @@ const A={
  fav(){
   if(!need())return;
   if(Date.now()-favLock<300)return;favLock=Date.now();
-  if(!S.favorite){S.favorite=true;S.favCount++;renderTop();renderSide();toast('팔로우했어요','알림 켜기',()=>{S.alarm.level='live';renderTop();if(S.view==='home'&&!S.live)renderView();toast('라이브 시작 알림만 받아요')})}
+  if(!S.favorite){S.favorite=true;S.favCount++;S.ui.alAnim='in';renderTop();alAnimRun();renderSide();toast('팔로우했어요','알림 켜기',()=>{S.alarm.level='live';renderTop();if(S.view==='home'&&!S.live)renderView();toast('라이브 시작 알림만 받아요')})}
   else{
     openModal({title:'팔로우를 취소할까요?',body:'<p>해제해도 알림 설정은 유지돼요</p>',foot:'<button class="btn sec" data-act="mclose">취소</button><button class="btn pri" data-act="favOff">해제</button>'});
   }
  },
- favOff(el){S.favorite=false;S.favCount--;closeModal(el.closest('.ov-back'));renderTop();renderSide();toast('팔로우를 취소했어요')},
+ favOff(el){S.favorite=false;S.favCount--;closeModal(el.closest('.ov-back'));S.ui.alAnim='out';renderTop();alAnimRun();renderSide();toast('팔로우를 취소했어요')},
  alarm:(el)=>openAlarm(el),
  alarmSave:saveAlarm,
  donate:()=>openDonate(),
@@ -962,11 +962,11 @@ function renderTop(){
   $('#top').innerHTML=`
    <div class="avw"><div class="avring${S.live?' on':''}">${av(D.name,90)}</div>${S.live?'<span class="livebdg">LIVE</span>':''}</div>
    <div class="pi"><h1>${D.name}${modeBadge()}</h1><button class="favn" data-act="nav" data-arg="subfans" data-qa="B-09" title="팔로워 보기"><img src="assets/watch/v4/viewers.svg" width="16" height="16" alt=""><span>팔로워 <b>${fmt(S.favCount)}</b>명</span></button></div>
-   <div class="btns">
+   <div class="btns${(!S.favorite&&S.ui.alAnim!=='out')||S.ui.alAnim==='in'?' no-al':''}">
      <button class="btn pri" id="donBtn" data-act="donate" data-qa="B-05">${ic('gift',18)}<span class="bl">후원하기</span>${donDotHTML()}</button>
      <button class="btn out" data-act="talk" data-qa="B-08">${ic('talk',18)}<span class="bl">채팅톡</span></button>
      <button class="btn out fav${S.favorite?' on':''}" data-act="fav" data-qa="B-04" aria-pressed="${S.favorite}">${S.favorite?`<svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round">${P.heart}</svg><span class="bl">팔로잉</span>`:ic('heart',18)+'<span class="bl">팔로우</span>'}</button>
-     <button class="btn out${al[2]?' on':''}" data-act="alarm" data-qa="B-03">${ic(al[0],18)}<span class="bl">${al[1]}</span></button>
+     <button class="btn out al${al[2]?' on':''}" data-act="alarm" data-qa="B-03"${S.favorite?'':' tabindex="-1" aria-hidden="true"'}>${ic(al[0],18)}<span class="bl">${al[1]}</span></button>
      <button class="btn circ" data-act="more" aria-label="더보기">${ic('more',20)}</button>
    </div>
    <div class="intro${st.intro?'':' empty'}" data-qa="B-01">${st.intro?`<span class="t">${esc(st.intro)}</span> `:'<span class="t">아직 방송국 소개가 없어요</span> '}<button class="link" data-act="introT" aria-expanded="${!!S.ui.introOpen}" data-qa="B-01t">${S.ui.introOpen?'접기 ▴':'소개 더보기 ›'}</button>${S.ui.introOpen?`<div class="intro-full" data-qa="B-01x">${introBody({intro:st.intro,text:st.introText,rules:st.rulesText},[])}${canSt()?'<button class="btn sec sm" data-act="introEdit">소개 수정</button>':''}</div>`:''}</div>
@@ -4013,6 +4013,13 @@ function hfanHTML(){
   const t3=rankList('all').slice(0,3);
   const crown=i=>i<2?`<img class="hfcr" src="assets/v2/station/crown/crown-${i?'silver':'gold'}.svg" width="18" height="18" alt="">`:'';
   return `<div class="hot3 hfan" data-qa="L-01-top3"><div class="h3h"><span class="h3t0">${ic('crown',14)}TOP 3 랭커</span></div><div class="hflist">${t3.map((f,i)=>`<button type="button" class="hfr r${i+1}" data-act="fan" data-arg="${esc(f.n)}" title="${esc(f.n)}"><span class="hfav">${av(f.n,24)}${crown(i)}</span><b class="hfn">${esc(f.n)}</b><span class="hfbd">${HFBD[i]}</span></button>`).join('')}</div></div>`;
+}
+
+/* 방송국 머리 알림 버튼 — 팔로우 중일 때만 (2026-11-27 사용자 요청). 팔로우하면 펼쳐지며 나타나고, 취소하면 접히며 사라짐 */
+function alAnimRun(){
+  const b=$('#top .btns'),d=S.ui.alAnim;S.ui.alAnim=null;if(!b||!d)return;
+  void b.offsetWidth;
+  requestAnimationFrame(()=>requestAnimationFrame(()=>b.classList.toggle('no-al',d==='out')));
 }
 
 renderAll();

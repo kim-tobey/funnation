@@ -2369,3 +2369,15 @@ html.is-sdon{overflow:hidden}
 .stn .gside .pg--more .link{min-height:0;height:16px;font-size:12px;line-height:16px}
 .stn .hot3.hfan .h3h{padding-bottom:10px}
 .stn .hflist{gap:6px}
+
+/* 방송국 머리 알림 버튼 — 팔로우 중에만 (2026-11-27 사용자 요청). 숨김 = 폭 0 · 투명 · 앞 간격(8)만큼 당김, 0.3초 펼침/접힘 [구현 제안] */
+.stn .top .btns .btn.al{max-width:160px;transition:width .3s cubic-bezier(.3,.7,.2,1),max-width .3s cubic-bezier(.3,.7,.2,1),margin .3s cubic-bezier(.3,.7,.2,1),opacity .2s ease .1s,transform .3s cubic-bezier(.3,.7,.2,1),visibility 0s}
+.stn .top .btns.no-al .btn.al{width:0!important;min-width:0;max-width:0;margin-left:-8px;padding:0;border-width:0;opacity:0;transform:scale(.6);overflow:hidden;visibility:hidden;transition:width .3s cubic-bezier(.3,.7,.2,1),max-width .3s cubic-bezier(.3,.7,.2,1),margin .3s cubic-bezier(.3,.7,.2,1),opacity .15s ease,transform .3s cubic-bezier(.3,.7,.2,1),visibility 0s .3s}
+/* 모바일(<768) 아이콘 4칸 — 칸 나눔을 grid 대신 같은 비율 flex 로(flex-grow 는 부드럽게 바뀜), 숨김이면 알림 칸 0 → 3칸이 줄 전체 */
+@media (max-width:767px){
+  .stn .top .btns{display:flex;flex-wrap:nowrap}
+  .stn .top .btns .btn:not(.circ){flex:1 1 0;min-width:0;width:auto}
+  .stn .top .btns .btn.al{transition:flex-grow .3s cubic-bezier(.3,.7,.2,1),margin .3s cubic-bezier(.3,.7,.2,1),opacity .2s ease .1s,transform .3s cubic-bezier(.3,.7,.2,1),visibility 0s}
+  .stn .top .btns.no-al .btn.al{flex-grow:0;width:0!important;transition:flex-grow .3s cubic-bezier(.3,.7,.2,1),margin .3s cubic-bezier(.3,.7,.2,1),opacity .15s ease,transform .3s cubic-bezier(.3,.7,.2,1),visibility 0s .3s}
+}
+@media (prefers-reduced-motion:reduce){.stn .top .btns,.stn .top .btns .btn.al{transition:none!important}}
