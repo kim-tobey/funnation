@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="8 8 24 24" fill="none">
+<!-- 모바일 앱바 · 잡화점 · 멤버십 사용 중 — 선은 검색 · 메뉴와 같은 #DFE2EA(불투명). 이하 PC 와 같음: (Figma 68205:83901 · 68218:94056, 2026-11-27) — 하트 자리만큼 가판대 오른쪽 아래를 깎은 모양(오른쪽 기둥 · 아래 판이 짧음),
+     선은 기본 잡화점과 같은 흰색 60% · 두께 2 · 22. 하트(#EC50B7 → #F91F8A)만 작아졌다 커졌다(0.8 ↔ 1.12배, 1.2초 왕복). 시안의 흐린 빛은 뺌. 하트 둘레 BG100 #0E0E14 테두리 바깥 2(내 정보 레드닷 링과 같음 — SVG 선은 가운데 기준이라 두께 4 중 바깥 2가 보임, 같은 날 사용자 요청). 움직임 줄이기면 멈춤 -->
+<defs>
+<linearGradient id="h" x1="25.58" y1="23" x2="25.58" y2="31.25" gradientUnits="userSpaceOnUse"><stop stop-color="#EC50B7"/><stop offset="1" stop-color="#F91F8A"/></linearGradient>
+<style>
+.heart{transform-origin:25.58px 27.1px;animation:beat 1.2s ease-in-out infinite alternate}
+@keyframes beat{from{transform:scale(.8)}to{transform:scale(1.12)}}
+@media (prefers-reduced-motion:reduce){.heart{animation:none}}
+</style>
+</defs>
+<g stroke="#DFE2EA">
+<path d="M12 24V18M28 18V20.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M24.8217 11H27.7871C27.9497 11.0007 28.109 11.0465 28.2472 11.1323C28.3853 11.218 28.4971 11.3404 28.5699 11.4858L30.0824 14.5072H25.6989" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M25.698 14.5063H20H9.9176L11.4292 11.4849C11.5022 11.3395 11.6141 11.2173 11.7525 11.1317C11.8909 11.046 12.0502 11.0005 12.2129 11H20H24.8217" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M25.698 14.5078V17.1386C26.9795 18.5824 29.3436 18.0993 29.9541 16.2678C30.0494 15.9836 30.0916 15.6839 30.0824 15.3851V14.5078H25.698Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M9.91842 14.5078V15.3851C9.85242 17.3156 11.903 18.5934 13.6071 17.6841C13.8696 17.5451 14.105 17.3601 14.3019 17.1377V14.5078H9.91842ZM19.9999 14.5078V17.6987C21.6004 19.4862 24.4769 19.203 25.6979 17.1377V14.5078H19.9999Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M14.302 14.5078V17.1386C15.5239 19.203 18.3995 19.4871 20.0009 17.6987V14.5087L14.302 14.5078Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M18.5001 24.5859L10.7948 24.5859C10.6796 24.5857 10.5654 24.6062 10.4589 24.6462C10.3523 24.6862 10.2555 24.7449 10.1739 24.819C10.0924 24.8931 10.0277 24.9811 9.98351 25.078C9.93935 25.1749 9.91663 25.2787 9.91663 25.3836V27.7783C9.91663 28.218 10.3099 28.5759 10.7939 28.5759H19.5001" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<path class="heart" d="M21.8038 27.62L25.5833 31.25L29.3628 27.62C30.7372 26.3 30.3936 23 27.9885 23C26.6141 23 25.9269 23.99 25.5833 24.65C25.2397 23.99 24.5526 23 23.1782 23C20.7731 23 20.4295 26.3 21.8038 27.62Z" fill="url(#h)" stroke="#0E0E14" stroke-width="4" stroke-linejoin="round" paint-order="stroke"/>
+</svg>

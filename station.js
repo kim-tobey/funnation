@@ -4019,7 +4019,8 @@ Object.assign(CH,{
 const HFBD=['회장','부회장','3등'];
 function hfanHTML(){
   const t3=rankList('all').slice(0,3);
-  const crown=i=>i<2?`<img class="hfcr" src="assets/v2/station/crown/crown-${i?'silver':'gold'}.svg" width="18" height="18" alt="">`:'';
+  // 1 · 2위 = Figma 68218:94098 — 금 · 은 링 + 양옆 월계수 가지(laurel-*.svg, 링까지 포함한 장식), 3위는 동 링 그대로 (2026-11-27)
+  const crown=i=>i<2?`<img class="hflr" src="assets/v2/station/crown/laurel-${i?'silver':'gold'}.svg" width="44" height="33" alt="">`:'';
   return `<div class="hot3 hfan" data-qa="L-01-top3"><div class="h3h"><span class="h3t0">${ic('crown',14)}TOP 3 랭커</span></div><div class="hflist">${t3.map((f,i)=>`<button type="button" class="hfr r${i+1}" data-act="fan" data-arg="${esc(f.n)}" title="${esc(f.n)}"><span class="hfav">${av(f.n,24)}${crown(i)}</span><b class="hfn">${esc(f.n)}</b><span class="hfbd">${HFBD[i]}</span></button>`).join('')}</div></div>`;
 }
 

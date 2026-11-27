@@ -2401,3 +2401,11 @@ html.is-sdon{overflow:hidden}
 
 /* 2026-11-27 게시판 메뉴는 아이콘 없이 이름만(스트리머가 기호로 꾸밈). 접힌 LNB 에서는 그릴 아이콘이 없어 게시판 줄을 숨김 */
 .stn .gside.rail .mi.bd{display:none}
+
+/* 2026-11-27 Figma 68218:94098 — 열혈팬 1 · 2위: 아바타 28(사진 17 + 어두운 띠 + 금 · 은 그라데이션 링 2)과 양옆 아래 월계수 가지.
+   링 · 가지는 시안에서 내보낸 한 장(laurel-gold · silver.svg, 44 × 33, 아바타 왼쪽 위에서 -8 · 0). 왕관은 뺌. 3위는 동 링 32 그대로 */
+.stn .hfr.r1 .hfav,.stn .hfr.r2 .hfav{width:28px;height:28px;padding:0;background:none}
+.stn .hfr.r1 .hfav .av,.stn .hfr.r2 .hfav .av{width:28px!important;height:28px!important;border:5.5px solid #0e0e14}
+.stn .hflr{position:absolute;top:0;left:-8px;width:44px;height:33px;max-width:none;pointer-events:none}
+.stn .hfr.r1,.stn .hfr.r2{gap:8px}
+.stn .hfr.r3{gap:8px}

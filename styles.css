@@ -226,6 +226,9 @@
 /* 모바일 앱바 잡화점 — 검색 · 메뉴 아이콘과 같은 색(#DFE2EA · 라이트 #596579), 2026-11-27 */
 .mo-appbar__crown img[src$="gnb/market.svg"] { content: url("assets/mo/appbar-market.svg"); }
 [data-theme="light"] .mo-appbar__crown img[src$="gnb/market.svg"] { content: url("assets/light/mo/appbar-market.svg"); }
+/* 모바일 앱바 잡화점 · 멤버십 사용 중(로그인 데모 = 구독 중) — 하트가 작아졌다 커졌다 (2026-11-27 사용자 요청) */
+html[data-auth="in"] .mo-appbar__crown img[src$="gnb/market.svg"] { content: url("assets/mo/appbar-market-on.svg"); }
+html[data-auth="in"][data-theme="light"] .mo-appbar__crown img[src$="gnb/market.svg"] { content: url("assets/light/mo/appbar-market-on.svg"); }
 [data-theme="light"] img[src$="icHome.svg"] { content: url("assets/light/icHome.svg"); }
 [data-theme="light"] img[src$="v2/lnb-live.svg"] { content: url("assets/light/v2/lnb-live.svg"); }
 [data-theme="light"] img[src$="v2/lnb-fun-live.svg"] { content: url("assets/light/v2/lnb-fun-live.svg"); }
