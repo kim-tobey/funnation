@@ -4690,18 +4690,43 @@ void main() {
   var params = new URLSearchParams(location.search);
   var known = params.get("q") ? { name: params.get("q"), av: params.get("av") || "assets/imgWhiteBg-photo.png" } : null;
   function esc(t) { return String(t).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  // 구독 상태 — 서버 연동 전이라 이 브라우저에 저장(funnation-market-subs). 구독하기 ↔ 구독해제 (2026-11-27 사용자 요청)
+  var SUBKEY = "funnation-market-subs";
+  function subs() { try { return JSON.parse(localStorage.getItem(SUBKEY)) || {}; } catch (e) { return {}; } }
+  function setSub(name, on) {
+    var m = subs();
+    if (on) m[name] = 1; else delete m[name];
+    try { localStorage.setItem(SUBKEY, JSON.stringify(m)); } catch (e) {}
+  }
+  var lastQ = "";
   function search(q) {
+    lastQ = q;
     var hit = known && q && known.name.toLowerCase().indexOf(q.toLowerCase()) !== -1;
     if (results) {
+      var on = hit && !!subs()[known.name];
       results.hidden = !hit;
       results.innerHTML = hit
         ? '<li class="market-res"><img class="market-res__av" src="' + esc(known.av) + '" width="48" height="48" alt="">' +
-          '<div class="market-plan__body"><b class="market-plan__title">' + esc(known.name) + '</b><p class="market-plan__desc"><b>월 4,900원</b> · 매월 자동결제 · 구독권 1장 = 1개월</p></div>' +
-          '<div class="market-res__btns"><button class="st-btn st-btn--primary" type="button" data-coming-soon>구독하기</button><button class="st-btn market-buy__cta" type="button" data-coming-soon>구독권 사기</button></div></li>'
+          '<div class="market-plan__body"><b class="market-plan__title">' + esc(known.name) + (on ? ' <span class="market-badge">구독 중</span>' : "") + '</b><p class="market-plan__desc"><b>월 4,900원</b> · 매월 자동결제 · 구독권 1장 = 1개월</p></div>' +
+          '<div class="market-res__btns">' +
+            (on
+              ? '<button class="st-btn market-buy__cta" type="button" data-sub-toggle="0">구독해제</button>'
+              : '<button class="st-btn st-btn--primary" type="button" data-sub-toggle="1">구독하기</button>') +
+            '<button class="st-btn market-buy__cta" type="button" data-coming-soon>구독권 사기</button></div></li>'
         : "";
     }
     empty.hidden = !!hit;
     empty.textContent = q ? "‘" + q + "’ 검색 결과가 없어요." : "아직 구독을 연 스트리머가 없어요.";
+  }
+  if (results) {
+    results.addEventListener("click", function (e) {
+      var b = e.target.closest("[data-sub-toggle]");
+      if (!b || !known) return;
+      setSub(known.name, b.getAttribute("data-sub-toggle") === "1");
+      search(lastQ);
+      var nb = results.querySelector("[data-sub-toggle]");
+      if (nb && e.detail === 0) nb.focus(); // 키보드로 눌렀을 때만 새 버튼으로 포커스 옮김
+    });
   }
   if (form) {
     form.addEventListener("submit", function (e) {

@@ -68,11 +68,13 @@
         <div class="top-nav__icons auth-in">
           <!-- VIP 왕관 (65514:33867 · 68182:46441) — 로그인 · 로그아웃 모두. 누르면 마켓 > 내 이용권(market.html#passes) -->
           <a class="nav-icon nav-icon--crown" href="market.html#membership" aria-label="잡화점" data-tooltip="잡화점"><img src="assets/v2/gnb/market.svg" width="24" height="24" alt=""></a>
-          <button class="nav-icon" type="button" aria-label="내 정보" data-tooltip="내 정보">
-            <img class="nav-icon__av" src="assets/imgWhiteBg-photo.png" width="24" height="24" alt="">
-          </button>
+          <!-- [테스트 · 2026-11-27] 잡화점 · 멤버십 사용 중 — 하트가 반짝반짝(Figma 68205:83901, market-on.svg). 확인 뒤 하나로 합칠 예정 -->
+          <a class="nav-icon nav-icon--crown nav-icon--test" href="market.html#inven" aria-label="잡화점 (멤버십 사용 중)" data-tooltip="잡화점 · 멤버십 사용 중 (테스트)"><img src="assets/v2/gnb/market-on.svg" width="24" height="24" alt=""></a>
           <button class="nav-icon" type="button" aria-label="언어 변경" data-tooltip="언어 변경" aria-haspopup="menu" aria-expanded="false" aria-controls="lang-pop" data-lang-btn>
             <img src="assets/imgLanguage.svg" width="24" height="24" alt="">
+          </button>
+          <button class="nav-icon" type="button" aria-label="내 정보" data-tooltip="내 정보">
+            <img class="nav-icon__av" src="assets/imgWhiteBg-photo.png" width="24" height="24" alt="">
           </button>
         </div>
 

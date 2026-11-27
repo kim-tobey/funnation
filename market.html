@@ -73,11 +73,13 @@
         <div class="top-nav__icons auth-in">
           <!-- VIP 왕관 (65514:33867 · 68182:46441) — 로그인 · 로그아웃 모두. 누르면 마켓 > 내 이용권(market.html#passes) -->
           <a class="nav-icon nav-icon--crown" href="market.html#membership" aria-label="잡화점" data-tooltip="잡화점"><img src="assets/v2/gnb/market.svg" width="24" height="24" alt=""></a>
-          <button class="nav-icon" type="button" aria-label="내 정보" data-tooltip="내 정보">
-            <img class="nav-icon__av" src="assets/imgWhiteBg-photo.png" width="24" height="24" alt="">
-          </button>
+          <!-- [테스트 · 2026-11-27] 잡화점 · 멤버십 사용 중 — 하트가 반짝반짝(Figma 68205:83901, market-on.svg). 확인 뒤 하나로 합칠 예정 -->
+          <a class="nav-icon nav-icon--crown nav-icon--test" href="market.html#inven" aria-label="잡화점 (멤버십 사용 중)" data-tooltip="잡화점 · 멤버십 사용 중 (테스트)"><img src="assets/v2/gnb/market-on.svg" width="24" height="24" alt=""></a>
           <button class="nav-icon" type="button" aria-label="언어 변경" data-tooltip="언어 변경" aria-haspopup="menu" aria-expanded="false" aria-controls="lang-pop" data-lang-btn>
             <img src="assets/imgLanguage.svg" width="24" height="24" alt="">
+          </button>
+          <button class="nav-icon" type="button" aria-label="내 정보" data-tooltip="내 정보">
+            <img class="nav-icon__av" src="assets/imgWhiteBg-photo.png" width="24" height="24" alt="">
           </button>
         </div>
 
@@ -379,7 +381,7 @@
           <a class="subnav__tab subnav__tab--active" href="#membership" role="tab" aria-controls="market-membership" aria-selected="true" data-market-tab="membership">멤버십</a>
           <a class="subnav__tab" href="#subs" role="tab" aria-controls="market-subs" data-market-tab="subs">구독권</a>
           <a class="subnav__tab" href="#passes" role="tab" aria-controls="market-passes" data-market-tab="passes" data-coming-soon>크리에이터 상품</a>
-          <a class="subnav__tab" href="#inven" role="tab" aria-controls="market-inven" data-market-tab="inven">내 이용권</a>
+          <a class="subnav__tab" href="#inven" role="tab" aria-controls="market-inven" data-market-tab="inven">인벤토리</a>
         </nav>
       </div>
 
@@ -463,7 +465,7 @@
         <section class="market-panel" id="market-inven" role="tabpanel" data-market-panel="inven" hidden>
           <header class="market-head">
             <div>
-              <h2 class="market-head__title">내 이용권</h2>
+              <h2 class="market-head__title">인벤토리</h2>
               <p class="market-head__desc">1장 = 1개월. 산 것은 쓰거나 선물하고, 받은 것은 원할 때 씁니다.</p>
             </div>
           </header>
