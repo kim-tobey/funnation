@@ -2366,6 +2366,7 @@ html.is-sdon{overflow:hidden}
 /* LNB 그룹 제목 '열혈팬' + 오른쪽 전체보기 › (방송국 섹션 전체보기 .link 와 같은 글자 · Primary SemiBold, LNB 제목 크기에 맞춰 12) — 2026-11-27 사용자 요청.
    박스 안 1~3위 사이 6 · 제목 줄 → 첫 줄 10(왕관이 위로 7 나와 붙어 보이지 않게) */
 .stn .gside .pg.pg--more{display:flex;align-items:center;justify-content:space-between;gap:8px;padding-right:6px}
+.stn .gside.rail .pg.pg--more{display:none} /* 접힌 LNB(72) 에선 '열혈팬 · 전체보기' 줄 숨김 — 위 display:flex 가 rail 숨김 규칙을 덮어 깨지던 것 */
 .stn .gside .pg--more .link{min-height:0;height:16px;font-size:12px;line-height:16px}
 .stn .hot3.hfan .h3h{padding-bottom:10px}
 .stn .hflist{gap:6px}
