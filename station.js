@@ -1845,9 +1845,8 @@ renderView=function(){
 };
 panelHTML=function(){
   const mi=(id,name,icn,qa,rt,cls,pen)=>`<div class="mi${S.view===id?' act':''}${cls||''}" role="button" tabindex="0" data-act="nav" data-arg="${id}" data-qa-nav="${qa}" title="${esc(name)}">${ic(icn,20)}<span class="nm">${esc(name)}</span>${pen||''}<span class="rt">${rt||''}</span></div>`;
-  const t3=FANS.slice(0,3);
-  const hot=`<div class="hot3" data-qa="L-01-top3"><div class="h3h"><span class="h3t0">${ic('crown',14)}TOP 3 랭커</span><button class="h3all" data-act="nav" data-arg="ranker" data-qa-nav="L-01">전체 보기 ›</button></div>${t3.map((f,i)=>`<button class="h3r h${i+1}" data-act="fan" data-arg="${esc(f.n)}" title="${esc(f.n)}">${gkEmblem(i+1,f.n,'mini')}<span class="h3t"><b>${esc(f.n)}</b><small>${esc(f.title||GRADEN[gradeOf(f.n)])}</small></span></button>`).join('')}</div>`;
-  let h='<div class="pg">팬</div>'+hot+mi('subfans','팔로워','heart','L-02',fmt(S.favCount))+'<hr><div class="pg">콘텐츠</div>'+mi('replay','다시보기','video','L-03','8')+mi('shorts','쇼츠','play','L-09','12')+'<hr><div class="pg">게시판</div>';
+  const hot=hfanHTML();
+  let h='<div class="pg pg--more"><span>열혈팬</span><button class="link" data-act="nav" data-arg="ranker" data-qa-nav="L-01">전체보기 ›</button></div>'+hot+mi('subfans','팔로워','heart','L-02',fmt(S.favCount))+'<hr><div class="pg">콘텐츠</div>'+mi('replay','다시보기','video','L-03','8')+mi('shorts','쇼츠','play','L-09','12')+'<hr><div class="pg">게시판</div>';
   S.station.boardList.forEach(b=>{
     if(b.type==='divider'){h+='<hr>'+(b.label?`<div class="pg">${esc(b.label)}</div>`:'');return}
     if(b.read==='private'&&!canRead(b))return;
@@ -2498,7 +2497,7 @@ function calHTML(){
 /* ---- 쇼츠 슬라이드 ---- */
 const SHN=10;
 function shSlider(){
-  return `<div class="shs" data-qa="SHO-01"><div class="shvp" id="shvp"><div class="shtrack" id="shtrack">${SHORTS.slice(0,SHN).map(shCard).join('')}</div></div><button class="shnav prev" data-act="shPrev" data-qa="SHO-prev" aria-label="이전 쇼츠">${ic('chevL',22)}</button><button class="shnav next" data-act="shNext" data-qa="SHO-next" aria-label="다음 쇼츠">${ic('chevR',22)}</button><div class="shpg" id="shpg" data-qa="SHO-pg"></div></div>`;
+  return `<div class="shs" data-qa="SHO-01"><div class="shvp" id="shvp"><div class="shtrack" id="shtrack">${SHORTS.slice(0,SHN).map(shCard).join('')}</div></div><button class="shnav prev" data-act="shPrev" data-qa="SHO-prev" aria-label="이전 쇼츠">${ic('chevL',22)}</button><button class="shnav next" data-act="shNext" data-qa="SHO-next" aria-label="다음 쇼츠">${ic('chevR',22)}</button></div>`;
 }
 const shN=()=>{const t=$('#shtrack');if(!t)return 6;void t.offsetWidth;void t.getBoundingClientRect();const n=parseInt(getComputedStyle(t).getPropertyValue('--n'));return n>0?n:6};
 function shApply(noAnim){
@@ -4006,6 +4005,15 @@ Object.assign(IN,{
 Object.assign(CH,{
  sdAnon(el){sdP().anon=el.checked;const n=$('#sdnick',sdOv);if(n)n.textContent=el.checked?'익명':(sd.nick||actorName());el.closest('.dmsg').classList.toggle('is-anon',el.checked)}
 });
+
+/* ---- LNB TOP 3 랭커 (2026-11-27 사용자 요청) — 예전 금색 박스 · 제목 · 전체 보기는 그대로, 줄만 SOOP 열혈팬 모양 ----
+   1~3위 줄(누적): 아바타 24 + 금 · 은 · 동 링(아바타 공통 규칙 42장) · 1 · 2위 왕관(SOOP 원본 SVG) · 이름 · 회장 · 부회장 · 3등 배지 */
+const HFBD=['회장','부회장','3등'];
+function hfanHTML(){
+  const t3=rankList('all').slice(0,3);
+  const crown=i=>i<2?`<img class="hfcr" src="assets/v2/station/crown/crown-${i?'silver':'gold'}.svg" width="18" height="18" alt="">`:'';
+  return `<div class="hot3 hfan" data-qa="L-01-top3"><div class="h3h"><span class="h3t0">${ic('crown',14)}TOP 3 랭커</span></div><div class="hflist">${t3.map((f,i)=>`<button type="button" class="hfr r${i+1}" data-act="fan" data-arg="${esc(f.n)}" title="${esc(f.n)}"><span class="hfav">${av(f.n,24)}${crown(i)}</span><b class="hfn">${esc(f.n)}</b><span class="hfbd">${HFBD[i]}</span></button>`).join('')}</div></div>`;
+}
 
 renderAll();
 applyHash();

@@ -4688,3 +4688,27 @@ void main() {
     });
   }
 })();
+
+/* 홈 인기 Catch — 좌우 화살표로 한 화면(보이는 카드 수)씩 넘김, 끝이면 그쪽 화살표 숨김 (2026-11-27) */
+(function () {
+  document.querySelectorAll("[data-catch]").forEach(function (box) {
+    var track = box.querySelector("[data-catch-track]");
+    if (!track) return;
+    var prev = box.querySelector('[data-catch-dir="-1"]');
+    var next = box.querySelector('[data-catch-dir="1"]');
+    function update() {
+      var max = track.scrollWidth - track.clientWidth;
+      if (prev) prev.disabled = track.scrollLeft <= 2;
+      if (next) next.disabled = track.scrollLeft >= max - 2;
+    }
+    box.addEventListener("click", function (e) {
+      var b = e.target.closest("[data-catch-dir]");
+      if (!b) return;
+      var gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+      track.scrollBy({ left: Number(b.dataset.catchDir) * (track.clientWidth + gap), behavior: "smooth" });
+    });
+    track.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+    update();
+  });
+})();

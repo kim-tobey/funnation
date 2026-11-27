@@ -17044,3 +17044,161 @@ button.subnav__tab {
     line-height: 22px;
   }
 }
+
+/* ------------------------------------------------------------
+   홈 인기 Catch (2026-11-27 사용자 요청, SOOP 메인 '인기 Catch' 참고 [구현 제안 · 시안 없음])
+   유튜브 라이브 탑 50 ↔ 신입 스트리머 사이. 세로 9:16 카드 가로 줄 + 좌우 화살표.
+   카드 글자는 홈 카드 부품(.card__meta), 제목은 신입 스트리머 카드 제목(.vod-card__title)과 같은 값.
+   PC 카드 사이 20(design.md 6장), 한 화면 6장(1124 기준 약 171 × 304) · 콘텐츠 1300 이상 7장 · 1000 미만 4장
+   ------------------------------------------------------------ */
+.catch {
+  position: relative;
+  container: catch / inline-size;
+}
+.catch__track {
+  --catch-gap: 20px;
+  --catch-n: 6;
+  display: flex;
+  gap: var(--catch-gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+}
+.catch__track::-webkit-scrollbar { display: none; }
+@container catch (min-width: 1300px) { .catch__track { --catch-n: 7; } }
+@container catch (max-width: 999px) { .catch__track { --catch-n: 4; } }
+.catch-card {
+  flex: 0 0 calc((100% - (var(--catch-n) - 1) * var(--catch-gap)) / var(--catch-n));
+  min-width: 0;
+  scroll-snap-align: start;
+}
+.catch-card__link {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  color: inherit;
+  text-decoration: none;
+}
+.catch-card__thumb {
+  position: relative;
+  aspect-ratio: 9 / 16;
+  border-radius: 10px;
+  background: var(--border-thumb);
+  overflow: hidden;
+}
+.catch-card__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+.catch-card__link:hover .catch-card__thumb img { transform: scale(1.04); }
+.catch-card__link:focus-visible { outline: none; }
+.catch-card__link:focus-visible .catch-card__thumb {
+  outline: 2px solid var(--color-interaction-focus, #81b3ff);
+  outline-offset: 2px;
+}
+/* 아래 어둡게 — 조회수 · 길이 글자가 밝은 썸네일에서도 읽히게 */
+.catch-card__thumb::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 30%;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.55));
+  pointer-events: none;
+}
+/* 조회수 · 길이 배지 — 홈 카드 시청자 배지(.card--rich .card__viewers, Overlay Gray 70)와 같은 모양 */
+.catch-card__views,
+.catch-card__len {
+  position: absolute;
+  bottom: 8px;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 4px 1px;
+  border-radius: 4px;
+  background: rgba(18, 18, 18, 0.7);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  color: #fff;
+}
+.catch-card__views { left: 8px; }
+.catch-card__len { right: 8px; }
+.catch-card__title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.6;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.catch-card .card__meta { margin-top: -6px; min-width: 0; }
+.catch-card .card__meta img { border-radius: 50%; object-fit: cover; }
+.catch-card .card__meta span { overflow: hidden; text-overflow: ellipsis; }
+
+/* 좌우 화살표 — 썸네일 세로 가운데, 줄 바깥으로 반쯤(본문 좌우 여백 28 안). 끝이면 숨김 */
+.catch__nav {
+  position: absolute;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  /* 카드 폭 × 16/9 = 썸네일 높이, 그 가운데 */
+  margin-top: calc((100cqw - (var(--catch-n, 6) - 1) * 20px) / var(--catch-n, 6) * 8 / 9 - 20px);
+  border: 1px solid var(--color-border-400);
+  border-radius: 9999px;
+  background: var(--color-bg-400);
+  color: var(--color-text-normal, #dfe5ed);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+  cursor: pointer;
+  transition: opacity 0.2s ease, background-color 0.15s ease, border-color 0.15s ease;
+}
+.catch__nav--prev { left: -20px; }
+.catch__nav--next { right: -20px; }
+.catch__nav:hover {
+  border-color: var(--color-brand-primary, #4a92ff);
+  background: var(--color-brand-primary, #4a92ff);
+  color: #fff;
+}
+.catch__nav:focus-visible {
+  outline: 2px solid var(--color-interaction-focus, #81b3ff);
+  outline-offset: 2px;
+}
+.catch__nav:disabled {
+  opacity: 0;
+  pointer-events: none;
+}
+@container catch (min-width: 1300px) { .catch__nav { --catch-n: 7; } }
+@container catch (max-width: 999px) { .catch__nav { --catch-n: 4; } }
+@media (prefers-reduced-motion: reduce) {
+  .catch__track { scroll-behavior: auto; }
+  .catch-card__thumb img, .catch__nav { transition: none; }
+}
+
+/* 모바일(<768) — 화살표 없이 손가락으로 넘김, 화면 끝까지(후원 컨텐츠 줄과 같은 방식). 카드 132 · 사이 10 */
+@media (max-width: 767px) {
+  .catch__track {
+    --catch-gap: 10px;
+    margin: 0 -16px;
+    padding: 0 16px;
+    scroll-padding: 0 16px;
+  }
+  .catch-card { flex: 0 0 132px; }
+  .catch-card__link { gap: 10px; }
+  .catch-card__title { font-size: 14px; }
+  .catch-card .card__meta span { font-size: 12px; }
+  .catch__nav { display: none; }
+}
