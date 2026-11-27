@@ -4682,15 +4682,36 @@ void main() {
     setQty(1);
   }
 
-  // 스트리머 검색 — 결과 없음 문구만 바꿈
+  // 스트리머 검색 — 서버 연동 전. 방송국 "구독권 구매"로 들어오면(?q=방송국 이름&av=사진#subs) 그 방송국을 검색한 상태로
+  // 결과 한 줄(사진 · 이름 · 월 구독료 · 구독하기 · 구독권 사기)을 보여 줌 (2026-11-27). 다른 이름은 결과 없음
   var form = page.querySelector("[data-market-search]");
   var empty = page.querySelector("[data-market-search-empty]");
+  var results = page.querySelector("[data-market-results]");
+  var params = new URLSearchParams(location.search);
+  var known = params.get("q") ? { name: params.get("q"), av: params.get("av") || "assets/imgWhiteBg-photo.png" } : null;
+  function esc(t) { return String(t).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  function search(q) {
+    var hit = known && q && known.name.toLowerCase().indexOf(q.toLowerCase()) !== -1;
+    if (results) {
+      results.hidden = !hit;
+      results.innerHTML = hit
+        ? '<li class="market-res"><img class="market-res__av" src="' + esc(known.av) + '" width="48" height="48" alt="">' +
+          '<div class="market-plan__body"><b class="market-plan__title">' + esc(known.name) + '</b><p class="market-plan__desc"><b>월 4,900원</b> · 매월 자동결제 · 구독권 1장 = 1개월</p></div>' +
+          '<div class="market-res__btns"><button class="st-btn st-btn--primary" type="button" data-coming-soon>구독하기</button><button class="st-btn market-buy__cta" type="button" data-coming-soon>구독권 사기</button></div></li>'
+        : "";
+    }
+    empty.hidden = !!hit;
+    empty.textContent = q ? "‘" + q + "’ 검색 결과가 없어요." : "아직 구독을 연 스트리머가 없어요.";
+  }
   if (form) {
     form.addEventListener("submit", function (e) {
       e.preventDefault();
-      var q = form.querySelector("input").value.trim();
-      empty.textContent = q ? "‘" + q + "’ 검색 결과가 없어요." : "아직 구독을 연 스트리머가 없어요.";
+      search(form.querySelector("input").value.trim());
     });
+    if (known) {
+      form.querySelector("input").value = known.name;
+      search(known.name);
+    }
   }
 
   // 새로고침 — 한 바퀴 도는 표시만

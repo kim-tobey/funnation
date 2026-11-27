@@ -117,17 +117,19 @@ const SIGS0=[["이쁜이는 뒤를 돌아봅니다",1000,"",0,"",77,6797,"assets
 const SG=()=>S.station.sigs;const SIGAMT=()=>SG().map(s=>s.amt);
 const AMTS=[10000,100000,300000,500000,1000000];
 const BOARDS={
- board1:{name:'기본 게시판 1',desc:'스트리머가 이름을 바꿀 수 있는 기본 게시판이에요',qa:'L-04'},
- board2:{name:'기본 게시판 2',desc:'누구나 글을 쓸 수 있는 기본 게시판이에요',qa:'L-05'},
- board3:{name:'기본 게시판 3',desc:'이름과 설명은 관리에서 바꿀 수 있어요',qa:'L-06'},
- board4:{name:'기본 게시판 4',desc:'VIP(팬 랭킹 20위 이내) 전용 이야기 공간이에요',qa:'L-07'},
- board5:{name:'기본 게시판 5',desc:'VVIP(팬 랭킹 10위 이내) 전용 이야기 공간이에요',qa:'L-08'}
+ board1:{name:'공지사항',desc:'스트리머가 이름을 바꿀 수 있는 기본 게시판이에요',qa:'L-04'},
+ board2:{name:'방송 후기',desc:'누구나 글을 쓸 수 있는 기본 게시판이에요',qa:'L-05'},
+ board3:{name:'건의함',desc:'이름과 설명은 관리에서 바꿀 수 있어요',qa:'L-06'},
+ board4:{name:'VIP 라운지',desc:'VIP(팬 랭킹 20위 이내) 전용 이야기 공간이에요',qa:'L-07'},
+ board5:{name:'VVIP 라운지',desc:'VVIP(팬 랭킹 10위 이내) 전용 이야기 공간이에요',qa:'L-08'},
+ board6:{name:'이벤트',desc:'방송국 이벤트 · 당첨자 발표를 올려요',qa:'L-10'}
 };
 const RAW={
 board1:[['[공지] 펀레이블 시즌1 직급전 일정 및 직급표 안내','펀상사','2026.11.03',1820,14,'np',0,'',32],['[공지] 방송 규칙 및 후원 매너 안내 (필독)','펀상사','2026.10.05',2410,9,'np',0,'',27],['오늘 출근 도장 찍고 갑니다','월요병환자','2026.11.04',154,12,'N',0,'',12],['탕비실 간식 추천 받습니다','믹스커피장인','2026.11.03',201,5,'',0,'',4],['엑셀표 처음 보는데 보는 법 알려주세요','신입팬','2026.11.02',97,4,'',0,'',7],['직급전 결과 예상해 봅니다','예측왕','2026.10.30',388,21,'i',0,'',15],['어제 퇴근전쟁 진짜 소름','새벽출근러','2026.10.29',420,3,'i',0,'',3],['야근하면서 다시보기 틀어놨어요','야근메이트','2026.10.27',76,2,'',0,'',1]],
 board2:[['시즌1 9화 후기 (역전 명장면 정리)','후기담당','2026.11.03',310,25,'N',0,'',21],['룰렛 벌금 장면 웃겨서 세 번 봄','룰렛러버','2026.11.02',132,9,'N',0,'',6],['회식 특집 비하인드 풀어봅니다','회식참석','2026.10.31',177,11,'',0,'',9],['합방 때 대표님 표정 모음','표정수집가','2026.10.28',264,18,'i',0,'',13],['인턴 전환 직급전 후기','지켜보는사람','2026.10.22',64,5,'',0,'',5],['퇴근전쟁 팁(?) 공유','전쟁참모','2026.10.18',45,3,'',0,'',2]],
 board3:[['직급전 일정 사전 공지 부탁드립니다','일정러','2026.11.03',210,7,'',5,'',11],['다시보기 시즌별 묶어 주세요','정주행러','2026.10.30',302,12,'',4,'',8],['시그니처 영상 길이 조금 줄여도 될까요','시그팬','2026.10.27',95,3,'',1,'',3],['엑셀표 글자 크기 키워 주세요','모바일시청','2026.10.21',140,5,'',2,'',5],['쇼츠 업로드 주기 궁금합니다','쇼츠애청자','2026.10.16',188,8,'',1,'',2],['후원 순위 갱신 간격 질문','순위궁금','2026.10.10',61,1,'',0,'',1]],
 board4:[['VIP 전용 사옥 투어 후기','팬랭킹7위','2026.11.03',64,10,'',0,'',14],['시즌1 종료 기념 응원 영상 제작 모집','편집담당','2026.10.29',58,14,'',0,'',9],['VIP 정모 장소 투표','총무','2026.10.25',41,8,'',0,'',6],['직급전 날 응원 방식 의견 받습니다','응원단장','2026.10.20',39,6,'',0,'',4],['사옥 굿즈 시안 평가','굿즈연구원','2026.10.10',30,4,'',0,'',10],['VIP 이용 매너 다시 확인해요','질서지킴이','2026.10.03',52,7,'',0,'',2]],
+board6:[['[이벤트] 시즌1 직급전 승부 예측 이벤트','펀상사','2026.11.04',980,41,'N',0,'',36],['[발표] 10월 출근 도장 이벤트 당첨자','펀상사','2026.11.01',620,22,'',0,'',18],['[이벤트] 사옥 굿즈 이름 짓기','펀상사','2026.10.22',410,57,'i',0,'',24]],
 board5:[['VVIP 시즌 결산 모임 안건','팬랭킹1위','2026.11.02',12,2,'',0,'',18],['대표님께 드리는 연말 선물 논의','선물담당','2026.10.30',10,3,'',0,'',12],['VVIP 전용 질문 시간 아이디어','질문러','2026.10.24',11,2,'',0,'',7],['시즌2 요청사항 모음','건의대장','2026.10.18',8,1,'',0,'',8],['직급전 응원 일정 조율','조율러','2026.10.12',9,2,'',0,'',3],['VVIP 공유 메모','기록담당','2026.10.05',12,2,'',0,'',2]]
 };
 const CMT=['저도 그렇게 생각해요!','좋은 글 감사합니다 :)','오늘도 방송 잘 봤어요','다음에도 기대할게요','공감 백 퍼센트예요','이런 거 너무 좋아요'];
@@ -203,12 +205,13 @@ function initStation(){
     seq:100,
     crew:{name:'펀레이블',list:CREW.map(c=>({id:({'펀상사':'funsangsa','새벽결재':'saebyeokgyeoljae','야근요정하루':'haru_overtime','탕비실지킴이':'tangbisil','칼퇴희망':'kaltoe_hope','복사기고장':'copier_down','신입은말해요':'newbie_talk','수습의여왕':'suseup_queen'})[c.n],n:c.n,role:c.role,live:c.live,fav:c.fav,intro:c.intro,lt:c.lt,rank:c.rank}))},
     boardList:[
-      {id:'board1',type:'board',name:'기본 게시판 1',desc:'스트리머가 이름을 바꿀 수 있는 기본 게시판이에요',read:'all',write:'all',vip:null},
-      {id:'board2',type:'board',name:'기본 게시판 2',desc:'누구나 글을 쓸 수 있는 기본 게시판이에요',read:'all',write:'all',vip:null},
-      {id:'board3',type:'board',name:'기본 게시판 3',desc:'이름과 설명은 관리에서 바꿀 수 있어요',read:'all',write:'all',vip:null},
+      {id:'board1',type:'board',name:'공지사항',desc:'스트리머가 이름을 바꿀 수 있는 기본 게시판이에요',read:'all',write:'all',vip:null},
+      {id:'board6',type:'board',name:'이벤트',desc:'방송국 이벤트 · 당첨자 발표를 올려요',read:'all',write:'all',vip:null},
+      {id:'board2',type:'board',name:'방송 후기',desc:'누구나 글을 쓸 수 있는 기본 게시판이에요',read:'all',write:'all',vip:null},
+      {id:'board3',type:'board',name:'건의함',desc:'이름과 설명은 관리에서 바꿀 수 있어요',read:'all',write:'all',vip:null},
       {id:'div1',type:'divider',label:'등급 전용'},
-      {id:'board4',type:'board',name:'기본 게시판 4',desc:'VIP(팬 랭킹 20위 이내) 전용 이야기 공간이에요',read:'vip',write:'vip',vip:'vip'},
-      {id:'board5',type:'board',name:'기본 게시판 5',desc:'VVIP(팬 랭킹 10위 이내) 전용 이야기 공간이에요',read:'vip',write:'vip',vip:'vvip'}
+      {id:'board4',type:'board',name:'VIP 라운지',desc:'VIP(팬 랭킹 20위 이내) 전용 이야기 공간이에요',read:'vip',write:'vip',vip:'vip'},
+      {id:'board5',type:'board',name:'VVIP 라운지',desc:'VVIP(팬 랭킹 10위 이내) 전용 이야기 공간이에요',read:'vip',write:'vip',vip:'vvip'}
     ],
     banwords:{on:true,list:['광고문의','무료충전','도배','홍보링크','바보']},
     managers:[{id:'harukeeper',n:'사옥청소부',since:'2025.02.10',perm:{station:true,chat:true,notice:false}},{id:'wolyobyeong',n:'월요병환자',since:'2024.06.01',perm:{station:false,chat:true,notice:true}}],
@@ -965,7 +968,7 @@ function renderTop(){
    <div class="pi"><h1>${D.name}${modeBadge()}</h1><button class="favn" data-act="nav" data-arg="subfans" data-qa="B-09" title="팔로워 보기"><img src="assets/watch/v4/viewers.svg" width="16" height="16" alt=""><span>팔로워 <b>${fmt(S.favCount)}</b>명</span></button></div>
    <div class="btns${(!S.favorite&&S.ui.alAnim!=='out')||S.ui.alAnim==='in'?' no-al':''}">
      <button class="btn pri" id="donBtn" data-act="donate" data-qa="B-05">${ic('gift',18)}<span class="bl">후원하기</span>${donDotHTML()}</button>
-     <a class="btn out sub" href="market.html#subs" data-qa="B-10">${ic('ticket',18)}<span class="bl">구독권 구매</span></a>
+     <a class="btn out sub" href="market.html?q=${encodeURIComponent(D.name)}&amp;av=${encodeURIComponent(PROFILE)}#subs" data-qa="B-10">${ic('ticket',18)}<span class="bl">구독권 구매</span></a>
      <button class="btn out ico" data-act="talk" data-qa="B-08" title="채팅톡">${ic('talk',18)}<span class="bl">채팅톡</span></button>
      <button class="btn out ico fav${S.favorite?' on':''}" data-act="fav" data-qa="B-04" aria-pressed="${S.favorite}" title="${S.favorite?'팔로잉':'팔로우'}">${S.favorite?`<svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round">${P.heart}</svg><span class="bl">팔로잉</span>`:ic('heart',18)+'<span class="bl">팔로우</span>'}</button>
      <button class="btn out ico al${al[2]?' on':''}" data-act="alarm" data-qa="B-03" title="${al[1]}"${S.favorite?'':' tabindex="-1" aria-hidden="true"'}>${ic(al[0],18)}<span class="bl">${al[1]}</span></button>
@@ -976,7 +979,7 @@ function renderTop(){
 }
 function hasNew(id){return !!S.posts[id]&&!isLocked(id)&&S.posts[id].some(p=>p.isNew)}
 function panelHTML(){
-  const mi=(id,name,icn,qa,rt,cls,pen)=>`<div class="mi${S.view===id?' act':''}${cls||''}" role="button" tabindex="0" data-act="nav" data-arg="${id}" data-qa-nav="${qa}" title="${esc(name)}">${ic(icn,20)}<span class="nm">${esc(name)}</span>${pen||''}<span class="rt">${rt||''}</span></div>`;
+  const mi=(id,name,icn,qa,rt,cls,pen)=>`<div class="mi${S.view===id?' act':''}${cls||''}" role="button" tabindex="0" data-act="nav" data-arg="${id}" data-qa-nav="${qa}" title="${esc(name)}">${icn?ic(icn,20):''}<span class="nm">${esc(name)}</span>${pen||''}<span class="rt">${rt||''}</span></div>`;
   let h='<div class="pg">팬</div>'+mi('hotfans','랭커','user','L-01','20')+mi('subfans','구독팬','heart','L-02','12')+'<hr><div class="pg">콘텐츠</div>'+mi('replay','다시보기','video','L-03','8')+'<hr><div class="pg">게시판</div>';
   S.station.boardList.forEach(b=>{
     if(b.type==='divider'){h+='<hr>'+(b.label?`<div class="pg">${esc(b.label)}</div>`:'');return}
@@ -984,7 +987,8 @@ function panelHTML(){
     const lk=!canRead(b);let rt='';
     if(lk)rt=ic('lock',14);else if(b.read==='private')rt='<span class="rb vp">비공개</span>';else if(b.read==='vip')rt=vipBadgeHTML(b,'rb');else if(hasNew(b.id))rt='<span class="nbd">N</span>';
     const pen=canSt()?`<span class="pen" data-act="rename" data-arg="${b.id}" role="button" tabindex="0" aria-label="게시판 이름 변경">${ic('pencil',14)}</span>`:'';
-    h+=mi(b.id,b.name,RICON[b.read],BQA(b.id),rt,lk?' lk':'',pen);
+    // 게시판은 아이콘 없이 이름만 — 스트리머가 이름 앞 기호(□ ■ ★ 등)로 직접 꾸밈 (2026-11-27, SOOP 방송국 게시판 참고)
+    h+=mi(b.id,b.name,'',BQA(b.id),rt,(lk?' lk':'')+' bd',pen);
   });
   return h;
 }
@@ -1846,7 +1850,7 @@ renderView=function(){
   if(v==='home')startOvSoon();
 };
 panelHTML=function(){
-  const mi=(id,name,icn,qa,rt,cls,pen)=>`<div class="mi${S.view===id?' act':''}${cls||''}" role="button" tabindex="0" data-act="nav" data-arg="${id}" data-qa-nav="${qa}" title="${esc(name)}">${ic(icn,20)}<span class="nm">${esc(name)}</span>${pen||''}<span class="rt">${rt||''}</span></div>`;
+  const mi=(id,name,icn,qa,rt,cls,pen)=>`<div class="mi${S.view===id?' act':''}${cls||''}" role="button" tabindex="0" data-act="nav" data-arg="${id}" data-qa-nav="${qa}" title="${esc(name)}">${icn?ic(icn,20):''}<span class="nm">${esc(name)}</span>${pen||''}<span class="rt">${rt||''}</span></div>`;
   const hot=hfanHTML();
   let h='<div class="pg pg--more"><span>열혈팬</span><button class="link" data-act="nav" data-arg="ranker" data-qa-nav="L-01">전체보기 ›</button></div>'+hot+mi('subfans','팔로워','heart','L-02',fmt(S.favCount))+'<hr><div class="pg">콘텐츠</div>'+mi('replay','다시보기','video','L-03','8')+mi('shorts','쇼츠','play','L-09','12')+'<hr><div class="pg">게시판</div>';
   S.station.boardList.forEach(b=>{
@@ -1855,7 +1859,7 @@ panelHTML=function(){
     const lk=!canRead(b);let rt='';
     if(lk)rt=ic('lock',14);else if(b.read==='private')rt='<span class="rb vp">비공개</span>';else if(b.read==='vip')rt=vipBadgeHTML(b,'rb');else if(hasNew(b.id))rt='<span class="nbd">N</span>';
     const pen=canSt()?`<span class="pen" data-act="rename" data-arg="${b.id}" role="button" tabindex="0" aria-label="게시판 이름 변경">${ic('pencil',14)}</span>`:'';
-    h+=mi(b.id,b.name,RICON[b.read],BQA(b.id),rt,lk?' lk':'',pen);
+    h+=mi(b.id,b.name,'',BQA(b.id),rt,(lk?' lk':'')+' bd',pen); // 게시판은 아이콘 없이 이름만 (2026-11-27)
   });
   return h;
 };

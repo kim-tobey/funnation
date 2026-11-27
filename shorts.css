@@ -377,6 +377,9 @@ body:has(.page--shorts) .fab-auth { bottom: 112px; }
   .sh-sheet__body { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 0 16px; }
   .sh-sheet__box > .sh-cin { flex: none; display: flex; align-items: center; gap: 8px; padding: 12px 16px 8px; border-top: 1px solid var(--color-border-100); }
   .sh-sheet__box > .sh-cin .sh-cin__box { flex: 1 1 auto; min-width: 0; height: 36px; box-sizing: border-box; padding: 0 12px; border-radius: 6px; }
+  /* 펀네이션 라이브 모바일 입력(.finput)과 같게 — 칸 안 보내기는 PC 전용, 모바일은 글을 쓰면 칸 밖 오른쪽에 보내기 24 */
+  .sh-sheet__box > .sh-cin .sh-cin__go { display: none; }
+  .sh-sheet__box > .sh-cin.has-text .sh-cin__send { display: flex; flex: none; padding: 0; background: none; }
   .sh-sheet__menu { display: flex; flex-direction: column; padding: 8px 8px 12px; }
   .sh-sheet__menu button { height: 52px; padding: 0 12px; font-size: 16px; }
   .sh-emo { grid-template-columns: repeat(8, 1fr); right: 0; }

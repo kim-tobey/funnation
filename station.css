@@ -2398,3 +2398,6 @@ html.is-sdon{overflow:hidden}
   [data-theme="light"] .sdpop__back img[src$="appbar-back.svg"]{content:url("assets/light/mo/appbar-back.svg")}
 }
 
+
+/* 2026-11-27 게시판 메뉴는 아이콘 없이 이름만(스트리머가 기호로 꾸밈). 접힌 LNB 에서는 그릴 아이콘이 없어 게시판 줄을 숨김 */
+.stn .gside.rail .mi.bd{display:none}

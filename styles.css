@@ -222,6 +222,7 @@
 /* 단색 아이콘은 라이트용 변형본으로 교체 (도형 동일, 색만 다름) */
 [data-theme="light"] img[src$="imgAccountCircle.svg"] { content: url("assets/light/imgAccountCircle.svg"); }
 [data-theme="light"] img[src$="imgLanguage.svg"] { content: url("assets/light/imgLanguage.svg"); }
+[data-theme="light"] img[src$="gnb/market.svg"] { content: url("assets/light/gnb-market.svg"); }
 [data-theme="light"] img[src$="icHome.svg"] { content: url("assets/light/icHome.svg"); }
 [data-theme="light"] img[src$="v2/lnb-live.svg"] { content: url("assets/light/v2/lnb-live.svg"); }
 [data-theme="light"] img[src$="v2/lnb-fun-live.svg"] { content: url("assets/light/v2/lnb-fun-live.svg"); }
@@ -548,6 +549,7 @@ ul {
   pointer-events: none;
 }
 /* VIP 왕관 (65514:33867) — 로그아웃 상태는 언어 버튼과 붙여 48 칸 연속(시안 우측 메뉴), .top-nav__right 의 15 간격을 상쇄 */
+/* 잡화점 아이콘 — Figma 68205:77222 효과 없는 가판대(market.svg). 구독 중 반짝이는 하트 버전(market-on.svg, 68205:83889)은 2026-11-27 사용자 요청으로 잠시 뺌(크기 · 색 확인 중) */
 .nav-icon--crown.auth-out {
   margin-right: -15px;
 }
@@ -17026,6 +17028,17 @@ button.subnav__tab {
   font-weight: 500;
   color: var(--color-text-depth-400);
   text-align: center;
+}
+/* 구독권 검색 결과 줄 — 방송국 "구독권 구매"로 들어오면 그 방송국 (2026-11-27) */
+.market-results { display: flex; flex-direction: column; gap: 12px; margin: 0; padding: 0; list-style: none; }
+.market-results[hidden], .market-empty[hidden] { display: none; }
+.market-res { display: flex; align-items: center; gap: 16px; padding: 16px; border: 1px solid var(--color-border-200); border-radius: 10px; background: var(--color-bg-200); }
+.market-res__av { flex: none; width: 48px; height: 48px; border-radius: 50%; object-fit: cover; }
+.market-res__btns { display: flex; flex: none; gap: 8px; }
+@media (max-width: 767px) {
+  .market-res { flex-wrap: wrap; }
+  .market-res__btns { width: 100%; }
+  .market-res__btns .st-btn { flex: 1 1 0; }
 }
 /* 내 이용권 (2026-11-27) — 개발 서버 '인벤토리'를 DS 카드 부품으로 */
 .market-inv__icon { color: var(--color-brand-primary); }
